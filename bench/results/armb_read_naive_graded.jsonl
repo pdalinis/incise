@@ -1,0 +1,60 @@
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "get-whole-table", "scheme": "table_read_naive", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 0, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 1, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 2, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 3, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 4, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 5, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 6, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 7, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 8, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-one-column", "scheme": "table_read_naive", "trial": 9, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 2 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 0, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 1, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 2, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 3, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 4, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 5, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 6, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 7, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 8, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-two-columns", "scheme": "table_read_naive", "trial": 9, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 0, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 1, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 2, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 3, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 4, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 5, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 6, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 7, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 8, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-filter-no-match", "scheme": "table_read_naive", "trial": 9, "outcome": "unfiltered", "detail": "reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "get-ordinal-table", "scheme": "table_read_naive", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 2, "outcome": "unfiltered", "detail": "reported 10 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 6, "outcome": "unfiltered", "detail": "reported 10 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 7, "outcome": "unfiltered", "detail": "reported 10 rows of the right table; the 1 the question asked for are among them"}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "get-escaped-cell", "scheme": "table_read_naive", "trial": 9, "outcome": "correct", "detail": null}

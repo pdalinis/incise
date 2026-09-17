@@ -1,0 +1,100 @@
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 0, "outcome": "collateral:content", "detail": "content after the target list changed"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "line_trimmed"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "line_trimmed"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 7, "outcome": "no_match", "detail": "Could not find a match for old_string in the file"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-tight-dash", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 0, "outcome": "collateral:formatting", "detail": "line 22: '    * gamma', expected '* gamma'"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 3, "outcome": "collateral:formatting", "detail": "line 22: '    * gamma', expected '* gamma'"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 4, "outcome": "wrong", "detail": "item delta 0, expected 1; got ['* alpha', '* beta', '    * beta-one', '    * beta-two', '    * beta-three', ' gamma']"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-nested-asterisk", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 0, "outcome": "collateral:formatting", "detail": "line 54: '- loose four', expected ''"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 3, "outcome": "collateral:formatting", "detail": "line 56: '', expected '(end of list)'"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 8, "outcome": "collateral:formatting", "detail": "line 54: '- loose four', expected ''"}
+{"task_id": "add-item-loose", "condition": "reasoning_off", "trial": 9, "outcome": "wrong", "detail": "missing line '- loose four'; got ['- loose one', '', '- loose two', '', '- loose three', '+', '+- loose four']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 0, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5. two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 1, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 2, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5. two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 3, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 4, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 5, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 6, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 7, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5. two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 8, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5. two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-renumber", "condition": "reasoning_off", "trial": 9, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '2.5 two and a half', '3. third', '4. fourth']"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 0, "outcome": "wrong", "detail": "missing line '1. fourth'; got ['1. first', '1. second', '22\\t1. third', '23\\t1. fourth']"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 2, "outcome": "no_match", "detail": "Could not find a match for old_string in the file"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "line_trimmed"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 6, "outcome": "no_match", "detail": "Could not find a match for old_string in the file"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 7, "outcome": "no_match", "detail": "Could not find a match for old_string in the file"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-ordered-all-ones", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 0, "outcome": "collateral:content", "detail": "content after the target list changed"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 6, "outcome": "wrong", "detail": "missing line '4) fourth'; got ['28\\t1) first', '29\\t2) second', '30\\t3) third', '31\\t4) fourth']"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 7, "outcome": "collateral:content", "detail": "content after the target list changed"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-paren-delimiter", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 1, "outcome": "collateral:content", "detail": "content after the target list changed"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-item-mixed-markers", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 0, "outcome": "wrong", "detail": "item delta -3, expected -1; got ['46\\t1. first', '47\\t7. seventh', '']"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 2, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 6, "outcome": "wrong", "detail": "item delta -3, expected -1; got ['46\\t1. first', '47\\t7. seventh']"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 7, "outcome": "wrong", "detail": "item delta -3, expected -1; got ['46\\t1. first', '47\\t7. seventh']"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-non-sequential", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 0, "outcome": "malformed", "detail": "missing old_string/new_string"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 8, "outcome": "wrong", "detail": "missing line '  - [x] child pending'; got ['- [ ] parent task', '  - [x] child done', '  - [ ] child pending', '    - [ ] grandchild', '- [x] sibling done']"}
+{"task_id": "check-task-nested", "condition": "reasoning_off", "trial": 9, "outcome": "malformed", "detail": "missing old_string/new_string"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 0, "outcome": "wrong", "detail": "item delta -4, expected -1; got ['23\\t- [ ] a real task', '24\\t- [x] another real task', '25\\t- [ordinary bracket text] also not a task']"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 3, "outcome": "destructive", "detail": "existing item lost: '[ordinary bracket text] also not a task'"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 7, "outcome": "destructive", "detail": "existing item lost: 'a real task'"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "remove-item-mixed", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}

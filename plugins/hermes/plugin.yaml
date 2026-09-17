@@ -1,0 +1,20 @@
+name: incise
+version: 0.1.0
+manifest_version: 2
+api_version: 1
+requires_hermes: ">=0.21.3"
+license: MIT
+homepage: https://github.com/pdalinis/incise
+tags: [markdown, editing, tools]
+description: "Byte-preserving markdown edits for tables, lists, sections and YAML frontmatter. Five measured tools plus three structural reads over the `incise` binary. Direct editing completed 60% of table tasks and 19% of section tasks; the adopted Incise table interface completed 60/60 with no data loss."
+author: Peter Dalinis
+kind: standalone
+provides_tools:
+  - table_edit
+  - list_edit
+  - section_edit
+  - frontmatter_edit
+  - table_get
+  - md_tables
+  - md_lists
+  - md_outline

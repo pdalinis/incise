@@ -1,0 +1,200 @@
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 2, "outcome": "op_error", "detail": "no list item matching \"third child\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 8, "outcome": "op_error", "detail": "no list item matching \"third level item three\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 9, "outcome": "op_error", "detail": "no list item matching \"third child of second child of first child of root\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 0, "outcome": "op_error", "detail": "no list item matching \"* current item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 2, "outcome": "op_error", "detail": "no list item matching \"* Star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 5, "outcome": "op_error", "detail": "no list item matching \"* first star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 7, "outcome": "op_error", "detail": "no list item matching \"* original asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 8, "outcome": "op_error", "detail": "no list item matching \"* single asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 9, "outcome": "op_error", "detail": "no list item matching \"* star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 10, "outcome": "op_error", "detail": "no list item matching \"third level item three\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 12, "outcome": "op_error", "detail": "no list item matching \"third level item three\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 13, "outcome": "op_error", "detail": "no list item matching \"third level\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 14, "outcome": "op_error", "detail": "no list item matching \"third child\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 17, "outcome": "op_error", "detail": "no list item matching \"third level item\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 10, "outcome": "op_error", "detail": "no list item matching \"* existing star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 12, "outcome": "op_error", "detail": "no list item matching \"the star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 13, "outcome": "op_error", "detail": "no list item matching \"* single asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 14, "outcome": "op_error", "detail": "no list item matching \"* Mixed marker item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 16, "outcome": "op_error", "detail": "no list item matching \"* item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 17, "outcome": "op_error", "detail": "no list item matching \"* existing star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 18, "outcome": "op_error", "detail": "no list item matching \"* first asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 19, "outcome": "op_error", "detail": "no list item matching \"* first star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 19, "outcome": "correct", "detail": null}

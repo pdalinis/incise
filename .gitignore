@@ -1,0 +1,24 @@
+# Rust build output
+/target/
+
+# Python
+__pycache__/
+*.pyc
+
+# bench/mutate.py edits crate sources in place and holds this lock while it
+# runs. A `git add -A` during a run commits both the lock and whichever
+# mutation is live -- which happened twice on this branch before it was
+# noticed. Ignoring the lock removes half the hazard; the other half is to
+# name paths explicitly when staging.
+crates/.mutate.lock
+
+# Zenrows CLI (do not commit secrets or run artifacts)
+.zenrows/secrets.json
+.zenrows/config.json
+.zenrows/account.json
+.zenrows/runs/
+.zenrows/traces/
+.zenrows/logs/
+
+# Claude Code per-user permissions and local overrides
+.claude/settings.local.json

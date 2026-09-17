@@ -1,0 +1,383 @@
+{
+  "_comment": "Eleven frontmatter tasks, graded against whole-document goldens stored as a minimal changed window: rebuild with before[:first_changed] + lines + before[len - unchanged_tail:] and compare bytes. Generated and regenerable by bench/make_frontmatter_tasks.py, which explains why this family pins the whole document. Instructions are phrased as a user would phrase them and never write a key as a dotted path -- reaching a nested key by path is the thing under test, and the paths are in the injected summary.",
+  "tasks": [
+    {
+      "id": "set-build-jobs",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "The build should run with 8 parallel jobs instead of 4.",
+      "golden": {
+        "first_changed": 14,
+        "unchanged_tail": 38,
+        "lines": [
+          "  jobs: 8"
+        ]
+      },
+      "expect": {
+        "key_delta": 0,
+        "state": "present",
+        "keys_present": {
+          "build.jobs": "8"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "build.jobs",
+            "value": 8
+          }
+        }
+      ],
+      "note": "`corpus/frontmatter/rich.md:37` names this exact edit as the file's reason for existing, so it is the family's first task. Two ways to get it wrong and they fail differently. `jobs` alone is a refusal -- loud, costs a turn -- and it is the failure worth measuring, because nothing in the instruction says the key is nested and the only place that is written down is the injected summary. Rewriting the block with a YAML library is the quiet one: it produces `jobs: 8` in a document that has lost the leading comment, the inline comment on `build.target`, and the quoting of `quoted_key`, and the whole-document golden is what makes that visible rather than merely true."
+    },
+    {
+      "id": "set-build-target",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Switch the build from a release build to a debug one.",
+      "golden": {
+        "first_changed": 10,
+        "unchanged_tail": 42,
+        "lines": [
+          "  target: debug        # inline comment, must survive a sibling edit"
+        ]
+      },
+      "expect": {
+        "key_delta": 0,
+        "state": "present",
+        "keys_present": {
+          "build.target": "debug"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "build.target",
+            "value": "debug"
+          }
+        }
+      ],
+      "note": "The sibling edit `rich.md:38` asks about: `target` carries an inline comment eight spaces out, and the golden pins the comment, the padding and the column. An edit that rewrites the line from parsed pieces keeps the value and loses the sentence next to it, which is a loss no key-level check can see."
+    },
+    {
+      "id": "set-dana-role",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Dana has taken over as a maintainer. Update her entry in the authors list to say so.",
+      "golden": {
+        "first_changed": 19,
+        "unchanged_tail": 33,
+        "lines": [
+          "    role: maintainer"
+        ]
+      },
+      "expect": {
+        "key_delta": 0,
+        "state": "present",
+        "keys_present": {
+          "authors[1].role": "maintainer"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "authors[1].role",
+            "value": "maintainer"
+          }
+        }
+      ],
+      "note": "The only task that needs an index, and `rich.md:50` names index addressing as one of the file's cases. Two failures: not finding the bracket syntax at all, and finding it but editing `authors[0]`, who is already the maintainer -- so an off-by-one here produces a document with two maintainers and no contributor, and Peter's role silently changes. The instruction says `Dana` and never says 1; the mapping from the name to the index is only in the document.\n\nThat last sentence is the whole task, and F-frontmatter found out the hard way what it costs: `render_frontmatter` omits scalar values by design, so a scheme offering only `frontmatter_edit` gives the model `authors[0].name` and `authors[1].name` and no way whatever to learn which is Dana. The two arms guessed 3/10 and 7/10 in mirror image and that one task was the difference between p = 0.0156 and p = 0.25 for the whole arm. The task is **not** reworded -- it is the correct task, and it was the schemes that were incomplete. It is the discriminating task for `front_r`, which publishes the read op the family has had since it was built."
+    },
+    {
+      "id": "add-build-cache",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Turn on caching for the build.",
+      "golden": {
+        "first_changed": 15,
+        "unchanged_tail": 38,
+        "lines": [
+          "  cache: true"
+        ]
+      },
+      "expect": {
+        "key_delta": 1,
+        "state": "present",
+        "keys_present": {
+          "build.cache": "true"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "build.cache",
+            "value": true
+          }
+        }
+      ],
+      "note": "A key that does not exist yet, under a parent that does. The new line has to land inside `build` at its siblings' indent and above `authors`; appending it at the top level gives a document where `cache` is a peer of `build` and the build does not see it. The indent is not in the instruction and not in the schema -- it is read off the siblings, which is `bench/synthetic/front-shapes.md`'s four-space section asking the same question of the executor."
+    },
+    {
+      "id": "clear-title",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Blank out the title, but leave the key itself in the frontmatter.",
+      "golden": {
+        "first_changed": 2,
+        "unchanged_tail": 50,
+        "lines": [
+          "title:"
+        ]
+      },
+      "expect": {
+        "key_delta": 0,
+        "state": "present",
+        "keys_present": {
+          "title": ""
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "title",
+            "value": null
+          }
+        }
+      ],
+      "note": "`rich.md:52` says null is distinct from absent and from the empty string, and this is the task that makes the distinction cost something. Deleting the key is the obvious wrong answer and the instruction rules it out in as many words. Writing `title: \"\"` is the subtle one: it renders the same in most tooling and is a different value, which is why the golden compares bytes."
+    },
+    {
+      "id": "delete-draft",
+      "family": "frontmatter-delete",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "This file is no longer a draft. Take the draft flag out of the frontmatter completely.",
+      "golden": {
+        "first_changed": 4,
+        "unchanged_tail": 48,
+        "lines": []
+      },
+      "expect": {
+        "key_delta": -1,
+        "state": "present",
+        "keys_present": {},
+        "keys_absent": [
+          "draft"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-delete",
+          "args": {
+            "key": "draft"
+          }
+        }
+      ],
+      "note": "Half of the family's verb pair. The instruction says the flag should be gone, not false, and `draft: false` is a document that still carries a draft flag. Paired with `set-draft-true` below, which asks for the opposite on the same key in the same file -- one task cannot tell a verb confusion from a coin flip, which is FINDINGS caveat 6."
+    },
+    {
+      "id": "delete-build",
+      "family": "frontmatter-delete",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Drop the whole build configuration from the frontmatter.",
+      "golden": {
+        "first_changed": 9,
+        "unchanged_tail": 38,
+        "lines": []
+      },
+      "expect": {
+        "key_delta": -6,
+        "state": "present",
+        "keys_present": {},
+        "keys_absent": [
+          "build",
+          "build.target",
+          "build.jobs",
+          "build.features"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-delete",
+          "args": {
+            "key": "build"
+          }
+        }
+      ],
+      "note": "One delete of a container, not three deletes of its leaves. Removing `target`, `features` and `jobs` one at a time leaves `build:` behind as a key with nothing under it, which is a different document and a different meaning. Six entries go, because the two items under `features` go with it -- the delta is what catches a delete that took the key and orphaned its children, the failure `bench/synthetic/front-shapes.md` exists to make reachable."
+    },
+    {
+      "id": "set-draft-true",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "This file has gone back to being a draft. Say so in the frontmatter.",
+      "golden": {
+        "first_changed": 4,
+        "unchanged_tail": 48,
+        "lines": [
+          "draft: true"
+        ]
+      },
+      "expect": {
+        "key_delta": 0,
+        "state": "present",
+        "keys_present": {
+          "draft": "true"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "draft",
+            "value": true
+          }
+        }
+      ],
+      "note": "The other half of the verb pair: the same `draft` key as `delete-draft`, in the same file, wanted the other way. One task cannot tell a verb confusion from a coin flip, which is FINDINGS caveat 6, and the two directions are what make a preference for `delete` visible as a preference. The key currently holds `false`, so an edit that merely reasserts the current state is not available here -- a wrong verb produces a document with no draft flag at all."
+    },
+    {
+      "id": "release-bump",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/rich.md",
+      "instruction": "Update the version to 0.5.0, and set `released` to 2026-09-12.",
+      "golden": {
+        "first_changed": 3,
+        "unchanged_tail": 21,
+        "lines": [
+          "version: 0.5.0",
+          "draft: false",
+          "tags:",
+          "  - markdown",
+          "  - tooling",
+          "  - rust",
+          "build:",
+          "  target: release        # inline comment, must survive a sibling edit",
+          "  features:",
+          "    - tables",
+          "    - lists",
+          "  jobs: 4",
+          "authors:",
+          "  - name: Peter",
+          "    role: maintainer",
+          "  - name: Dana",
+          "    role: contributor",
+          "empty_value:",
+          "quoted_key: \"value: with a colon\"",
+          "multiline: |",
+          "  A literal block scalar.",
+          "  Second line, newlines preserved.",
+          "folded: >",
+          "  A folded scalar that joins",
+          "  these lines with spaces.",
+          "\"key with spaces\": ok",
+          "nested:",
+          "  deeply:",
+          "    buried: true",
+          "released: 2026-09-12"
+        ]
+      },
+      "expect": {
+        "key_delta": 1,
+        "state": "present",
+        "keys_present": {
+          "version": "0.5.0",
+          "released": "2026-09-12"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "version",
+            "value": "0.5.0"
+          }
+        },
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "released",
+            "value": "2026-09-12"
+          }
+        }
+      ],
+      "note": "Two calls, one changing a key and one adding a top-level key that has no obvious neighbour. Both values are quoted in the instruction and must be written bare: `0.5.0` is not a number, and a serializer that decides quoting from the JSON type the value arrived as writes `\"0.5.0\"`, which is a different value to every tool that reads it. The date is the same trap with a different shape -- YAML would read it as a date either way, and quoting it changes that.\n\nThis task has been wrong twice, in two different ways, and both are kept here because the failures are more instructive than the task.\n\nIt opened `Cut version 0.5.0, ...`, and measured the verb rather than the edit: 10/10 trials in *both* F-frontmatter arms read that as `action=delete` on `version` -- a release-engineering idiom colliding with an `action` enum -- and destroyed the key. That is the clearest evidence in the project that an instruction verb colliding with a destructive action name is a data-loss route no argument-level guard can see, since every argument in that call is well-formed. `Update` removed it: 20 destroyed documents became 0.\n\nWhat that was masking was a wrong *expectation*. The instruction said `record 2026-09-12 as the release date` and this note used to say the key it becomes is the model's choice -- while `keys_present` demanded `released` and the golden pinned its line. Both cannot be true, and the expectation is the half with teeth: all 30 trials across the three F-frontread schemes made both calls, wrote both values bare, and chose `release_date`, so the task scored 0/30 for obeying an instruction that never named a key. Naming it is the fix, and it is chosen over loosening the expectation because the whole-document golden is this family's entire point -- a task that accepts two different documents cannot pin the bytes `rich.md:37-43` exists to protect."
+    },
+    {
+      "id": "create-on-absent",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/absent.md",
+      "instruction": "Give this file a frontmatter block with a title of \"Absent frontmatter\".",
+      "golden": {
+        "first_changed": 0,
+        "unchanged_tail": 19,
+        "lines": [
+          "---",
+          "title: Absent frontmatter",
+          "---",
+          ""
+        ]
+      },
+      "expect": {
+        "key_delta": 1,
+        "state": "present",
+        "keys_present": {
+          "title": "Absent frontmatter"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "title",
+            "value": "Absent frontmatter"
+          }
+        }
+      ],
+      "note": "The one task where the block does not exist yet, and the only one where the edit inserts above every byte of the document. The summary the model is given says the file has no frontmatter, so this measures whether it reads that as 'nothing to edit' and refuses -- which is the failure to watch for, since every other family's tools can only change what is already there. `corpus/frontmatter/absent.md:5` names the blank line between the new block and `# No frontmatter` as part of what must be right, and the whole-document golden pins it."
+    },
+    {
+      "id": "fill-empty",
+      "family": "frontmatter-set",
+      "fixture": "corpus/frontmatter/empty.md",
+      "instruction": "Mark this file as a draft by adding a draft flag set to true.",
+      "golden": {
+        "first_changed": 1,
+        "unchanged_tail": 12,
+        "lines": [
+          "draft: true"
+        ]
+      },
+      "expect": {
+        "key_delta": 1,
+        "state": "present",
+        "keys_present": {
+          "draft": "true"
+        },
+        "keys_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "frontmatter-set",
+          "args": {
+            "key": "draft",
+            "value": true
+          }
+        }
+      ],
+      "note": "The state `create-on-absent` is not: delimiters present, no keys. `corpus/frontmatter/empty.md:9-11` requires the key to fill the existing block rather than open a second one above it, and a second `---` block would leave the file's real frontmatter being the new one and the old pair being a thematic break and a heading. Together with `create-on-absent` this is the pair that makes absent and empty different states rather than two spellings of falsy."
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 1, "outcome": "op_error", "detail": "missing section 'Changelog > [1.5.0] - 2026-09-06'; have ['Changelog', 'Changelog > Changelog > [1.5.0] - 2026-09-06', 'Changelog > [1.2.0] - 2026-04-01', 'Changelog > [1.2.0] - 2026-04-01 > Added', 'Changelog > [1.2.0] - 2026-04-01 > Security', 'Changelog > [1.3.0] - 2026-05-19', 'Changelog > [1.3.0] - 2026-05-19 > Added', 'Changelog > [1.3.0] - 2026-05-19 > Removed', 'Changelog > [1.4.0] - 2026-07-02', 'Changelog > [1.4.0] - 2026-07-02 > Added', 'Changelog > [1.4.0] - 2026-07-02 > Changed', 'Changelog > [1.4.0] - 2026-07-02 > Deprecated', 'Changelog > [1.4.1] - 2026-07-30', 'Changelog > [1.4.1] - 2026-07-30 > Fixed', 'Changelog > [1.4.2] - 2026-08-14', 'Changelog > [1.4.2] - 2026-08-14 > Changed', 'Changelog > [1.4.2] - 2026-08-14 > Fixed', 'Changelog > [Unreleased]', 'Changelog > [Unreleased] > Added']; after: call 4: no section at path \"Changelog > [1.5.0] - 2026-09-06\". |   Near matches: [1.4.0] - 2026-07-02, [1.2.0] - 2026-04-01, [1.4.1] - 2026-07-30 |   Paths: \"Changelog\"; \"Changelog > [Unreleased]\"; \"Changelog > [Unreleased] > Added\"; \"Changelog > Changelog > [1.5.0] - 2026-09-06\"; \"Changelog > [1.4.2] - 2026-08-14\"; \"Changelog > [1.4.2] - 2026-08-14 > Fixed\"; \"Changelog > [1.4.2] - 2026-08-14 > Changed\"; \"Changelog > [1.4.1] - 2026-07-30\"; \"Changelog > [1.4.1] - 2026-07-30 > Fixed\"; \"Changelog > [1.4.0] - 2026-07-02\"; ..."}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 5, "outcome": "op_error", "detail": "section delta +3, expected +2; after: call 3: no section at path \"Changelog > [1.5.0] - 2026-09-06 > Added\". |   Near matches: Added, Added, Added |   Paths: \"Changelog\"; \"Changelog > [Unreleased]\"; \"Changelog > [Unreleased] > Added\"; \"Changelog > [1.5.0] - 2026-09-06\"; \"Changelog > Added\"; \"Changelog > [1.4.2] - 2026-08-14\"; \"Changelog > [1.4.2] - 2026-08-14 > Fixed\"; \"Changelog > [1.4.2] - 2026-08-14 > Changed\"; \"Changelog > [1.4.1] - 2026-07-30\"; \"Changelog > [1.4.1] - 2026-07-30 > Fixed\"; ..."}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 6, "outcome": "wrong", "detail": "line 26: '- `plan --explain` flag.', expected '### Added'"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 7, "outcome": "op_error", "detail": "line 28: '- \\\\`plan --explain\\\\` flag.', expected '- `plan --explain` flag.'; after: call 1: `body` contains a heading ('Added\\\\n- \\\\`plan --explain\\\\` flag.'), and it is inserted as literal text -- the level would not be worked out for you. |   Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created. |   If 'Added\\\\n- \\\\`plan --explain\\\\` flag.' is meant to be prose, drop the `#` marks."}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 8, "outcome": "wrong", "detail": "missing section 'Changelog > [1.5.0] - 2026-09-06 > Added'; have ['Changelog', 'Changelog > Added', 'Changelog > [1.2.0] - 2026-04-01', 'Changelog > [1.2.0] - 2026-04-01 > Added', 'Changelog > [1.2.0] - 2026-04-01 > Security', 'Changelog > [1.3.0] - 2026-05-19', 'Changelog > [1.3.0] - 2026-05-19 > Added', 'Changelog > [1.3.0] - 2026-05-19 > Removed', 'Changelog > [1.4.0] - 2026-07-02', 'Changelog > [1.4.0] - 2026-07-02 > Added', 'Changelog > [1.4.0] - 2026-07-02 > Changed', 'Changelog > [1.4.0] - 2026-07-02 > Deprecated', 'Changelog > [1.4.1] - 2026-07-30', 'Changelog > [1.4.1] - 2026-07-30 > Fixed', 'Changelog > [1.4.2] - 2026-08-14', 'Changelog > [1.4.2] - 2026-08-14 > Changed', 'Changelog > [1.4.2] - 2026-08-14 > Fixed', 'Changelog > [1.5.0] - 2026-09-06', 'Changelog > [Unreleased]', 'Changelog > [Unreleased] > Added']"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 9, "outcome": "destructive", "detail": "existing line lost: 'Purpose in the corpus: the insert-at-top pattern. Almost every changelog edit'"}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 0, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits > Headers'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Headers', 'Deep heading nesting > Reference > API > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 1, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 4: no section at path \"Reference > API > Rate limits\"},text:\". |   Near matches: Rate limits |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 2, "outcome": "wrong", "detail": "line 68: 'Every request is subject to rate limiting. Check headers for details.', expected '##### Headers'"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 5, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Reference > Rate limits > Headers', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 2: no section at path \"Reference > API > Rate limits\". |   Near matches: Rate limits |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 7, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits > Headers'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Headers', 'Deep heading nesting > Reference > API > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 9, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Headers', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 0, "outcome": "collateral:formatting", "detail": "whitespace only, line 69: 'Written to `~/.fastmd/log`.', expected ''"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 1, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 3, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 5, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Troubleshooting'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS', 'Troubleshooting', 'Troubleshooting > Common errors', 'Troubleshooting > Logs']; after: call 1: `body` contains a heading ('Logs'), and it is inserted as literal text -- the level would not be worked out for you. |   Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created. |   If 'Logs' is meant to be prose, drop the `#` marks."}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 6, "outcome": "wrong", "detail": "line 68: 'Logs are written to `~/.fastmd/log`.', expected '### Logs'"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 7, "outcome": "wrong", "detail": "line 68: 'See the FAQ.', expected '### Logs'"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 8, "outcome": "wrong", "detail": "line 68: 'Logs. Written to `~/.fastmd/log`.', expected '### Logs'"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 9, "outcome": "wrong", "detail": "line 68: 'Please see the troubleshooting guide below for common issues.', expected '### Logs'"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 10, "outcome": "wrong", "detail": "section delta +3, expected +2"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 12, "outcome": "wrong", "detail": "missing section 'Changelog > [1.5.0] - 2026-09-06 > Added'; have ['Changelog', 'Changelog > [1.2.0] - 2026-04-01', 'Changelog > [1.2.0] - 2026-04-01 > Added', 'Changelog > [1.2.0] - 2026-04-01 > Security', 'Changelog > [1.3.0] - 2026-05-19', 'Changelog > [1.3.0] - 2026-05-19 > Added', 'Changelog > [1.3.0] - 2026-05-19 > Removed', 'Changelog > [1.4.0] - 2026-07-02', 'Changelog > [1.4.0] - 2026-07-02 > Added', 'Changelog > [1.4.0] - 2026-07-02 > Changed', 'Changelog > [1.4.0] - 2026-07-02 > Deprecated', 'Changelog > [1.4.1] - 2026-07-30', 'Changelog > [1.4.1] - 2026-07-30 > Fixed', 'Changelog > [1.4.2] - 2026-08-14', 'Changelog > [1.4.2] - 2026-08-14 > Changed', 'Changelog > [1.4.2] - 2026-08-14 > Fixed', 'Changelog > [1.5.0] - 2026-09-06', 'Changelog > [Unreleased]', 'Changelog > [Unreleased] > Added']"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 15, "outcome": "wrong", "detail": "line 26: '- `plan --explain` flag.,', expected '### Added'"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 18, "outcome": "wrong", "detail": "section delta +4, expected +2"}
+{"task_id": "insert-release-at-top", "scheme": "section_g_hpath", "trial": 19, "outcome": "wrong", "detail": "line 28: '- `plan --explain` flag.\\\\n', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 14, "outcome": "collateral:formatting", "detail": "line 26: ' This release is a hotfix.', expected 'This release is a hotfix.'"}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 16, "outcome": "wrong", "detail": "line 26: '<br>This release is a hotfix.', expected 'This release is a hotfix.'"}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 14, "outcome": "wrong", "detail": "line 30: '\\\\nNone of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'"}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 12, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 14, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_g_hpath", "trial": 19, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 10, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 11, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 12, "outcome": "wrong", "detail": "line 68: 'No information provided.', expected '##### Headers'"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 13, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 14, "outcome": "wrong", "detail": "line 68: 'Every request is limited to 60 requests per minute.', expected '##### Headers'"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 15, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Headers', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 16, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 17, "outcome": "wrong", "detail": "line 68: 'Every request is subject to rate limiting. Check headers for current status.', expected '##### Headers'"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 18, "outcome": "wrong", "detail": "line 68: 'Every response carries `X-RateLimit-*`.', expected '##### Headers'"}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_g_hpath", "trial": 19, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 4: no section at path \"Deep heading nesting > Reference > API > Rate limits\". |   Near matches: Rate limits |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 10, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Troubleshooting'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS', 'Troubleshooting', 'Troubleshooting > Common errors', 'Troubleshooting > Logs']; after: call 1: `body` contains a heading ('Troubleshooting\\\\n\\\\n## Logs\\\\n\\\\nWritten to `~/.fastmd/log`.\\\\n\\\\n## Common errors\\\\n\\\\nSee the FAQ.'), and it is inserted as literal text -- the level would not be worked out for you. |   Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created. |   If 'Troubleshooting\\\\n\\\\n## Logs\\\\n\\\\nWritten to `~/.fastmd/log`.\\\\n\\\\n## Common errors\\\\n\\\\nSee the FAQ.' is meant to be prose, drop the `#` marks."}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 11, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 12, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Troubleshooting'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS', 'Troubleshooting', 'Troubleshooting > Logs']; after: call 4: no section at path \"Troubleshooting\"},text:\". |   Near matches: Troubleshooting |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 13, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 14, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Troubleshooting > Common errors'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Troubleshooting > Logs', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 4: no section at path \"Troubleshooting > Logs\"}}<tool_call|><|thought | |><|tool_call>call:section_edit{action:\". |   Near matches: none |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 15, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 16, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 17, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 18, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_g_hpath", "trial": 19, "outcome": "wrong", "detail": "missing section 'Deep heading nesting > Troubleshooting'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS', 'Troubleshooting', 'Troubleshooting > Common errors', 'Troubleshooting > Logs']"}

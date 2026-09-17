@@ -1,0 +1,122 @@
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:plain", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 0, "outcome": "op_error", "detail": "missing row ['sprocket', 'active', 'rowan']; have [('widget', 'active', 'peter'), ('widget-core', 'active', 'dana'), ('gadget', 'retired', 'rowan'), ('', 'active', 'rowan')]; after: call 2: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 4, "outcome": "op_error", "detail": "missing row ['sprocket', 'active', 'rowan']; have [('widget', 'active', 'peter'), ('widget-core', 'active', 'dana'), ('gadget', 'retired', 'rowan'), ('sprocket', '', 'rowan')]; after: call 2: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 7, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:plain", "trial": 9, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 0, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 2, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 4, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 5, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 6, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:plain", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 4, "outcome": "op_error", "detail": "missing row ['sprocket', 'active', 'rowan']; have [('widget', 'active', 'peter'), ('widget-core', 'active', 'dana'), ('gadget', 'retired', 'rowan'), ('sprocket', '', 'rowan')]; after: call 2: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 5, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:plain", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 0, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 1, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 5, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 6, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 7, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:plain", "trial": 9, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "delete-row-aligned", "scheme": "scheme_d:armb:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:plain", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:plain", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:json", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:json", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:json", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_a:armb:json", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "scheme_a:armb:json", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_c:armb:json", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 2, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 3, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 4, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 5, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 8, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-short", "scheme": "scheme_d:armb:json", "trial": 9, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 0, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 2, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 4, "outcome": "op_error", "detail": "a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "scheme_d:armb:json", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 4, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Component | Status | Owner"}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "scheme_d:armb:json", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 0, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 1, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 2, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 3, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 5, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 7, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 8, "outcome": "op_error", "detail": "call 4: a row is required: either `values` keyed by column name, or `row` as an ordered array. |   Columns: Default | Left | Center | Right"}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_d:armb:json", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "scheme_d:armb:json", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_e:armb:json", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:json", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:json", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "scheme_g:armb:json", "trial": 9, "outcome": "correct", "detail": null}

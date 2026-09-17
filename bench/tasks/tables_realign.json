@@ -1,0 +1,79 @@
+{
+  "_comment": "The gain half of the `table-realign` ship decision, priced without a GPU. `table-realign` is the one op in OPS that no published `action` enum offers, so these three tasks are unanswerable under `scheme_f` at any temperature and answerable in one call under `scheme_f_realign`. That asymmetry is forced by the schema rather than measured, which is the F-rows argument: run `ceiling.py` on both schemes and the discordant count is bounded before a model is asked anything. The three tasks are the three shapes raggedness arrives in -- a foreign line ending, over-padding, and a table nested inside a list item -- because realign has to preserve all three of those properties while changing the padding, and a ceiling that only covers the easy shape is not a ceiling. Fixture is bench/synthetic/realign-targets.md, which is synthetic and not frozen corpus. require_delimiter_unchanged and preserve_existing_rows are false here and true almost everywhere else: rewriting the delimiter row and every body line is what this op does, and a task set that forbade it would be asserting the op should not work.",
+  "tasks": [
+    {
+      "id": "realign-crlf",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/realign-targets.md",
+      "instruction": "The table under \"CRLF ragged\" had its column padding stripped by another editor. Tidy the table so its columns line up again. Do not change any cell's text.",
+      "target_table": 0,
+      "expect_row_delta": 0,
+      "require_present": [
+        ["widget", "active"],
+        ["gadget", "retired"]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": false,
+      "require_delimiter_unchanged": false,
+      "require_aligned": true,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "CRLF ragged"
+          }
+        }
+      },
+      "note": "Every line of this table ends CRLF while the over-padded table below ends LF. Realign rewrites all four lines, so it has to carry the file's per-line ending through rather than normalizing it -- the byte-preservation contract at its narrowest, on the one op licensed to rewrite lines nobody named."
+    },
+    {
+      "id": "realign-overpadded",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/realign-targets.md",
+      "instruction": "The table under \"Over-padded ragged\" has one row that is not padded like the others. Tidy the table so its columns line up again. Do not change any cell's text.",
+      "target_table": 1,
+      "expect_row_delta": 0,
+      "require_present": [
+        ["a", "b", "c"],
+        ["dd", "ee", "ff"]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": false,
+      "require_delimiter_unchanged": false,
+      "require_aligned": true,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "Over-padded ragged"
+          }
+        }
+      },
+      "note": "The disagreement here is between a wide header and a narrow row, and realign settles it by narrowing to the widest *content* rather than by widening to the header's existing padding. That is a defensible reading -- the columns do line up afterwards -- and it is also the subject of the separate open item about display width, which is why this task asserts alignment and not a specific width."
+    },
+    {
+      "id": "realign-indented",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/realign-targets.md",
+      "instruction": "Under \"Indented ragged\" there is a table inside a list item whose columns do not line up. Tidy the table. Do not change any cell's text.",
+      "target_table": 2,
+      "expect_row_delta": 0,
+      "require_present": [
+        ["--verbose", "off"]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": false,
+      "require_delimiter_unchanged": false,
+      "require_aligned": true,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "Indented ragged"
+          }
+        }
+      },
+      "note": "The table is a continuation block of a list item, so every line carries two leading spaces that are structure and not padding. Realign has to re-pad inside that indent without touching it; dropping it would silently end the list item and change what the document means, which check_table_result would see as content outside the target table changing."
+    }
+  ]
+}

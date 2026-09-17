@@ -1,0 +1,228 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTUP_TOOLCHAIN: "1.75"
+
+jobs:
+  validate:
+    name: Validate release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: "1.75"
+          components: rustfmt, clippy
+
+      - name: Install Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify tag matches workspace version
+        shell: bash
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          cargo_version="$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(json.load(sys.stdin)["packages"][0]["version"])')"
+          test "$tag_version" = "$cargo_version" || {
+            echo "Tag version ($tag_version) does not match Cargo version ($cargo_version)"
+            exit 1
+          }
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+      - name: Run Rust tests
+        run: cargo test --workspace --locked
+
+      - name: Build CLI for integration tests
+        run: cargo build -p incise-cli --locked
+
+      - name: Run Python invariant suite
+        run: python3 bench/test_incise_ops.py
+
+      - name: Run differential test suite
+        run: python3 bench/difftest.py
+
+      - name: Check published schemas
+        run: python3 bench/schematest.py
+
+      - name: Check recorded-call replay agreement
+        run: python3 bench/replaycheck.py
+
+      - name: Test Hermes plugin adapter
+        run: python3 plugins/hermes/test_plugin.py
+
+      - name: Verify incise-core package
+        run: cargo package -p incise-core --locked
+
+  package:
+    name: Package ${{ matrix.archive }}
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            archive: x86_64-unknown-linux-gnu
+            format: tar
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            archive: aarch64-unknown-linux-gnu
+            format: tar
+          - os: macos-14
+            target: aarch64-apple-darwin
+            archive: aarch64-apple-darwin
+            format: tar
+          - os: macos-14
+            target: x86_64-apple-darwin
+            archive: x86_64-apple-darwin
+            format: tar
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+            archive: x86_64-pc-windows-msvc
+            format: zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: "1.75"
+          targets: ${{ matrix.target }}
+
+      - name: Build release binary
+        run: cargo build --release -p incise-cli --locked --target ${{ matrix.target }}
+
+      - name: Create Unix archive
+        if: matrix.format == 'tar'
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          ARCHIVE: ${{ matrix.archive }}
+        run: |
+          mkdir -p staging dist
+          cp "target/$TARGET/release/incise" README.md LICENSE staging/
+          tar -C staging -czf "dist/incise-${GITHUB_REF_NAME}-${ARCHIVE}.tar.gz" incise README.md LICENSE
+
+      - name: Create Windows archive
+        if: matrix.format == 'zip'
+        shell: pwsh
+        env:
+          TARGET: ${{ matrix.target }}
+          ARCHIVE: ${{ matrix.archive }}
+        run: |
+          New-Item -ItemType Directory -Force staging, dist
+          Copy-Item "target/$env:TARGET/release/incise.exe", README.md, LICENSE staging
+          Compress-Archive -Path staging/* -DestinationPath "dist/incise-$env:GITHUB_REF_NAME-$env:ARCHIVE.zip"
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: incise-${{ matrix.archive }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    name: Publish crates
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: "1.75"
+
+      - name: Publish incise-core
+        shell: bash
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if curl --fail --silent --show-error --user-agent "incise-release-workflow" \
+            "https://crates.io/api/v1/crates/incise-core/$version" >/dev/null; then
+            echo "incise-core $version is already published"
+          else
+            cargo publish -p incise-core --locked
+          fi
+
+      - name: Publish incise-cli after registry propagation
+        shell: bash
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if curl --fail --silent --show-error --user-agent "incise-release-workflow" \
+            "https://crates.io/api/v1/crates/incise-cli/$version" >/dev/null; then
+            echo "incise-cli $version is already published"
+            exit 0
+          fi
+          for attempt in {1..12}; do
+            cargo publish -p incise-cli --locked && exit 0
+            if [ "$attempt" -eq 12 ]; then
+              exit 1
+            fi
+            echo "incise-core is not visible yet; retrying in 10 seconds"
+            sleep 10
+          done
+
+  github-release:
+    name: Create GitHub release
+    needs: [package, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Download release archives
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: incise-*
+          path: dist
+          merge-multiple: true
+
+      - name: Generate checksums and release notes
+        shell: bash
+        run: |
+          cd dist
+          sha256sum incise-* > SHA256SUMS
+          cd ..
+          previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
+          if [ -n "$previous_tag" ]; then
+            git log --pretty=format:"- %s (%h)" "$previous_tag..HEAD" > release-notes.md
+          else
+            git log --pretty=format:"- %s (%h)" > release-notes.md
+          fi
+
+      - name: Create release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          files: dist/*
+          body_path: release-notes.md
+          draft: false
+          prerelease: false

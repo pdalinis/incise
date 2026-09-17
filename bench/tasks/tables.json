@@ -1,0 +1,150 @@
+{
+  "_comment": "Targeted auto-graded pass. Six table tasks, all gradable mechanically with no golden files. See bench/PLAN.md sections 2.3 and 5.1. Instructions are phrased as a user would phrase them and deliberately avoid incise's op vocabulary.",
+  "tasks": [
+    {
+      "id": "add-row-aligned-short",
+      "family": "table-add-row",
+      "fixture": "corpus/tables/aligned.md",
+      "instruction": "Add a row to the Components table for a component named \"sprocket\" with status \"active\" and owner \"rowan\". Put it at the end of the table.",
+      "target_table": 0,
+      "expect_row_delta": 1,
+      "require_present": [["sprocket", "active", "rowan"]],
+      "require_absent": [],
+      "preserve_existing_rows": true,
+      "require_aligned": true,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-add-row",
+        "args": {
+          "table": {
+            "heading": "Components"
+          },
+          "values": ["sprocket", "active", "rowan"]
+        }
+      },
+      "note": "sprocket (8) is shorter than widget-core (11), so column widths do not change. Correct answer touches only the new line. This is the pilot task that failed by one space."
+    },
+    {
+      "id": "add-row-aligned-repad",
+      "family": "table-add-row",
+      "fixture": "corpus/tables/aligned.md",
+      "instruction": "Add a row at the end of the Components table for a component named \"hyperwidget-assembly\" with status \"active\" and owner \"dana\".",
+      "target_table": 0,
+      "expect_row_delta": 1,
+      "require_present": [["hyperwidget-assembly", "active", "dana"]],
+      "require_absent": [],
+      "preserve_existing_rows": false,
+      "require_aligned": true,
+      "require_delimiter_unchanged": false,
+      "ideal_call": {
+        "op": "table-add-row",
+        "args": {
+          "table": {
+            "heading": "Components"
+          },
+          "values": ["hyperwidget-assembly", "active", "dana"]
+        }
+      },
+      "note": "New value (20) is longer than any existing, so every line of the table must be re-padded, including the delimiter row. The hard case for a direct editor."
+    },
+    {
+      "id": "add-row-ragged",
+      "family": "table-add-row",
+      "fixture": "corpus/tables/ragged.md",
+      "instruction": "Add a row to the Components table for a component named \"sprocket\" with status \"active\" and owner \"rowan\". Put it at the end of the table.",
+      "target_table": 0,
+      "expect_row_delta": 1,
+      "require_present": [["sprocket", "active", "rowan"]],
+      "require_absent": [],
+      "preserve_existing_rows": true,
+      "require_aligned": false,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-add-row",
+        "args": {
+          "table": {
+            "heading": "Components"
+          },
+          "values": ["sprocket", "active", "rowan"]
+        }
+      },
+      "note": "Table is ragged. Correct behavior is to leave the existing rows alone rather than prettifying them."
+    },
+    {
+      "id": "add-row-alignment-markers",
+      "family": "table-add-row",
+      "fixture": "corpus/tables/alignment-markers.md",
+      "instruction": "Add a row with the values i, j, k and l to the table under \"All four forms\".",
+      "target_table": 0,
+      "expect_row_delta": 1,
+      "require_present": [["i", "j", "k", "l"]],
+      "require_absent": [],
+      "preserve_existing_rows": true,
+      "require_aligned": true,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-add-row",
+        "args": {
+          "table": {
+            "heading": "All four forms"
+          },
+          "values": ["i", "j", "k", "l"]
+        }
+      },
+      "note": "The delimiter row carries :--- / :---: / ---: alignment markers that must survive byte-identical."
+    },
+    {
+      "id": "delete-row-aligned",
+      "family": "table-delete-row",
+      "fixture": "corpus/tables/aligned.md",
+      "instruction": "Remove the gadget row from the Components table.",
+      "target_table": 0,
+      "expect_row_delta": -1,
+      "require_present": [],
+      "require_absent": [["gadget", "retired", "rowan"]],
+      "preserve_existing_rows": true,
+      "require_aligned": true,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-delete-row",
+        "args": {
+          "table": {
+            "heading": "Components"
+          },
+          "where": {
+            "Component": "gadget"
+          }
+        }
+      },
+      "note": "gadget (6) is not the widest value, so removing it leaves column widths unchanged. No re-padding is correct."
+    },
+    {
+      "id": "update-cell-multi-table",
+      "family": "table-update-cell",
+      "fixture": "corpus/tables/multiple-per-section.md",
+      "instruction": "The staging host stage-1 has been resized. Change its Size to t3.l.",
+      "target_table": 1,
+      "expect_row_delta": 0,
+      "require_present": [["stage-1", "us-west-2", "t3.l"]],
+      "require_absent": [["stage-1", "us-west-2", "t3.m"]],
+      "preserve_existing_rows": false,
+      "require_aligned": true,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-update-cell",
+        "args": {
+          "table": {
+            "heading": "Environments",
+            "ordinal": 1
+          },
+          "where": {
+            "Host": "stage-1"
+          },
+          "column": "Size",
+          "value": "t3.l"
+        }
+      },
+      "note": "Four tables in the file share identical column headers. Tests whether the right one is edited; the other three must be byte-identical."
+    }
+  ]
+}

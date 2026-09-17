@@ -1,0 +1,4 @@
+# Corpus and synthetic fixtures contain intentional byte-level hazards.
+# Disable checkout/checkin normalization while retaining textual diffs.
+corpus/** -text diff
+bench/synthetic/** -text diff

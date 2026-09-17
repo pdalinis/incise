@@ -1,0 +1,214 @@
+{
+  "_comment": "Six table READ tasks -- the first tasks in this project that ask a model a question instead of an edit. Graded by grade.check_table_read_result against the structure table_get returns, never against render_table_get's string: a grader matching rendered text would be a golden for the renderer.\n\nSeparate from tables.json rather than appended to it, which is a deviation from the plan and deliberate. Every scheme in tables.json offers table_edit and none offers table_get, so a mixed file would put ceiling.py below 100% on the six write tasks for a reason that is not a defect -- and the read question (does a model given the table summary reach for the tool at all) is its own arm, not a rider on an edit arm.\n\nEvery expectation in this file was computed from the fixture by table_get and pasted, not typed: a hand-written expectation that disagrees with the document would silently redefine correct, which is the rule make_section_tasks.py states. No instruction can be answered from the prompt's table summary, which carries headings, columns and row counts and no cell -- so a trial that answers without calling has invented the answer.",
+  "tasks": [
+    {
+      "id": "get-whole-table",
+      "family": "table-get",
+      "fixture": "corpus/tables/ragged.md",
+      "instruction": "List every component in the Components table with its status and owner.",
+      "expect_heading": "Ragged table > Components",
+      "expect_columns": [
+        "Component",
+        "Status",
+        "Owner"
+      ],
+      "expect_rows": [
+        [
+          "widget",
+          "active",
+          "peter"
+        ],
+        [
+          "widget-core",
+          "active",
+          "dana"
+        ],
+        [
+          "gadget",
+          "retired",
+          "rowan"
+        ]
+      ],
+      "expect_total": 3,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Components"
+          }
+        }
+      },
+      "note": "The unfiltered read. The table is ragged, which is the point: a read reports cells, and the source formatting is not one of them."
+    },
+    {
+      "id": "get-filter-one-column",
+      "family": "table-get",
+      "fixture": "corpus/tables/sortable.md",
+      "instruction": "Which packages in the Packages table are priority high? Give their names and versions.",
+      "expect_heading": "Sortable table > Packages",
+      "expect_columns": [
+        "Name",
+        "Version",
+        "Released",
+        "Downloads",
+        "Priority"
+      ],
+      "expect_rows": [
+        [
+          "delta",
+          "1.10.0",
+          "2025-03-04",
+          "9",
+          "high"
+        ],
+        [
+          "bravo",
+          "1.10.1",
+          "2025-12-01",
+          "100",
+          "high"
+        ]
+      ],
+      "expect_total": 5,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Packages"
+          },
+          "filter": {
+            "Priority": "high"
+          }
+        }
+      },
+      "note": "Two matches. The case `where` cannot express and `filter` can: on a write op two matches is a refusal, and here it is the answer. A model that reads the whole table instead grades `unfiltered`, not `misreported` -- nothing it reported was untrue."
+    },
+    {
+      "id": "get-filter-two-columns",
+      "family": "table-get",
+      "fixture": "corpus/tables/sortable.md",
+      "instruction": "In the Packages table, find the package that is priority low AND at version 2.0.0. What date was it released?",
+      "expect_heading": "Sortable table > Packages",
+      "expect_columns": [
+        "Name",
+        "Version",
+        "Released",
+        "Downloads",
+        "Priority"
+      ],
+      "expect_rows": [
+        [
+          "echo",
+          "2.0.0",
+          "2024-02-29",
+          "1000",
+          "low"
+        ]
+      ],
+      "expect_total": 5,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Packages"
+          },
+          "filter": {
+            "Priority": "low",
+            "Version": "2.0.0"
+          }
+        }
+      },
+      "note": "Two filter keys, ANDed. `alpha` is priority low and `echo` is version 2.0.0, so a filter that ORs its keys returns two rows and one of them is wrong -- the `get-filter-any` mutation's failure, reached from the model's side."
+    },
+    {
+      "id": "get-filter-no-match",
+      "family": "table-get",
+      "fixture": "corpus/tables/sortable.md",
+      "instruction": "Which packages in the Packages table are priority urgent?",
+      "expect_heading": "Sortable table > Packages",
+      "expect_columns": [
+        "Name",
+        "Version",
+        "Released",
+        "Downloads",
+        "Priority"
+      ],
+      "expect_rows": [],
+      "expect_total": 5,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Packages"
+          },
+          "filter": {
+            "Priority": "urgent"
+          }
+        }
+      },
+      "note": "Zero matches, which is an ordinary answer on a read and a refusal on a write. Also the task where a model that never called and a model that called and got nothing look alike in prose and do not look alike here: no call is `malformed`, the empty read is `correct`."
+    },
+    {
+      "id": "get-ordinal-table",
+      "family": "table-get",
+      "fixture": "corpus/tables/multiple-per-section.md",
+      "instruction": "The Environments heading has three tables: production hosts first, then staging hosts, then scratch hosts. What host is in the staging table, and what region and size is it?",
+      "expect_heading": "Multiple tables per section > Environments",
+      "expect_columns": [
+        "Host",
+        "Region",
+        "Size"
+      ],
+      "expect_rows": [
+        [
+          "stage-1",
+          "us-west-2",
+          "t3.m"
+        ]
+      ],
+      "expect_total": 1,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Environments",
+            "ordinal": 1
+          }
+        }
+      },
+      "note": "Ordinal addressing on a read. All three tables share the heading and the columns, so the heading and column checks cannot catch the wrong one -- only the rows can, which is why rows are compared and not just counted."
+    },
+    {
+      "id": "get-escaped-cell",
+      "family": "table-get",
+      "fixture": "corpus/tables/cell-edge-cases.md",
+      "instruction": "In the Hazardous cells table, what is the Value cell of the row whose Case is \"escaped pipe\"? Report it exactly as written.",
+      "expect_heading": "Table cell edge cases > Hazardous cells",
+      "expect_columns": [
+        "Case",
+        "Value",
+        "Note"
+      ],
+      "expect_rows": [
+        [
+          "escaped pipe",
+          "a \\| b",
+          "literal pipe, backslashed"
+        ]
+      ],
+      "expect_total": 10,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Hazardous cells"
+          },
+          "filter": {
+            "Case": "escaped pipe"
+          }
+        }
+      },
+      "note": "One row out of ten, and its cell holds an escaped pipe. `split_row` leaves the backslash intact and so must the report: a read that helpfully unescapes returns a cell the document does not contain."
+    }
+  ]
+}

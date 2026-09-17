@@ -1,0 +1,73 @@
+name: Benchmark proposal
+description: Propose a model trial, remeasurement, or benchmark-design change.
+title: "benchmark: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Live model runs can be expensive and can invalidate comparisons when conditions drift. Define the question and the decision rule before spending GPU time.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+      description: State the narrow question the experiment should answer.
+    validations:
+      required: true
+
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis and predicted direction
+      description: Record the prediction before observing new outcomes.
+    validations:
+      required: true
+
+  - type: textarea
+    id: population
+    attributes:
+      label: Affected population and reach
+      description: Identify the tasks, calls, refusal branches, schemas, or tool compositions that can encounter the changed surface.
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Control, treatment, and pairing
+      description: Specify seeds, sample size, turn cap, result shape, and variables held constant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: endpoint
+    attributes:
+      label: Primary endpoint and decision rule
+      description: Define the outcome, statistical comparison, stopping condition, and what each result would cause the project to do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: cheaper_evidence
+    attributes:
+      label: Cheaper evidence considered first
+      description: Explain whether deterministic tests, reach analysis, replay, regrading, or a ceiling check can answer part or all of the question.
+    validations:
+      required: true
+
+  - type: input
+    id: gpu_cost
+    attributes:
+      label: Estimated live-run cost
+      description: Estimate trials, tokens, GPU time, or monetary cost.
+      placeholder: 300 paired trials, approximately 2 GPU-hours
+    validations:
+      required: true
+
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Provenance to record
+      description: Name the model, checkpoint, server, decoding settings, prompt and schema identifiers, executor commit, and task-set hash.
+    validations:
+      required: true

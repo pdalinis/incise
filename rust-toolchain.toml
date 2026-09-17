@@ -1,0 +1,9 @@
+[toolchain]
+channel = "1.75"
+components = ["rustfmt", "clippy"]
+profile = "minimal"
+
+[target]
+# Add cross-compilation targets here if needed
+# x86_64-unknown-linux-musl = []
+# aarch64-apple-darwin = []

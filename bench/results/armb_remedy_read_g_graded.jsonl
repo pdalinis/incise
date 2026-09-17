@@ -1,0 +1,30 @@
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 0, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 1, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 2, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 3, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 4, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 5, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 6, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 7, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 8, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-name", "scheme": "table_read_g", "trial": 9, "outcome": "op_error", "detail": "the column \"Name\" appears 2 times in this table's header, so it does not identify one cell. |   Columns: Name | Value | Name |   Rename one of them in the document, then retry."}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-both", "scheme": "table_read_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "get-repeated-control", "scheme": "table_read_g", "trial": 9, "outcome": "correct", "detail": null}

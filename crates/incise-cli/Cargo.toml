@@ -1,0 +1,30 @@
+[package]
+name = "incise-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Command-line front end for incise's markdown edit operations"
+readme = "README.md"
+keywords = ["markdown", "editing", "llm", "agents", "cli"]
+categories = ["command-line-utilities", "text-processing"]
+
+[[bin]]
+name = "incise"
+path = "src/main.rs"
+
+# `incise-core` has no dependencies and must not acquire any: it is one half of a
+# differential pair against `bench/incise_ops.py`, and a library upgrade on one
+# side would be a divergence nothing tests (REQUIREMENTS.md section 9, criterion
+# 7). Nothing in this crate is under differential test -- it carries argv, file
+# I/O and exit codes, which the oracle has no opinion about -- so the ban stops
+# at the crate boundary rather than at the workspace's.
+[dependencies]
+incise-core = { version = "0.1.0", path = "../incise-core" }
+# Newer Clap releases require Rust 1.85. Pin a version covered by the workspace's
+# Rust 1.75 MSRV so a lockfile refresh cannot raise it implicitly.
+clap = "=4.5.20"
+sha2 = "0.10"

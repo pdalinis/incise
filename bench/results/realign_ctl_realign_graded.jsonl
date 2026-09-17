@@ -1,0 +1,30 @@
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 0, "outcome": "destructive", "detail": "existing row lost: ('widget', 'active')"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 1, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 2, "outcome": "destructive", "detail": "existing row lost: ('widget', 'active')"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 3, "outcome": "transport", "detail": "HTTPError: HTTP Error 500: Internal Server Error"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 4, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 5, "outcome": "op_error", "detail": "call 4: no row where Status=\"inactive\". |   Near matches: active, retired |   Values in Status: active, retired"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 6, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 7, "outcome": "op_error", "detail": "call 2: a `where` selector is required to identify the row."}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 8, "outcome": "destructive", "detail": "existing row lost: ('widget', 'active')"}
+{"task_id": "realign-crlf", "scheme": "scheme_f", "trial": 9, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired')"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 0, "outcome": "op_error", "detail": "a `where` selector is required to identify the row."}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 1, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 2, "outcome": "destructive", "detail": "existing row lost: ('a', 'b', 'c')"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 3, "outcome": "destructive", "detail": "existing row lost: ('dd', 'ee', 'ff')"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 4, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 5, "outcome": "op_error", "detail": "call 2: no row where Name=\"Example\". |   Near matches: none |   Values in Name: a, dd"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 6, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 7, "outcome": "op_error", "detail": "call 2: a `where` selector is required to identify the row."}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 8, "outcome": "op_error", "detail": "a `where` selector is required to identify the row."}
+{"task_id": "realign-overpadded", "scheme": "scheme_f", "trial": 9, "outcome": "destructive", "detail": "existing row lost: ('a', 'b', 'c')"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 0, "outcome": "op_error", "detail": "row delta 1, expected 0; after: call 1: no row where Flag=\"A step, with a table\". |   Near matches: none |   Values in Flag: --verbose"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 1, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 2, "outcome": "op_error", "detail": "row delta 1, expected 0; after: call 3: no row where Default=\"with a table\". |   Near matches: a table |   Values in Default: off, a table"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 3, "outcome": "op_error", "detail": "row delta 1, expected 0; after: call 1: no row where Flag=\"A step, with a table\". |   Near matches: none |   Values in Flag: --verbose"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 4, "outcome": "op_error", "detail": "call 2: no row where Flag=\"off\". |   Near matches: none |   Values in Flag: --verbose"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 5, "outcome": "op_error", "detail": "row delta 2, expected 0; after: call 3: no row where Default=\"A step, with a table\". |   Near matches: none |   Values in Default: off, Default"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 6, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 7, "outcome": "destructive", "detail": "existing row lost: ('--verbose', 'off')"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 8, "outcome": "op_error", "detail": "row delta 2, expected 0; after: call 3: no row where Flag=\"A step, with a table\". |   Near matches: none |   Values in Flag: --verbose, Flag"}
+{"task_id": "realign-indented", "scheme": "scheme_f", "trial": 9, "outcome": "op_error", "detail": "call 3: no row where Flag=\"A step, with a table\". |   Near matches: none |   Values in Flag: --verbose"}

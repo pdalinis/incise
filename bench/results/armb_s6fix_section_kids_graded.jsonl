@@ -1,0 +1,20 @@
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 9, "outcome": "destructive", "detail": "section disappeared: 'Changelog > [1.4.2] - 2026-08-14' (1 before, 0 after)"}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 2, "outcome": "wrong", "detail": "line 70: 'Logs are written to `~/.fastmd/log`.', expected 'Written to `~/.fastmd/log`.'"}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 9, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Troubleshooting > Common errors'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Troubleshooting > Logs', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 3: `text` is required and must not be empty."}

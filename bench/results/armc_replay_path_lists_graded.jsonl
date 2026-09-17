@@ -1,0 +1,72 @@
+{"task_id": "add-item-loose", "scheme": "list_g:clap:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g:clap:plain", "trial": 6, "outcome": "usage_error", "detail": "no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:clap:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:clap:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g:clap:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:clap:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h:clap:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h:clap:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:clap:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:clap:plain", "trial": 2, "outcome": "usage_error", "detail": "item delta 2, expected 1; got ['* star item', '* second star item', '* second star item']; after: call 2: no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:clap:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:clap:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:clap:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:clap:plain", "trial": 2, "outcome": "destructive", "detail": "existing item lost: 'seventh'"}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:clap:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:clap:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:clap:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:clap:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h:clap:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g:fastmd:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g:fastmd:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:fastmd:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:fastmd:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g:fastmd:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:fastmd:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h:fastmd:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h:fastmd:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:fastmd:plain", "trial": 0, "outcome": "usage_error", "detail": "call 2: no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:fastmd:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:fastmd:plain", "trial": 3, "outcome": "usage_error", "detail": "call 3: no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:fastmd:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:fastmd:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:fastmd:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:fastmd:plain", "trial": 6, "outcome": "usage_error", "detail": "no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "check-task-nested", "scheme": "list_h:fastmd:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:fastmd:plain", "trial": 6, "outcome": "usage_error", "detail": "no file to edit was given. |   `path` is the markdown file itself, not a heading path inside it. |   Send it, e.g. \"docs/api.md\"."}
+{"task_id": "check-task-nested", "scheme": "list_h:fastmd:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h:fastmd:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g:filefirst:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g:filefirst:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:filefirst:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g:filefirst:plain", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g:filefirst:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h:filefirst:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h:filefirst:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h:filefirst:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:filefirst:plain", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:filefirst:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:filefirst:plain", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:filefirst:plain", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h:filefirst:plain", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:filefirst:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h:filefirst:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:filefirst:plain", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:filefirst:plain", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h:filefirst:plain", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h:filefirst:plain", "trial": 5, "outcome": "correct", "detail": null}

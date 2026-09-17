@@ -1,0 +1,180 @@
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 1, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 3, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 4, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 5, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 6, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 8, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 0, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 1, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 2, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 3, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 4, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 5, "outcome": "destructive", "detail": "existing row lost: ('widget-core', 'active', 'dana')"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 6, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 7, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9), (13, 9, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 8, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 12, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_off", "trial": 9, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 1, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 0, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 1, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 2, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 3, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 4, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 5, "outcome": "collateral:formatting", "detail": "delimiter row changed: '| ----------- | ------- | ------- |' -> '| ------------- | ------- | ----- |'"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 8, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 0, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 1, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 2, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 4, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 6, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 7, "outcome": "collateral:formatting", "detail": "delimiter row changed: '| ----------- | ------- | ------- |' -> '| ------------- | ------- | ------- |'"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "reasoning_on", "trial": 9, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 0, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(23, 9, 9), (23, 9, 9), (23, 9, 9), (23, 9, 9), (23, 9, 9), (24, 9, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 1, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(25, 10, 9), (25, 10, 10), (25, 10, 9), (25, 10, 10), (24, 10, 10), (22, 10, 10)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 3, "outcome": "no_match", "detail": "old_string is only whitespace \u2014 provide non-blank text to match"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 4, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(17, 10, 9), (17, 10, 9), (17, 10, 9), (17, 10, 9), (17, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 5, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(20, 8, 7), (20, 8, 7), (20, 8, 7), (20, 8, 7), (20, 8, 7), (21, 8, 7)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 6, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 6)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 7, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(23, 9, 7), (23, 9, 7), (23, 9, 7), (23, 9, 7), (23, 9, 7), (24, 9, 7)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 8, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(23, 9, 9), (22, 9, 9), (22, 9, 9), (22, 9, 9), (21, 9, 9), (22, 9, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "reasoning_on", "trial": 9, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 6)]"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 0, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 3, "outcome": "destructive", "detail": "existing row lost: ('widget-core', 'active', 'dana')"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 4, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "reasoning_on", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 3, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 5, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "reasoning_on", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 0, "outcome": "wrong", "detail": "row delta 0, expected -1"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 4, "outcome": "no_match", "detail": "Could not find a match for old_string in the file"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 8, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "delete-row-aligned", "condition": "reasoning_on", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "reasoning_on", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 0, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 1, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 2, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 3, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 4, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 6, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 7, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 8, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (14, 9, 9)]"}
+{"task_id": "add-row-aligned-short", "condition": "repen_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 0, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 1, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9), (13, 9, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 2, "outcome": "collateral:content", "detail": "content outside the target table changed"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 3, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 4, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 5, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 6, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 7, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 8, "outcome": "collateral:formatting", "detail": "table misaligned: widths [(13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (13, 9, 9), (22, 8, 9)]"}
+{"task_id": "add-row-aligned-repad", "condition": "repen_off", "trial": 9, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-ragged", "condition": "repen_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 5, "outcome": "destructive", "detail": "existing row lost: ('e', 'f', 'g', 'h')"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "add-row-alignment-markers", "condition": "repen_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 2, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 4, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 5, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 8, "outcome": "no_match", "detail": "No edit was applied because old_string and new_string are identical. Provide the existing text to replace in old_string and the changed replacement text in new_string."}
+{"task_id": "delete-row-aligned", "condition": "repen_off", "trial": 9, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 0, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 1, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 2, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 3, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 4, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 5, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 6, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 7, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 8, "outcome": "correct", "detail": "exact"}
+{"task_id": "update-cell-multi-table", "condition": "repen_off", "trial": 9, "outcome": "correct", "detail": "exact"}

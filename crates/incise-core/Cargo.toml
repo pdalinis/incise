@@ -1,0 +1,22 @@
+[package]
+name = "incise-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Byte-preserving markdown edit operations, content-addressed"
+documentation = "https://docs.rs/incise-core"
+readme = "README.md"
+keywords = ["markdown", "editing", "llm", "agents", "parser"]
+categories = ["text-processing"]
+
+# No dependencies, deliberately. `bench/incise_ops.py` is the oracle and its
+# only imports are difflib and json; both are ported here (`similar.rs`,
+# `json.rs`) so the two implementations cannot diverge through a library
+# upgrade on one side. See REQUIREMENTS.md section 9 criterion 7.
+[dependencies]
+
+[dev-dependencies]

@@ -1,0 +1,100 @@
+{
+  "_comment": "Three table tasks built for F-width, on a fixture whose ragged tables hold a character wider than one display column. \n\nIts own file rather than appended to tables_realign.json, for the reason that file states about tables.json: every recorded `scheme_f_realign` pool was run over those three tasks, and appending would change n and break comparability with every rate already published. \n\n**The ceiling on the first two tasks is zero, by construction, and that is the point rather than a defect in the tasks.** `table-realign` is the only op that re-pads a table, it refuses any table holding a character it cannot measure, and `armb.grade_one` grades an unchanged document as `op_error` -- never as `correct` -- so no trial of any scheme at any temperature can grade correct here. `ceiling.py` will report 0/2 on them and 1/1 on the control, and both numbers are correct. \n\nWhat this set can measure is therefore the **failure class**, which is the endpoint F-realign's control cell already showed matters: 30 trials that could not say `realign` said `update-cell` 54 times instead and destroyed the document 8 times. The good outcome here is `op_error` -- the model drew the refusal, read the last line, and stopped. The bad outcomes are `destructive` (a row rewritten into a different one), `wrong`, and `collateral:formatting` (the table hand-padded to a character count, which is the misaligned-on-screen table the refusal exists to prevent: `require_aligned` is false on both provoking tasks, so `grade.check_table_result` reports a ragged table that came out aligned as `ragged table was prettified`). \n\nThe control is the third table in the same file, same shape, same instruction, no wide character. Without it a corruption rate on the first two could be a model that mishandles ragged tables rather than one that mishandles this refusal. \n\nThe fixture is `bench/synthetic/wide-ragged.md`, which is synthetic and not frozen corpus. `corpus/tables/cell-edge-cases.md` also holds a wide table and realign refuses it too, but that table is aligned by character count already, so \"tidy the columns\" would not be a thing a user would ask -- the refusal would be incidental rather than provoked. `require_present` was read out of the fixture by `table_get` and pasted, never typed, which is the rule tables_read.json states.",
+  "tasks": [
+    {
+      "id": "realign-wide-cjk",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/wide-ragged.md",
+      "instruction": "The table under \"CJK ragged\" had its column padding stripped by another editor. Tidy the table so its columns line up again. Do not change any cell's text.",
+      "target_table": 0,
+      "expect_row_delta": 0,
+      "require_present": [
+        [
+          "日本語テキスト",
+          "active",
+          "ana"
+        ],
+        [
+          "gadget",
+          "retired",
+          "bo"
+        ]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": true,
+      "require_aligned": false,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "CJK ragged"
+          }
+        }
+      },
+      "note": "The provoking task. `日` is two display columns wide and incise counts width in characters, so realign refuses and names the character and the first cell holding it. The instruction is word-for-word the one `realign-crlf` uses, so the only difference between a trial here and a trial there is the fixture."
+    },
+    {
+      "id": "realign-wide-emoji",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/wide-ragged.md",
+      "instruction": "The table under \"Emoji ragged\" is ragged. Tidy the table so its columns line up again. Do not change any cell's text.",
+      "target_table": 1,
+      "expect_row_delta": 0,
+      "require_present": [
+        [
+          "🚀 ship it",
+          "ana"
+        ],
+        [
+          "write the notes",
+          "bo"
+        ]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": true,
+      "require_aligned": false,
+      "require_delimiter_unchanged": true,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "Emoji ragged"
+          }
+        }
+      },
+      "note": "The same refusal reached through a different width class: `🚀` is a multi-codepoint grapheme rather than a fullwidth form, and the two are separate branches of the range table that `incise_ops.py` and `ops/table.rs` duplicate by design. A model that recovers from one and not the other would be reading the character rather than the sentence."
+    },
+    {
+      "id": "realign-wide-control",
+      "family": "table-realign",
+      "fixture": "bench/synthetic/wide-ragged.md",
+      "instruction": "The table under \"Narrow ragged\" is ragged. Tidy the table so its columns line up again. Do not change any cell's text.",
+      "target_table": 2,
+      "expect_row_delta": 0,
+      "require_present": [
+        [
+          "--verbose",
+          "off"
+        ],
+        [
+          "--quiet",
+          "on"
+        ]
+      ],
+      "require_absent": [],
+      "preserve_existing_rows": false,
+      "require_aligned": true,
+      "require_delimiter_unchanged": false,
+      "ideal_call": {
+        "op": "table-realign",
+        "args": {
+          "table": {
+            "heading": "Narrow ragged"
+          }
+        }
+      },
+      "note": "The control, in the same file and the same instruction. Every cell is ASCII, so realign applies and the task is answerable in one call. `preserve_existing_rows` and `require_delimiter_unchanged` are false here and true on the two above, for the reason tables_realign.json gives: re-padding every line is what this op does, and a control that forbade it would be asserting the op should not work."
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "_comment": "Fifteen section tasks, graded against whole-document goldens stored as a minimal changed window: rebuild with before[:first_changed] + lines + before[len - unchanged_tail:] and compare bytes. Generated and regenerable by bench/make_section_tasks.py, which explains why this family pins the whole document where the list family scoped to one list. Instructions are phrased as a user would phrase them and avoid incise's op vocabulary -- in particular they never name a heading level, because deriving it is the thing under test.",
+  "tasks": [
+    {
+      "id": "insert-release-at-top",
+      "family": "section-insert",
+      "fixture": "corpus/documents/changelog.md",
+      "instruction": "Add a new release section for version 1.5.0, dated 2026-09-06, immediately above the [1.4.2] release. Give it an Added subsection containing the line \"- `plan --explain` flag.\"",
+      "golden": {
+        "first_changed": 23,
+        "unchanged_tail": 60,
+        "lines": [
+          "## [1.5.0] - 2026-09-06",
+          "",
+          "### Added",
+          "",
+          "- `plan --explain` flag.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 2,
+        "paths_present": [
+          "Changelog > [1.5.0] - 2026-09-06",
+          "Changelog > [1.5.0] - 2026-09-06 > Added"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "[1.4.2] - 2026-08-14",
+            "position": "before",
+            "heading": "[1.5.0] - 2026-09-06"
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Changelog > [1.5.0] - 2026-09-06",
+            "position": "last-child",
+            "heading": "Added",
+            "body": "- `plan --explain` flag."
+          }
+        }
+      ],
+      "note": "The single most common changelog edit there is, and the one the file was added to the corpus for. Three ways to get it wrong: put it below [1.4.2] instead of above, give it the wrong level, or land it between [Unreleased] and its `### Added` child. The level is not in the instruction and must be derived from the anchor.\nRe-specified as two calls after S6: the one-call form needed `### Added` written by hand into `body`, which the executor now refuses. The golden document is byte-identical either way -- what changed is which vocabulary can reach it.\nThe instruction was later made to quote the body line verbatim. It originally paraphrased ('listing a new `plan --explain` flag'), which was the only paraphrased payload in the family -- every other task quotes its text. Under a multi-turn harness that stopped being harmless: trials that derived the level correctly still graded wrong because they wrote `* New \\`plan --explain\\` flag` against a golden that says `- \\`plan --explain\\` flag.` A whole-document golden cannot express 'any bullet to this effect', so the instruction has to be the thing that is specific. The golden is unchanged; only its reachability is."
+    },
+    {
+      "id": "insert-subsection-last",
+      "family": "section-insert",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Under Install, add a FreeBSD subsection after the existing ones, saying \"Use pkg.\"",
+      "golden": {
+        "first_changed": 38,
+        "unchanged_tail": 27,
+        "lines": [
+          "### FreeBSD",
+          "",
+          "Use pkg.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 1,
+        "paths_present": [
+          "Deep heading nesting > Install > FreeBSD"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Install",
+            "position": "last-child",
+            "heading": "FreeBSD",
+            "body": "Use pkg."
+          }
+        }
+      ],
+      "note": "`last-child` means after the anchor's whole subtree, so this lands below `### Windows` and above `## Upgrade`. Appending to Install's own body instead would put FreeBSD above macOS. The level is 3, derived from the anchor -- a hand editor that counts the nearest heading above the insertion point writes `####`, because the nearest heading above is `### Windows`'s body."
+    },
+    {
+      "id": "append-hotfix-note",
+      "family": "section-append",
+      "fixture": "corpus/documents/changelog.md",
+      "instruction": "Add a sentence to the [1.4.2] release itself -- not to any of its subsections -- saying \"This release is a hotfix.\"",
+      "golden": {
+        "first_changed": 25,
+        "unchanged_tail": 58,
+        "lines": [
+          "This release is a hotfix.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": "[1.4.2] - 2026-08-14",
+            "text": "This release is a hotfix."
+          }
+        }
+      ],
+      "note": "`## [1.4.2]` has no prose of its own and two subsections, so its own body is empty and the sentence goes between the heading and `### Fixed`. 'Append to the section' read as 'append to the end of the section' puts it under `### Changed`, which attributes it to the wrong subsection."
+    },
+    {
+      "id": "rename-setext",
+      "family": "section-rename",
+      "fixture": "corpus/sections/setext-and-atx.md",
+      "instruction": "Rename the \"Setext H2\" heading to \"Setext level two\".",
+      "golden": {
+        "first_changed": 7,
+        "unchanged_tail": 37,
+        "lines": [
+          "Setext level two",
+          "----------------"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Setext H1 Title > Setext level two"
+        ],
+        "paths_absent": [
+          "Setext H1 Title > Setext H2"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "section-rename",
+          "args": {
+            "section": "Setext H2",
+            "heading": "Setext level two"
+          }
+        }
+      ],
+      "note": "The heading is underlined, not marked with hashes. Rewriting it as `## Setext level two` addresses identically and is still wrong: it changes the document's syntax. The underline must also be re-run to the new width -- leaving nine dashes under a sixteen-character title is the kind of damage that renders fine and reads as sloppy forever."
+    },
+    {
+      "id": "rename-closed-atx",
+      "family": "section-rename",
+      "fixture": "corpus/sections/setext-and-atx.md",
+      "instruction": "Rename \"Closed ATX level 3\" to \"Closed ATX heading\".",
+      "golden": {
+        "first_changed": 16,
+        "unchanged_tail": 29,
+        "lines": [
+          "### Closed ATX heading ###"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Setext H1 Title > Setext H2 > Closed ATX heading"
+        ],
+        "paths_absent": [
+          "Setext H1 Title > Setext H2 > Closed ATX level 3"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "section-rename",
+          "args": {
+            "section": "Closed ATX level 3",
+            "heading": "Closed ATX heading"
+          }
+        }
+      ],
+      "note": "The trailing `###` is decoration and is not part of the address, so a model that reads the address off the outline sees no hashes to preserve. They must survive anyway."
+    },
+    {
+      "id": "delete-install-macos",
+      "family": "section-delete",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Delete the macOS section under Install, including everything in it.",
+      "golden": {
+        "first_changed": 10,
+        "unchanged_tail": 43,
+        "lines": []
+      },
+      "expect": {
+        "section_delta": -3,
+        "paths_present": [
+          "Deep heading nesting > Install > Linux",
+          "Deep heading nesting > Upgrade > macOS",
+          "Deep heading nesting > Uninstall > macOS"
+        ],
+        "paths_absent": [
+          "Deep heading nesting > Install > macOS",
+          "Deep heading nesting > Install > macOS > Apple Silicon",
+          "Deep heading nesting > Install > macOS > Intel"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "section-delete",
+          "args": {
+            "section": "Install > macOS"
+          }
+        }
+      ],
+      "note": "Two failure modes in opposite directions. Deleting the heading and its paragraph but not `#### Apple Silicon` and `#### Intel` orphans them under Install. Matching `macOS` by name instead of by path hits the wrong one of three -- and the two under Upgrade and Uninstall must still be there afterwards, which is what makes that detectable."
+    },
+    {
+      "id": "promote-api",
+      "family": "section-set-level",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Promote the API heading under Reference to a second-level heading, moving its subsections with it.",
+      "golden": {
+        "first_changed": 57,
+        "unchanged_tail": 3,
+        "lines": [
+          "## API",
+          "",
+          "### Endpoints",
+          "",
+          "#### Authentication"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Deep heading nesting > API",
+          "Deep heading nesting > API > Endpoints",
+          "Deep heading nesting > API > Endpoints > Authentication"
+        ],
+        "paths_absent": [
+          "Deep heading nesting > Reference > API"
+        ]
+      },
+      "ideal_calls": [
+        {
+          "op": "section-set-level",
+          "args": {
+            "section": "Reference > API",
+            "level": 2
+          }
+        }
+      ],
+      "note": "Three headings change, not one. `##### Authentication` is four levels down and has to come up with the rest; leaving it behind produces a document where a level-5 heading follows a level-2 one with nothing in between. Section count is unchanged -- only the shape is."
+    },
+    {
+      "id": "replace-install-preamble",
+      "family": "section-replace-body",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Replace the introductory paragraph under Install -- the one before the macOS subsection -- with \"Choose your platform below.\"",
+      "golden": {
+        "first_changed": 8,
+        "unchanged_tail": 56,
+        "lines": [
+          "Choose your platform below."
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Deep heading nesting > Install > macOS"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-replace-body",
+          "args": {
+            "section": "Install",
+            "text": "Choose your platform below.",
+            "overwrite": true
+          }
+        }
+      ],
+      "note": "The inverse of `append-hotfix-note` and the same boundary: 'the text under Install' is its own body, which stops at `### macOS`. Reading it as the whole subtree replaces six subsections with one sentence, which is the most destructive single outcome available in this family.\n`overwrite` is required because Install's body is not empty: FINDINGS S2 made an unacknowledged overwrite an `op_error`, so the ideal call has to acknowledge it. This is the one task where the destructive action is the correct one, and it exists so a fix for S2 cannot be 'remove replace-body' -- something has to still be able to do this."
+    },
+    {
+      "id": "notes-second-ordinal",
+      "family": "section-append",
+      "fixture": "corpus/sections/duplicate-siblings.md",
+      "instruction": "Add the line \"Superseded.\" to the second of the three Notes sections.",
+      "golden": {
+        "first_changed": 15,
+        "unchanged_tail": 26,
+        "lines": [
+          "Superseded.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": {
+              "path": "Notes",
+              "ordinal": 1
+            },
+            "text": "Superseded."
+          }
+        }
+      ],
+      "note": "Three sections share the path `Notes` and nothing but position distinguishes them, so this is the one case in the family where an ordinal is the answer rather than a longer path. Silently editing the first is the outcome the fixture exists to catch."
+    },
+    {
+      "id": "append-after-fence",
+      "family": "section-append",
+      "fixture": "corpus/hazards/code-fences.md",
+      "instruction": "Add a sentence to the \"Fenced headings and lists\" section saying \"None of the above is parsed as markdown.\"",
+      "golden": {
+        "first_changed": 29,
+        "unchanged_tail": 45,
+        "lines": [
+          "None of the above is parsed as markdown.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": "Fenced headings and lists",
+            "text": "None of the above is parsed as markdown."
+          }
+        }
+      ],
+      "note": "The section's body is a fenced block containing `# Not a real heading` and `## Also not real`. Anything that finds the end of the section by scanning forward for the next `#` stops inside the fence and writes the sentence into the code block, where it is not prose and not visible as an edit."
+    },
+    {
+      "id": "append-atx-line",
+      "family": "section-append",
+      "fixture": "corpus/sections/setext-and-atx.md",
+      "instruction": "Add the sentence \"The same is true of the closed form.\" to the \"ATX level 3\" section.",
+      "golden": {
+        "first_changed": 16,
+        "unchanged_tail": 30,
+        "lines": [
+          "The same is true of the closed form.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": "ATX level 3",
+            "text": "The same is true of the closed form."
+          }
+        }
+      ],
+      "note": "The cleanest possible append/overwrite discriminator: one addressable section, no duplicate paths, no subsections, and a one-line body (`Normal.`) that an overwrite destroys and an append keeps. Nothing about addressing is at stake, so a failure here is a failure to choose the verb."
+    },
+    {
+      "id": "append-macos-note",
+      "family": "section-append",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Add \"Requires macOS 13 or later.\" to the macOS section under Install.",
+      "golden": {
+        "first_changed": 14,
+        "unchanged_tail": 51,
+        "lines": [
+          "Requires macOS 13 or later.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": "Install > macOS",
+            "text": "Requires macOS 13 or later."
+          }
+        }
+      ],
+      "note": "The same choice with both of the family's other traps present: `macOS` appears under three parents so the path must be full, and the section has two subsections, so the sentence belongs after `Use Homebrew.` and before `#### Apple Silicon` -- own body, not subtree."
+    },
+    {
+      "id": "replace-linux-body",
+      "family": "section-replace-body",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Replace the text under Upgrade > Linux with \"See the platform notes.\"",
+      "golden": {
+        "first_changed": 47,
+        "unchanged_tail": 17,
+        "lines": [
+          "See the platform notes."
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-replace-body",
+          "args": {
+            "section": "Upgrade > Linux",
+            "text": "See the platform notes.",
+            "overwrite": true
+          }
+        }
+      ],
+      "note": "The other direction, and the reason the pair needs four tasks rather than two more appends: an instruction that says *replace* must still reach the destructive op. A schema change that fixes S2 by making overwriting unreachable would score 0 here, which is the point."
+    },
+    {
+      "id": "insert-nested-ratelimits",
+      "family": "section-insert",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "Under the API section, add a Rate limits section, and give it a Headers subsection saying \"Every response carries `X-RateLimit-*`.\"",
+      "golden": {
+        "first_changed": 65,
+        "unchanged_tail": 0,
+        "lines": [
+          "#### Rate limits",
+          "",
+          "##### Headers",
+          "",
+          "Every response carries `X-RateLimit-*`.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 2,
+        "paths_present": [
+          "Deep heading nesting > Reference > API > Rate limits",
+          "Deep heading nesting > Reference > API > Rate limits > Headers"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Reference > API",
+            "position": "last-child",
+            "heading": "Rate limits"
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Reference > API > Rate limits",
+            "position": "last-child",
+            "heading": "Headers",
+            "body": "Every response carries `X-RateLimit-*`."
+          }
+        }
+      ],
+      "note": "The changelog task's mechanism at depth: `API` is level 3, so the two new headings are 4 and 5. Neither number is in the instruction and neither is expressible in the schema, so both must come from the anchor. `Endpoints` is already a level-4 child of `API`, which makes a wrong level land the new section inside it rather than beside it."
+    },
+    {
+      "id": "insert-troubleshooting",
+      "family": "section-insert",
+      "fixture": "corpus/sections/deep-nesting.md",
+      "instruction": "At the end of Deep heading nesting, add a Troubleshooting section with two subsections: Logs, saying \"Written to `~/.incise/log`.\", and Common errors, saying \"See the FAQ.\"",
+      "golden": {
+        "first_changed": 65,
+        "unchanged_tail": 0,
+        "lines": [
+          "## Troubleshooting",
+          "",
+          "### Logs",
+          "",
+          "Written to `~/.incise/log`.",
+          "",
+          "### Common errors",
+          "",
+          "See the FAQ.",
+          ""
+        ]
+      },
+      "expect": {
+        "section_delta": 3,
+        "paths_present": [
+          "Deep heading nesting > Troubleshooting",
+          "Deep heading nesting > Troubleshooting > Logs",
+          "Deep heading nesting > Troubleshooting > Common errors"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Deep heading nesting",
+            "position": "last-child",
+            "heading": "Troubleshooting"
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Deep heading nesting > Troubleshooting",
+            "position": "last-child",
+            "heading": "Logs",
+            "body": "Written to `~/.incise/log`."
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "Deep heading nesting > Troubleshooting",
+            "position": "last-child",
+            "heading": "Common errors",
+            "body": "See the FAQ."
+          }
+        }
+      ],
+      "note": "Three calls, and the first one has to go past a seventeen-section subtree: the end of `Deep heading nesting` is the end of the file, not the line under its heading. Also the only task where a scheme with a structured payload could legitimately finish in one call, which is what makes it worth measuring against a scheme that cannot.\nFirst written with the anchor left implicit -- 'at the end of the document' -- and an ideal call that made Troubleshooting a *sibling* of the H1. All 30 trials across the three S6 schemes chose `last-child` of the H1 instead. They were right and the task was wrong: 'the end of the document' names an insertion point and not a level, both readings put the bytes in the same place, and the level is the only difference. This was the family's one insert task that did not name its anchor, and an anchor-relative op cannot be graded on an unstated anchor. Naming it is the fix; the level is still derived and still not in the instruction."
+    }
+  ]
+}

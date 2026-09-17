@@ -1,0 +1,110 @@
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 5, "outcome": "destructive", "detail": "existing line lost: '  - name: Peter'"}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 6, "outcome": "op_error", "detail": "call 1: \"`authors[0].role` \u2014 sequence of maps, index addressing\" is not a task item -- it has no [ ] checkbox. |   Task items in this list: none"}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 7, "outcome": "op_error", "detail": "call 2: no table under heading \"Addressing\". |   Near matches: none |   Headings with tables: "}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 8, "outcome": "op_error", "detail": "no table under heading \"Authors\". |   Near matches: none |   Headings with tables: "}
+{"task_id": "set-dana-role", "scheme": "compose_5", "trial": 9, "outcome": "destructive", "detail": "existing line lost: '    role: maintainer'"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 0, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 1, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 2, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 4, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 7, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-build-cache", "scheme": "compose_5", "trial": 9, "outcome": "wrong", "detail": "missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "delete-draft", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "delete-build", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 0, "outcome": "wrong", "detail": "key delta +1, expected +0"}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 3, "outcome": "wrong", "detail": "'draft' holds 'false', expected 'true'"}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 7, "outcome": "wrong", "detail": "'draft' holds 'false', expected 'true'"}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "compose_5", "trial": 9, "outcome": "wrong", "detail": "'draft' holds 'false', expected 'true'"}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "compose_5", "trial": 9, "outcome": "correct", "detail": null}

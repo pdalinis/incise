@@ -1,0 +1,295 @@
+{
+  "_comment": "Ten list tasks, graded against goldens scoped to the target list. Generated and regenerable by bench/make_list_tasks.py, which explains why this family uses goldens where the table family did not. Instructions are phrased as a user would phrase them and avoid incise's op vocabulary.",
+  "tasks": [
+    {
+      "id": "add-item-tight-dash",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/nested-mixed.md",
+      "instruction": "At the end of the list under \"Dash markers, two-space indent\", add an item that says \"fourth\".",
+      "target_list": 0,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "- fourth"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "- first",
+        "- second",
+        "  - second-a",
+        "  - second-b",
+        "    - second-b-i",
+        "- third",
+        "- fourth"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Dash markers, two-space indent"
+          },
+          "text": "fourth"
+        }
+      },
+      "note": "The list ends with a nested item three levels deep. `at the end` means after the last TOP-LEVEL item, so the new item takes the outer indent and not the indent of the line physically above it."
+    },
+    {
+      "id": "add-item-nested-asterisk",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/nested-mixed.md",
+      "instruction": "Under \"Asterisk markers, four-space indent\", add \"beta-three\" immediately after \"beta-two\".",
+      "target_list": 1,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "    * beta-three"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "* alpha",
+        "* beta",
+        "    * beta-one",
+        "    * beta-two",
+        "    * beta-three",
+        "* gamma"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Asterisk markers, four-space indent"
+          },
+          "text": "beta-three",
+          "after": "beta-two"
+        }
+      },
+      "note": "Two conventions at once: the `*` marker and a four-space indent, both read off the sibling. A house-style editor writes `- ` at two spaces."
+    },
+    {
+      "id": "add-item-loose",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/nested-mixed.md",
+      "instruction": "Add an item \"loose four\" at the end of the list under \"Loose vs tight\" whose items have blank lines between them.",
+      "target_list": 7,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "- loose four"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "- loose one",
+        "",
+        "- loose two",
+        "",
+        "- loose three",
+        "",
+        "- loose four"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Loose vs tight",
+            "ordinal": 1
+          },
+          "text": "loose four"
+        }
+      },
+      "note": "Loose list: the inserted item must be preceded by a blank line or the list silently becomes tight and every item's rendering changes. Also requires picking ordinal 1 of the two lists under this heading."
+    },
+    {
+      "id": "add-item-ordered-renumber",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/ordered-numbering.md",
+      "instruction": "In the list under \"Sequential\", insert an item \"two and a half\" between \"second\" and \"third\".",
+      "target_list": 0,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "3. two and a half"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "1. first",
+        "2. second",
+        "3. two and a half",
+        "4. third",
+        "5. fourth"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Sequential"
+          },
+          "text": "two and a half",
+          "after": "second"
+        }
+      },
+      "note": "The re-pad analogue: inserting mid-list forces every following item to be renumbered. 0/10 direct in the table family was exactly this shape."
+    },
+    {
+      "id": "add-item-ordered-all-ones",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/ordered-numbering.md",
+      "instruction": "Add an item \"fourth\" at the end of the list under \"All ones\".",
+      "target_list": 1,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "1. fourth"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "1. first",
+        "1. second",
+        "1. third",
+        "1. fourth"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "All ones"
+          },
+          "text": "fourth"
+        }
+      },
+      "note": "The inverse trap. `1. 1. 1.` is legal CommonMark and renumbering it is the bug. A rule that always renumbers fails here; a rule that never renumbers fails the task above."
+    },
+    {
+      "id": "add-item-paren-delimiter",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/ordered-numbering.md",
+      "instruction": "Add an item \"fourth\" at the end of the list under \"Paren delimiter\".",
+      "target_list": 2,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "4) fourth"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "1) first",
+        "2) second",
+        "3) third",
+        "4) fourth"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Paren delimiter"
+          },
+          "text": "fourth"
+        }
+      },
+      "note": "The delimiter is part of the marker. `4.` is a different list."
+    },
+    {
+      "id": "add-item-mixed-markers",
+      "family": "list-add-item",
+      "fixture": "corpus/lists/nested-mixed.md",
+      "instruction": "Under \"Mixed markers at the same level\", add an item \"second star item\" to the list that contains the star item.",
+      "target_list": 4,
+      "expect_item_delta": 1,
+      "require_lines_present": [
+        "* second star item"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "* star item",
+        "* second star item"
+      ],
+      "ideal_call": {
+        "op": "list-add-item",
+        "args": {
+          "list": {
+            "heading": "Mixed markers at the same level",
+            "ordinal": 1
+          },
+          "text": "second star item"
+        }
+      },
+      "note": "Three single-item lists under one heading, distinguishable only by marker. The list counterpart of update-cell-multi-table: the other two lists must be byte-identical."
+    },
+    {
+      "id": "remove-item-non-sequential",
+      "family": "list-remove-item",
+      "fixture": "corpus/lists/ordered-numbering.md",
+      "instruction": "Remove the \"third\" item from the list under \"Non-sequential\".",
+      "target_list": 4,
+      "expect_item_delta": -1,
+      "require_lines_present": [],
+      "require_texts_absent": [
+        "third"
+      ],
+      "golden": [
+        "1. first",
+        "7. seventh"
+      ],
+      "ideal_call": {
+        "op": "list-remove-item",
+        "args": {
+          "list": {
+            "heading": "Non-sequential"
+          },
+          "item": "third"
+        }
+      },
+      "note": "Numbers are already 1, 3, 7. Renumbering the survivors to 1, 2 is a behaviour change nobody asked for, so the correct answer leaves `7. seventh` alone."
+    },
+    {
+      "id": "check-task-nested",
+      "family": "list-set-checked",
+      "fixture": "corpus/lists/tasks.md",
+      "instruction": "Mark the \"child pending\" task as done, in the list under \"Nested\".",
+      "target_list": 1,
+      "expect_item_delta": 0,
+      "require_lines_present": [
+        "  - [x] child pending"
+      ],
+      "require_texts_absent": [],
+      "golden": [
+        "- [ ] parent task",
+        "  - [x] child done",
+        "  - [x] child pending",
+        "    - [ ] grandchild",
+        "- [x] sibling done"
+      ],
+      "ideal_call": {
+        "op": "list-set-checked",
+        "args": {
+          "list": {
+            "heading": "Nested"
+          },
+          "item": "child pending",
+          "checked": true
+        }
+      },
+      "note": "Two-space indent must survive, and the `[X]` capital elsewhere in the file must not be normalized. Only one line may change."
+    },
+    {
+      "id": "remove-item-mixed",
+      "family": "list-remove-item",
+      "fixture": "corpus/lists/tasks.md",
+      "instruction": "In the list under \"Mixed with plain items\", remove the item \"not a task, just an item\".",
+      "target_list": 2,
+      "expect_item_delta": -1,
+      "require_lines_present": [],
+      "require_texts_absent": [
+        "not a task, just an item"
+      ],
+      "golden": [
+        "- [ ] a real task",
+        "- [x] another real task",
+        "- [ordinary bracket text] also not a task"
+      ],
+      "ideal_call": {
+        "op": "list-remove-item",
+        "args": {
+          "list": {
+            "heading": "Mixed with plain items"
+          },
+          "item": "not a task, just an item"
+        }
+      },
+      "note": "The list mixes task items and plain items. Removing the plain one must not disturb the checkboxes on either side."
+    }
+  ]
+}

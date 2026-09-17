@@ -1,0 +1,101 @@
+{
+  "_comment": "Three table READ tasks built for F-remedy, on a fixture that repeats a column name in its header.\n\nIts own file rather than appended to tables_read.json, for the reason that file states about tables.json: every recorded `table_read_g` pool was run over those six tasks, and appending would change n and break comparability with every rate already published.\n\nWhat this measures, stated so a later reader does not over-read it. The expected answer for the first two tasks is the *whole* table, because no filter can narrow a table addressed by a repeated column -- so `unfiltered` cannot fire and the correct-rate is not a filtering score. The contrast is recovery: a trial that draws the refusal and follows its only named remedy (rename a column, which no shipping tool can do) retries and grades `op_error`; one that drops `filter` grades `correct`. That is an outcome, not a turn count, which is the distinction F-framing had to make the hard way.\n\nThe fixture is `bench/synthetic/duplicate-columns.md`, reused rather than written fresh: difftest already covers it, so no expected-output snapshot has to be recomputed. It is a purpose-built test file and not a document anyone wrote, which FINDINGS records as the caveat on this whole finding -- no file in `corpus/` repeats a header name.\n\nEvery expectation here was computed from the fixture by `table_get` and pasted, never typed, which is the rule tables_read.json states.",
+  "tasks": [
+    {
+      "id": "get-repeated-name",
+      "family": "table-get",
+      "fixture": "bench/synthetic/duplicate-columns.md",
+      "instruction": "In the Repeated header table, what Value does the entry named b have? Report the table you read.",
+      "expect_heading": "Duplicate columns > Repeated header",
+      "expect_columns": [
+        "Name",
+        "Value",
+        "Name"
+      ],
+      "expect_rows": [
+        [
+          "a",
+          "1",
+          "z"
+        ],
+        [
+          "b",
+          "2",
+          "y"
+        ]
+      ],
+      "expect_total": 2,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Duplicate columns > Repeated header",
+            "ordinal": 0
+          }
+        }
+      },
+      "note": "The question names a cell under `Name`, and `Name` appears twice in the header, so `filter` on it is refused: \"Rename one of them in the document, then retry.\" -- a remedy no shipping tool can perform. The answer is reachable only by dropping `filter` and reading both rows, which the refusal does not say. F-remedy."
+    },
+    {
+      "id": "get-repeated-both",
+      "family": "table-get",
+      "fixture": "bench/synthetic/duplicate-columns.md",
+      "instruction": "What pair of values is in the Key table? Report the table you read.",
+      "expect_heading": "Duplicate columns > Repeated, and ragged",
+      "expect_columns": [
+        "Key",
+        "Key"
+      ],
+      "expect_rows": [
+        [
+          "p",
+          "q"
+        ]
+      ],
+      "expect_total": 1,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Duplicate columns > Repeated, and ragged",
+            "ordinal": 0
+          }
+        }
+      },
+      "note": "Harder version: every column is repeated, so no filter at all can narrow this table. A model that treats the rename remedy as actionable has no move; one told to omit `filter` answers in one call."
+    },
+    {
+      "id": "get-repeated-control",
+      "family": "table-get",
+      "fixture": "bench/synthetic/duplicate-columns.md",
+      "instruction": "In the Repeated header table, which row has Value 2? Report only that row.",
+      "expect_heading": "Duplicate columns > Repeated header",
+      "expect_columns": [
+        "Name",
+        "Value",
+        "Name"
+      ],
+      "expect_rows": [
+        [
+          "b",
+          "2",
+          "y"
+        ]
+      ],
+      "expect_total": 2,
+      "ideal_call": {
+        "op": "table-get",
+        "args": {
+          "table": {
+            "heading": "Duplicate columns > Repeated header",
+            "ordinal": 0
+          },
+          "filter": {
+            "Value": "2"
+          }
+        }
+      },
+      "note": "The control, on the same table. `Value` is not repeated, so a filter works and the branch is never reached. Without it a drop in the two tasks above could be a model that stopped filtering rather than one that could not."
+    }
+  ]
+}

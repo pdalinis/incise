@@ -1,0 +1,309 @@
+{
+  "_comment": [
+    "The five-tool set as the composition arms ran it. Generated once, from",
+    "`armb.SCHEMES['compose_5']` at df247d4 (F-compose) -- byte-identical at",
+    "01da741 (F-anchor), which re-ran the same composition. Never regenerate:",
+    "this file is the record of what was measured, and a regeneration would",
+    "make `schematest.check_composition` compare the shipped set against",
+    "itself. See FINDINGS, F-compose and 'the composition has drifted'."
+  ],
+  "runs": [
+    "F-compose df247d4",
+    "F-anchor 01da741"
+  ],
+  "tools": [
+    {
+      "name": "table_edit",
+      "description": "Edit a markdown table. Column widths and alignment are maintained automatically; you do not need to pad anything.\n`table` says WHICH table in the file and is required for every action. Copy it from the table list in the request; the last heading segment on its own is enough (e.g. \"All four forms\").\n  action=add-row      requires `table`, `values`\n  action=update-cell  requires `table`, `where`, `column`, `value`\n  action=delete-row   requires `table`, `where`",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File to edit."
+          },
+          "action": {
+            "type": "string",
+            "description": "The operation to perform.",
+            "enum": [
+              "add-row",
+              "update-cell",
+              "delete-row"
+            ]
+          },
+          "table": {
+            "type": "object",
+            "description": "Which table to edit, addressed by content. Never by line number.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "description": "The heading the table sits under. Either the last heading (e.g. \"Environments\") or the full path (e.g. \"Deployment > Environments\")."
+              },
+              "ordinal": {
+                "type": "integer",
+                "description": "0-based index among tables under that same heading, in document order. Required only when more than one table shares the heading. The table list shows the ordinal of each."
+              }
+            },
+            "required": [
+              "heading"
+            ]
+          },
+          "values": {
+            "description": "The new row. Either an object keyed by column name, or an array of values in column order. The row's values in column order, one per column, all columns required. For the table Default | Left | Center | Right, the values i, j, k, l are [\"i\", \"j\", \"k\", \"l\"]. Use this when the request lists values in order rather than naming a column for each."
+          },
+          "where": {
+            "type": "object",
+            "description": "Selects one existing row by its cell values, as {\"ColumnName\": \"cell value\"}. Must match exactly one row. Example: {\"Host\": \"stage-1\"}.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "column": {
+            "type": "string",
+            "description": "For update-cell: the column whose cell changes."
+          },
+          "value": {
+            "type": "string",
+            "description": "For update-cell: the new cell value."
+          },
+          "position": {
+            "type": "string",
+            "description": "Where to insert: \"end\" (default) or \"start\".",
+            "enum": [
+              "end",
+              "start"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "action",
+          "table"
+        ]
+      }
+    },
+    {
+      "name": "list_edit",
+      "description": "Edit a markdown list. Marker character, marker delimiter, indentation, blank-line spacing and ordered-list numbering are all maintained automatically; you do not need to format anything.\n`list` says WHICH list in the file and is required for every action. Copy it from the list summary in the request; the last heading segment on its own is enough (e.g. \"All ones\").\n  action=add-item     requires `list`, `text`\n  action=remove-item  requires `list`, `match`\n  action=set-checked  requires `list`, `match`, `checked`",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File to edit."
+          },
+          "action": {
+            "type": "string",
+            "description": "The operation to perform.",
+            "enum": [
+              "add-item",
+              "remove-item",
+              "set-checked"
+            ]
+          },
+          "list": {
+            "type": "object",
+            "description": "Which list to edit, addressed by content. Never by line number.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "description": "The heading the list sits under. Either the last heading (e.g. \"All ones\") or the full path (e.g. \"Ordered list numbering > All ones\")."
+              },
+              "ordinal": {
+                "type": "integer",
+                "description": "0-based index among lists under that same heading, in document order. Required only when more than one list shares the heading. The list summary shows the ordinal of each."
+              }
+            },
+            "required": [
+              "heading"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "description": "For add-item: the content of the new item. Text only -- no marker, no number, no checkbox, no indentation."
+          },
+          "after": {
+            "type": "string",
+            "description": "For add-item: put the new item immediately after this existing item. The new item copies that item's indentation and marker, so this is also how an item is added inside a nested list."
+          },
+          "position": {
+            "type": "string",
+            "description": "For add-item, when `after` is not given: \"end\" (default) or \"start\".",
+            "enum": [
+              "end",
+              "start"
+            ]
+          },
+          "checked": {
+            "type": "boolean",
+            "description": "For set-checked: true to tick the box, false to untick it."
+          },
+          "match": {
+            "type": "string",
+            "description": "For remove-item and set-checked: selects an existing item by its text. Must match exactly one item."
+          }
+        },
+        "required": [
+          "path",
+          "action",
+          "list"
+        ]
+      }
+    },
+    {
+      "name": "section_edit",
+      "description": "Edit a markdown document's sections. Heading syntax, heading level, blank-line spacing and the boundaries of each section are all maintained automatically; you do not need to format anything or count levels.\n  action=append        requires `text`. Adds to the section's existing text, keeping it. Cannot create a section.\n  action=replace-body  requires `text`. DISCARDS the section's existing text; also requires `overwrite`=true if it has any.\n  action=insert        requires `position`, `new_heading`. The only action that creates a section; use position=last-child for a new subsection.\n  action=delete        requires nothing else -- takes the subtree with it\n  action=rename        requires `new_heading`\n  action=set-level     requires `level`",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File to edit."
+          },
+          "action": {
+            "type": "string",
+            "description": "The operation to perform.",
+            "enum": [
+              "append",
+              "replace-body",
+              "insert",
+              "delete",
+              "rename",
+              "set-level"
+            ]
+          },
+          "section": {
+            "type": "object",
+            "description": "Which section to act on, addressed by heading path. Never by line number.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "description": "The heading path, from the outline. Either the last segment (e.g. \"macOS\") or the full path (e.g. \"Install > macOS\"). Use the full path when the last segment appears more than once."
+              },
+              "ordinal": {
+                "type": "integer",
+                "description": "0-based index among sections that share an identical path, in document order. Required only for those; the outline marks them DUPLICATE PATH."
+              }
+            },
+            "required": [
+              "heading"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "description": "For append and replace-body: the markdown to put in the section's own body -- the part above its first subsection. Not its heading."
+          },
+          "body": {
+            "type": "string",
+            "description": "For insert: the new section's body. Optional."
+          },
+          "position": {
+            "type": "string",
+            "description": "For insert: where the new section goes relative to `section`. before/after make it a sibling; first-child/last-child make it a subsection. after and last-child go past the whole subtree.",
+            "enum": [
+              "before",
+              "after",
+              "first-child",
+              "last-child"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "description": "For set-level: the heading level to move to, 1 to 6."
+          },
+          "subtree": {
+            "type": "boolean",
+            "description": "For set-level: move the subsections too. Default true. False reparents them, which is rarely what is wanted."
+          },
+          "new_heading": {
+            "type": "string",
+            "description": "For rename: the new heading text. For insert: the heading text of the new section. Text only -- no `#` marks; the level is worked out from `section` and `position`."
+          },
+          "overwrite": {
+            "type": "boolean",
+            "description": "For replace-body: confirms that discarding the section's existing text is intended. Required when it has any."
+          }
+        },
+        "required": [
+          "path",
+          "action",
+          "section"
+        ]
+      }
+    },
+    {
+      "name": "frontmatter_edit",
+      "description": "Edit the YAML frontmatter of a markdown file -- the block between `---` lines at the very top. This does not touch the document below it.\n  action=set     requires `key`, `value`. Creates the key if it is not there, and creates the whole block if the file has none.\n  action=delete  requires `key`. Removes the key and everything under it.\n",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File to edit."
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "set",
+              "delete"
+            ],
+            "description": "Which edit to make."
+          },
+          "key": {
+            "type": "string",
+            "description": "Which frontmatter key to edit, as a full path from the top of the block. Copy it from the frontmatter summary in the request. A nested key is written with dots -- \"build.jobs\", not \"jobs\" -- and an item in a sequence is indexed from 0 -- \"authors[0].role\"."
+          },
+          "value": {
+            "description": "For set: the new value, as one scalar. Send null to empty the key without removing it. The tool decides YAML quoting; send the value, not a quoted spelling of it."
+          }
+        },
+        "required": [
+          "path",
+          "action",
+          "key"
+        ]
+      }
+    },
+    {
+      "name": "table_get",
+      "description": "Read rows out of a markdown table. This does not change the file.\n`table` says WHICH table and is required. Copy it from the table list in the request; the last heading segment on its own is enough (e.g. \"Packages\").\n`filter` narrows the rows. Leave it out to get the whole table.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File to read."
+          },
+          "table": {
+            "type": "object",
+            "description": "Which table to edit, addressed by content. Never by line number.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "description": "The heading the table sits under. Either the last heading (e.g. \"Environments\") or the full path (e.g. \"Deployment > Environments\")."
+              },
+              "ordinal": {
+                "type": "integer",
+                "description": "0-based index among tables under that same heading, in document order. Required only when more than one table shares the heading. The table list shows the ordinal of each."
+              }
+            },
+            "required": [
+              "heading"
+            ]
+          },
+          "filter": {
+            "type": "object",
+            "description": "Keeps only the rows whose cells match, as {\"ColumnName\": \"cell value\"}. Several columns are ANDed. Any number of rows may match, including none -- matching nothing is an answer, not an error. Example: {\"Priority\": \"high\"}.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "path",
+          "table"
+        ]
+      }
+    }
+  ]
+}

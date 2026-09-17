@@ -1,0 +1,41 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.toml]
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[*.{js,ts,json}]
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+
+# These files are byte-sensitive test inputs. Their CRLF, mixed line endings,
+# trailing whitespace, encoding markers, and missing final newlines are data.
+[corpus/**]
+end_of_line = unset
+charset = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
+
+[bench/synthetic/**]
+end_of_line = unset
+charset = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset

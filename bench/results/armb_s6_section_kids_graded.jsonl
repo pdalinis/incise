@@ -1,0 +1,150 @@
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 0, "outcome": "wrong", "detail": "line 26: 'Added to subsections:', expected '### Added'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 1, "outcome": "wrong", "detail": "line 28: 'A new `plan --explain` flag has been added to provide detailed reasoning for plan outputs.', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 2, "outcome": "wrong", "detail": "line 28: 'New `plan --explain` flag added to provide detailed execution plans.', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 3, "outcome": "wrong", "detail": "line 28: '* New `plan --explain` flag.', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 4, "outcome": "transport", "detail": "HTTPError: HTTP Error 500: Internal Server Error"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 5, "outcome": "wrong", "detail": "line 26: '  New feature implementation.', expected '### Added'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 6, "outcome": "wrong", "detail": "line 28: '* Added support for the `plan --explain` flag to provide detailed execution steps.', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 7, "outcome": "destructive", "detail": "existing line lost: '- Placeholder for the next release.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 8, "outcome": "wrong", "detail": "line 28: '* Added `plan --explain` flag for detailed execution plans.', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-release-at-top", "scheme": "section_kids", "trial": 9, "outcome": "wrong", "detail": "line 28: '- New `plan --explain` flag.`}<tool_call|><|channel>thought', expected '- `plan --explain` flag.'"}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 4, "outcome": "op_error", "detail": "line 26: '\\\\\\\\nThis release is a hotfix.\\\\\\\\n', expected 'This release is a hotfix.'; after: call 1: `section.path` must be a string, but arrived as an array. |   Got: ['Changelog', '[1.4.2] - 2026-08-14'] |   Send the heading text, or the heading path joined with \" > \"."}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 5, "outcome": "op_error", "detail": "line 28: 'This release is a hotfix.', expected '(end of change)'; after: call 3: no section at path \"Changelog > [1.4.2] - 2026-08-14</div><div class=\"fixed\">This release is a hotfix. |  | # Fixed (reconstructed from context) | ... | # Changed (reconstructed from context) | ...</div>,text:\". |   Near matches: none |   Paths: \"Changelog\"; \"Changelog > [Unreleased]\"; \"Changelog > [Unreleased] > Added\"; \"Changelog > [1.4.2] - 2026-08-14\"; \"Changelog > [1.4.2] - 2026-08-14 > Fixed\"; \"Changelog > [1.4.2] - 2026-08-14 > Changed\"; \"Changelog > [1.4.1] - 2026-07-30\"; \"Changelog > [1.4.1] - 2026-07-30 > Fixed\"; \"Changelog > [1.4.0] - 2026-07-02\"; \"Changelog > [1.4.0] - 2026-07-02 > Added\"; ..."}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 7, "outcome": "op_error", "detail": "line 28: 'This release is a hotfix.', expected '(end of change)'; after: call 1: no section \"Changelog > [1.4.2] - 2026-08-14\" with ordinal 1. |   Only one section matches `section.path`. Sending an ordinal says you expected several, so it may not be the section you meant. |   If you meant a section inside it, send one of these as `section.path`: \"Changelog > [1.4.2] - 2026-08-14 > Fixed\"; \"Changelog > [1.4.2] - 2026-08-14 > Changed\" |   If you did mean this one, send it again without an ordinal."}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-hotfix-note", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "rename-setext", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 7, "outcome": "destructive", "detail": "section disappeared: 'Setext H1 Title > Setext H2' (1 before, 0 after)"}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "rename-closed-atx", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "delete-install-macos", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 0, "outcome": "op_error", "detail": "call 2: no section at path \"Deep heading nesting > Reference > API\"}, subtree: true}<tool_call|><|channel>thought | <channel|>The attempt to use `set-level` on a subsection via its full path failed due to tool limitations regarding how it identifies sections for renaming versus leveling. However, I've noted the requested change: promoting `Reference > API` and its descendants (`Endpoints`, `Authentication`) to second-level headings within `Deep heading nesting`. |  | Since I cannot perform this specific operation directly with the current parameters provided in my error log, please let me know if you would like me to try an alternative approach (like replacing the whole structure).  |  | Wait, looking at the instructions: `set-level` requires `new_heading` to be the *name* of the section being moved? No, `set-level` only takes `level`. The previous call had both `rename` logic mixed in by mistake or misinterpreted input. |  | Let me retry using just `set-level` correctly once I realize the parameter mismatch. Actually, I will try to `replace-body` if that were possible, but since \"API\" is a heading itself, I should have used `set-level`.  |  | I will try one more time with `set-level` properly formatted. If it fails again, I'll ask for clarification. |  | Actually, I can't fix the internal tool failure if it persists. Let me try a different approach: deleting the old section and inserting a new one at the correct level. But `insert` doesn't take an existing path easily as a target for promotion. |  | Let's attempt `set-level` on the **Reference** subsection specifically if I can identify its position relative to Reference. | The outline says `Reference` has one subsection `API`.  | If I want to promote `API`, I am changing its parentage/rank.  |  | Wait, the prompt asks to promote it to second-level. In the structure: | # Deep heading nesting (Level 1) | ## Install (Level 2) | ... | ## Reference (Level 2) | ### API (Level 3) -> Should become Level 2? No, that would make it a sibling of Reference.  | If Reference is Level 2, then its children are Level 3. Promoting API to Level 2 means making it a child of \"Deep heading nesting\" instead of \"Reference\". |  | To achieve this via my tools: | 1. Delete `Deep heading nesting > Reference > API` (and subtree). | 2. Insert `API` after `Deep heading nesting > Reference`. |  | Actually, `Reference` itself becomes orphaned if we delete all children and don't replace body. |  | Let's try this logic: | 1. `replace-body` on `Reference` with empty text (to keep the section but remove content if needed, though the tool doesn't have an 'empty' action easily, let's just leave it). | 2. Actually, the best way to move a subsection to be a sibling of its parent's parent is `delete` + `insert`. |  | However, I will first attempt the correct `set-level` call again without extra arguments in case the previous error was due to providing `new_heading` where only `level` was expected for that specific action type. The documentation says `set-level` requires `level`, and optional `subtree`. It does NOT mention `new_heading`. My previous failed call included `new_heading`. That was likely the cause! |  | I will try `set-level` alone. But wait, `set-level` changes the level *of the current section*. If \"API\" is Level 3, setting level to 2 makes it Level 2. To make it a sibling of \"Reference\", it would need to stay at Level 2 relative to the document root? No, \"Deep heading nesting\" is L1, so \"Reference\" is L2. A second-level heading under \"Deep heading nesting\" would be a sibling of Reference. So API should become L2. |  | Let's try `set-level` on `API` with `level=2`. (This assumes the tool treats the new level relative to the document). |  | Actually, if I change API from L3 to L2, it becomes a child of \"Deep heading nesting\". This is exactly what \"promoting to a second-level heading\" usually means in this context. |  | Plan: | 1. Try `set-level(path=\"... > API\", level=2, subtree=true)`. Note: The documentation says for `replace-body`, it needs `overwrite=true`. For `set-level`, it doesn't mention `new_heading`. |  | Wait, looking at my previous error: `Error: 'level' must be a number from 1 to 6, not None.` and I provided `new_heading`. It seems the tool got confused because I gave extra arguments or `new_heading` was expected by some logic but not others. |  | I will attempt one clean call.<|channel>thought | <channel|><|tool_call>call:section_edit{action:\". |   Near matches: none |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 1, "outcome": "destructive", "detail": "section disappeared: 'Deep heading nesting > Reference > API > Endpoints' (1 before, 0 after)"}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 2, "outcome": "op_error", "detail": "call 4: no section \"Deep heading nesting\" with ordinal 3. |   Only one section matches `section.path`. Sending an ordinal says you expected several, so it may not be the section you meant. |   If you meant a section inside it, send one of these as `section.path`: \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; ... |   If you did mean this one, send it again without an ordinal."}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 3, "outcome": "transport", "detail": "HTTPError: HTTP Error 500: Internal Server Error"}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 5, "outcome": "transport", "detail": "HTTPError: HTTP Error 500: Internal Server Error"}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "promote-api", "scheme": "section_kids", "trial": 9, "outcome": "op_error", "detail": "call 4: `section` is required: the heading path of the section to act on. |   This file has 18 sections. Candidates: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; ..."}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "replace-install-preamble", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "notes-second-ordinal", "scheme": "section_kids", "trial": 9, "outcome": "transport", "detail": "HTTPError: HTTP Error 500: Internal Server Error"}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 1, "outcome": "op_error", "detail": "line 30: '\\\\\\\\nNone of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'; after: call 1: `text` is required and must not be empty."}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 2, "outcome": "collateral:formatting", "detail": "line 30: ' None of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'"}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 6, "outcome": "wrong", "detail": "line 30: '}', expected 'None of the above is parsed as markdown.'"}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 7, "outcome": "wrong", "detail": "line 30: '}', expected 'None of the above is parsed as markdown.'"}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-after-fence", "scheme": "section_kids", "trial": 9, "outcome": "wrong", "detail": "line 30: '\\\\nNone of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'"}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-atx-line", "scheme": "section_kids", "trial": 9, "outcome": "wrong", "detail": "line 17: ' The same is true of the closed form.\"\"\"}<tool_call|>]<tool_call|><|channel>thought', expected 'The same is true of the closed form.'"}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "append-macos-note", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "replace-linux-body", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 5, "outcome": "op_error", "detail": "missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Reference > Rate limits > Headers', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: call 3: no section at path \"Deep heading nesting > Reference > API > Rate limits\". |   Near matches: Rate limits |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "scheme": "section_kids", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 1, "outcome": "wrong", "detail": "line 74: '(end of change)', expected 'See the FAQ.'"}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 3, "outcome": "op_error", "detail": "section delta +4, expected +3; after: call 4: no section \"Deep heading nesting\" with ordinal 4. |   Only one section matches `section.path`. Sending an ordinal says you expected several, so it may not be the section you meant. |   If you meant a section inside it, send one of these as `section.path`: \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; ... |   If you did mean this one, send it again without an ordinal."}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 4, "outcome": "op_error", "detail": "line 70: '### Common errors', expected 'Written to `~/.fastmd/log`.'; after: call 4: `section` is required: the heading path of the section to act on. |   This file has 21 sections. Candidates: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; ..."}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 7, "outcome": "op_error", "detail": "section delta +4, expected +3; after: call 4: no section at path \"Reference/API/Endpoints/Authentication\". |   Near matches: Authentication |   Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 8, "outcome": "destructive", "detail": "section disappeared: 'Deep heading nesting > Reference > API > Endpoints > Authentication' (1 before, 0 after)"}
+{"task_id": "insert-troubleshooting", "scheme": "section_kids", "trial": 9, "outcome": "wrong", "detail": "line 70: 'Logs are written to `~/.fastmd/log`.', expected 'Written to `~/.fastmd/log`.'"}

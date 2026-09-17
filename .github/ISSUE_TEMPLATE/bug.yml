@@ -1,0 +1,75 @@
+name: Bug report
+description: Report reproducible incorrect or unsafe behavior.
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a problem. Use the smallest document that reproduces it and remove private content.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Provide the Incise version or commit hash.
+      placeholder: v0.1.0 or abc1234
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: Include the operating system, architecture, and Rust version when relevant.
+      placeholder: macOS 15, arm64, rustc 1.xx
+    validations:
+      required: true
+
+  - type: textarea
+    id: operation
+    attributes:
+      label: Command or tool call
+      description: Show the exact command or structured arguments.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal input document
+      description: Provide the smallest Markdown document that reproduces the problem.
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include stdout, stderr, and the resulting document or diff when relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add logs, related findings, or anything else that may help.
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public-report safety
+      options:
+        - label: I removed credentials, private notes, and other sensitive information.
+          required: true
+        - label: This is not a vulnerability that should be reported privately.
+          required: true

@@ -1,0 +1,200 @@
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 2, "outcome": "op_error", "detail": "no list item matching \"third child\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 8, "outcome": "op_error", "detail": "no list item matching \"third level item three\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_g", "trial": 9, "outcome": "op_error", "detail": "no list item matching \"third child of second child of first child of root\". |   Near matches: none |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 4, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 6, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 0, "outcome": "op_error", "detail": "no list item matching \"* current item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 1, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 2, "outcome": "op_error", "detail": "no list item matching \"* Star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 4, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 5, "outcome": "op_error", "detail": "no list item matching \"* first star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 7, "outcome": "op_error", "detail": "no list item matching \"* original asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 8, "outcome": "op_error", "detail": "no list item matching \"* single asterisk item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_g", "trial": 9, "outcome": "op_error", "detail": "no list item matching \"* star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 2, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-set-checked --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_g", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 6, "outcome": "op_error", "detail": "no list item matching \"third level one\". |   Near matches: third |   Items: first; second; second-a; second-b; second-b-i; third"}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 0, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 1, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 2, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 3, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 7, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 8, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-loose", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 5, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 5, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 0, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 2, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 3, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 4, "outcome": "op_error", "detail": "no list item matching \"* Existing star item? No, I don't know exact text of existing item. Wait, summary says it has 1 item. The instruction implies there is a \"star item\". But wait, the prompt asks me to add \"second star item\" to the list that contains *the star item*. Since the list under heading ordinal 1 only has one item which isn't named in the prompt but implied by context as 'a star item', I should check if I can match 'the star item'. Actually, looking at the request: `add an item \"second star item\" to the list that contains the star item`. It doesn't say what the current star item is. However, usually these tasks assume I can find it or I might have made a mistake. Let's look at the summary again. Heading \"Mixed markers at the same level\" ordinal 1 has \"bullet list, marker \"*\", 1 items, tight\". If I want to add after \"the star item\", and I don't know its name... wait, maybe the user meant adding it regardless of content? Or maybe they expect me to guess? No, instructions say \"Never guess an item's text\". |  | Wait, let's re-read carefully. Maybe \"the star item\" refers to an item whose text IS exactly \"star item\"? Unlikely. | Usually, when people say \"the [type] item\", they mean matching on some known part. But if there's only one item and I don't know its text, I can't use `after`. | However, I am provided with no file contents. The tool documentation says \"You do NOT have the file contents\". | If the instruction is \"add ... to the list that contains the star item\", and the summary for heading \"Mixed markers at the same level\" (ordinal 1) says it has 1 item, then there is only one way to add something: by position 'end'.  |  | Let's try using `position=\"end\"` for that list.\". |   Near matches: none |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 5, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 6, "outcome": "op_error", "detail": "no list item matching \"* first star item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 7, "outcome": "op_error", "detail": "no list item matching \"* item\". |   Near matches: star item |   Items: star item"}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 8, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-add-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "add-item-mixed-markers", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 2, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-remove-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 6, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-remove-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 2, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-set-checked --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 5, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 6, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-set-checked --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 7, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-set-checked --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "check-task-nested", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 3, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 4, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 5, "outcome": "usage_error", "detail": "error: the following required arguments were not provided: |   <FILE> |  | Usage: fastmd list-remove-item --args <JSON> --json <FILE> |  | For more information, try '--help'."}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 6, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 7, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 8, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-mixed", "scheme": "list_h", "trial": 9, "outcome": "correct", "detail": null}

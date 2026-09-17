@@ -1,0 +1,115 @@
+{
+  "_comment": "Three section tasks on a section that mixes CRLF and LF, built for F-remedy's line-endings refusal, which headroom.py priced UNTESTED at k = 0 for want of a fixture. Its own file rather than appended to sections.json, for the reason that file's siblings state: every recorded section pool was run over those fifteen tasks, and appending would change n and break comparability with every rate already published. Generated and regenerable by bench/make_mixed_endings_tasks.py, which explains why the two provoking tasks have a reachable golden at all -- the remedy the refusal names is performable, in two calls, by deleting the section and re-inserting it, and the price is retyping the body. The third task is the control: the same instruction on the section next door, whose endings are uniform.",
+  "tasks": [
+    {
+      "id": "append-mixed-body",
+      "family": "section-append",
+      "fixture": "bench/synthetic/mixed-endings-section.md",
+      "instruction": "Add the line \"A new line.\" to the end of the \"Mixed body\" section.",
+      "golden": {
+        "first_changed": 5,
+        "unchanged_tail": 9,
+        "lines": [
+          "This line ends LF, and it is the only thing that makes the section mixed.\r",
+          "The paragraph then goes back to CRLF and stays there.\r",
+          "\r",
+          "A new line.\r"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Mixed endings inside one section > Mixed body"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-delete",
+          "args": {
+            "section": "Mixed body"
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "CRLF body",
+            "position": "before",
+            "heading": "Mixed body",
+            "body": "This paragraph opens with CRLF lines, as does the heading above it.\nThis line ends LF, and it is the only thing that makes the section mixed.\nThe paragraph then goes back to CRLF and stays there.\n\nA new line."
+          }
+        }
+      ],
+      "note": "The provoking task. `section-append` is refused because the section's span holds one LF line among CRLF ones, and the refusal's only named remedy is a document change it does not say how to make. The two calls here are that remedy, performed: delete the section, re-insert it against an anchor whose endings are uniform, and the body comes back CRLF throughout with the new line on the end. A model that reads the refusal and stops grades `op_error`, which is the loud failure and the outcome most trials should be expected to reach. A model that finds this route grades `correct` and has falsified the word `unperformable` in F-remedy's title for this half of the finding."
+    },
+    {
+      "id": "replace-mixed-body",
+      "family": "section-replace-body",
+      "fixture": "bench/synthetic/mixed-endings-section.md",
+      "instruction": "Replace the body of the \"Mixed body\" section with the single line \"Superseded; see CRLF body.\"",
+      "golden": {
+        "first_changed": 4,
+        "unchanged_tail": 9,
+        "lines": [
+          "Superseded; see CRLF body.\r"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Mixed endings inside one section > Mixed body"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-delete",
+          "args": {
+            "section": "Mixed body"
+          }
+        },
+        {
+          "op": "section-insert",
+          "args": {
+            "section": "CRLF body",
+            "position": "before",
+            "heading": "Mixed body",
+            "body": "Superseded; see CRLF body."
+          }
+        }
+      ],
+      "note": "The same refusal on the other body-writing op, and the easier half of the recovery: the instruction supplies the replacement text, so the delete-and-re-insert route costs nothing but the two calls. The task above has to retype three lines it was never given. If the pair separates, the cost of the remedy is the retyping and not the discovery."
+    },
+    {
+      "id": "append-crlf-control",
+      "family": "section-append",
+      "fixture": "bench/synthetic/mixed-endings-section.md",
+      "instruction": "Add the line \"A new line.\" to the end of the \"CRLF body\" section.",
+      "golden": {
+        "first_changed": 12,
+        "unchanged_tail": 4,
+        "lines": [
+          "A new line.\r",
+          "\r"
+        ]
+      },
+      "expect": {
+        "section_delta": 0,
+        "paths_present": [
+          "Mixed endings inside one section > CRLF body"
+        ],
+        "paths_absent": []
+      },
+      "ideal_calls": [
+        {
+          "op": "section-append",
+          "args": {
+            "section": "CRLF body",
+            "text": "A new line."
+          }
+        }
+      ],
+      "note": "The control, in the same file and with the same instruction one section over. Every line of this section ends CRLF, so there is a convention to match, `section-append` applies in one call, and the line it writes ends CRLF too. Without it a drop on the two tasks above could be a model that mishandles an unfamiliar fixture rather than one that mishandles this refusal."
+    }
+  ]
+}

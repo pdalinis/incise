@@ -1,0 +1,59 @@
+name: Feature proposal
+description: Propose a new capability or improvement.
+title: "feature: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Incise favors narrow semantic operations backed by concrete use cases. Explain the intent an agent needs to express, not only the interface you imagine.
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: What is the agent or user trying to accomplish, and in what kind of Markdown knowledge base?
+    validations:
+      required: true
+
+  - type: textarea
+    id: gap
+    attributes:
+      label: Why existing operations are insufficient
+      description: Explain why the current reads, edits, or composition cannot safely express the task.
+    validations:
+      required: true
+
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: Describe the semantic address, operation, expected result, and refusal behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Include representative input and desired output when possible.
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Likely affected surface
+      options:
+        - Core operation
+        - Structural read
+        - CLI
+        - Agent schema or integration
+        - Benchmark or measurement
+        - Documentation
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Safety and compatibility considerations
+      description: Note ambiguity, preservation risks, model-facing changes, or compatibility concerns.
