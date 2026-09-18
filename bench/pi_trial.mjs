@@ -94,7 +94,17 @@ async function createSession(request) {
 		authPath: join(request.agentDir, "auth.json"),
 		modelsPath: join(request.agentDir, "models.json"),
 	});
-	await modelRuntime.setRuntimeApiKey("pi-composition-local", "local-benchmark");
+	const requestedModel = modelFor(request);
+	const { provider, baseUrl, api, ...modelDefinition } = requestedModel;
+	modelRuntime.registerProvider(provider, {
+		baseUrl,
+		api,
+		apiKey: "local-benchmark",
+		models: [modelDefinition],
+	});
+	await modelRuntime.refresh({ allowNetwork: false });
+	const model = modelRuntime.getModel(provider, requestedModel.id);
+	if (!model) throw new Error(`custom model was not registered: ${provider}/${requestedModel.id}`);
 
 	const settingsManager = SettingsManager.inMemory({
 		compaction: { enabled: false },
@@ -103,7 +113,7 @@ async function createSession(request) {
 	const created = await createAgentSession({
 		cwd: request.cwd,
 		agentDir: request.agentDir,
-		model: modelFor(request),
+		model,
 		thinkingLevel: "off",
 		modelRuntime,
 		resourceLoader,

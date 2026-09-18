@@ -556,7 +556,11 @@ def command_clap(args):
                       for call in row_a["tool_calls"]]
         sequence_b = [(call["function"]["name"], call["function"]["arguments"])
                       for call in row_b["tool_calls"]]
-        if (grade_a["outcome"] == "transport"
+        if (row_a.get("error")
+                or row_b.get("error")
+                or not row_a.get("n_turns")
+                or not row_b.get("n_turns")
+                or grade_a["outcome"] == "transport"
                 or grade_b["outcome"] == "transport"
                 or grade_a["outcome"] != grade_b["outcome"]
                 or sequence_a != sequence_b):
