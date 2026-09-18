@@ -23,8 +23,7 @@ in `Cargo.toml`; the release workflow refuses a mismatch.
    cargo package -p incise-core --locked --list
    cargo package -p incise-cli --locked --no-verify --list
    ```
-
-4. Review the commit history that will become the generated release notes.
+4. Add `.github/release-notes/vX.Y.Z.md` with the curated GitHub release body.
 5. Push the release commit and wait for CI to pass on the default branch.
 
 ## Tag and publish
@@ -40,7 +39,7 @@ It then builds four CLI archives—Linux x86-64 and ARM64, plus macOS x86-64 and
 
 Publication is intentionally ordered: `incise-core` is published first, then `incise-cli` retries while the registry index catches up. Each publish step checks whether that exact version already exists, so rerunning a partially completed workflow does not try to upload the same crate version twice.
 
-After both crates and all five archives succeed, the workflow creates a GitHub release with generated notes and `SHA256SUMS`.
+After both crates and all five archives succeed, the workflow creates a GitHub release with the curated notes and `SHA256SUMS`.
 
 ## After release
 

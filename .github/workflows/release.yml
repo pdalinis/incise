@@ -242,11 +242,16 @@ jobs:
           cd dist
           sha256sum incise-* > SHA256SUMS
           cd ..
-          previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
-          if [ -n "$previous_tag" ]; then
-            git log --pretty=format:"- %s (%h)" "$previous_tag..HEAD" > release-notes.md
+          notes_file=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$notes_file" ]; then
+            cp "$notes_file" release-notes.md
           else
-            git log --pretty=format:"- %s (%h)" > release-notes.md
+            previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
+            if [ -n "$previous_tag" ]; then
+              git log --pretty=format:"- %s (%h)" "$previous_tag..HEAD" > release-notes.md
+            else
+              git log --pretty=format:"- %s (%h)" > release-notes.md
+            fi
           fi
 
       - name: Create release
