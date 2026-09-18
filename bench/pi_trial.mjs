@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { accessSync, constants, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -22,6 +23,26 @@ function packageVersion(root) {
 
 function binaryVersion(path) {
 	return execFileSync(path, ["--version"], { encoding: "utf8" }).trim();
+}
+
+function packageBinary(extensionPath) {
+	const names = {
+		"darwin-arm64": "@pdalinis/pi-incise-darwin-arm64",
+		"darwin-x64": "@pdalinis/pi-incise-darwin-x64",
+		"linux-arm64": "@pdalinis/pi-incise-linux-arm64-gnu",
+		"linux-x64": "@pdalinis/pi-incise-linux-x64-gnu",
+	};
+	const packageName = names[`${process.platform}-${process.arch}`];
+	if (!packageName) return null;
+	try {
+		const require = createRequire(extensionPath);
+		const manifest = require.resolve(`${packageName}/package.json`);
+		const path = join(dirname(manifest), "bin", "incise");
+		accessSync(path, constants.X_OK);
+		return { path, source: "package", packageName, version: binaryVersion(path) };
+	} catch {
+		return null;
+	}
 }
 
 function modelFor(request) {
@@ -106,19 +127,13 @@ function toolInfo(session, names) {
 }
 
 async function probe(request, session) {
-	const extensionModule = await import(pathToFileURL(resolve(dirname(request.extension), "binary.ts")).href);
-	const binary = extensionModule.resolveBinary();
+	const binary = packageBinary(request.extension);
 	const root = packageRootFor(request.extension);
 	return {
 		mode: "probe",
 		packageRoot: root,
 		packageVersion: packageVersion(root),
-		binary: binary ? {
-			path: binary.path,
-			source: binary.source,
-			packageName: binary.packageName,
-			version: binaryVersion(binary.path),
-		} : null,
+		binary,
 		activeTools: session.getActiveToolNames(),
 		tools: toolInfo(session, request.tools),
 		systemPrompt: session.systemPrompt,
