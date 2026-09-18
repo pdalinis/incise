@@ -104,14 +104,24 @@ incise schema --tool table_edit
 
 These schemas are measured artifacts, not handwritten approximations. A function-calling harness can pass the model argument object to the corresponding Incise command and return stdout or stderr directly.
 
-A useful agent instruction is intentionally short:
+When using the Hermes plugin, add a rule like this to a project-level `AGENTS.md`:
 
-```text
-For Markdown tables, lists, sections, and frontmatter, inspect structure first
-and use Incise operations instead of rewriting the file. Address content by
-heading, cell value, item text, or key. If Incise refuses a call, follow the
-remedy in the refusal rather than replacing the document as raw text.
+```md
+## Editing Markdown
+
+For Markdown tables, lists, sections, and frontmatter, prefer Incise tools over
+generic patch, write, or shell tools.
+
+Inspect structure first with `md_tables`, `md_lists`, or `md_outline`. Use
+`table_get` when current table rows are needed. Make changes with `table_edit`,
+`list_edit`, `section_edit`, or `frontmatter_edit`.
+
+If Incise refuses an operation, follow the remedy in its response rather than
+rewriting the document. Use raw editing only for prose changes that Incise does
+not represent.
 ```
+
+This preference is deliberately scoped to Markdown structures Incise represents. Generic editing remains appropriate for ordinary prose and for creating the initial contents of a new document.
 
 The adapter under [`plugins/hermes/`](plugins/hermes/) exposes the measured edit and table-read schemas plus structural reads for Hermes Agent. Its [README](plugins/hermes/README.md) contains the installation and safety details.
 
