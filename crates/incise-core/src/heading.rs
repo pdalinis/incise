@@ -386,7 +386,7 @@ pub fn heading_gap(sections: &[Section]) -> usize {
         .collect::<std::collections::BTreeSet<_>>()
     {
         let count = gaps.iter().filter(|x| **x == g).count();
-        if best.map_or(true, |(c, _)| count > c) {
+        if best.is_none_or(|(c, _)| count > c) {
             best = Some((count, g));
         }
     }

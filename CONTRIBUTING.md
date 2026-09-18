@@ -4,7 +4,7 @@ Thank you for helping improve incise. This project treats file-preservation beha
 
 ## Development setup
 
-Use the toolchain and commands exercised by CI. The core crate must remain dependency-free. The CLI and plugins may take dependencies when the tradeoff is justified.
+Use the toolchain and commands exercised by CI. The workspace MSRV is Rust 1.85; review it annually and never raise it incidentally through a dependency update. The core crate must remain dependency-free. The CLI and plugins may take dependencies when the tradeoff is justified.
 
 Run the following before submitting a code change:
 

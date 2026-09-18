@@ -252,7 +252,7 @@ pub fn apply_op(content: &str, op: &str, args: Option<&Value>) -> Result<String>
         // unticks.
         "section-set-level" => {
             let address = to_section_address(args::section_address(a)?);
-            let subtree = a.get("subtree").map_or(true, json::py_truthy);
+            let subtree = a.get("subtree").is_none_or(json::py_truthy);
             section_set_level(content, &address, a.get("level"), subtree)
         }
         // `key` and nothing else. `item`'s alias list is deliberately not used

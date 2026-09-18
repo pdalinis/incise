@@ -692,7 +692,7 @@ fn no_row_message(table: &Table, cols: &[String], selector: &Where) -> String {
         }
         let score: f64 = keys.iter().map(|k| selectivity(k)).sum();
         // `max()` keeps the first maximum; strict `>` reproduces that.
-        if best.map_or(true, |(b, _)| score > b) {
+        if best.is_none_or(|(b, _)| score > b) {
             best = Some((score, i));
         }
     }

@@ -64,7 +64,7 @@ A harness can pass the model argument object directly to the corresponding comma
 
 Use `--dry-run` to preview a write. Use `incise hash FILE` and pass the result through `--if-match HASH` when another process may have changed the file since it was read. Successful writes use atomic replacement, no-op edits leave modification times unchanged, and unrelated bytes remain untouched.
 
-Incise currently supports Linux and macOS. Windows is not supported or tested. The minimum supported Rust version for source builds is 1.75.
+Incise currently supports Linux and macOS. Windows is not supported or tested. The minimum supported Rust version for source builds is 1.85.
 
 ## Documentation
 
