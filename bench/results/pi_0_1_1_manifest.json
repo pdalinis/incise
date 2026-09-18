@@ -1,0 +1,105 @@
+{
+  "conditions": {
+    "control": {
+      "system_prompt": "You are an expert coding assistant operating inside pi, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files.\n\nAvailable tools:\n- table_edit: Edit Markdown tables without reconstructing them\n- list_edit: Edit Markdown lists without reconstructing them\n- section_edit: Edit Markdown sections without reconstructing them\n- frontmatter_edit: Edit Markdown frontmatter without rewriting it\n- table_get: Read selected rows from a Markdown table\n\nIn addition to the tools above, you may have access to other custom tools depending on the project.\n\nGuidelines:\n- Use table_edit for structured Markdown table changes and follow any Incise refusal remedy.\n- Use list_edit for structured Markdown list changes and follow any Incise refusal remedy.\n- Use section_edit for Markdown section changes and follow any Incise refusal remedy.\n- Use frontmatter_edit for Markdown frontmatter changes and follow any Incise refusal remedy.\n- Use table_get instead of reconstructing a Markdown table when only selected rows are needed.\n- Be concise in your responses\n- Show file paths clearly when working with files\n\nPi documentation (read only when the user asks about pi itself, its SDK, extensions, themes, skills, or TUI):\n- Main documentation: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/README.md\n- Additional docs: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/docs\n- Examples: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/examples (extensions, custom tools, SDK)\n- When reading pi docs or examples, resolve docs/... under Additional docs and examples/... under Examples, not the current working directory\n- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), pi packages (docs/packages.md), environment variables (docs/environment-variables.md)\n- When working on pi topics, read the docs and examples, and follow .md cross-references before implementing\n- Always read pi .md files completely and follow links to related docs (e.g., tui.md for TUI API details)\nCurrent working directory: /private/tmp/incise-pi-composition-v0.1.1",
+      "system_prompt_sha256": "3063ccbfd5a378b0d163765afe60156a6de7af92903c5348cbfe5d3fcde72d53",
+      "tools": [
+        "table_edit",
+        "list_edit",
+        "section_edit",
+        "frontmatter_edit",
+        "table_get"
+      ],
+      "tools_sha256": "c2acb3eb0ba5d5dcdfa86bb7b8da1cea7f0f91a90bf454472c36b0ea4503c04b"
+    },
+    "treatment": {
+      "system_prompt": "You are an expert coding assistant operating inside pi, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files.\n\nAvailable tools:\n- table_edit: Edit Markdown tables without reconstructing them\n- list_edit: Edit Markdown lists without reconstructing them\n- section_edit: Edit Markdown sections without reconstructing them\n- frontmatter_edit: Edit Markdown frontmatter without rewriting it\n- table_get: Read selected rows from a Markdown table\n- md_tables: Inspect Markdown tables before structured table edits\n- md_lists: Inspect Markdown lists before structured list edits\n- md_outline: Inspect Markdown section structure before section edits\n\nIn addition to the tools above, you may have access to other custom tools depending on the project.\n\nGuidelines:\n- Use table_edit for structured Markdown table changes and follow any Incise refusal remedy.\n- Use list_edit for structured Markdown list changes and follow any Incise refusal remedy.\n- Use section_edit for Markdown section changes and follow any Incise refusal remedy.\n- Use frontmatter_edit for Markdown frontmatter changes and follow any Incise refusal remedy.\n- Use table_get instead of reconstructing a Markdown table when only selected rows are needed.\n- Use md_tables before table_edit to copy exact table addresses and column names.\n- Use md_lists before list_edit to copy exact list addresses and item text.\n- Use md_outline before section_edit to copy exact heading paths.\n- Be concise in your responses\n- Show file paths clearly when working with files\n\nPi documentation (read only when the user asks about pi itself, its SDK, extensions, themes, skills, or TUI):\n- Main documentation: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/README.md\n- Additional docs: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/docs\n- Examples: /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/examples (extensions, custom tools, SDK)\n- When reading pi docs or examples, resolve docs/... under Additional docs and examples/... under Examples, not the current working directory\n- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), pi packages (docs/packages.md), environment variables (docs/environment-variables.md)\n- When working on pi topics, read the docs and examples, and follow .md cross-references before implementing\n- Always read pi .md files completely and follow links to related docs (e.g., tui.md for TUI API details)\nCurrent working directory: /private/tmp/incise-pi-composition-v0.1.1",
+      "system_prompt_sha256": "5c9232c7c5a85d2674c0c1b835c801f97e97553db53f2e4218afb572041eb051",
+      "tools": [
+        "table_edit",
+        "list_edit",
+        "section_edit",
+        "frontmatter_edit",
+        "table_get",
+        "md_tables",
+        "md_lists",
+        "md_outline"
+      ],
+      "tools_sha256": "21534acb38bbe22cb4c784a5c7e8a19261518d07812b199db75ef6e2edf36313"
+    }
+  },
+  "created_at": "2026-09-18T19:20:29.551036+00:00",
+  "design": {
+    "decision": "p >= 0.05 pooled and no family loss > 5.0 percentage points",
+    "max_turns": 4,
+    "primary": "graded correct, paired exact McNemar",
+    "seed": "trial index",
+    "tasks": 48,
+    "trials_per_condition": 480,
+    "trials_per_task": 10
+  },
+  "model": {
+    "alias": "gemma4-direct-q8",
+    "endpoint": "http://127.0.0.1:8081/v1",
+    "launch_flags": [
+      "--jinja",
+      "--ctx-size 65536",
+      "--parallel 1",
+      "--n-gpu-layers 999",
+      "--cache-type-k q8_0",
+      "--cache-type-v q8_0",
+      "--flash-attn on",
+      "--cache-ram 8192",
+      "--temperature 1.0",
+      "--top-k 64",
+      "--top-p 0.95",
+      "--min-p 0.05",
+      "--repeat-penalty 1.15",
+      "--repeat-last-n 256",
+      "--presence-penalty 0",
+      "--reasoning-budget 3000",
+      "--reasoning-format deepseek",
+      "-n 8192",
+      "--host 127.0.0.1",
+      "--port 8081"
+    ],
+    "model_file": "/Users/peter/.local/share/llama-models/gemma4-26b/qat/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+    "model_sha256": "a7c5bc715f5ff8e99a3e8901ce7d2b42b402c669bf24f7c5250747633d0f5891",
+    "name": "gemma-4-26B-A4B-it",
+    "server": "llama.cpp 0.4.0 build 10809 (5266f24da)"
+  },
+  "package": {
+    "binary": {
+      "packageName": "@pdalinis/pi-incise-darwin-arm64",
+      "path": "/private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@pdalinis/pi-incise-darwin-arm64/bin/incise",
+      "source": "package",
+      "version": "incise 0.1.1"
+    },
+    "integrity": "sha512-1CmFNYv5Ko1GcZjqdp70PFdFYKxK7TwfzUGx035wkF4zDSWvwdPRKehXVwVAl+QWPEVKp9oacj5HDmznkC7hnQ==",
+    "integrity_source": "/private/tmp/incise-pi-package-0.1.1-2f2b13d/package-lock.json",
+    "name": "pi-incise",
+    "root": "/private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/pi-incise",
+    "version": "0.1.1"
+  },
+  "pi": {
+    "sdk": "/private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/dist/index.js",
+    "version": "0.85.1"
+  },
+  "preregistration": {
+    "commit": "455ffda",
+    "issue": "https://github.com/pdalinis/incise/issues/10",
+    "plan": "bench/PI_COMPOSITION_PLAN.md"
+  },
+  "source": {
+    "commit": "594aaf11fbcdfec99b50ba0ae2eee69bf6901d6a",
+    "describe": "v0.1.1-3-g594aaf1"
+  },
+  "status": "preflight",
+  "tasks": {
+    "bench/tasks/frontmatter.json": "f1279fd405ed2fab140a6948881f7db9243a87dcd201d7e10efb86958f4c8989",
+    "bench/tasks/lists.json": "37732f805659a06a16a9fbe636a54aa5cd0046d37feaaf4f45f3efc3bc5c6f1f",
+    "bench/tasks/sections.json": "e2c0a0ef1f45f8e3299670dad9d5cbcc9ee0d78ffbc49e87dff213fde220d7b2",
+    "bench/tasks/tables.json": "2ff4a06e819c3de5404b5873c029e9e208ba1ba0e94a28863dcc677c8d18a318",
+    "bench/tasks/tables_read.json": "97a6369c99e5a41ef630b3c0b83b359dc037e4fd621964ee68457fdae0ea3fce"
+  }
+}
