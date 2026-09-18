@@ -24,7 +24,7 @@ path = "src/main.rs"
 # at the crate boundary rather than at the workspace's.
 [dependencies]
 incise-core = { version = "0.1.0", path = "../incise-core" }
-# Newer Clap releases require Rust 1.85. Pin a version covered by the workspace's
-# Rust 1.75 MSRV so a lockfile refresh cannot raise it implicitly.
+# Pin Clap so a lockfile refresh cannot change CLI behavior implicitly. Dependency
+# updates are reviewed separately from the workspace's Rust 1.85 MSRV policy.
 clap = "=4.5.20"
 sha2 = "0.10"

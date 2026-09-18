@@ -151,9 +151,22 @@ The adapter under [`plugins/hermes/`](plugins/hermes/) exposes the measured edit
 
 Incise began with a narrow question: can deterministic structure-aware operations make a small local model safer and more capable at Markdown maintenance?
 
-Under the recorded single-family benchmark conditions, direct text editing completed 60% of table tasks, 63% of list tasks, and 19% of section tasks. The adopted Incise interfaces reached 100% on the table task set, 94% first-call on lists, and 89.2% on sections with one retry. Direct section editing lost existing content in 28% of trials; the measured Incise condition reduced that to 0.8%.
+The paired results below compare Hermes-style direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader. “Tokens” means completion/output tokens, and “time” is model-server wall time per trial; neither includes local tool execution. Values are means rounded to the nearest token and tenth of a second.
 
-The result is not that every model will achieve those exact rates. It is that deterministic operations remove failure modes a model should not have to solve with language generation: character arithmetic, structural boundaries, and byte-for-byte reconstruction.
+| Operation | Mode | Accuracy | Mean output tokens | Mean model time |
+| --- | --- | ---: | ---: | ---: |
+| Tables | Without: direct `patch` | 60.0% (36/60) | 77 | 2.4 s |
+| Tables | With: Incise (`scheme_f`) | 100% (60/60) | 66 | 2.2 s |
+| Lists | Without: direct `patch` | 63.0% (63/100) | 58 | 2.0 s |
+| Lists | With: Incise (`list_g`) | 91.0% (91/100) | 58 | 2.0 s |
+| Sections | Without: direct `patch` | 19.0% (19/100) | 186 | 5.9 s |
+| Sections | With: Incise (`section_g`) | 74.0% (74/100) | 60 | 2.0 s |
+
+The table and list Incise rows use the adopted schemas. The section row uses the shared 10-task, single-turn `section_g` slice so it remains comparable with the direct-edit baseline. The currently adopted `section_g_hpath` schema was later measured on a broader 15-task, four-turn arm at 86.7% accuracy (130/150); that result is not mixed into the table. Frontmatter is omitted because its recorded experiments compare Incise schemas and do not include a direct-edit control.
+
+These are results for one small local model under the recorded benchmark conditions, not a promise that every model will achieve the same rates. The useful result is the failure modes removed by deterministic operations: character arithmetic, structural-boundary mistakes, and byte-for-byte reconstruction.
+
+Full benchmark reports by operation: [tables](bench/FINDINGS.md#headline--arm-a-baseline), [lists](bench/FINDINGS.md#lists--the-second-op-family), [sections](bench/FINDINGS.md#s1--sections-are-the-hardest-family-measured-and-the-first-arm-b-family-with-data-loss), and [frontmatter](bench/FINDINGS.md#f-frontmatter--the-fourth-family-and-the-verb-that-deleted-the-version). See also the [combined shipping-tool benchmark](bench/FINDINGS.md#f-compose--the-shipping-set-has-never-been-measured-as-a-set).
 
 The complete tasks, prompts, raw results, statistical comparisons, caveats, and reversed conclusions are recorded in [`bench/FINDINGS.md`](bench/FINDINGS.md).
 
