@@ -1,0 +1,131 @@
+{
+  "arms": {
+    "control": {
+      "capped_trials": 65,
+      "completion_tokens_mean": 141.06471816283926,
+      "completion_tokens_total": 67570,
+      "continued_after_tool_error": 84,
+      "correct": 397,
+      "correct_after_tool_error": 59,
+      "correct_rate": 0.8288100208768268,
+      "correct_wilson_95": [
+        0.7924944113903392,
+        0.8598936432091253
+      ],
+      "cross_family_calls": 57,
+      "cross_family_trials": 38,
+      "elapsed_s_mean": 6.481858037578288,
+      "elapsed_s_median": 3.81,
+      "handler_refusal_results": 60,
+      "handler_refusal_trials": 43,
+      "outcomes": {
+        "collateral:content": 9,
+        "collateral:formatting": 3,
+        "correct": 397,
+        "destructive": 7,
+        "op_error": 40,
+        "unfiltered": 11,
+        "wrong": 12
+      },
+      "pi_validation_results": 178,
+      "pi_validation_trials": 99,
+      "silent_corruption": 31,
+      "silent_corruption_rate": 0.06471816283924843,
+      "tool_calls_mean": 1.524008350730689,
+      "tool_calls_total": 730,
+      "turns_mean": 2.5177453027139873
+    },
+    "treatment": {
+      "capped_trials": 88,
+      "completion_tokens_mean": 150.8643006263048,
+      "completion_tokens_total": 72264,
+      "continued_after_tool_error": 92,
+      "correct": 393,
+      "correct_after_tool_error": 62,
+      "correct_rate": 0.8204592901878914,
+      "correct_wilson_95": [
+        0.783581072546762,
+        0.8522383965390652
+      ],
+      "cross_family_calls": 87,
+      "cross_family_trials": 47,
+      "elapsed_s_mean": 7.808559498956159,
+      "elapsed_s_median": 4.14,
+      "handler_refusal_results": 75,
+      "handler_refusal_trials": 54,
+      "outcomes": {
+        "collateral:content": 10,
+        "collateral:formatting": 2,
+        "correct": 393,
+        "destructive": 9,
+        "op_error": 45,
+        "unfiltered": 13,
+        "wrong": 7
+      },
+      "pi_validation_results": 163,
+      "pi_validation_trials": 90,
+      "silent_corruption": 28,
+      "silent_corruption_rate": 0.05845511482254697,
+      "tool_calls_mean": 1.6889352818371608,
+      "tool_calls_total": 809,
+      "turns_mean": 2.682672233820459
+    }
+  },
+  "families": {
+    "frontmatter": {
+      "mcnemar_exact_p": 0.6636238098144531,
+      "only_control": 12,
+      "only_treatment": 9
+    },
+    "list": {
+      "mcnemar_exact_p": 0.1796875,
+      "only_control": 2,
+      "only_treatment": 7
+    },
+    "section": {
+      "mcnemar_exact_p": 0.5034446716308594,
+      "only_control": 12,
+      "only_treatment": 8
+    },
+    "table": {
+      "mcnemar_exact_p": 1.0,
+      "only_control": 0,
+      "only_treatment": 0
+    },
+    "table-read": {
+      "mcnemar_exact_p": 0.5,
+      "only_control": 2,
+      "only_treatment": 0
+    }
+  },
+  "pairs": 479,
+  "silent_corruption_definition": [
+    "wrong",
+    "collateral:content",
+    "collateral:formatting",
+    "destructive"
+  ],
+  "structural_read_uptake": {
+    "md_lists": {
+      "calls": 28,
+      "correct": 24,
+      "trials": 28
+    },
+    "md_outline": {
+      "calls": 26,
+      "correct": 10,
+      "trials": 25
+    },
+    "md_tables": {
+      "calls": 1,
+      "correct": 1,
+      "trials": 1
+    }
+  },
+  "transport_pairs_dropped": [
+    [
+      "rename-setext",
+      1
+    ]
+  ]
+}

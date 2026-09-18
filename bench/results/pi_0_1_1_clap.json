@@ -1,0 +1,13 @@
+{
+  "graded": [
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_a_graded.jsonl",
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_b_graded.jsonl"
+  ],
+  "mismatches": [],
+  "pairs": 48,
+  "raw": [
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_a.jsonl",
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_b.jsonl"
+  ],
+  "status": "pass"
+}

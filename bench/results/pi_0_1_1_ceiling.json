@@ -1,0 +1,679 @@
+{
+  "correct": 96,
+  "expected": 96,
+  "records": [
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "78dc18b276db3aa705c51bc517c5ec459e159c5db1b0ec3e96575a6970cb1dd1",
+      "outcome": "correct",
+      "task_id": "add-row-aligned-short"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "169ce2b97208ebe80447acbbe70c9a18887ac042bc42e945c313b9cdb1bdbbfd",
+      "outcome": "correct",
+      "task_id": "add-row-aligned-repad"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "515c332e0c9ee474ac81fd306774f9feea0447ad66b367e895cd7806446db28c",
+      "outcome": "correct",
+      "task_id": "add-row-ragged"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "dabdeaf3142cfbf40887a7249b0063081dad89e906e396b69b22cfb10d4f986d",
+      "outcome": "correct",
+      "task_id": "add-row-alignment-markers"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "d23aca2cf8071e34b762a9b8cbf75f10d44ee9ec36b21004dbb472719f4e8a37",
+      "outcome": "correct",
+      "task_id": "delete-row-aligned"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "5f73382de872b0beb77f88d188bce9dea21d0034c541485d42c1030944345360",
+      "outcome": "correct",
+      "task_id": "update-cell-multi-table"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "deceb794fabf385b2975784841ebd0cbda9f003bfd6d036746b878df4b5ebd0c",
+      "outcome": "correct",
+      "task_id": "add-item-tight-dash"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "fa73fca310c010c281cd84865ce60817356f8f781e2da8b03859d717a9a64476",
+      "outcome": "correct",
+      "task_id": "add-item-nested-asterisk"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "75993552305f442806cdeee1f09f9d12db45699ac2ef78d0accb3c510881c07f",
+      "outcome": "correct",
+      "task_id": "add-item-loose"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "b62d53e5335026ebcfecdf5e87783659e7bd80b172bccbb5d7d6e3f8d9236293",
+      "outcome": "correct",
+      "task_id": "add-item-ordered-renumber"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "0ba6aa73ef2b90dce70ac52f82dad68b05b764c7700efb6207942a78514126b3",
+      "outcome": "correct",
+      "task_id": "add-item-ordered-all-ones"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "3b27e49105fed26486a5d37fe8c7b63675f9a24026ad6759584f56667538a45c",
+      "outcome": "correct",
+      "task_id": "add-item-paren-delimiter"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "a83102295e1564c2922933896543d17b2eb54f83bc3b6cb22347d3323bf4f948",
+      "outcome": "correct",
+      "task_id": "add-item-mixed-markers"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "d03591f32ff8d57e9eacd6a9e17f18db0faf3fa0a7ba15e025647d53eb499fff",
+      "outcome": "correct",
+      "task_id": "remove-item-non-sequential"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "9a961c59f9a78f7ba75c0a31d4932a8ec2f3dcacd0a4b921dd6aeeb206c05969",
+      "outcome": "correct",
+      "task_id": "check-task-nested"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "4628e34ae6899d919eeeaebf228116b5aecbf091b2a8d978993a886932ccb2ff",
+      "outcome": "correct",
+      "task_id": "remove-item-mixed"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "eccbc3e64efb93164ce5983b524256eda5be96e7cbcb678ba9398438bc6701a0",
+      "outcome": "correct",
+      "task_id": "insert-release-at-top"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "7e66046cc96fb1651460744d3378cd23b1b949e0ef3b688c963f18380fd16cec",
+      "outcome": "correct",
+      "task_id": "insert-subsection-last"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "88f3df7776d959ca89baae2dc0c4bc89797e2a983c76b5e6c121cc3b87482fce",
+      "outcome": "correct",
+      "task_id": "append-hotfix-note"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "0042c2fa710a6108c694d5e4c3457e901102a62f111a7a3a046fc17330c11cb1",
+      "outcome": "correct",
+      "task_id": "rename-setext"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "a6a18db4d63bab31deee8e886b7530f1a891f77b33fcd4fac020f96ac546e982",
+      "outcome": "correct",
+      "task_id": "rename-closed-atx"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "a6f5efd8bfbc02399e007d77e00c41d3bf31eea87f57b5340bbb6502c452443c",
+      "outcome": "correct",
+      "task_id": "delete-install-macos"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "911f73ac31332b4e6028c0984b03c595c57c9921325ef6af670f78380431c639",
+      "outcome": "correct",
+      "task_id": "promote-api"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "dffaa8b7059617f77295d8bfc3649c76603ea3d24e3c77ef2fdf0b7f5aae0e2b",
+      "outcome": "correct",
+      "task_id": "replace-install-preamble"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "87569bd77173dac5caeda2d22d3c7156487c029ede26a57bafbe512e02b96814",
+      "outcome": "correct",
+      "task_id": "notes-second-ordinal"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "fdfa73d48f82518b2fb288729effef27a57c53a8d792d868a456c3133ddb0195",
+      "outcome": "correct",
+      "task_id": "append-after-fence"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "c94482cfed25d76c22ed33615db7f33f2dcd2cd7873015f7b6e46cddd148af58",
+      "outcome": "correct",
+      "task_id": "append-atx-line"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "f64033e9b6280b72add9099d4240b85d43355b690538768328fa75820699fa31",
+      "outcome": "correct",
+      "task_id": "append-macos-note"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "59e8337e967f42ffb5dcdf17d3b5c42f4ec5e651c7b6a308c5b94c90d1f0f9a8",
+      "outcome": "correct",
+      "task_id": "replace-linux-body"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "c1a628687df38151a3d71bb3dcd8ded6197598edc8fa93708278c9eb9d3fc29e",
+      "outcome": "correct",
+      "task_id": "insert-nested-ratelimits"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "f4040fe07fba3f0213deb81eee8bba89fb1bf139d5c733252cb85f7383162b0a",
+      "outcome": "correct",
+      "task_id": "insert-troubleshooting"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "f5cc68d0aa58ea2a67e6303f9e038a3a56618b51830f29b49021afd3d08cbf01",
+      "outcome": "correct",
+      "task_id": "set-build-jobs"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "3c071c096e12b70524de52887495d5ddfbe8e934f67e6dc9e35dcb5cd1b5c5a8",
+      "outcome": "correct",
+      "task_id": "set-build-target"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "45ab87a2b7bf8a99475ff7551627c290bd36d2b21e6715ff4dd2a4cc93147ac7",
+      "outcome": "correct",
+      "task_id": "set-dana-role"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "2da16d4838ed8ba77b61485bff33a5f996bcda1fbdb8039da5b9733b3fbbc398",
+      "outcome": "correct",
+      "task_id": "add-build-cache"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "13aabc9e75b7a0547244002a674d687dbfa6f650f59f96faea91e4d998f8c93b",
+      "outcome": "correct",
+      "task_id": "clear-title"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "1dc917e701849e785824b3bb68f577ca43cefc334934be664157ba8f1cda9919",
+      "outcome": "correct",
+      "task_id": "delete-draft"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "1db992daef7a972c36a1c0cfba100d78055bebc038a79c9bbcd8a8dfedb42c5b",
+      "outcome": "correct",
+      "task_id": "delete-build"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "1b821ad0cfa438bd0cd4b59917502720789cdbbd7b24997a0ebe41e73b869be1",
+      "outcome": "correct",
+      "task_id": "set-draft-true"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "2ed535bb5f4131d10f9eda1dced1f5a0703b18dabc76c1260fa0949c6b1b4bd9",
+      "outcome": "correct",
+      "task_id": "release-bump"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "cd8953048b92b54ca6348e50dfb81b364412b100e13eea975aa25f34816448eb",
+      "outcome": "correct",
+      "task_id": "create-on-absent"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "3c6d695ded0deb33132ab324ce54c5408a47dc8540ecac9881aa65fc1f1b9e79",
+      "outcome": "correct",
+      "task_id": "fill-empty"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "f17ab50492e31e4a7c3e9cb99674049b011e34b9a1c8c455694af207aa110cc5",
+      "outcome": "correct",
+      "task_id": "get-whole-table"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-one-column"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-two-columns"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-no-match"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "a152521f0b0811f78016d7ec5cb05887a0d0775fb4092ff96a119c3329fd798c",
+      "outcome": "correct",
+      "task_id": "get-ordinal-table"
+    },
+    {
+      "condition": "control",
+      "detail": null,
+      "final_sha256": "1b3f24ae994811b3d3d753618bf708ae295c76e5dd0fa875711f3dda4334a484",
+      "outcome": "correct",
+      "task_id": "get-escaped-cell"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "78dc18b276db3aa705c51bc517c5ec459e159c5db1b0ec3e96575a6970cb1dd1",
+      "outcome": "correct",
+      "task_id": "add-row-aligned-short"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "169ce2b97208ebe80447acbbe70c9a18887ac042bc42e945c313b9cdb1bdbbfd",
+      "outcome": "correct",
+      "task_id": "add-row-aligned-repad"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "515c332e0c9ee474ac81fd306774f9feea0447ad66b367e895cd7806446db28c",
+      "outcome": "correct",
+      "task_id": "add-row-ragged"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "dabdeaf3142cfbf40887a7249b0063081dad89e906e396b69b22cfb10d4f986d",
+      "outcome": "correct",
+      "task_id": "add-row-alignment-markers"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "d23aca2cf8071e34b762a9b8cbf75f10d44ee9ec36b21004dbb472719f4e8a37",
+      "outcome": "correct",
+      "task_id": "delete-row-aligned"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "5f73382de872b0beb77f88d188bce9dea21d0034c541485d42c1030944345360",
+      "outcome": "correct",
+      "task_id": "update-cell-multi-table"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "deceb794fabf385b2975784841ebd0cbda9f003bfd6d036746b878df4b5ebd0c",
+      "outcome": "correct",
+      "task_id": "add-item-tight-dash"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "fa73fca310c010c281cd84865ce60817356f8f781e2da8b03859d717a9a64476",
+      "outcome": "correct",
+      "task_id": "add-item-nested-asterisk"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "75993552305f442806cdeee1f09f9d12db45699ac2ef78d0accb3c510881c07f",
+      "outcome": "correct",
+      "task_id": "add-item-loose"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "b62d53e5335026ebcfecdf5e87783659e7bd80b172bccbb5d7d6e3f8d9236293",
+      "outcome": "correct",
+      "task_id": "add-item-ordered-renumber"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "0ba6aa73ef2b90dce70ac52f82dad68b05b764c7700efb6207942a78514126b3",
+      "outcome": "correct",
+      "task_id": "add-item-ordered-all-ones"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "3b27e49105fed26486a5d37fe8c7b63675f9a24026ad6759584f56667538a45c",
+      "outcome": "correct",
+      "task_id": "add-item-paren-delimiter"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "a83102295e1564c2922933896543d17b2eb54f83bc3b6cb22347d3323bf4f948",
+      "outcome": "correct",
+      "task_id": "add-item-mixed-markers"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "d03591f32ff8d57e9eacd6a9e17f18db0faf3fa0a7ba15e025647d53eb499fff",
+      "outcome": "correct",
+      "task_id": "remove-item-non-sequential"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "9a961c59f9a78f7ba75c0a31d4932a8ec2f3dcacd0a4b921dd6aeeb206c05969",
+      "outcome": "correct",
+      "task_id": "check-task-nested"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "4628e34ae6899d919eeeaebf228116b5aecbf091b2a8d978993a886932ccb2ff",
+      "outcome": "correct",
+      "task_id": "remove-item-mixed"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "eccbc3e64efb93164ce5983b524256eda5be96e7cbcb678ba9398438bc6701a0",
+      "outcome": "correct",
+      "task_id": "insert-release-at-top"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "7e66046cc96fb1651460744d3378cd23b1b949e0ef3b688c963f18380fd16cec",
+      "outcome": "correct",
+      "task_id": "insert-subsection-last"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "88f3df7776d959ca89baae2dc0c4bc89797e2a983c76b5e6c121cc3b87482fce",
+      "outcome": "correct",
+      "task_id": "append-hotfix-note"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "0042c2fa710a6108c694d5e4c3457e901102a62f111a7a3a046fc17330c11cb1",
+      "outcome": "correct",
+      "task_id": "rename-setext"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "a6a18db4d63bab31deee8e886b7530f1a891f77b33fcd4fac020f96ac546e982",
+      "outcome": "correct",
+      "task_id": "rename-closed-atx"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "a6f5efd8bfbc02399e007d77e00c41d3bf31eea87f57b5340bbb6502c452443c",
+      "outcome": "correct",
+      "task_id": "delete-install-macos"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "911f73ac31332b4e6028c0984b03c595c57c9921325ef6af670f78380431c639",
+      "outcome": "correct",
+      "task_id": "promote-api"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "dffaa8b7059617f77295d8bfc3649c76603ea3d24e3c77ef2fdf0b7f5aae0e2b",
+      "outcome": "correct",
+      "task_id": "replace-install-preamble"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "87569bd77173dac5caeda2d22d3c7156487c029ede26a57bafbe512e02b96814",
+      "outcome": "correct",
+      "task_id": "notes-second-ordinal"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "fdfa73d48f82518b2fb288729effef27a57c53a8d792d868a456c3133ddb0195",
+      "outcome": "correct",
+      "task_id": "append-after-fence"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "c94482cfed25d76c22ed33615db7f33f2dcd2cd7873015f7b6e46cddd148af58",
+      "outcome": "correct",
+      "task_id": "append-atx-line"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "f64033e9b6280b72add9099d4240b85d43355b690538768328fa75820699fa31",
+      "outcome": "correct",
+      "task_id": "append-macos-note"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "59e8337e967f42ffb5dcdf17d3b5c42f4ec5e651c7b6a308c5b94c90d1f0f9a8",
+      "outcome": "correct",
+      "task_id": "replace-linux-body"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "c1a628687df38151a3d71bb3dcd8ded6197598edc8fa93708278c9eb9d3fc29e",
+      "outcome": "correct",
+      "task_id": "insert-nested-ratelimits"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "f4040fe07fba3f0213deb81eee8bba89fb1bf139d5c733252cb85f7383162b0a",
+      "outcome": "correct",
+      "task_id": "insert-troubleshooting"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "f5cc68d0aa58ea2a67e6303f9e038a3a56618b51830f29b49021afd3d08cbf01",
+      "outcome": "correct",
+      "task_id": "set-build-jobs"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "3c071c096e12b70524de52887495d5ddfbe8e934f67e6dc9e35dcb5cd1b5c5a8",
+      "outcome": "correct",
+      "task_id": "set-build-target"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "45ab87a2b7bf8a99475ff7551627c290bd36d2b21e6715ff4dd2a4cc93147ac7",
+      "outcome": "correct",
+      "task_id": "set-dana-role"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "2da16d4838ed8ba77b61485bff33a5f996bcda1fbdb8039da5b9733b3fbbc398",
+      "outcome": "correct",
+      "task_id": "add-build-cache"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "13aabc9e75b7a0547244002a674d687dbfa6f650f59f96faea91e4d998f8c93b",
+      "outcome": "correct",
+      "task_id": "clear-title"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "1dc917e701849e785824b3bb68f577ca43cefc334934be664157ba8f1cda9919",
+      "outcome": "correct",
+      "task_id": "delete-draft"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "1db992daef7a972c36a1c0cfba100d78055bebc038a79c9bbcd8a8dfedb42c5b",
+      "outcome": "correct",
+      "task_id": "delete-build"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "1b821ad0cfa438bd0cd4b59917502720789cdbbd7b24997a0ebe41e73b869be1",
+      "outcome": "correct",
+      "task_id": "set-draft-true"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "2ed535bb5f4131d10f9eda1dced1f5a0703b18dabc76c1260fa0949c6b1b4bd9",
+      "outcome": "correct",
+      "task_id": "release-bump"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "cd8953048b92b54ca6348e50dfb81b364412b100e13eea975aa25f34816448eb",
+      "outcome": "correct",
+      "task_id": "create-on-absent"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "3c6d695ded0deb33132ab324ce54c5408a47dc8540ecac9881aa65fc1f1b9e79",
+      "outcome": "correct",
+      "task_id": "fill-empty"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "f17ab50492e31e4a7c3e9cb99674049b011e34b9a1c8c455694af207aa110cc5",
+      "outcome": "correct",
+      "task_id": "get-whole-table"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-one-column"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-two-columns"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "0d8b9374e21960880a4ae4ef70d70f5dfd3f65b84515515ad5e0c2a95fe985ef",
+      "outcome": "correct",
+      "task_id": "get-filter-no-match"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "a152521f0b0811f78016d7ec5cb05887a0d0775fb4092ff96a119c3329fd798c",
+      "outcome": "correct",
+      "task_id": "get-ordinal-table"
+    },
+    {
+      "condition": "treatment",
+      "detail": null,
+      "final_sha256": "1b3f24ae994811b3d3d753618bf708ae295c76e5dd0fa875711f3dda4334a484",
+      "outcome": "correct",
+      "task_id": "get-escaped-cell"
+    }
+  ],
+  "status": "pass"
+}

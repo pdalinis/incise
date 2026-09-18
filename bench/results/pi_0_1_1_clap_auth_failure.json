@@ -1,0 +1,14 @@
+{
+  "graded": [
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_auth_failure_a_graded.jsonl",
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_auth_failure_b_graded.jsonl"
+  ],
+  "invalidated": "Pi rejected every prompt before inference because the custom provider was not registered; all 96 rows have zero turns and no tool calls.",
+  "mismatches": 48,
+  "pairs": 48,
+  "raw": [
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_auth_failure_a.jsonl",
+    "/Users/peter/projects/fastmd/bench/results/pi_0_1_1_clap_auth_failure_b.jsonl"
+  ],
+  "status": "invalid"
+}

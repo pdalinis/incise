@@ -1,0 +1,47 @@
+{
+  "discordant": {
+    "only_control": 28,
+    "only_treatment": 24
+  },
+  "families": {
+    "frontmatter": {
+      "control_correct": 91,
+      "delta_points": -2.727272727272727,
+      "n": 110,
+      "treatment_correct": 88
+    },
+    "list": {
+      "control_correct": 91,
+      "delta_points": 5.0,
+      "n": 100,
+      "treatment_correct": 96
+    },
+    "section": {
+      "control_correct": 106,
+      "delta_points": -2.684563758389262,
+      "n": 149,
+      "treatment_correct": 102
+    },
+    "table": {
+      "control_correct": 60,
+      "delta_points": 0.0,
+      "n": 60,
+      "treatment_correct": 60
+    },
+    "table-read": {
+      "control_correct": 49,
+      "delta_points": -3.3333333333333335,
+      "n": 60,
+      "treatment_correct": 47
+    }
+  },
+  "mcnemar_exact_p": 0.6778086391424605,
+  "pairs": 479,
+  "status": "pass",
+  "transport_pairs_dropped": [
+    [
+      "rename-setext",
+      1
+    ]
+  ]
+}
