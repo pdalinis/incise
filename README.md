@@ -1,5 +1,7 @@
 # Incise
 
+[![CI](https://github.com/pdalinis/incise/actions/workflows/ci.yml/badge.svg)](https://github.com/pdalinis/incise/actions/workflows/ci.yml)
+
 **Safe, surgical Markdown edits for AI agents.**
 
 Incise helps small language models work reliably with Markdown knowledge bases. Instead of asking a model to reproduce a table, renumber a list, or rewrite a section boundary correctly, give it a semantic operation and let deterministic code handle the structure.
