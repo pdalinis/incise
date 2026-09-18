@@ -12,13 +12,5 @@ __pycache__/
 # name paths explicitly when staging.
 crates/.mutate.lock
 
-# Zenrows CLI (do not commit secrets or run artifacts)
-.zenrows/secrets.json
-.zenrows/config.json
-.zenrows/account.json
-.zenrows/runs/
-.zenrows/traces/
-.zenrows/logs/
-
 # Claude Code per-user permissions and local overrides
 .claude/settings.local.json
