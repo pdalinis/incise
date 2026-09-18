@@ -12,27 +12,38 @@ The plugin has no Python package dependencies, but it requires an `incise` binar
 
 ## Installation
 
-Incise is pre-release, so the supported plugin installation uses a source checkout.
+Install the CLI and plugin from the same Incise release so their schemas and behavior stay in sync.
 
 **1. Install the CLI.**
 
 ```bash
-git clone https://github.com/pdalinis/incise.git
-cd incise
-cargo install --locked --path crates/incise-cli --force
+cargo install incise-cli --locked
 incise --version
 ```
 
-Ensure the Cargo bin directory is on `PATH`, normally `$HOME/.cargo/bin`. Alternatively, set `INCISE_BIN` to an absolute binary path in the environment that launches Hermes.
+Ensure the Cargo bin directory is on `PATH`, normally `$HOME/.cargo/bin`. Alternatively, set `INCISE_BIN` to an absolute binary path in the environment that launches Hermes. Prebuilt Linux and macOS binaries are also available from [GitHub Releases](https://github.com/pdalinis/incise/releases).
 
-**2. Link the plugin into Hermes.**
+**2. Install the matching Hermes plugin bundle.**
 
 ```bash
+release="v$(incise --version | awk '{print $2}')"
 mkdir -p "$HOME/.hermes/plugins"
-ln -s "$PWD/plugins/hermes" "$HOME/.hermes/plugins/incise"
+curl --fail --location --silent --show-error \
+  "https://github.com/pdalinis/incise/releases/download/$release/incise-hermes-$release.tar.gz" \
+  | tar -xz -C "$HOME/.hermes/plugins"
 ```
 
-The installed directory must be named `incise`. Keeping it as a symlink means a repository update also updates the plugin code.
+The archive creates `$HOME/.hermes/plugins/incise`. The installed directory must be named `incise`.
+
+For development or a source-based installation, clone the matching tag and link the plugin directory instead:
+
+```bash
+release="v$(incise --version | awk '{print $2}')"
+git clone --branch "$release" --depth 1 \
+  https://github.com/pdalinis/incise.git incise-source
+mkdir -p "$HOME/.hermes/plugins"
+ln -s "$PWD/incise-source/plugins/hermes" "$HOME/.hermes/plugins/incise"
+```
 
 **3. Enable the plugin and its CLI toolset.**
 
@@ -67,7 +78,7 @@ At registration, the plugin asks the binary for the five measured schemas: `tabl
 
 For each call, the adapter checks the path with Hermes file-safety rules, maps the tool action to an Incise subcommand, and passes the argument object to the binary. It does not parse Markdown or maintain a second implementation of the edit rules. Successful writes return a short description and content hash; refusals preserve the actionable message produced by Incise.
 
-The separate read tools are intentional. A previous combined read tool introduced an enum that models confused with edit actions, while the retired `md_rows` interface could not address repeated tables by ordinal. The detailed measurements and design history remain in [`bench/FINDINGS.md`](../../bench/FINDINGS.md).
+The separate read tools are intentional. A previous combined read tool introduced an enum that models confused with edit actions, while the retired `md_rows` interface could not address repeated tables by ordinal. The detailed measurements and design history remain in [`bench/FINDINGS.md`](https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md).
 
 ## Agent guidance
 
@@ -98,15 +109,15 @@ Incise refusals are safety behavior. Follow the remedy in the returned error ins
 
 ## Troubleshooting
 
-**The plugin is not listed.** Confirm that `~/.hermes/plugins/incise` exists, resolves to this directory, and contains `plugin.yaml`. The installed directory and every configuration reference must use `incise`, not the retired `fastmd` name.
+**The plugin is not listed.** Confirm that `~/.hermes/plugins/incise` exists and contains `plugin.yaml`. The installed directory and every configuration reference must use `incise`, not the retired `fastmd` name.
 
 **The plugin is enabled but its tools are missing.** Run `hermes tools enable --platform cli incise`, then inspect `hermes tools list --platform cli`. Restart an already-running Hermes session after configuration changes.
 
-**Doctor reports that the binary is unavailable.** The lookup order is `INCISE_BIN`, `PATH`, then `target/release/incise` and `target/debug/incise` relative to the source checkout. `cargo install --locked --path crates/incise-cli --force` is the most durable source installation.
+**Doctor reports that the binary is unavailable.** The lookup order is `INCISE_BIN`, `PATH`, then `target/release/incise` and `target/debug/incise` relative to a source checkout. Install the released binary with `cargo install incise-cli --locked` or set `INCISE_BIN` explicitly.
 
 **Tools refuse every path.** The plugin intentionally fails closed when Hermes file-safety guards cannot load. Run `hermes plugins doctor --ci incise` under the same environment that launches Hermes and confirm the installed Hermes version is at least 0.21.3.
 
-**After upgrading.** Pull the repository, reinstall or rebuild the CLI, rerun doctor, and restart Hermes. Keep the plugin and binary on the same Incise version.
+**After upgrading.** Reinstall the CLI with `cargo install incise-cli --locked --force`, then extract the matching `incise-hermes-vX.Y.Z.tar.gz` over the plugin directory and restart Hermes. For a source-linked installation, check out the matching Incise tag instead. Run doctor again after either upgrade path.
 
 ## Development and tests
 

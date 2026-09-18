@@ -34,13 +34,21 @@ Incise is not a knowledge graph or a vault index. It is the safe mutation layer 
 
 ## Quick start
 
-Incise is currently pre-release, so installation from source is the supported path.
+Install the current release from crates.io:
+
+```bash
+cargo install incise-cli --locked
+incise --version
+```
+
+Prebuilt binary archives for Linux and macOS are attached to each [GitHub release](https://github.com/pdalinis/incise/releases). Download the archive for your platform, verify it against `SHA256SUMS`, and place `incise` somewhere on `PATH`.
+
+To build the current development version from source:
 
 ```bash
 git clone https://github.com/pdalinis/incise.git
 cd incise
-cargo install --path crates/incise-cli
-incise --help
+cargo install --locked --path crates/incise-cli
 ```
 
 Inspect a note before changing it:
@@ -161,7 +169,7 @@ The differential and invariant suites are themselves exercised by mutation testi
 
 ## Project status
 
-Incise is under active development and has not reached a stable release. Tables, lists, sections, YAML frontmatter, structural reads, dry runs, atomic writes, and stale-read protection are implemented.
+Incise uses 0.x versioning and is under active development; its public interfaces may still evolve before 1.0. Tables, lists, sections, YAML frontmatter, structural reads, dry runs, atomic writes, and stale-read protection are implemented.
 
 Scoped search and replace and multi-operation transactions are planned but not built. Incise intentionally refuses Markdown shapes it cannot edit without keeping its preservation guarantees.
 

@@ -52,6 +52,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.toolchain == 'stable'
         run: cargo clippy --workspace --all-targets -- -D warnings
 
+      - name: Check documentation
+        if: matrix.os == 'ubuntu-latest' && matrix.toolchain == 'stable'
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --workspace --no-deps --locked
+
       - name: Run tests
         run: cargo test --workspace --locked
 

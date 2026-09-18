@@ -32,7 +32,7 @@
 //! * difflib runs four extension loops after the DP in `find_longest_match`.
 //!   All four are dead without junk: two are guarded by `isbjunk` on an empty
 //!   set, and the other two can only fire on a match the DP failed to find,
-//!   which an unpurged index makes impossible. See [`Matcher::longest_match`].
+//!   which an unpurged index makes impossible. See `Matcher::longest_match`.
 //!
 //! [`Matcher`] is generic over the element type because the two callers compare
 //! different things: `get_close_matches` diffs a heading path against a

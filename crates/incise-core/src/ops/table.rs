@@ -1247,7 +1247,7 @@ pub fn table_delete_row(
 /// state this op exists to repair, so it goes down the realign path.
 ///
 /// A table holding characters that are not one display column wide is refused
-/// outright; see [`check_realignable`].
+/// outright; see `check_realignable`.
 pub fn table_realign(content: &str, address: &TableAddress) -> Result<String> {
     let table = resolve_table(content, address)?;
     if table.is_aligned() && !table.has_tabs() {

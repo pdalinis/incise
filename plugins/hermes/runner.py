@@ -71,8 +71,9 @@ def available() -> Optional[str]:
     if binary():
         return None
     return (
-        "incise is not installed. Build it with `cargo build --release` in the "
-        "incise repo, put the binary on PATH, or set INCISE_BIN to it."
+        "incise is not installed. Install it with "
+        "`cargo install incise-cli --locked`, put the binary on PATH, or set "
+        "INCISE_BIN to it."
     )
 
 

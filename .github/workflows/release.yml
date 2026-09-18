@@ -47,6 +47,11 @@ jobs:
       - name: Run clippy
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
 
+      - name: Check documentation
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --workspace --no-deps --locked
+
       - name: Run Rust tests
         run: cargo test --workspace --locked
 
@@ -70,6 +75,9 @@ jobs:
 
       - name: Verify incise-core package
         run: cargo package -p incise-core --locked
+
+      - name: Verify incise-cli package contents
+        run: cargo package -p incise-cli --locked --no-verify --list
 
   package:
     name: Package ${{ matrix.archive }}
@@ -126,9 +134,46 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
+  package-hermes:
+    name: Package Hermes plugin
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Create Hermes plugin archive
+        shell: bash
+        run: |
+          mkdir -p staging/incise dist
+          cp \
+            plugins/hermes/__init__.py \
+            plugins/hermes/plugin.yaml \
+            plugins/hermes/README.md \
+            plugins/hermes/runner.py \
+            plugins/hermes/safety.py \
+            plugins/hermes/schema_cache.py \
+            staging/incise/
+          cp LICENSE staging/incise/LICENSE
+          tar -C staging -czf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" incise
+
+      - name: Verify Hermes plugin archive
+        shell: bash
+        run: |
+          tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz"
+          test "$(tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" | grep -c '^incise/$')" -eq 1
+          test "$(tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" | grep -c '^incise/plugin.yaml$')" -eq 1
+
+      - name: Upload Hermes plugin archive
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: incise-hermes
+          path: dist/*
+          if-no-files-found: error
+
   publish:
     name: Publish crates
-    needs: validate
+    needs: [validate, package, package-hermes]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -174,7 +219,7 @@ jobs:
 
   github-release:
     name: Create GitHub release
-    needs: [package, publish]
+    needs: [package, package-hermes, publish]
     runs-on: ubuntu-latest
     permissions:
       contents: write
