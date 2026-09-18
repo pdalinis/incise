@@ -27,4 +27,4 @@ incise-core = { version = "0.1.0", path = "../incise-core" }
 # Newer Clap releases require Rust 1.85. Pin a version covered by the workspace's
 # Rust 1.75 MSRV so a lockfile refresh cannot raise it implicitly.
 clap = "=4.5.20"
-sha2 = "0.10"
+sha2 = "0.11"
