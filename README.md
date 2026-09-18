@@ -70,6 +70,19 @@ incise table-update-cell vault/Projects.md \
 
 The row is selected by content, not by a line number. If the new value widens a column, Incise re-pads that table correctly and leaves the rest of the file alone.
 
+## Use with Pi
+
+Install the release candidate without a Rust toolchain:
+
+```bash
+pi install npm:pi-incise@next
+pi
+```
+
+After the live composition benchmark passes and that exact version is promoted, `pi install npm:pi-incise` installs the stable release.
+
+The package provides prebuilt binaries for macOS arm64/x64 and glibc Linux arm64/x64. It registers `md_tables`, `md_lists`, `md_outline`, `table_get`, and the four structured edit tools. Run `/incise-doctor` in Pi to inspect the selected binary and schema status. Windows and musl Linux are not supported in v1.
+
 ## A safer agent editing loop
 
 Incise gives an agent a small, repeatable loop: inspect the relevant structure, issue one semantic operation, and act on either a precise success message or an actionable refusal.

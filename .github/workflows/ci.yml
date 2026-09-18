@@ -122,3 +122,46 @@ jobs:
           name: bench-failure-logs
           path: bench/results/
           retention-days: 7
+
+  pi-package:
+    name: Pi package
+    runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: stable
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+
+      - name: Install Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22.19.0"
+          cache: npm
+          cache-dependency-path: plugins/pi/package-lock.json
+
+      - name: Install trusted-publishing-compatible npm
+        run: npm install --global npm@11.19.0
+
+      - name: Build Incise for adapter tests
+        run: cargo build -p incise-cli --locked
+
+      - name: Install Pi package development dependencies
+        working-directory: plugins/pi
+        run: npm ci --omit=optional
+
+      - name: Test Pi adapter
+        working-directory: plugins/pi
+        run: npm test
+
+      - name: Type-check Pi adapter
+        working-directory: plugins/pi
+        run: npm run typecheck
+
+      - name: Check Pi package contents
+        working-directory: plugins/pi
+        run: npm run pack:check

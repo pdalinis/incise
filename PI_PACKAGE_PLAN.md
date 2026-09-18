@@ -28,17 +28,13 @@ Pi packages declare extensions in `package.json` and are installed through `pi i
 
 ## Phase 0: make the repository releasable
 
-The Incise rename is complete across the executable, crates, integrations, and active documentation. Release automation still needs to build or download native artifacts before creating a GitHub release; a fresh release job cannot upload `target/release/incise` unless an earlier job produced and transferred it.
+The public names are settled: the executable is `incise`, the crates are `incise-cli` and `incise-core`, the main npm package is `pi-incise`, and native packages use the personal `@pdalinis` scope. The unscoped `pi-incise` name was available when checked. No npm organization is required.
 
-Before package work:
+V1 supports macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are out of scope. The release workflow already builds the four supported native artifacts and transfers them into the GitHub release job.
 
-- Settle the public executable and crate names: preferably `incise`, `incise-cli`, and `incise-core`.
-- Repair the crates.io and GitHub release workflow.
-- Produce versioned binaries and checksums for macOS arm64/x64, Linux glibc arm64/x64, and Windows x64.
-- Decide whether `INCISE_BIN` remains a temporary compatibility alias for the new `INCISE_BIN`.
-- Reserve the npm names. `pi-incise` is preferred; use a scope if the unscoped name is unavailable.
+`INCISE_BIN` remains the explicit binary override; no compatibility alias is needed. A binary supplied by `INCISE_BIN` or `PATH` may differ from the package version and `/incise-doctor` reports that as a warning. A native binary supplied by the package must match the main package version exactly; a mismatch disables the tools as an installation-integrity error.
 
-Acceptance criterion: a release tag produces working native archives, crates, checksums, and a GitHub release from the same source revision.
+Acceptance criterion: a release tag produces working native archives, crates, checksums, four native npm packages, and the main Pi package from the same source revision.
 
 ## Phase 1: add the Pi extension
 
@@ -92,21 +88,20 @@ Use platform-specific optional npm dependencies, following the standard native-C
 
 ```text
 pi-incise
-@scope/incise-darwin-arm64
-@scope/incise-darwin-x64
-@scope/incise-linux-arm64-gnu
-@scope/incise-linux-x64-gnu
-@scope/incise-win32-x64
+@pdalinis/pi-incise-darwin-arm64
+@pdalinis/pi-incise-darwin-x64
+@pdalinis/pi-incise-linux-arm64-gnu
+@pdalinis/pi-incise-linux-x64-gnu
 ```
 
-Each native package should contain only its executable, license, metadata, and checksum information, with appropriate `os`, `cpu`, and where applicable `libc` constraints.
+Each native package contains only its executable, license, metadata, and checksum information, with `os`, `cpu`, and Linux `libc` constraints. Every optional dependency is pinned to exactly the main package version.
 
 The main package resolves the binary in this order:
 
 1. `INCISE_BIN`
 2. Matching native optional dependency
 3. `incise` on `PATH`
-4. A development checkout's `target/release` or `target/debug`
+4. A development checkout’s `target/release` or `target/debug`
 
 Avoid `postinstall` downloads and source compilation. This gives users a lifecycle-script-free installation and does not require Cargo.
 
@@ -184,11 +179,11 @@ Add four layers:
 
 3. Pi integration tests
 
-   - Load the packed extension through Pi.
+   - Load the extension through Pi’s extension API.
    - Verify all eight tools are active.
-   - Invoke reads and writes against temporary corpus copies.
+   - Invoke reads and writes against temporary files.
    - Confirm two parallel writes to one file are serialized.
-   - Exercise TUI-less print, JSON, and RPC modes.
+   - Exercise TUI-less print, JSON, and RPC modes before release.
 
 4. Package tests
 
@@ -198,31 +193,34 @@ Add four layers:
    - `/incise-doctor` passes.
    - Every supported OS and architecture receives a CI smoke test.
 
+The deterministic adapter, contract, integration, and package suite must pass before publishing under `next`. The live model composition benchmark is a separate promotion gate before `latest`.
+
 ## Phase 7: publishing
 
-Use one version across Rust crates, GitHub release, main npm package, and native npm packages.
+Use one version across Rust crates, GitHub release, the main npm package, and all native npm packages.
 
 Release order:
 
-1. Run Rust, oracle, schema, Pi adapter, and package tests.
-2. Build and sign or checksum the native artifacts.
-3. Publish native npm packages.
-4. Publish `pi-incise` last, initially under the `next` tag.
-5. Install it through Pi on macOS, Linux, and Windows.
-6. Promote the tested version to `latest`.
-7. Publish the Pi gallery metadata and installation documentation.
+1. Run Rust, oracle, schema, Hermes, Pi adapter, and package tests.
+2. Build and checksum the four native artifacts.
+3. Publish the native npm packages.
+4. Publish `pi-incise` last under the `next` tag.
+5. Install and smoke-test it through Pi on supported macOS and Linux targets.
+6. Run the live composition benchmark and record its result under the benchmark-impact policy.
+7. Promote that exact tested version to `latest` only if the live benchmark passes.
+8. Publish the Pi gallery metadata and final installation documentation.
 
-Use npm trusted publishing with GitHub Actions provenance if the npm account supports it. Never overwrite a released binary package.
+Use npm trusted publishing with GitHub Actions provenance for each of the five packages. The initial versions must be published once from the authenticated local npm account before trusted-publisher settings can be attached to the packages. Never overwrite a released binary package.
 
 ## Definition of done
 
-A new user can run:
+A new user on a supported macOS or glibc Linux target can run:
 
 ```bash
 pi install npm:pi-incise
 pi
 ```
 
-They can then ask Pi to inspect and edit a Markdown table without installing Rust or configuring a binary. `pi list` shows the package, `/incise-doctor` passes, all eight tools are available, structured writes are serialized with Pi's native file queue, and valid tool behavior matches the Incise CLI.
+They can then ask Pi to inspect and edit a Markdown table without installing Rust or configuring a binary. `pi list` shows the package, `/incise-doctor` passes, all eight tools are available, structured writes are serialized with Pi’s native file queue, and valid tool behavior matches the Incise CLI.
 
-Pi extensions and their subprocesses run with the user's full permissions; project trust is not a filesystem sandbox. The package README should state this clearly and point unattended users toward OS or container isolation. See the [Pi security model](https://pi.dev/docs/latest/security).
+Pi extensions and their subprocesses run with the user’s full permissions; project trust is not a filesystem sandbox. The package README states this clearly and points unattended users toward OS or container isolation. See the [Pi security model](https://pi.dev/docs/latest/security).

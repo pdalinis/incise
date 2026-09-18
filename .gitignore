@@ -5,6 +5,11 @@
 __pycache__/
 *.pyc
 
+# Pi package development
+/plugins/pi/node_modules/
+/plugins/pi/.npm-cache/
+/plugins/pi/dist/
+
 # bench/mutate.py edits crate sources in place and holds this lock while it
 # runs. A `git add -A` during a run commits both the lock and whichever
 # mutation is live -- which happened twice on this branch before it was
