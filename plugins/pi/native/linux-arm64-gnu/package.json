@@ -1,0 +1,16 @@
+{
+  "name": "@pdalinis/pi-incise-linux-arm64-gnu",
+  "version": "0.1.1",
+  "description": "Incise native binary for Linux arm64 (glibc)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdalinis/incise.git",
+    "directory": "plugins/pi/native/linux-arm64-gnu"
+  },
+  "os": ["linux"],
+  "cpu": ["arm64"],
+  "libc": ["glibc"],
+  "files": ["bin/incise", "LICENSE", "README.md", "SHA256SUMS"],
+  "publishConfig": { "access": "public" }
+}

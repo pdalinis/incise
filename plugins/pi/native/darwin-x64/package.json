@@ -1,0 +1,15 @@
+{
+  "name": "@pdalinis/pi-incise-darwin-x64",
+  "version": "0.1.1",
+  "description": "Incise native binary for macOS x64",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdalinis/incise.git",
+    "directory": "plugins/pi/native/darwin-x64"
+  },
+  "os": ["darwin"],
+  "cpu": ["x64"],
+  "files": ["bin/incise", "LICENSE", "README.md", "SHA256SUMS"],
+  "publishConfig": { "access": "public" }
+}

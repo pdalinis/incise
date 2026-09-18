@@ -31,6 +31,16 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22.19.0"
+          cache: npm
+          cache-dependency-path: plugins/pi/package-lock.json
+
+      - name: Install trusted-publishing-compatible npm
+        run: npm install --global npm@11.19.0
+
       - name: Verify tag matches workspace version
         shell: bash
         run: |
@@ -40,6 +50,30 @@ jobs:
             echo "Tag version ($tag_version) does not match Cargo version ($cargo_version)"
             exit 1
           }
+
+      - name: Verify npm package versions
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          node - "$version" <<'NODE'
+          const fs = require("node:fs");
+          const expected = process.argv[2];
+          const manifests = [
+            "plugins/pi/package.json",
+            "plugins/pi/native/darwin-arm64/package.json",
+            "plugins/pi/native/darwin-x64/package.json",
+            "plugins/pi/native/linux-arm64-gnu/package.json",
+            "plugins/pi/native/linux-x64-gnu/package.json",
+          ];
+          for (const path of manifests) {
+            const manifest = JSON.parse(fs.readFileSync(path, "utf8"));
+            if (manifest.version !== expected) throw new Error(`${path} has ${manifest.version}, expected ${expected}`);
+          }
+          const main = JSON.parse(fs.readFileSync(manifests[0], "utf8"));
+          for (const [name, version] of Object.entries(main.optionalDependencies)) {
+            if (version !== expected) throw new Error(`${name} is pinned to ${version}, expected ${expected}`);
+          }
+          NODE
 
       - name: Check formatting
         run: cargo fmt --all -- --check
@@ -73,6 +107,30 @@ jobs:
       - name: Test Hermes plugin adapter
         run: python3 plugins/hermes/test_plugin.py
 
+      - name: Install Pi package development dependencies
+        working-directory: plugins/pi
+        run: npm ci --omit=optional
+
+      - name: Test and type-check Pi package
+        working-directory: plugins/pi
+        run: |
+          npm test
+          npm run typecheck
+          npm run pack:check
+
+      - name: Pack main Pi package
+        working-directory: plugins/pi
+        run: |
+          mkdir -p dist/npm
+          npm pack --ignore-scripts --pack-destination dist/npm
+
+      - name: Upload main Pi package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pi-incise-npm-main
+          path: plugins/pi/dist/npm/*.tgz
+          if-no-files-found: error
+
       - name: Verify incise-core package
         run: cargo package -p incise-core --locked
 
@@ -90,18 +148,22 @@ jobs:
             target: x86_64-unknown-linux-gnu
             archive: x86_64-unknown-linux-gnu
             format: tar
+            npm_dir: linux-x64-gnu
           - os: ubuntu-24.04-arm
             target: aarch64-unknown-linux-gnu
             archive: aarch64-unknown-linux-gnu
             format: tar
+            npm_dir: linux-arm64-gnu
           - os: macos-14
             target: aarch64-apple-darwin
             archive: aarch64-apple-darwin
             format: tar
+            npm_dir: darwin-arm64
           - os: macos-14
             target: x86_64-apple-darwin
             archive: x86_64-apple-darwin
             format: tar
+            npm_dir: darwin-x64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -127,11 +189,35 @@ jobs:
           cp "target/$TARGET/release/incise" README.md LICENSE staging/
           tar -C staging -czf "dist/incise-${GITHUB_REF_NAME}-${ARCHIVE}.tar.gz" incise README.md LICENSE
 
+      - name: Pack native npm package
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          NPM_DIR: ${{ matrix.npm_dir }}
+        run: |
+          package_dir="plugins/pi/native/$NPM_DIR"
+          mkdir -p "$package_dir/bin" dist/npm
+          cp "target/$TARGET/release/incise" "$package_dir/bin/incise"
+          chmod 755 "$package_dir/bin/incise"
+          cp LICENSE "$package_dir/LICENSE"
+          (
+            cd "$package_dir"
+            shasum -a 256 bin/incise > SHA256SUMS
+          )
+          npm pack --ignore-scripts --pack-destination dist/npm "./$package_dir"
+
       - name: Upload release archive
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: incise-${{ matrix.archive }}
-          path: dist/*
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+      - name: Upload native npm package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pi-incise-npm-${{ matrix.npm_dir }}
+          path: dist/npm/*.tgz
           if-no-files-found: error
 
   package-hermes:
@@ -217,9 +303,55 @@ jobs:
             sleep 10
           done
 
+  publish-npm:
+    name: Publish Pi packages to next
+    needs: [validate, package]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22.19.0"
+          registry-url: https://registry.npmjs.org
+
+      - name: Install trusted-publishing-compatible npm
+        run: npm install --global npm@11.19.0
+
+      - name: Download npm packages
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: pi-incise-npm-*
+          path: dist/npm
+          merge-multiple: true
+
+      - name: Publish native packages, then main package
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          publish_if_missing() {
+            name="$1"
+            archive="$2"
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already published"
+            else
+              npm publish "$archive" --access public --tag next --provenance
+            fi
+          }
+          publish_if_missing "@pdalinis/pi-incise-darwin-arm64" "dist/npm/pdalinis-pi-incise-darwin-arm64-$version.tgz"
+          publish_if_missing "@pdalinis/pi-incise-darwin-x64" "dist/npm/pdalinis-pi-incise-darwin-x64-$version.tgz"
+          publish_if_missing "@pdalinis/pi-incise-linux-arm64-gnu" "dist/npm/pdalinis-pi-incise-linux-arm64-gnu-$version.tgz"
+          publish_if_missing "@pdalinis/pi-incise-linux-x64-gnu" "dist/npm/pdalinis-pi-incise-linux-x64-gnu-$version.tgz"
+          publish_if_missing "pi-incise" "dist/npm/pi-incise-$version.tgz"
+
   github-release:
     name: Create GitHub release
-    needs: [package, package-hermes, publish]
+    needs: [package, package-hermes, publish, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write

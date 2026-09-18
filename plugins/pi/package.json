@@ -1,0 +1,57 @@
+{
+  "name": "pi-incise",
+  "version": "0.1.1",
+  "description": "Byte-preserving structured Markdown tools for Pi",
+  "type": "module",
+  "license": "MIT",
+  "author": "Peter Dalinis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdalinis/incise.git",
+    "directory": "plugins/pi"
+  },
+  "homepage": "https://github.com/pdalinis/incise#readme",
+  "bugs": "https://github.com/pdalinis/incise/issues",
+  "keywords": [
+    "pi-package",
+    "markdown",
+    "structured-editing",
+    "ai-agent"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "files": [
+    "extension",
+    "LICENSE",
+    "README.md"
+  ],
+  "pi": {
+    "extensions": [
+      "./extension/index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.85.1",
+    "@types/node": "^22.19.19",
+    "typescript": "^5.9.3"
+  },
+  "optionalDependencies": {
+    "@pdalinis/pi-incise-darwin-arm64": "0.1.1",
+    "@pdalinis/pi-incise-darwin-x64": "0.1.1",
+    "@pdalinis/pi-incise-linux-arm64-gnu": "0.1.1",
+    "@pdalinis/pi-incise-linux-x64-gnu": "0.1.1"
+  },
+  "scripts": {
+    "test": "node --test --experimental-strip-types test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "pack:check": "node --experimental-strip-types test/pack-check.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
