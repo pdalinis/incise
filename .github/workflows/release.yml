@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
@@ -94,14 +94,10 @@ jobs:
             target: x86_64-apple-darwin
             archive: x86_64-apple-darwin
             format: tar
-          - os: windows-2022
-            target: x86_64-pc-windows-msvc
-            archive: x86_64-pc-windows-msvc
-            format: zip
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
@@ -123,17 +119,6 @@ jobs:
           cp "target/$TARGET/release/incise" README.md LICENSE staging/
           tar -C staging -czf "dist/incise-${GITHUB_REF_NAME}-${ARCHIVE}.tar.gz" incise README.md LICENSE
 
-      - name: Create Windows archive
-        if: matrix.format == 'zip'
-        shell: pwsh
-        env:
-          TARGET: ${{ matrix.target }}
-          ARCHIVE: ${{ matrix.archive }}
-        run: |
-          New-Item -ItemType Directory -Force staging, dist
-          Copy-Item "target/$env:TARGET/release/incise.exe", README.md, LICENSE staging
-          Compress-Archive -Path staging/* -DestinationPath "dist/incise-$env:GITHUB_REF_NAME-$env:ARCHIVE.zip"
-
       - name: Upload release archive
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -147,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
@@ -195,7 +180,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
 

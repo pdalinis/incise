@@ -37,7 +37,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # The host, if it is here. Without it `safety` fails closed and every path is
 # refused, which is the right behaviour and an untestable one.
 HERMES = os.path.expanduser("~/.hermes/hermes-agent")
-if os.path.isdir(HERMES):
+HERMES_AVAILABLE = os.path.isdir(HERMES) and os.environ.get("INCISE_TEST_NO_HERMES") != "1"
+if HERMES_AVAILABLE:
     sys.path.insert(0, HERMES)
 
 if "INCISE_BIN" not in os.environ:
@@ -61,6 +62,33 @@ def load():
 
 
 plugin = load()
+
+
+class _AllowTemporaryFiles:
+    """Minimal host guard for functional tests when Hermes is not installed.
+
+    The production plugin still fails closed when ``agent.file_safety`` cannot
+    be imported. These tests exercise that behavior separately; their ordinary
+    edit/read cases operate only on fresh files under the system temp directory.
+    """
+
+    @staticmethod
+    def get_read_block_error(_path):
+        return None
+
+    @staticmethod
+    def get_write_denied_error(_path, verb="Edit"):
+        return None
+
+    @staticmethod
+    def is_write_approval_required(_path):
+        return False
+
+
+if not HERMES_AVAILABLE:
+    plugin.safety._fs = _AllowTemporaryFiles()
+    plugin.safety._IMPORT_ERROR = None
+
 
 FAILURES = []
 
@@ -488,7 +516,7 @@ def test_a_read_argument_is_not_pre_validated():
 # --- safety -----------------------------------------------------------------
 
 def test_denied_write_never_reaches_the_binary():
-    if not os.path.isdir(HERMES):
+    if not HERMES_AVAILABLE:
         print("  skip  file-safety (hermes-agent not installed)")
         return
 

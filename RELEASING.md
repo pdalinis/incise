@@ -35,15 +35,15 @@ git push origin v0.1.0
 ```
 
 The release workflow validates the pinned Rust 1.75 toolchain, runs the Rust,
-Python, differential, schema, replay, and Hermes checks, and builds archives
-for Linux x86-64 and ARM64, macOS x86-64 and ARM64, and Windows x86-64.
+Python, differential, schema, replay, and Hermes checks, and builds four
+archives: Linux x86-64 and ARM64, plus macOS x86-64 and ARM64.
 
 Publication is intentionally ordered: `incise-core` is published first, then
 `incise-cli` retries while the registry index catches up. Each publish step
 checks whether that exact version already exists, so rerunning a partially
 completed workflow does not try to upload the same crate version twice.
 
-After both crates and all five archives succeed, the workflow creates a GitHub
+After both crates and all four archives succeed, the workflow creates a GitHub
 release with generated notes and `SHA256SUMS`.
 
 ## After release

@@ -165,6 +165,8 @@ Scoped search and replace and multi-operation transactions are planned but not b
 
 Behavioral claims are tied to the model, prompts, schemas, tasks, and executor that produced them. Changes to a tool description or refusal can require remeasurement even when deterministic tests still pass.
 
+The currently supported platforms are Linux and macOS. Windows is not supported or tested at this stage.
+
 ## Development
 
 Run the deterministic suite before submitting a code change:
