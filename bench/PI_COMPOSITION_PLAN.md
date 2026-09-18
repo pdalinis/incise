@@ -2,7 +2,7 @@
 
 ## Status
 
-Pre-registered 2026-09-18, before any live-model outcome was collected. The plan and harness must be committed before the first preflight request. Results will use new names and will not overwrite any historical pool.
+Completed 2026-09-18. The preregistered promotion gate passed on 479 complete paired trials after one pair exhausted its transport retry and was excluded as specified. `pi-incise@0.1.1` is stable for the measured Pi 0.85.1 / Gemma 4 26B condition and frozen population.
 
 ## Question and hypothesis
 
@@ -57,3 +57,13 @@ Secondary endpoints are per-family correctness and Wilson intervals, silent corr
 Write new immutable raw and graded pools under a `pi_0_1_1_` prefix, plus one manifest and one analysis report. The manifest records exact commands, hashes, versions, conditions, timestamps, counts, and exclusions. Raw prompts may be represented by hashes when their complete sources are pinned in the same manifest.
 
 Historical F-compose remains current for the five-tool schema and its original prompt/executor condition. This run neither overwrites nor silently extends those pools: it answers the narrower release question about the Pi 0.1.1 surface and Pi prompt construction. A pass licenses calling 0.1.1 stable on this measured model and population; it is not evidence for other models, later Pi versions, unmeasured tools, or Windows.
+
+## Results
+
+The primary comparison retained 479 paired trials. Control was 397/479 correct (82.9%) and treatment was 393/479 (82.0%). There were 28 control-only successes and 24 treatment-only successes; two-sided exact McNemar p = 0.6778. The family changes were table 0.0 points, list +5.0, section -2.7, frontmatter -2.7, and table-read -3.3. No family crossed the fixed loss boundary, so the gate passes.
+
+`rename-setext` trial 1 timed out at the fixed 900-second worker limit on its initial treatment attempt and its one retry. Both attempts remain in the raw pool, and the pair is excluded under the preregistered transport rule.
+
+Silent corruption moved from 31/479 (6.5%) to 28/479 (5.8%). Mean calls rose from 1.52 to 1.69, mean turns from 2.52 to 2.68, mean completion tokens from 141.1 to 150.9, and mean elapsed time from 6.48 to 7.81 seconds. Treatment used `md_lists` in 28 trials, `md_outline` in 25, and `md_tables` in one. Pi schema-validation results fell from 178 to 163 while handler refusals rose from 60 to 75; cross-family calls rose from 57 to 87.
+
+Primary results are in `bench/results/pi_0_1_1_analysis.json`; secondary diagnostics are in `bench/results/pi_0_1_1_secondary.json`; exact pool and harness hashes are in `bench/results/pi_0_1_1_run_manifest.json`.

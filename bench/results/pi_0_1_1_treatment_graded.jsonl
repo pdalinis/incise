@@ -1,0 +1,481 @@
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-short","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-aligned-repad","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-ragged","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-row-alignment-markers","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-row-aligned","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"update-cell-multi-table","family":"table","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-tight-dash","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-nested-asterisk","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-loose","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":1,"outcome":"collateral:formatting","detail":"line 15: '', expected '(end of list)'"}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-renumber","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-ordered-all-ones","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-paren-delimiter","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":5,"outcome":"op_error","detail":"no list item matching \"star item placeholder\".\n  Near matches: none\n  Items: alpha; beta; beta-one; beta-two; gamma"}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-item-mixed-markers","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":1,"outcome":"collateral:content","detail":"content before the target list changed"}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":5,"outcome":"collateral:content","detail":"content before the target list changed"}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-non-sequential","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"check-task-nested","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"remove-item-mixed","family":"list","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":0,"outcome":"op_error","detail":"line 25: '#### Added', expected ''; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"#### Added\\n- `plan --explain` flag.\\n\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog</div><div class=\\\"error\\\">Error during tool call: section_edit failed because required property 'path' was missing. Please ensure you specify the file path where you want the changes to be applied.</div></s></html>\\nI apologize for my previous mistakes. Let me fix that by providing the correct file path and using a properly structured request.\\n\\nFirst, I need to confirm the exact heading structure of `corpus/documents/changelog.md` using `md_outline`. Since it was provided in the prompt, I will attempt the insertion again with the correct parameters.\\n\\nWait, I should probably use `list_edit` if the release versions are part of a list or just regular sections. The user said \\\"sections\\\", so `section_edit` is appropriate. However, looking at the error message, I missed the `path` parameter.\\n\\nLet me try inserting the new version as a sibling before \\\"[1.4.2] - 2026-08-14\\\". Note: To add the subsection within the newly created section, I may need two steps: one to insert the header (which creates the section) and another to append content OR create it with body text immediately. Actually, `insert` can take a `body`.\\n\\nThe hierarchy seems to be:\\nChangelog -> [1.5.0]... -> Added\\n\\nSo I'll insert [1.5.0] - 2026-09-06 before [1.4.2], then add the \\\"Added\\\" subsection inside it? No, `section_edit` with `action=insert` allows specifying a `new_heading` and its position relative to an existing heading. If I want a parent/child relationship in Markdown structure via this tool, usually you insert the parent first. But here we want a level that contains subsections.\\n\\nActually, if I use `insert` on `[1.4.2]`, the new section will be at the same level as `[1.4.2]` because they share the same parent `Changelog`. Then I can use another call to insert a subsection into my new section.\\n\\nWait, let me check what kind of headings are used for version numbers vs subheaders like 'Added'. Usually versions are H2 and 'Added' is H3. The prompt says \\\"[Unreleased]\\\" has one subsection \\\"Added\\\". This implies `[Unreleased]` is likely a higher-level header than `Added`.\\n\\nLet's try to insert the section first.\\n\\nOne detail: the user wants \\\"- `plan --explain` flag.\\\" which looks like a list item under \\\"Added\\\".\\n\\nI will perform two steps:\\n1. Insert `[1.5.0] - 2026-09-06` before `[1.4.2] - 2026-08-14`.\\n2. Use `section_edit` again to insert a subsection titled `Added` inside this new section (using its path) or just include it in the body if possible. Actually, `insert` with `body` might work well here.\\n\\nActually, looking at how `section_edit` works, it targets an existing heading. If I insert a new heading, that new heading doesn't exist yet so I can't target it in a second call immediately unless I use the file name.\\n\\nWait, let's look at the hierarchy provided by the user:\\nChangelog -> [1.4.2]... -> Fixed / Changed\\nSo `[1.4.2]` is a child of `Changelog`.\\n\\nIf I want to create \\\"[1.5.0]\\\" as a sibling of \\\"[1.4.2]\\\", I insert it before \\\"[1.4.2]\\\".\\n\\nLet me try to do it properly now.<|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":1,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Changelog > [1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":3,"outcome":"op_error","detail":"missing section 'Changelog > [1.5.0] - 2026-09-06 > Added'; have ['Changelog', 'Changelog > [1.2.0] - 2026-04-01', 'Changelog > [1.2.0] - 2026-04-01 > Added', 'Changelog > [1.2.0] - 2026-04-01 > Security', 'Changelog > [1.3.0] - 2026-05-19', 'Changelog > [1.3.0] - 2026-05-19 > Added', 'Changelog > [1.3.0] - 2026-05-19 > Removed', 'Changelog > [1.4.0] - 2026-07-02', 'Changelog > [1.4.0] - 2026-07-02 > Added', 'Changelog > [1.4.0] - 2026-07-02 > Changed', 'Changelog > [1.4.0] - 2026-07-02 > Deprecated', 'Changelog > [1.4.1] - 2026-07-30', 'Changelog > [1.4.1] - 2026-07-30 > Fixed', 'Changelog > [1.4.2] - 2026-08-14', 'Changelog > [1.4.2] - 2026-08-14 > Changed', 'Changelog > [1.4.2] - 2026-08-14 > Fixed', 'Changelog > [1.5.0] - 2026-09-06', 'Changelog > [Unreleased]', 'Changelog > [Unreleased] > Added']; after: `body` contains a heading ('Added'), and it is inserted as literal text -- the level would not be worked out for you.\n  Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created.\n  If 'Added' is meant to be prose, drop the `#` marks."}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":4,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":5,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":6,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"### Added\\n- `plan --explain` flag.\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog > [Unreleased]\"\n  },\n  \"subtree\": false\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":7,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog > [Unreleased]\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":8,"outcome":"op_error","detail":"line 26: '#### Added', expected '### Added'; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"### Added\\n- `plan --explain` flag.\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog > [Unreleased]</div>\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-release-at-top","family":"section","trial":9,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"#### Added\\n\\n- `plan --explain` flag.\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"[1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":0,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":2,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":3,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  },\n  \"text\": \"Use pkg.\"\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":4,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":5,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\\\\\\\"},subtree:true}<tool_call|><|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n  },\n  \"\\\"name\\\"\": 0,\n  \"\\\"path\\\"\": 0,\n  \"\\\"section\\\"\": {\n    \"\\\"heading\\\"\": 1,\n    \"\\\"ordinal\\\"\": null\n  }\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":7,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  },\n  \"text\": \"Use pkg.\"\n}"}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-subsection-last","family":"section","trial":9,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":5,"outcome":"op_error","detail":"line 26: '\\\\nThis release is a hotfix.', expected 'This release is a hotfix.'; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"path\": \"corpus/documents/changelog.md\",\n  \"text\": \"\\nThis release is a hotfix.\"\n}"}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-hotfix-note","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":1,"outcome":"transport","detail":"TimeoutExpired: Command '['node', '/Users/peter/projects/fastmd/bench/pi_trial.mjs']' timed out after 900 seconds"}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":1,"outcome":"destructive","detail":"section disappeared: 'Setext H1 Title > Setext H2' (1 before, 0 after)"}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":2,"outcome":"destructive","detail":"section disappeared: 'Setext H1 Title > Setext H2' (1 before, 0 after)"}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":4,"outcome":"destructive","detail":"section disappeared: 'Setext H1 Title > Setext H2' (1 before, 0 after)"}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-closed-atx","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-install-macos","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":2,"outcome":"op_error","detail":"missing section 'Deep heading nesting > API > Endpoints'; have ['Deep heading nesting', 'Deep heading nesting > API', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: `level` must be a number from 1 to 6, not None."}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":6,"outcome":"op_error","detail":"missing section 'Deep heading nesting > API > Endpoints'; have ['Deep heading nesting', 'Deep heading nesting > API', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: `level` must be a number from 1 to 6, not None."}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"promote-api","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":8,"outcome":"op_error","detail":"\"Deep heading nesting > Install\" already has a body, and `replace-body` discards it.\n  If you meant to add to it, use action=append.\n  If you really meant to replace it, pass overwrite=true."}
+{"condition":"treatment","task_id":"replace-install-preamble","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"notes-second-ordinal","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":1,"outcome":"collateral:formatting","detail":"line 30: ' None of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'"}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-after-fence","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-atx-line","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"append-macos-note","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":2,"outcome":"destructive","detail":"existing line lost: 'Use the package manager.'"}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":3,"outcome":"destructive","detail":"existing line lost: 'Use the package manager.'"}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":6,"outcome":"destructive","detail":"existing line lost: 'Use the package manager.'"}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"replace-linux-body","family":"section","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":0,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Some content.\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  },\n  \"text\": \"\"\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":1,"outcome":"op_error","detail":"missing section 'Deep heading nesting > Reference > API > Rate limits > Headers'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":2,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":3,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints\"\n  },\n  \"text\": \"# Headers\\\\nEvery response carries `X-RateLimit-*`.`}<tool_call|><|channel>thought\\n<channel|>I've attempted to add the requested section. However, I encountered an error because I forgot to include the file `path` in my command. Let me retry correctly.\\n\\nWait, looking at your request again, you want a *subsection* called `Headers` under `Rate limits`, and `Rate limits` itself should be under `API`. \\n\\nLet's try this sequence:\\n1. Insert `Rate limits` as a sibling after `Endpoints` (which is inside `API`).\\n2. Inside `Rate limits`, insert the `Headers` subsection.\\n\\nActually, it might be cleaner to do it in one go if possible, but I will start by inserting the `Rate limits` section first.\\n\\n(Self-correction: My previous attempt failed due to missing `path`. I must specify `path: 'corpus/sections/deep-nesting.md'`)\\n\\nI will perform these actions now.<|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":4,"outcome":"wrong","detail":"missing section 'Deep heading nesting > Reference > API > Rate limits > Headers'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":5,"outcome":"op_error","detail":"missing section 'Deep heading nesting > Reference > API > Rate limits > Headers'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > API > Headers', 'Deep heading nesting > Reference > API > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Every response carries `X-RateLimit-*`.\",\n  \"new_heading\": \"Headers\",\n  \"position\": \"first-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Rate limits\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":6,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":7,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  },\n  \"text\": \"\"\n}"}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":8,"outcome":"op_error","detail":"missing section 'Deep heading nesting > Reference > API > Rate limits'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Reference > Rate limits', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: no section at path \"Reference > API > Rate limits\".\n  Near matches: Rate limits\n  Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"condition":"treatment","task_id":"insert-nested-ratelimits","family":"section","trial":9,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  },\n  \"text\": \"Every response carries `X-RateLimit-*`.\"\n}"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":0,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":1,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Logs\\nWritten to `~/.incise/log`.\\n\\nCommon errors\\nSee the FAQ.\",\n  \"new_heading\": \"Troubleshooting\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting\"\n  },\n  \"subtree\": true\n}"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":2,"outcome":"op_error","detail":"missing section 'Deep heading nesting > Troubleshooting > Logs'; have ['Deep heading nesting', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Troubleshooting', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS', 'Troubleshooting']; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Troubleshooting\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting\\\"},path:\"\n  }\n}"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":3,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":4,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":5,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":6,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":7,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":8,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"insert-troubleshooting","family":"section","trial":9,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":0,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: Rich Frontmatter Example\\nversion: 1.0.0\\ndraft: true\\ntags:\\n  - example\\n  - frontmatter\\n  - rich\\nbuild:\\n  target: web\\n  features:\\n    - speed\\n    - size\\n  jobs: 8\\nauthors:\\n  - name: Jane Doe\\n    role: Lead Architect\\n  - name: John Smith\\n    role: Senior Developer\\nempty_value: null\\nquoted_key: \\\"This is a value\\\"\\nmultiline: |\\n  Line one\\n  Line two\\nfolded: >\\n  This is a folded\\n  block scalar\\nkey with spaces: Some Value\\nnested:\\n  property: some value\\n  deeply:\\n    buried: deep value\\n---\\n\\n# Content follows...\"\n}"}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-jobs","family":"frontmatter","trial":9,"outcome":"op_error","detail":"no table under heading \"Addressing\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":2,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":6,"outcome":"op_error","detail":"no table under heading \"Frontmatter in `corpus/frontmatter/rich.md`\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-build-target","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":2,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":3,"outcome":"destructive","detail":"existing line lost: '- `title` \u2014 top-level scalar'"}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":5,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: Example Document\\nversion: 1.0.0\\ndraft: false\\ntags:\\n  - tag1\\n  - tag2\\n  - tag3\\nbuild:\\n  target: web\\n  features:\\n    - feature1\\n    - feature2\\n  jobs: build-job\\nauthors:\\n  - name: Dana\\n    role: Maintainer\\n  - name: John Doe\\n    role: Contributor\\nempty_value: null\\nquoted_key: \\\"Value\\\"\\nmultiline: |\\n  Line one\\n  Line two\\nfolded: >\\n  This is a\\n  folded string\\nkey with spaces: Value\\nnested:\\n  deeply:\\n    buried: deep value\\n---\"\n}"}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":6,"outcome":"op_error","detail":"Validation failed for tool \"list_edit\":\n  - list: must have required properties list\n\nReceived arguments:\n{\n  \"action\": \"set-checked\",\n  \"match\": \"Dana\",\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"Dana (Maintainer)\"\n}"}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":8,"outcome":"op_error","detail":"no table under heading \"Frontmatter in `corpus/frontmatter/rich.md`: YAML, 12 top-level keys\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"treatment","task_id":"set-dana-role","family":"frontmatter","trial":9,"outcome":"op_error","detail":"'authors[1].role' holds 'Dana has taken over as a maintainer', expected 'maintainer'; after: `text` is required and must not be empty."}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":1,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":2,"outcome":"op_error","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path, section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"body\": \"The user wants to turn on caching for the build. I need to check if 'build' is a section or part of the frontmatter. Looking at the prompt, it describes the frontmatter structure. However, there are no files yet in this directory based on my internal state (I should list files first). Actually, I don't have `ls` but I can try reading the file. Wait, the instruction says \\\"Turn on caching for the build\\\" and provides the structure of `corpus/frontmatter/rich.md`. It looks like the user might want me to edit the *content* of that file if it were a markdown table, but they described the *frontmatter*. Frontmatter is usually YAML.\\n\\nWait, looking closely at the input:\\n\\\"Frontmatter in `corpus/frontmatter/rich.md`: YAML, 12 top-level keys...\\\"\\n\\nThis looks like a description of a Markdown table OR just text describing the content. But the toolset provided is for editing MARKDOWN structures (tables, lists, sections, frontmatter). If the information provided IS the content of the file, then it's not actually a table, it's a description.\\n\\nHowever, if I am supposed to modify the FRONTMATTER of that file, I use `frontmatter_edit`. The request \\\"Turn on caching for the build\\\" implies adding or updating `build.caching = true`.\\n\\nBut wait, `frontmatter_edit` works on `.md` files. Let's check what kind of file it is first by attempting to read its outline or similar, but since it's likely just a data file, let's try to see if it even exists or if I can use `frontmatter_edit`.\\n\\nActually, the prompt format suggests this is a task where the user provides the state and asks for an edit. Since \\\"Turn on caching for the build\\\" refers to `build`, which was listed as having 3 keys (`target`, `features`, `jobs`), I should add `caching: true` under `build`.\\n\\nWait, `frontmatter_edit` uses dot notation for nested keys. So I should call `frontmatter_edit(path='corpus/frontmatter/rich.md', action='set', key='build.caching', value='true')`.\\n\\nBUT! Looking at the provided text again, it looks like a table representation (or a list) describing the frontmatter structure. If it IS a markdown table in the file, then I should use `table_edit`. But the description says \\\"`Frontmatter in ...: YAML...`\\\". This sounds like metadata about the file.\\n\\nLet's assume the goal is to update the actual YAML frontmatter of that file.\\n\"\n}"}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":3,"outcome":"op_error","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"title: Rich Frontmatter Example\\nversion: 1.0\\ndraft: false\\ntags:\\n  - tag1\\n  - tag2\\n  - tag3\\nbuild:\\n  target: web\\n  features:\\n    - feature1\\n    - feature2\\n  jobs: default\\nauthors:\\n  - name: Alice\\n    role: Lead\\n  - name: Bob\\n    role: Reviewer\\nempty_value:\\nquoted_key: value\\nmultiline: |\\n  line one\\n  line two\\nfolded: >\\n  This is a folded\\n  scalar block\\n` key with spaces`: scalar\\nnested:\\n  deeply:\\n    buried: value\"\n}"}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":7,"outcome":"op_error","detail":"key delta +2, expected +1; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"build.caching: true\"\n}"}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"add-build-cache","family":"frontmatter","trial":9,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":0,"outcome":"op_error","detail":"'title' holds '\"\"', expected ''; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\"\n}"}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":1,"outcome":"op_error","detail":"'title' holds '\"\\\\\"\\\\\"\"', expected ''; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"title                    \\\"\\\"\\nversion                  scalar\\ndraft                    scalar\\ntags                     3 items\\nbuild                    3 keys below it\\nbuild.target             scalar\\nbuild.features           2 items\\nbuild.jobs               scalar\\nauthors                  2 items\\nauthors[0].name          scalar\\nauthors[0].role          scalar\\nauthors[1].name          scalar\\nauthors[1].role          scalar\\nempty_value              empty (null)\\nquoted_key               scalar\\nmultiline                literal block scalar, 2 lines\\nfolded                   folded block scalar, 2 lines\\nkey with spaces          scalar\\nnested                   1 key below it\\nnested.deeply            1 key below it\\nnested.deeply.buried     scalar\"\n}"}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":8,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: \\nversion: 0.1.0\\ndraft: true\\ntags:\\n  - tag1\\n  - tag2\\n  - tag3\\nbuild:\\n  target: web\\n  features:\\n    - feature1\\n    - feature2\\n  jobs: build-all\\nauthors:\\n  - name: Alice\\n    role: Author\\n  - name: Bob\\n    role: Editor\\nempty_value: \\nquoted_key: \\\"some value\\\"\\nmultiline: |\\n  line 1\\n  line 2\\nfolded: >\\n  this is a folded\\n  string\\nkey with spaces: some value\\nnested:\\n  deeply:\\n    buried: value\\n---\"\n}"}
+{"condition":"treatment","task_id":"clear-title","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-draft","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"delete-build","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":2,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":4,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":5,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":8,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"treatment","task_id":"set-draft-true","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"release-bump","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"create-on-absent","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"fill-empty","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-whole-table","family":"table-read","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-one-column","family":"table-read","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":1,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":5,"outcome":"unfiltered","detail":"reported 2 rows of the right table; the 1 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":6,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":8,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 1 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-two-columns","family":"table-read","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":0,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":1,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":2,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":3,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":4,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":5,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":7,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":8,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-filter-no-match","family":"table-read","trial":9,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 0 the question asked for are among them"}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-ordinal-table","family":"table-read","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":0,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":1,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":2,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":3,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":4,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":5,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":6,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":7,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":8,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"get-escaped-cell","family":"table-read","trial":9,"outcome":"correct","detail":null}
+{"condition":"treatment","task_id":"rename-setext","family":"section","trial":1,"outcome":"transport","detail":"TimeoutExpired: Command '['node', '/Users/peter/projects/fastmd/bench/pi_trial.mjs']' timed out after 900 seconds"}

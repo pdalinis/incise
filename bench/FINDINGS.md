@@ -11072,3 +11072,39 @@ leave it believing the edit succeeded. Only the first is safe.
   on without anyone writing it down: `headroom` tests `op in armb.READS` and
   `regrade_snapshot` tests `name in armb.READS`, and those are the same test only
   while `normalize` returns the tool name unchanged for a read.
+
+## F-pi-live — the published Pi package clears its live composition gate
+
+The package-level question was narrower than F-compose and closer to what a user installs: does adding the three structural discovery tools to the five established tools change correctness when the actual published `pi-incise@0.1.1` extension runs through Pi 0.85.1? The plan was committed at `455ffda` and posted as issue 10 before a live-model outcome existed. It fixed 48 tasks, ten paired seeds, four turns, Pi default prompt construction, the historical Gemma 4 26B server condition, and a two-part gate: pooled exact McNemar must not show a loss at 0.05, and no family may lose more than 5.0 percentage points.
+
+The answer is yes: this measured package condition passes. This result does not replace F-compose. That finding remains current for its original five-tool schema, injected summaries, and executor. The lower baseline here is evidence about the Pi prompt and validation path used here, not a regrade of a historical pool.
+
+### The package and harness passed their claps before treatment
+
+The manifest pins Pi 0.85.1, `pi-incise@0.1.1`, package integrity `sha512-1CmFNYv5Ko1GcZjqdp70PFdFYKxK7TwfzUGx035wkF4zDSWvwdPRKehXVwVAl+QWPEVKp9oacj5HDmznkC7hnQ==`, the packaged `incise 0.1.1` Darwin arm64 binary, system-prompt and schema hashes, task hashes, model hash, and server flags. Both ideal-call ceilings were 48/48. The control determinism clap then matched all 48 seed-zero trials on both graded outcome and normalized call sequence; each repeat was 42/48 correct.
+
+An earlier clap attempt was invalid because the custom provider had not been registered in Pi’s `ModelRuntime`. Every row failed before inference. Those records are retained under the `pi_0_1_1_clap_auth_failure` prefix, the provider wiring fix is a separate commit, and no invalid row entered the control or treatment pool.
+
+### The preregistered gate passes
+
+One treatment pair, `rename-setext` trial 1, hit the fixed 900-second worker timeout on its initial attempt and its one retry. Both attempts remain in the raw pool. The pair is excluded under the preregistered transport rule, leaving 479 complete pairs.
+
+Control was 397/479 correct, 82.9%, and treatment was 393/479, 82.0%. Of the discordant pairs, 28 succeeded only in control and 24 only in treatment; two-sided exact McNemar p = 0.677809. The pooled endpoint therefore does not show a significant loss.
+
+The family guardrail also holds. Tables stayed 60/60 to 60/60. Lists improved from 91/100 to 96/100, plus 5.0 points. Sections moved from 106/149 to 102/149, minus 2.7 points; frontmatter from 91/110 to 88/110, minus 2.7; table-read from 49/60 to 47/60, minus 3.3. The worst loss is inside the fixed 5.0-point boundary. The package passes the rule as written.
+
+### The reads move work, failure class, and cost more than correctness
+
+Silent corruption, defined as `wrong`, either collateral class, or `destructive`, moved from 31/479, 6.5%, to 28/479, 5.8%. Loud `op_error` outcomes rose from 40 to 45. Pi schema-validation error results fell from 178 to 163, while handler refusal results rose from 60 to 75. This is not an accuracy win, but it is a small movement from silent damage toward visible refusal.
+
+The model used a new structural read in 54 distinct trials: `md_lists` in 28 trials with 24 correct, `md_outline` in 25 with 10 correct, and `md_tables` in one with one correct. The reads were not confined to their intended edit families. Ten frontmatter trials called `md_outline`, and cross-family calls rose from 57 in control to 87 in treatment. That is the clearest compositional weakness left by the pass.
+
+The extra surface also costs work. Mean calls rose from 1.52 to 1.69, mean turns from 2.52 to 2.68, mean completion tokens from 141.1 to 150.9, and mean elapsed time from 6.48 to 7.81 seconds. The gate deliberately judged correctness, not efficiency; these secondary movements are real and should constrain any claim that the discovery tools are free.
+
+### The stable claim is deliberately bounded
+
+`pi-incise@0.1.1` is stable for the measured Pi 0.85.1, Gemma 4 26B, macOS arm64, frozen 48-task population. This is direct evidence from the package users install, not from a mock schema or a repository binary. It licenses the stable designation fixed in the plan.
+
+It does not license a claim about Windows, which is out of scope; other operating systems or architectures; other models; later Pi releases; or a larger tool surface. It also does not erase the efficiency cost or the `md_outline` cross-family behavior. A later package or Pi version needs a new named run rather than overwriting this pool.
+
+Pools are `bench/results/pi_0_1_1_{control,treatment}.jsonl` and their graded siblings. The primary decision is `pi_0_1_1_analysis.json`, secondary diagnostics are `pi_0_1_1_secondary.json`, and `pi_0_1_1_run_manifest.json` pins exact execution and artifact hashes. Historical F-compose remains current within its stated condition.

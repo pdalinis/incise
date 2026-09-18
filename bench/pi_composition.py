@@ -629,13 +629,13 @@ def paired_data(path):
 def command_analyse(args):
     control = paired_data(args.control)
     treatment = paired_data(args.treatment)
-    shared = sorted(set(control) & set(treatment))
-    dropped = [key for key in shared
+    paired_keys = sorted(set(control) & set(treatment))
+    if len(paired_keys) != 480:
+        raise SystemExit(f"expected 480 paired trial keys, found {len(paired_keys)}")
+    dropped = [key for key in paired_keys
                if control[key]["outcome"] == "transport"
                or treatment[key]["outcome"] == "transport"]
-    shared = [key for key in shared if key not in set(dropped)]
-    if len(shared) != 480:
-        raise SystemExit(f"expected 480 complete paired trials, found {len(shared)}")
+    shared = [key for key in paired_keys if key not in set(dropped)]
 
     only_control = sum(control[key]["outcome"] == "correct"
                        and treatment[key]["outcome"] != "correct" for key in shared)

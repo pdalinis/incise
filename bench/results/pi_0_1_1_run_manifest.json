@@ -1,0 +1,44 @@
+{
+  "analysis": {
+    "analyzer_sha256": "51211b4029f23bc44287da753ef36095f9ad4896a13f3f8db9692b01f44b3a80",
+    "command": "python3 bench/pi_composition.py analyse",
+    "note": "The analyzer-only change implements the preregistered pairwise transport exclusion; model execution used the execution_harness hashes.",
+    "primary_sha256": "4df3847f40a2256418ad5589af63f6cd04f3c2551b3fd767ff916f996d772a6a",
+    "secondary_sha256": "2d291939b21be03ecb789a9dd831fc8ecf06f3166e05a42eb3492692e5b99972"
+  },
+  "completed_at": "2026-09-18T22:55:11Z",
+  "execution_harness": {
+    "control_commit": "df5c10d",
+    "runner_sha256": "926e4e1a99330d4191b97fa627971b91f94f9602725589917f7e219a3dd892fe",
+    "treatment_commit": "daef682",
+    "worker_sha256": "ebdb4c8685d39ed01125b872398f5e314d5875af680ad0a724ff78212dd8f484"
+  },
+  "inputs": {
+    "preflight_manifest": "bench/results/pi_0_1_1_manifest.json",
+    "preregistration_commit": "455ffda",
+    "preregistration_issue": "https://github.com/pdalinis/incise/issues/10"
+  },
+  "pools": {
+    "control": {
+      "attempts": 480,
+      "command": "python3 bench/pi_composition.py run --extension /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/pi-incise/extension/index.ts --pi-sdk /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/dist/index.js --condition control --out bench/results/pi_0_1_1_control.jsonl --graded bench/results/pi_0_1_1_control_graded.jsonl",
+      "graded_sha256": "0297c723b086dd37b915fd3c3f2bc1e6b7aa0f9eb36d63d1dcd6b03b3925e156",
+      "raw_sha256": "e03a32117b10ae6e36cd9446bfd69373d800fb625a7122bbd02ad7c6b515bb7e"
+    },
+    "treatment": {
+      "attempts": 481,
+      "command": "python3 bench/pi_composition.py run --extension /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/pi-incise/extension/index.ts --pi-sdk /private/tmp/incise-pi-package-0.1.1-2f2b13d/node_modules/@earendil-works/pi-coding-agent/dist/index.js --condition treatment --out bench/results/pi_0_1_1_treatment.jsonl --graded bench/results/pi_0_1_1_treatment_graded.jsonl",
+      "completed_pairs": 479,
+      "graded_sha256": "ab9003fe61128c1f61fd0ead94754d8e9a2075864f9b2ed1b68680bd26c89394",
+      "raw_sha256": "c007108669469927153c61da15153cd43e5ced70efa75b8f37f0ec93549e95ce",
+      "transport_attempts": 2,
+      "transport_pairs_dropped": [
+        [
+          "rename-setext",
+          1
+        ]
+      ]
+    }
+  },
+  "status": "complete"
+}
