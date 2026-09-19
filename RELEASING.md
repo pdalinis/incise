@@ -41,8 +41,8 @@ The first npm release is a bootstrap: the five packages must exist before npm tr
 For this release:
 
 ```bash
-git tag -a v0.1.2 -m "Incise 0.1.2"
-git push origin v0.1.2
+git tag -a v0.1.3 -m "Incise 0.1.3"
+git push origin v0.1.3
 ```
 
 The release workflow validates the pinned Rust toolchain, runs the Rust, documentation, Python, differential, schema, replay, Hermes, and Pi package checks, and verifies the crate and npm package contents.
@@ -57,9 +57,9 @@ After the crates, npm packages, and all archives succeed, the workflow creates a
 
 ## After release
 
-- Install from crates.io with `cargo install incise-cli --version 0.1.2 --locked` and run a smoke edit on a disposable Markdown file.
+- Install from crates.io with `cargo install incise-cli --version 0.1.3 --locked` and run a smoke edit on a disposable Markdown file.
 - Download one GitHub archive and verify it against `SHA256SUMS`.
 - Confirm the crates.io and docs.rs pages link back to the repository.
 - Download and extract the version-matched Hermes plugin archive, then confirm that `hermes plugins doctor --ci incise` reports all eight tools.
 - Install the Pi candidate with `pi install npm:pi-incise@next`, run `/incise-doctor`, and smoke-test a read and write on each supported platform family.
-- Run the live composition benchmark. Only then promote the exact version with `npm dist-tag add pi-incise@0.1.2 latest`; keep the native packages pinned by exact version.
+- For a model-facing behavior change, run the live composition benchmark before promotion. For a documentation- or metadata-only release, verify that the published extension and schema match the prior stable package. Then promote the exact version with `npm dist-tag add pi-incise@0.1.3 latest`; keep the native packages pinned by exact version.
