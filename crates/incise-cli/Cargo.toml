@@ -7,9 +7,9 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 homepage.workspace = true
-description = "Command-line front end for incise's markdown edit operations"
+description = "Semantic, byte-preserving Markdown editing CLI for AI agents and automation"
 readme = "README.md"
-keywords = ["markdown", "editing", "llm", "agents", "cli"]
+keywords = ["markdown", "ai-agents", "structured-editing", "frontmatter", "cli"]
 categories = ["command-line-utilities", "text-processing"]
 
 [[bin]]

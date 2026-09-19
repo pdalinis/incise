@@ -7,10 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 homepage.workspace = true
-description = "Byte-preserving markdown edit operations, content-addressed"
+description = "Dependency-free, byte-preserving Markdown edit operations for AI agents"
 documentation = "https://docs.rs/incise-core"
 readme = "README.md"
-keywords = ["markdown", "editing", "llm", "agents", "parser"]
+keywords = ["markdown", "ai-agents", "structured-editing", "frontmatter", "parser"]
 categories = ["text-processing"]
 
 # No dependencies, deliberately. `bench/incise_ops.py` is the oracle and its
