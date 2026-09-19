@@ -4,13 +4,11 @@ Structured, byte-preserving Markdown tools for [Pi](https://pi.dev). The package
 
 ## Install
 
-Before promotion to `latest`, install the release candidate with:
+Install the stable release with:
 
 ```bash
-pi install npm:pi-incise@next
+pi install npm:pi-incise
 ```
-
-After the live composition benchmark passes and that exact version is promoted, `pi install npm:pi-incise` installs the stable release.
 
 Prebuilt binaries are provided for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not supported in v1.
 
