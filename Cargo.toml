@@ -9,7 +9,7 @@ rust-version = "1.85"
 license = "MIT"
 authors = ["Peter Dalinis"]
 repository = "https://github.com/pdalinis/incise"
-homepage = "https://github.com/pdalinis/incise"
+homepage = "https://pdalinis.github.io/incise/"
 
 [profile.release]
 opt-level = 3

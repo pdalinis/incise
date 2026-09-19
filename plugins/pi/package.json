@@ -1,7 +1,7 @@
 {
   "name": "pi-incise",
   "version": "0.1.1",
-  "description": "Byte-preserving structured Markdown tools for Pi",
+  "description": "Semantic, byte-preserving Markdown editing tools for Pi and AI agents",
   "type": "module",
   "license": "MIT",
   "author": "Peter Dalinis",
@@ -10,13 +10,17 @@
     "url": "git+https://github.com/pdalinis/incise.git",
     "directory": "plugins/pi"
   },
-  "homepage": "https://github.com/pdalinis/incise#readme",
+  "homepage": "https://pdalinis.github.io/incise/",
   "bugs": "https://github.com/pdalinis/incise/issues",
   "keywords": [
     "pi-package",
     "markdown",
     "structured-editing",
-    "ai-agent"
+    "ai-agent",
+    "llm-tools",
+    "frontmatter",
+    "obsidian",
+    "knowledge-base"
   ],
   "engines": {
     "node": ">=22.19.0"
