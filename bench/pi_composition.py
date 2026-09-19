@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the pre-registered Pi 0.1.1 live composition promotion gate.
+"""Run a pre-registered Pi package live composition promotion gate.
 
 The model is driven through Pi itself. Pi loads the requested extension, builds
 its real system prompt from active tool metadata, validates tool arguments, and
@@ -212,9 +212,10 @@ def probe_condition(args, condition):
         args, "probe", condition, seed=0,
     ))
     expected = CONDITIONS[condition]
-    if result.get("packageVersion") != PACKAGE_VERSION:
+    if result.get("packageVersion") != args.package_version:
         raise SystemExit(
-            f"expected pi-incise {PACKAGE_VERSION}, got {result.get('packageVersion')}")
+            f"expected pi-incise {args.package_version}, "
+            f"got {result.get('packageVersion')}")
     if result.get("activeTools") != expected:
         raise SystemExit(
             f"active tool order differs: expected {expected}, got {result.get('activeTools')}")
@@ -222,7 +223,7 @@ def probe_condition(args, condition):
     if names != expected:
         raise SystemExit(f"registered tool order differs: expected {expected}, got {names}")
     binary = result.get("binary") or {}
-    if binary.get("version") != f"incise {PACKAGE_VERSION}":
+    if binary.get("version") != f"incise {args.package_version}":
         raise SystemExit(f"wrong binary version: {binary.get('version')}")
     if not args.allow_nonpackage_binary and binary.get("source") != "package":
         raise SystemExit(
@@ -266,9 +267,9 @@ def command_probe(args):
     manifest = {
         "status": "preflight",
         "preregistration": {
-            "issue": "https://github.com/pdalinis/incise/issues/10",
-            "commit": "455ffda",
-            "plan": "bench/PI_COMPOSITION_PLAN.md",
+            "issue": args.preregistration_issue,
+            "commit": args.preregistration_commit,
+            "plan": args.preregistration_plan,
         },
         "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "source": {
@@ -277,7 +278,7 @@ def command_probe(args):
         },
         "package": {
             "name": "pi-incise",
-            "version": PACKAGE_VERSION,
+            "version": args.package_version,
             "root": treatment["packageRoot"],
             "integrity": integrity,
             "integrity_source": lock_path,
@@ -685,6 +686,14 @@ def add_runtime_arguments(parser):
     parser.add_argument("--sandbox", default=str(DEFAULT_SANDBOX))
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--allow-nonpackage-binary", action="store_true")
+    parser.add_argument("--package-version", default=PACKAGE_VERSION)
+    parser.add_argument(
+        "--preregistration-issue",
+        default="https://github.com/pdalinis/incise/issues/10",
+    )
+    parser.add_argument("--preregistration-commit", default="455ffda")
+    parser.add_argument(
+        "--preregistration-plan", default="bench/PI_COMPOSITION_PLAN.md")
 
 
 def main():
