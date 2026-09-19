@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safe Markdown Table Editing for AI Agents — Incise</title>
+  <meta name="description" content="Let AI agents update Markdown table cells and rows without corrupting pipes, alignment markers, padding, line endings, or nearby content.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/"><link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:title" content="Safe Markdown table editing for AI agents"><meta property="og:description" content="Content-addressed table edits with deterministic formatting."><meta property="og:url" content="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/">
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <div class="eyebrow">Markdown tables</div><h1>Update the cell, not the whole table.</h1>
+    <p class="lede">AI agents understand which value should change. Incise handles pipe escaping, column width, alignment, and the exact byte splice.</p>
+
+    <h2>Why raw text replacement is fragile</h2>
+    <p>A one-cell change can require an agent to identify the right table and row, preserve escaped pipes, calculate padding, maintain alignment markers, and reproduce every unrelated cell exactly. A plausible-looking rewrite can silently alter data.</p>
+
+    <h2>Address rows by content</h2>
+    <pre><code>incise table-update-cell Projects.md \
+  --table Projects \
+  --where Note=Launch \
+  --column Status \
+  --value done</code></pre>
+    <p>The table is selected by its heading and the row by existing cell values. If either address is ambiguous, Incise refuses and explains how to make the next call precise.</p>
+
+    <h2>Table operations</h2>
+    <div class="grid">
+      <article class="card"><h3>Update cells</h3><p>Change one selected value and widen the table only when necessary.</p></article>
+      <article class="card"><h3>Add or delete rows</h3><p>Use named column values and exact row selectors instead of line positions.</p></article>
+      <article class="card"><h3>Read and realign</h3><p>Query only the rows an agent needs or repair padding without changing cell text.</p></article>
+    </div>
+    <p><a class="button" href="/incise/docs/">Install and try Incise</a></p>
+  </main>
+  <footer><div class="wrap footer-row"><span>Semantic Markdown editing for agents.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
+</body>
+</html>

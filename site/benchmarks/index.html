@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incise Benchmarks — Structured vs Direct Markdown Editing</title>
+  <meta name="description" content="Measured results comparing direct Markdown patching with deterministic Incise operations for a small local language model.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/benchmarks/"><link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:title" content="Incise Markdown editing benchmarks"><meta property="og:description" content="Structured operations remove mechanical failure modes from agent editing."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <div class="eyebrow">Published evidence</div><h1>Structured editing removes mechanical failures.</h1>
+    <p class="lede">The benchmark compares direct patch calls with Incise operations on the same tasks, model, seeds, and grader.</p>
+
+    <table><thead><tr><th>Operation</th><th>Direct patch</th><th>Incise</th></tr></thead><tbody>
+      <tr><td>Tables</td><td>60.0% (36/60)</td><td><strong>100% (60/60)</strong></td></tr>
+      <tr><td>Lists</td><td>63.0% (63/100)</td><td><strong>91.0% (91/100)</strong></td></tr>
+      <tr><td>Sections</td><td>19.0% (19/100)</td><td><strong>74.0% (74/100)</strong></td></tr>
+    </tbody></table>
+
+    <div class="callout"><strong>Scope matters.</strong> These are results for one small local model under recorded conditions, not a promise that every model will achieve the same rates.</div>
+
+    <h2>What the operations remove</h2>
+    <div class="grid">
+      <article class="card"><h3>Character arithmetic</h3><p>The model no longer needs to count table padding or reproduce formatting exactly.</p></article>
+      <article class="card"><h3>Boundary guesses</h3><p>Section and list boundaries are determined by deterministic structure-aware code.</p></article>
+      <article class="card"><h3>Whole-document rewrites</h3><p>Targeted splices avoid recreating unrelated bytes and consuming them as model output.</p></article>
+    </div>
+
+    <h2>Reproducible evidence</h2>
+    <p>The complete tasks, prompts, raw results, statistical comparisons, caveats, and reversed conclusions are versioned with the source. The Rust core is also compared byte-for-byte with an independent Python oracle across 110,406 generated cases over 54 fixtures.</p>
+    <div class="actions"><a class="button" href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md">Read the full findings</a><a class="button secondary" href="https://github.com/pdalinis/incise/tree/main/bench">Browse the benchmark</a></div>
+  </main>
+  <footer><div class="wrap footer-row"><span>Claims stay tied to their recorded population.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
+</body>
+</html>

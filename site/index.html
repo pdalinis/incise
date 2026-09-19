@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incise — Semantic Markdown Editing for AI Agents</title>
+  <meta name="description" content="Incise is a safe, semantic Markdown editing CLI for AI agents. Update tables, lists, sections, and YAML frontmatter without rewriting unrelated bytes.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/">
+  <link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Incise — Semantic Markdown Editing for AI Agents">
+  <meta property="og:description" content="Safe, byte-preserving updates to Markdown tables, lists, sections, and YAML frontmatter.">
+  <meta property="og:url" content="https://pdalinis.github.io/incise/">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Incise",
+    "description": "Semantic, byte-preserving Markdown editing for AI agents and automation.",
+    "url": "https://pdalinis.github.io/incise/",
+    "downloadUrl": "https://github.com/pdalinis/incise/releases",
+    "softwareVersion": "0.1.1",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS",
+    "license": "https://opensource.org/license/mit",
+    "codeRepository": "https://github.com/pdalinis/incise",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Deterministic structure. Minimal diffs.</div>
+      <h1>Markdown edits an AI agent can trust.</h1>
+      <p class="lede">Incise lets agents update Markdown tables, lists, sections, and YAML frontmatter by meaning—not fragile line numbers—while preserving unrelated document bytes.</p>
+      <div class="actions"><a class="button" href="/incise/docs/">Get started</a><a class="button secondary" href="https://github.com/pdalinis/incise">View source</a></div>
+    </section>
+
+    <section>
+      <h2>Intent in. Exact edit out.</h2>
+      <pre><code>incise table-update-cell vault/Projects.md \
+  --table Projects \
+  --where Note=Launch \
+  --column Status \
+  --value done</code></pre>
+      <p class="muted">The row is selected by content. Incise adjusts table padding when needed and leaves the rest of the file alone.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card"><h3>Semantic addresses</h3><p>Target headings, cell values, item text, keys, and ordinals instead of stale line numbers.</p></article>
+      <article class="card"><h3>Byte-preserving</h3><p>Change the smallest structural range possible. Unrelated prose, formatting, and line endings survive.</p></article>
+      <article class="card"><h3>Loud ambiguity</h3><p>Unsafe or ambiguous operations refuse with an actionable remedy instead of choosing a plausible target.</p></article>
+    </section>
+
+    <section>
+      <h2>Made for agent-managed Markdown</h2>
+      <div class="grid">
+        <article class="card"><h3><a href="/incise/markdown-table-editor-for-ai-agents/">Tables and task lists</a></h3><p>Update cells, add or remove rows and items, toggle checkboxes, and preserve formatting conventions.</p></article>
+        <article class="card"><h3><a href="/incise/yaml-frontmatter-cli/">YAML frontmatter</a></h3><p>Set and delete nested keys while keeping comments, key order, scalar spelling, and document content intact.</p></article>
+        <article class="card"><h3><a href="/incise/obsidian-ai-agent-editing/">Obsidian and knowledge bases</a></h3><p>Protect wikilinks, callouts, block IDs, embeds, and carefully formatted notes from incidental rewrites.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Measured, not merely claimed</h2>
+      <p>On the recorded small-model benchmark, structured Incise operations improved accuracy over direct patching for tables, lists, and sections. The repository publishes the tasks, raw calls, graders, caveats, and full findings.</p>
+      <div class="actions"><a class="button secondary" href="/incise/benchmarks/">Read the benchmark summary</a></div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-row"><span>Incise is MIT licensed.</span><span><a href="https://crates.io/crates/incise-cli">crates.io</a> · <a href="https://www.npmjs.com/package/pi-incise">npm</a> · <a href="https://github.com/pdalinis/incise/releases">Releases</a></span></div></footer>
+</body>
+</html>

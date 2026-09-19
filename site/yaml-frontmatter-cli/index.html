@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit YAML Frontmatter Without Reformatting — Incise CLI</title>
+  <meta name="description" content="Set or delete nested YAML frontmatter keys in Markdown while preserving comments, key order, scalar formatting, and the document below.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/yaml-frontmatter-cli/"><link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:title" content="Edit YAML frontmatter without reformatting"><meta property="og:description" content="Target nested keys while preserving the rest of the Markdown file."><meta property="og:url" content="https://pdalinis.github.io/incise/yaml-frontmatter-cli/">
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <div class="eyebrow">YAML frontmatter</div><h1>Change metadata without serializing the file.</h1>
+    <p class="lede">Incise edits one frontmatter key at a time while preserving comments, key order, scalar spelling, and every unrelated line.</p>
+
+    <h2>Inspect before editing</h2>
+    <pre><code>incise keys note.md
+incise frontmatter-set note.md \
+  --key publish.status \
+  --value ready</code></pre>
+    <p>Nested mappings use dotted paths such as <code>publish.status</code>. Sequence members use indexes such as <code>authors[0].role</code>.</p>
+
+    <h2>Designed for narrow changes</h2>
+    <div class="grid">
+      <article class="card"><h3>Preserve comments</h3><p>Human context around metadata stays where its author placed it.</p></article>
+      <article class="card"><h3>Preserve formatting</h3><p>Unrelated scalar styles and key order are not normalized through a serializer.</p></article>
+      <article class="card"><h3>Refuse unsafe shapes</h3><p>Malformed or unsupported frontmatter produces a concrete refusal instead of a guess.</p></article>
+    </div>
+    <div class="callout">Incise is intentionally not a general-purpose YAML formatter. It is a narrow mutation layer for Markdown documents.</div>
+    <p><a class="button" href="/incise/docs/">See the editing workflow</a></p>
+  </main>
+  <footer><div class="wrap footer-row"><span>Semantic Markdown editing for agents.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
+</body>
+</html>
