@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incise Documentation — Install and Use the Markdown CLI</title>
+  <meta name="description" content="Install Incise and use semantic commands to inspect and safely edit Markdown tables, lists, sections, and YAML frontmatter.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/docs/"><link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:title" content="Incise documentation"><meta property="og:description" content="Install and use the semantic Markdown editing CLI."><meta property="og:url" content="https://pdalinis.github.io/incise/docs/">
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <div class="eyebrow">Documentation</div><h1>Install, inspect, edit, verify.</h1>
+    <p class="lede">Incise is a command-line tool and agent-tool backend for targeted, structure-aware Markdown changes.</p>
+
+    <h2>Install</h2>
+    <pre><code>cargo install incise-cli --locked
+incise --version</code></pre>
+    <p>Linux and macOS archives are also available from <a href="https://github.com/pdalinis/incise/releases">GitHub Releases</a>.</p>
+
+    <h2>The editing loop</h2>
+    <ol class="steps"><li>Inspect the relevant document structure.</li><li>Address the target by its content.</li><li>Preview or perform one semantic operation.</li><li>Verify the concise result or follow the remedy in a refusal.</li></ol>
+    <pre><code>incise tables vault/Projects.md
+incise rows vault/Projects.md --table Projects
+incise table-update-cell vault/Projects.md \
+  --table Projects --where Note=Launch \
+  --column Status --value done</code></pre>
+
+    <h2>Supported structures</h2>
+    <table><thead><tr><th>Structure</th><th>Operations</th></tr></thead><tbody>
+      <tr><td>Tables</td><td>Add and delete rows, update cells, query rows, realign columns</td></tr>
+      <tr><td>Lists</td><td>Add and remove items, toggle task checkboxes</td></tr>
+      <tr><td>Sections</td><td>Append, replace, insert, delete, rename, change heading level</td></tr>
+      <tr><td>Frontmatter</td><td>Read, set, and delete nested YAML keys</td></tr>
+    </tbody></table>
+
+    <h2>Agent integrations</h2>
+    <p>Print the measured function schemas with <code>incise schema</code>. Incise also ships integrations for <a href="https://github.com/pdalinis/incise/tree/main/plugins/hermes">Hermes Agent</a> and <a href="https://www.npmjs.com/package/pi-incise">Pi</a>.</p>
+    <div class="callout"><strong>Need every command and option?</strong> Run <code>incise --help</code> or <code>incise &lt;command&gt; --help</code>. The <a href="https://github.com/pdalinis/incise#readme">project README</a> covers safety, compatibility, and development.</div>
+  </main>
+  <footer><div class="wrap footer-row"><span>Incise is MIT licensed.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
+</body>
+</html>

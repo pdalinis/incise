@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safe AI-Agent Editing for Obsidian Vaults — Incise</title>
+  <meta name="description" content="Use AI agents to maintain Obsidian and Markdown knowledge bases without incidental rewrites to wikilinks, callouts, embeds, or surrounding notes.">
+  <link rel="canonical" href="https://pdalinis.github.io/incise/obsidian-ai-agent-editing/"><link rel="stylesheet" href="/incise/assets/styles.css">
+  <meta property="og:title" content="Safe AI-agent editing for Obsidian vaults"><meta property="og:description" content="A byte-preserving mutation layer for living Markdown knowledge bases."><meta property="og:url" content="https://pdalinis.github.io/incise/obsidian-ai-agent-editing/">
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
+  <main class="wrap">
+    <div class="eyebrow">Knowledge bases</div><h1>Let agents change a fact without rewriting a note.</h1>
+    <p class="lede">Markdown vaults accumulate wikilinks, block IDs, callouts, embeds, task lists, comments, and personal formatting. Incise targets the structure an agent intends to change and leaves everything else untouched.</p>
+
+    <h2>Where Incise fits</h2>
+    <p>Incise is not a knowledge graph, semantic-search engine, or vault index. Use your preferred agent or retrieval system to decide which file and fact need attention; use Incise as the deterministic mutation layer after that decision.</p>
+
+    <h2>A safer maintenance loop</h2>
+    <ol class="steps"><li>The agent locates the relevant Markdown file.</li><li>Incise exposes only its table, list, heading, or frontmatter structure.</li><li>The agent selects a target by content.</li><li>Incise performs a minimal edit or returns an actionable refusal.</li></ol>
+
+    <h2>Good fits</h2>
+    <div class="grid">
+      <article class="card"><h3>Project dashboards</h3><p>Update status tables and task lists without reformatting the page.</p></article>
+      <article class="card"><h3>Daily notes</h3><p>Toggle tasks or append to a known section while retaining the surrounding journal.</p></article>
+      <article class="card"><h3>Metadata workflows</h3><p>Change nested frontmatter used by publishing, indexing, or automation.</p></article>
+    </div>
+    <p><a class="button" href="/incise/docs/">Install Incise</a></p>
+  </main>
+  <footer><div class="wrap footer-row"><span>Semantic Markdown editing for agents.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
+</body>
+</html>
