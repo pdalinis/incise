@@ -723,6 +723,14 @@ The transport audit observed 39 requests while one pipeline tool was active. Eve
 
 Safety held: all 16 executed edits were correct, used validated current structure, and stopped after one successful mutation; no refusal changed a file and there were no destructive or collateral outcomes. The preregistered adoption gate still failed correctness, per-task, generic-no-regression, route-coverage, and two-phase-request criteria. Exact forced choice is therefore removed from the product profile rather than shipped. The opt-in unforced Pi pipeline remains at its measured 16/21, while the adapter-independent forced-phase ceiling remains 21/21. Default Gemma schemas stayed byte-identical. Artifacts use `bench/results/minicpm5_pi_list_profile_20260922_v3*` and `minicpm5_pi_list_force_analysis_20260922_v3.json`.
 
+## F-minicpm-pi-prompt — invocation rose, content fidelity fell
+
+The final Pi list-profile follow-up was preregistered at `733678f`; treatment `f5a9d24` replaced only the opt-in profile system prompt with compact list-specific framing, and analyzer `640511c` was frozen before sampling. The treatment reached **19/21**, up from the unforced Pi control at 16/21. Five control failures became correct and two control-correct pairs regressed (exact paired McNemar **p = 0.453125**). Against the generic routed control it moved 13/21 to 19/21 with six treatment-only and no control-only pairs (**p = 0.03125**).
+
+The mechanism moved exactly as predicted: all 21 trials invoked `list_select`, all 21 reached the content tool, and all 42 active-phase requests carried the compact prompt with automatic tool choice. The five prior prose-only failures disappeared. But two `add-item-nested-asterisk` trials selected the correct list and exact `after="beta-two"` anchor, then wrote `text="delta"` instead of the requested `beta-three`. That task scored only 1/3. Mean completion increased from 85 to 94 tokens and turns from 2.62 to 3.0.
+
+All writes remained structurally validated and limited to one mutation; there were no destructive or collateral outcomes, and default schemas stayed byte-identical. The preregistered gate nevertheless failed the per-task and no-Pi-control-regression rules. The compact prompt is removed rather than shipped. Under the stopping rule, Pi list prompt/schema tuning ends here: the unforced opt-in profile remains at its measured 16/21, while further improvement requires a different runtime/model or deterministic host-derived list selection rather than another wording variant. Artifacts use `bench/results/minicpm5_pi_list_profile_20260922_v4*` and `minicpm5_pi_list_prompt_analysis_20260922_v4.json`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table

@@ -7,7 +7,6 @@ import test from "node:test";
 
 import type { ExecOptions, ExecResult, ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import inciseExtension from "../extension/index.ts";
-import { MINICPM_LIST_SYSTEM_PROMPT } from "../extension/minicpm-list.ts";
 
 function exec(command: string, args: string[], options: ExecOptions = {}): Promise<ExecResult> {
 	return new Promise((resolve, reject) => {
@@ -137,19 +136,13 @@ test("minicpm-list profile validates two phases and permits one successful write
 		"# Sequential", "", "1. first", "2. second", "3. third", "4. fourth", "",
 	].join("\n"), "utf8");
 	const context = { cwd: directory } as any;
-	const listSummaryResult = await exec(binary, ["lists", path, "--json"]);
-	const listSummary = JSON.parse(listSummaryResult.stdout).text;
 	const prepared = await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: "In @lists.md, insert an item named two and a half between second and third.",
 		systemPrompt: "System.",
 		systemPromptOptions: {},
 	}, context);
-	assert.equal(
-		prepared.systemPrompt,
-		`${MINICPM_LIST_SYSTEM_PROMPT}\n\n${listSummary}\n\nUse list_select once. Copy the exact full heading and ordinal for the requested list.`,
-	);
-	assert.doesNotMatch(prepared.systemPrompt, /expert coding assistant operating inside pi/);
+	assert.match(prepared.systemPrompt, /Lists in/);
 	assert.deepEqual(active.at(-1), ["list_select"]);
 
 	const selected = await tools.get("list_select").execute(
