@@ -59,3 +59,5 @@ A pass licenses the opt-in Pi profile only. It does not change the default, vali
 ## Artifacts
 
 Keep new Pi raw, graded, and analysis pools under `bench/results/minicpm5_pi_list_profile_20260922*`. Record Pi and Incise versions, model identity, active tool at each phase, raw calls and results, path and route decisions, structured validation, hashes, mutation count, tokens, and latency. Never overwrite the adapter-independent integrated pool.
+
+Preflight correction recorded before any valid treatment sample: the first worker invocation passed an empty Pi `tools` array. In Pi 0.85.1 this is an empty allowlist, not merely an initially empty active set, so every dynamically registered profile tool was filtered out. The active trace was empty in all 21 rows and no mutation ran. Preserve the raw, graded, and analysis files at the original names as an invalid harness pool. The corrected worker allowlist is exactly `list_select`, `list_append_item`, `list_insert_after`, and `list_insert_between`; the valid treatment uses the `_v2` suffix. No route, schema, prompt, model, seed, threshold, or executor rule changes.
