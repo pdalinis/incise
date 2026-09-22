@@ -1,0 +1,6 @@
+{"task_id": "add-item-nested-asterisk", "trial": 0, "scheme": "minicpm_list_required_after", "outcome": "correct", "detail": null, "after_from_read": true}
+{"task_id": "add-item-nested-asterisk", "trial": 1, "scheme": "minicpm_list_required_after", "outcome": "correct", "detail": null, "after_from_read": true}
+{"task_id": "add-item-nested-asterisk", "trial": 2, "scheme": "minicpm_list_required_after", "outcome": "correct", "detail": null, "after_from_read": true}
+{"task_id": "add-item-ordered-renumber", "trial": 0, "scheme": "minicpm_list_required_after", "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. two and a half', '5. fourth']", "after_from_read": true}
+{"task_id": "add-item-ordered-renumber", "trial": 1, "scheme": "minicpm_list_required_after", "outcome": "correct", "detail": null, "after_from_read": true}
+{"task_id": "add-item-ordered-renumber", "trial": 2, "scheme": "minicpm_list_required_after", "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. two and a half', '5. fourth']", "after_from_read": true}

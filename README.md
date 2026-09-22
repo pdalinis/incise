@@ -160,6 +160,8 @@ The follow-up classifier is now measured: a two-phase MiniCPM planner recovered 
 
 A planner-only follow-up using request-language labels also failed (0/12 exact plans). MiniCPM copied section anchors reliably, but it did not reliably distinguish sibling placement from subsection placement or body text from named nested headings. Further schema-only section routing is therefore not planned.
 
+List placement responds better to request-shaped routing. After `list_get`, requiring an exact returned anchor solved 3/3 explicit-after insertions; requiring both adjacent boundaries solved 3/3 between-item insertions. These are small, model-specific evaluation results, not default tool changes.
+
 ## Measured with small models
 
 The recorded benchmark compares direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader.
