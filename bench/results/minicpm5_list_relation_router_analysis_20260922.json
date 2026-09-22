@@ -1,0 +1,73 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_list_between_20260922_graded.jsonl": "845e8bc6e1cc343f872fee63f5a90847347cfb2aa39a761aaf670812f9bf3926",
+    "bench/results/minicpm5_list_relation_router_20260922.jsonl": "5c79efb8e985176ea3760541a72b965883744335c34130f3c789c761ba7fe4ea",
+    "bench/results/minicpm5_list_relation_router_20260922_graded.jsonl": "db5b44cb7e616b0465df77d5364721871cf6f008c9c37f64d51fa564bb410266",
+    "bench/results/minicpm5_list_required_after_20260922_graded.jsonl": "25cb66d4451b658e163ef50913eb34b482031461bd7c7593c427067581f56f4c",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "efficiency": {
+    "mean_completion_tokens": 85.67,
+    "mean_elapsed_s": 3.06,
+    "read_mean_completion_tokens": 53.17,
+    "route_mean_completion_tokens": 32.5
+  },
+  "gate": {
+    "at_least_five_correct_documents": true,
+    "at_least_five_correct_relations": false,
+    "each_task_correct_in_two_seeds": true,
+    "executed_calls_passed_validation": true,
+    "no_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T00:49:27.630322+00:00",
+  "model": "minicpm5-2b-q8",
+  "paired_vs_generic": {
+    "control_correct": 0,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.03125,
+    "treatment_correct": 6,
+    "treatment_only": 6
+  },
+  "paired_vs_oracle_ceiling": {
+    "control_correct": 6,
+    "control_only": 0,
+    "exact_mcnemar_p": 1.0,
+    "treatment_correct": 6,
+    "treatment_only": 0
+  },
+  "pairs": 6,
+  "preregistration_commit": "e105bb4",
+  "relation_selection": {
+    "by_task": {
+      "add-item-nested-asterisk": 3,
+      "add-item-ordered-renumber": 0
+    },
+    "correct": 3,
+    "total": 6
+  },
+  "sampling_harness_sha256": [
+    "025901a24cdaf56f3daf4df6bf75ba52f9e703ba17f083b4316764c3b8884424"
+  ],
+  "schema_sha256": {
+    "list_get": [
+      "b64c37abab6d5fe0763f30e480cd2d2a4fd0d8044cb1481950c1d540f9560af0"
+    ],
+    "relation_tools": [
+      "0e0a99369dc0fd1d27bb72408fb57b1fd74371cf32dcfa51a81c33fa1dfffe46",
+      "2a6f89c417016ab6682c15335866bcafa6a0fe6ebc23f884e1ce15482ee86568"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-nested-asterisk": {
+      "correct": 3
+    },
+    "add-item-ordered-renumber": {
+      "correct": 3
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 6
+  }
+}

@@ -162,6 +162,8 @@ A planner-only follow-up using request-language labels also failed (0/12 exact p
 
 List placement responds better to request-shaped routing. After `list_get`, requiring an exact returned anchor solved 3/3 explicit-after insertions; requiring both adjacent boundaries solved 3/3 between-item insertions. These are small, model-specific evaluation results, not default tool changes.
 
+When both list-placement tools were exposed together, final edits reached 6/6, but MiniCPM always chose the after-style tool; the preregistered routing gate therefore failed. The result supports exact dynamic anchors, not autonomous relation routing.
+
 ## Measured with small models
 
 The recorded benchmark compares direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader.
