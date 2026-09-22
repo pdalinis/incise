@@ -795,6 +795,16 @@ The correction is mechanical but benchmark-relevant: when the prompt begins with
 
 Artifacts: gemma_section_insert_route_v2_20260922.jsonl (SHA-256 0c23d30329559737dcae970f6a5f208726ae2b81405e4f1ea9f2fa8d9d4178d4), its graded pool (SHA-256 27fbc3558cf557b9b8e1cb0cf2d58763e7ca54f2a573e80e714d7a2eb8819ea7), and analysis (SHA-256 77ae637c06fd5fc88b1595499f11b259f4c0586bfa7d25122be678f98a6128fd).
 
+## F-gemma-section-insert-v3 — exact host-owned trees pass
+
+The request-boundary correction was frozen at 81fa634 and implemented at 4e7c889. It changed only which part of Incise structural-summary framing the already frozen v2 literal parser reads.
+
+V3 scored 40/40: every one of the four insertion tasks reached 10/10, versus 28/40 in v1 and 4/40 in the current full-profile-v2 fallback. Against v1 there were twelve treatment-only wins and no regressions, with exact paired McNemar p = 0.00048828125. There were zero harmful outcomes, route errors, model-argument errors, resolved-argument errors, multiple mutations, or transports.
+
+The mechanism is now explicit: when the request itself provides every heading and body literally, the adapter can own the complete insertion tree and expose a zero-argument confirmation tool. This removes path copying, placement selection, invented root prose, and redundant body prefixes from the model task. Ambiguous or non-literal requests still fall back. The targeted pass licenses a new full 480-pair composition run, not adoption by itself.
+
+Artifacts: gemma_section_insert_route_v3_20260922.jsonl (SHA-256 223f7c9f1f6766b4ff47edf180b3195c7bc6d2b44e675e15ee1b444bf6555e9b), its graded pool (SHA-256 0395300f4c8a0b4c300f2ce58ba23df3e43a42ddb0c7d37c6ebb04338654e50e), and analysis (SHA-256 9be9e035acf78025039bc608739e2dd4e546c75568a783f7876773bb3a2f33e3).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
