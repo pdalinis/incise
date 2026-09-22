@@ -21,6 +21,18 @@ class RequiredAfterTests(unittest.TestCase):
             schema["parameters"]["properties"]["after"]["enum"],
             ["alpha", "beta-two"])
 
+    def test_between_schema_requires_both_exact_boundaries(self):
+        schema = treatment.between_schema(["second", "third"])
+        self.assertEqual(set(schema["parameters"]["properties"]), {
+            "text", "after", "before",
+        })
+        self.assertEqual(schema["parameters"]["required"], [
+            "text", "after", "before",
+        ])
+        self.assertEqual(
+            schema["parameters"]["properties"]["before"]["enum"],
+            ["second", "third"])
+
     def test_exact_item_texts_preserve_order_and_dedupe(self):
         report = {"items": [
             {"text": "one"}, {"text": "two"}, {"text": "one"},
@@ -88,6 +100,32 @@ class RequiredAfterTests(unittest.TestCase):
         self.assertTrue(row["after_from_read"])
         args = json.loads(row["composed_operation"]["function"]["arguments"])
         self.assertEqual(args["after"], "beta-two")
+
+    def test_between_requires_ordered_adjacent_siblings(self):
+        task = self.task("add-item-ordered-renumber")
+        read_args = {
+            "path": task["fixture"], "list": {"heading": "Sequential"},
+        }
+        report = {"items": [
+            {"text": "first", "depth": 0, "parent": None},
+            {"text": "second", "depth": 0, "parent": None},
+            {"text": "third", "depth": 0, "parent": None},
+        ]}
+        content = {
+            "text": "two and a half", "after": "second", "before": "third",
+        }
+        call, validated, error = treatment.compose_between(
+            task, read_args, report, content, ["first", "second", "third"])
+        self.assertTrue(validated)
+        self.assertIsNone(error)
+        self.assertEqual(
+            json.loads(call["function"]["arguments"])["after"], "second")
+        content["after"], content["before"] = "third", "second"
+        call, validated, error = treatment.compose_between(
+            task, read_args, report, content, ["first", "second", "third"])
+        self.assertIsNone(call)
+        self.assertFalse(validated)
+        self.assertIn("not adjacent and ordered", error)
 
 
 if __name__ == "__main__":
