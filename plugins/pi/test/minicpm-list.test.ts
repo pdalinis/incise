@@ -5,6 +5,7 @@ import {
 	composeListAdd,
 	contentSchema,
 	extractMarkdownPath,
+	forceToolChoice,
 	parseListSummary,
 	routeListRequest,
 	selectEntry,
@@ -18,6 +19,39 @@ const ITEMS: ListItem[] = [
 	{ text: "third", depth: 0, parent: null, checked: null },
 	{ text: "fourth", depth: 0, parent: null, checked: null },
 ];
+
+test("forces the expected function without mutating or changing other provider fields", () => {
+	const source = {
+		model: "minicpm5-2b-q8",
+		messages: [{ role: "user", content: "Edit the list." }],
+		tools: [
+			{ type: "function", function: { name: "list_select", parameters: { type: "object" } } },
+			{ type: "function", function: { name: "unrelated_tool" } },
+		],
+		temperature: 0.7,
+	};
+	const before = structuredClone(source);
+	const forced = forceToolChoice(source, "list_select");
+	assert.equal(forced.present, true);
+	assert.deepEqual(forced.payload, {
+		...source,
+		tool_choice: { type: "function", function: { name: "list_select" } },
+	});
+	assert.deepEqual(source, before);
+});
+
+test("fails closed when the expected function is absent", () => {
+	const forced = forceToolChoice({
+		model: "minicpm5-2b-q8",
+		tools: [{ type: "function", function: { name: "another_tool" } }],
+	}, "list_select");
+	assert.equal(forced.present, false);
+	assert.deepEqual(forced.payload, {
+		model: "minicpm5-2b-q8",
+		tools: [],
+		tool_choice: { type: "function", function: { name: "list_select" } },
+	});
+});
 
 test("extracts exactly one explicit markdown path and refuses ambiguity", () => {
 	assert.equal(extractMarkdownPath("Edit `docs/guide.md` now."), "docs/guide.md");

@@ -30,6 +30,8 @@ interface PipelineState {
 	items?: ListItem[];
 	hash?: string;
 	successfulMutation: boolean;
+	requiredTool: string;
+	forcedRequests: Array<{ tool: string; present: boolean }>;
 }
 
 export const MINICPM_LIST_TOOL_NAMES = [
@@ -38,6 +40,30 @@ export const MINICPM_LIST_TOOL_NAMES = [
 	"list_insert_after",
 	"list_insert_between",
 ] as const;
+
+export function forceToolChoice(
+	payload: unknown,
+	expected: string,
+): { payload: unknown; present: boolean } {
+	const choice = { type: "function", function: { name: expected } };
+	if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+		return { payload: { tools: [], tool_choice: choice }, present: false };
+	}
+	const source = payload as Record<string, unknown>;
+	const tools = Array.isArray(source.tools) ? source.tools : [];
+	const present = tools.some((raw) => {
+		if (!raw || typeof raw !== "object" || Array.isArray(raw)) return false;
+		const fn = (raw as Record<string, unknown>).function;
+		return Boolean(fn && typeof fn === "object" && !Array.isArray(fn) &&
+			(fn as Record<string, unknown>).name === expected);
+	});
+	return {
+		payload: present
+			? { ...source, tool_choice: choice }
+			: { ...source, tools: [], tool_choice: choice },
+		present,
+	};
+}
 
 export function extractMarkdownPath(prompt: string): string | undefined {
 	const found = new Set<string>();
@@ -272,6 +298,7 @@ export function installMiniCpmListProfile(
 				const result = await withFileMutationQueue(state.path, call);
 				if (result.code !== 0 || result.payload.ok === false) throw processError(result);
 				state.successfulMutation = true;
+				state.requiredTool = "";
 				pi.setActiveTools([]);
 				return toolResult(String(result.payload.description ?? ""), {
 					exitCode: result.code,
@@ -280,6 +307,7 @@ export function installMiniCpmListProfile(
 					changed: Boolean(result.payload.changed),
 					route: state.route,
 					validated: true,
+					forcedProviderRequests: [...state.forcedRequests],
 				});
 			},
 		});
@@ -313,6 +341,7 @@ export function installMiniCpmListProfile(
 				state.items = items;
 				state.hash = result.payload.hash;
 				const next = contentSchema(state.route, items);
+				state.requiredTool = next.name;
 				registerContentTool(next);
 				pi.setActiveTools([next.name]);
 				return toolResult(String(result.payload.text ?? ""), {
@@ -321,6 +350,7 @@ export function installMiniCpmListProfile(
 					list: result.payload.list,
 					route: state.route,
 					validated: true,
+					forcedProviderRequests: [...state.forcedRequests],
 				});
 			},
 		});
@@ -352,6 +382,8 @@ export function installMiniCpmListProfile(
 			route: routeListRequest(event.prompt),
 			entries,
 			successfulMutation: false,
+			requiredTool: "list_select",
+			forcedRequests: [],
 		};
 		const schema = selectionSchema(entries);
 		registerSelectionTool(schema);
@@ -359,5 +391,12 @@ export function installMiniCpmListProfile(
 		return {
 			systemPrompt: `${event.systemPrompt}\n\n${text}\n\nUse list_select once. Copy the exact full heading and ordinal for the requested list.`,
 		};
+	});
+
+	pi.on("before_provider_request", (event) => {
+		if (!state?.requiredTool) return undefined;
+		const forced = forceToolChoice(event.payload, state.requiredTool);
+		state.forcedRequests.push({ tool: state.requiredTool, present: forced.present });
+		return forced.payload;
 	});
 }

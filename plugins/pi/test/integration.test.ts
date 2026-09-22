@@ -144,12 +144,42 @@ test("minicpm-list profile validates two phases and permits one successful write
 	}, context);
 	assert.match(prepared.systemPrompt, /Lists in/);
 	assert.deepEqual(active.at(-1), ["list_select"]);
+	const providerBase = {
+		model: "minicpm5-2b-q8",
+		messages: [{ role: "user", content: "Insert the item." }],
+		tools: [{ type: "function", function: { name: "list_select" } }],
+		temperature: 0.7,
+	};
+	assert.deepEqual(
+		events.get("before_provider_request")({
+			type: "before_provider_request",
+			payload: providerBase,
+		}),
+		{
+			...providerBase,
+			tool_choice: { type: "function", function: { name: "list_select" } },
+		},
+	);
 
 	const selected = await tools.get("list_select").execute(
 		"select", { heading: "Sequential", ordinal: 0 }, undefined, undefined, context,
 	);
 	assert.match(selected.content[0].text, /text="second"/);
 	assert.deepEqual(active.at(-1), ["list_insert_between"]);
+	const contentProviderBase = {
+		...providerBase,
+		tools: [{ type: "function", function: { name: "list_insert_between" } }],
+	};
+	assert.deepEqual(
+		events.get("before_provider_request")({
+			type: "before_provider_request",
+			payload: contentProviderBase,
+		}),
+		{
+			...contentProviderBase,
+			tool_choice: { type: "function", function: { name: "list_insert_between" } },
+		},
+	);
 
 	const inserted = await tools.get("list_insert_between").execute(
 		"insert",
@@ -161,6 +191,10 @@ test("minicpm-list profile validates two phases and permits one successful write
 	assert.match(inserted.content[0].text, /^Applied:/);
 	assert.equal(inserted.details.validated, true);
 	assert.deepEqual(active.at(-1), []);
+	assert.equal(events.get("before_provider_request")({
+		type: "before_provider_request",
+		payload: contentProviderBase,
+	}), undefined);
 	const once = await readFile(path, "utf8");
 	assert.match(once, /3\. two and a half\n4\. third/);
 
@@ -192,6 +226,20 @@ test("minicpm-list profile validates two phases and permits one successful write
 			"stale", { text: "fifth" }, undefined, undefined, context,
 		),
 		/has changed since it was read/,
+	);
+	const retryProviderBase = {
+		...providerBase,
+		tools: [{ type: "function", function: { name: "list_append_item" } }],
+	};
+	assert.deepEqual(
+		events.get("before_provider_request")({
+			type: "before_provider_request",
+			payload: retryProviderBase,
+		}),
+		{
+			...retryProviderBase,
+			tool_choice: { type: "function", function: { name: "list_append_item" } },
+		},
 	);
 	assert.equal(await readFile(path, "utf8"), externallyChanged);
 });

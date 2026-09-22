@@ -190,6 +190,7 @@ async function run(request, session) {
 	let capped = false;
 	let abortPromise;
 	const activeTools = [];
+	const providerRequests = [];
 	const unsubscribe = session.subscribe((event) => {
 		if (request.recordActiveTools && (event.type === "turn_start" || event.type === "tool_execution_start")) {
 			activeTools.push({ event: event.type, tools: session.getActiveToolNames() });
@@ -204,10 +205,34 @@ async function run(request, session) {
 
 	const started = performance.now();
 	let promptError;
+	const originalFetch = globalThis.fetch;
+	if (request.recordProviderRequests) {
+		globalThis.fetch = async (input, init) => {
+			try {
+				if (typeof init?.body === "string") {
+					const payload = JSON.parse(init.body);
+					if (payload && typeof payload === "object" && Array.isArray(payload.messages)) {
+						providerRequests.push({
+							active_tools: session.getActiveToolNames(),
+							tool_choice: payload.tool_choice ?? null,
+							tools: Array.isArray(payload.tools)
+								? payload.tools.map((tool) => tool?.function?.name ?? null)
+								: [],
+						});
+					}
+				}
+			} catch {
+				// Observation must never alter the provider request or its outcome.
+			}
+			return originalFetch(input, init);
+		};
+	}
 	try {
 		await session.prompt(request.prompt);
 	} catch (error) {
 		if (!capped) promptError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+	} finally {
+		globalThis.fetch = originalFetch;
 	}
 	if (abortPromise) await abortPromise;
 	const elapsedSeconds = (performance.now() - started) / 1000;
@@ -262,6 +287,7 @@ async function run(request, session) {
 			? textOf([...session.state.messages].reverse().find((message) => message.role === "assistant").content)
 			: "",
 		...(request.recordActiveTools ? { active_tools: activeTools } : {}),
+		...(request.recordProviderRequests ? { provider_requests: providerRequests } : {}),
 	};
 }
 

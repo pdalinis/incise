@@ -99,6 +99,7 @@ def worker_request(args, sandbox, task, trial):
         "maxTurns": 4,
         "prompt": prompt_for(task),
         "recordActiveTools": True,
+        "recordProviderRequests": True,
         "model": {
             "id": "minicpm5-2b-q8",
             "name": "openbmb/MiniCPM5-2B Q8_0",
@@ -163,10 +164,33 @@ def validation_report(row):
             content.append(details.get("validated") is True)
             if isinstance(details.get("route"), str):
                 routes.append(details["route"])
+    phase_requests = []
+    for request in row.get("provider_requests", []):
+        active = request.get("active_tools")
+        if (not isinstance(active, list) or len(active) != 1
+                or active[0] not in PROFILE_TOOLS):
+            continue
+        expected = active[0]
+        choice = request.get("tool_choice")
+        actual = None
+        if isinstance(choice, dict) and choice.get("type") == "function":
+            function = choice.get("function")
+            if isinstance(function, dict):
+                actual = function.get("name")
+        phase_requests.append({
+            "expected": expected,
+            "actual": actual,
+            "correct": actual == expected,
+            "advertised": expected in request.get("tools", []),
+        })
     return {
         "selection_validated": bool(selected) and all(selected),
         "content_validated": bool(content) and all(content),
         "reported_routes": routes,
+        "phase_provider_requests": phase_requests,
+        "forced_choice_correct": bool(phase_requests) and all(
+            request["correct"] and request["advertised"]
+            for request in phase_requests),
     }
 
 
@@ -250,6 +274,8 @@ def run_one(args, task, trial):
         "selection_validated": row["selection_validated"],
         "content_validated": row["content_validated"],
         "successful_mutations": row["successful_mutations"],
+        "forced_choice_correct": row["forced_choice_correct"],
+        "phase_provider_request_count": len(row["phase_provider_requests"]),
     }
     return row, graded
 
