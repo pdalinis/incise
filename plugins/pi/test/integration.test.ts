@@ -337,6 +337,37 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(escaped.content[0].text, /a \\\| b/);
 	assert.deepEqual(escaped.details.resolvedArguments.filter, { Case: "escaped pipe" });
 	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const frontmatterPath = join(directory, "frontmatter.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), frontmatterPath);
+	const frontmatterPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @frontmatter.md, the build should run with 8 parallel jobs instead of 4.",
+		systemPrompt: "System.\n\nAvailable tools:\n(none)",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(frontmatterPrepared.systemPrompt, /activated frontmatter_set_integer/);
+	assert.match(frontmatterPrepared.systemPrompt, /build\.jobs/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_set_integer"]);
+	assert.deepEqual(tools.get("frontmatter_set_integer").parameters.required, ["key", "value"]);
+	const frontmatterChanged = await tools.get("frontmatter_set_integer").execute(
+		"frontmatter", { key: "build.jobs", value: 8 }, undefined, undefined, context,
+	);
+	assert.equal(frontmatterChanged.details.route, "frontmatter-typed");
+	assert.deepEqual(frontmatterChanged.details.resolvedArguments, {
+		key: "build.jobs", value: 8, must_exist: true,
+	});
+	assert.match(await readFile(frontmatterPath, "utf8"), /  jobs: 8/);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @frontmatter.md, turn on caching for the build.",
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert(active.has("frontmatter_edit"));
+	assert(!active.has("frontmatter_set_boolean"));
 });
 
 test("auto profile selects once from the active model and reports the decision", async () => {

@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
 	filterColumns,
+	frontmatterValueType,
 	parseOutline,
 	parseTableSummary,
 	requestedTable,
@@ -12,6 +13,27 @@ import {
 	sectionIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
+
+test("frontmatter routing recognizes only the five measured existing-key intents", () => {
+	const supported = new Map<string, string>([
+		["The build should run with 8 parallel jobs instead of 4.", "integer"],
+		["Switch the build from a release build to a debug one.", "string"],
+		["Dana has taken over as a maintainer. Update her entry in the authors list to say so.", "string"],
+		["Blank out the title, but leave the key itself in the frontmatter.", "null"],
+		["This file has gone back to being a draft. Say so in the frontmatter.", "boolean"],
+	]);
+	for (const [prompt, expected] of supported) {
+		assert.equal(frontmatterValueType(prompt), expected, prompt);
+	}
+	for (const prompt of [
+		"Turn on caching for the build.",
+		"This file is no longer a draft. Take the draft flag out of the frontmatter completely.",
+		"Drop the whole build configuration from the frontmatter.",
+		"Update the version to 0.5.0, and set `released` to 2026-09-12.",
+		"Give this file a frontmatter block with a title of Absent frontmatter.",
+		"Mark this file as a draft by adding a draft flag set to true.",
+	]) assert.equal(frontmatterValueType(prompt), undefined, prompt);
+});
 
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
 	assert.deepEqual(

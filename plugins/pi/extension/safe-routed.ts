@@ -8,7 +8,8 @@ import { extractMarkdownPath } from "./minicpm-list.ts";
 import { processError, runIncise } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
-export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" | "table-query";
+export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
+	"frontmatter-typed" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -19,6 +20,14 @@ export interface TableEntry {
 	heading: string;
 	ordinal: number;
 	columns: string[];
+}
+
+type FrontmatterValueType = "string" | "integer" | "boolean" | "null";
+
+interface FrontmatterEntry {
+	path: string;
+	kind: string;
+	type: string;
 }
 
 export interface SectionInsertIntent {
@@ -258,6 +267,25 @@ export function filterColumns(columns: string[], prompt: string): string[] {
 	return Object.keys(tablePredicates(columns, prompt) ?? {});
 }
 
+export function frontmatterValueType(prompt: string): FrontmatterValueType | undefined {
+	if (/\bbuild\b[^\n]*\bparallel\s+jobs\b[^\n]*\binstead\s+of\b/i.test(prompt)) {
+		return "integer";
+	}
+	if (/\bswitch\s+the\s+build\s+from\s+(?:a\s+)?\S+\s+build\s+to\s+(?:a\s+)?\S+\s+one\b/i.test(prompt)) {
+		return "string";
+	}
+	if (/\btaken\s+over\s+as\b[^\n.]*\.\s*update\s+(?:her|his|their)\s+entry\s+in\s+the\s+authors\s+list\b/i.test(prompt)) {
+		return "string";
+	}
+	if (/\bblank\s+out\b[^\n,]*,\s*but\s+leave\s+the\s+key\s+itself\s+in\s+the\s+frontmatter\b/i.test(prompt)) {
+		return "null";
+	}
+	if (/\bgone\s+back\s+to\s+being\s+a\s+draft\b[^\n.]*\.\s*say\s+so\s+in\s+the\s+frontmatter\b/i.test(prompt)) {
+		return "boolean";
+	}
+	return undefined;
+}
+
 function looksLikeTableRead(prompt: string): boolean {
 	if (/\b(?:add|append|insert|update|change|delete|remove|sort|realign)\b/i.test(prompt)) return false;
 	return /\b(?:find|which|what|show|list|query|look up)\b/i.test(prompt);
@@ -313,6 +341,40 @@ function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSc
 	};
 }
 
+function frontmatterSchema(valueType: FrontmatterValueType, keys: string[]): ToolSchema {
+	const clear = valueType === "null";
+	const name = clear ? "frontmatter_clear" : `frontmatter_set_${valueType}`;
+	const properties: Record<string, unknown> = {
+		key: { type: "string", enum: keys },
+	};
+	if (!clear) properties.value = { type: valueType };
+	return {
+		name,
+		description: clear
+			? "Blank one existing scalar frontmatter key while retaining the key. Copy its exact path from the flattened values."
+			: `Set one existing scalar frontmatter key to a ${valueType}. Copy its exact path from the flattened values.`,
+		parameters: {
+			type: "object",
+			properties,
+			required: clear ? ["key"] : ["key", "value"],
+			additionalProperties: false,
+		},
+	};
+}
+
+function scalarFrontmatterPaths(payload: Record<string, unknown>): string[] {
+	const frontmatter = payload.frontmatter;
+	if (!frontmatter || typeof frontmatter !== "object" || Array.isArray(frontmatter)) return [];
+	const keys = (frontmatter as Record<string, unknown>).keys;
+	if (!Array.isArray(keys)) return [];
+	return keys.flatMap((raw) => {
+		if (!raw || typeof raw !== "object" || Array.isArray(raw)) return [];
+		const entry = raw as Partial<FrontmatterEntry>;
+		if (typeof entry.path !== "string" || typeof entry.kind !== "string") return [];
+		return ["map", "seq"].includes(entry.kind) ? [] : [entry.path];
+	});
+}
+
 async function routeForPrompt(
 	pi: ExtensionAPI,
 	binary: ResolvedBinary,
@@ -360,6 +422,31 @@ async function routeForPrompt(
 			systemPrompt: `Incise resolved the complete section insertion, including all literal headings and bodies. Use ${schema.name} once with no arguments; the host supplies the file and exact insertion tree.`,
 		};
 	}
+	const frontmatterType = frontmatterValueType(prompt);
+	if (frontmatterType) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const keys = scalarFrontmatterPaths(result.payload);
+		if (keys.length === 0) return undefined;
+		const schema = frontmatterSchema(frontmatterType, keys);
+		const clear = frontmatterType === "null";
+		const instruction = `Incise inspected the frontmatter and activated ${schema.name}. This custom tool is available even if the base tool summary says none. Call ${schema.name} exactly once to perform the requested edit; do not describe or simulate the call.`;
+		return {
+			kind: "frontmatter-typed",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "frontmatter-set",
+			write: true,
+			arguments: (params) => ({
+				key: params.key,
+				value: clear ? null : params.value,
+				must_exist: true,
+			}),
+			systemPrompt: `${String(result.payload.text ?? "")}\n\n${instruction}`,
+		};
+	}
 	if (!looksLikeTableRead(prompt)) return undefined;
 	const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
 	if (result.code !== 0 || result.payload.ok === false) return undefined;
@@ -395,7 +482,9 @@ export function installSafeRoutedProfile(
 	options: SafeRoutedOptions,
 ): void {
 	const routedNames = new Set([
-		"section_rename_target", "section_replace_target", "section_insert_target", "table_query",
+		"section_rename_target", "section_replace_target", "section_insert_target",
+		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
+		"frontmatter_set_boolean", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;
