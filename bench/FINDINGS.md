@@ -805,6 +805,10 @@ The mechanism is now explicit: when the request itself provides every heading an
 
 Artifacts: gemma_section_insert_route_v3_20260922.jsonl (SHA-256 223f7c9f1f6766b4ff47edf180b3195c7bc6d2b44e675e15ee1b444bf6555e9b), its graded pool (SHA-256 0395300f4c8a0b4c300f2ce58ba23df3e43a42ddb0c7d37c6ebb04338654e50e), and analysis (SHA-256 9be9e035acf78025039bc608739e2dd4e546c75568a783f7876773bb3a2f33e3).
 
+## F-gemma-full-v3 — host-owned insertion passes the full Pi gate
+
+The full-profile v3 plan and harness were frozen after targeted evidence at commit `01c5a6a`; treatment code was frozen at `4e7c889`. One Setext trial hit the preregistered transport retry and then succeeded, leaving all 480 paired trials usable. Against the passing v2 profile, correctness rose from 406/480 to 444/480: 44 treatment-only wins, 6 control-only wins, and two-sided exact McNemar `p = 3.243740565039843e-08`. Harmful outcomes fell from 28 to 18. Family results were tables 60/60, lists 94/100, sections 146/150, frontmatter 84/110, and table reads 60/60. All 100 routed trials were correct, with no tool-surface, filter, insertion-argument, or multiple-mutation errors; all 380 fallback trials retained the standard eight-tool surface. The gate passes and licenses retaining explicit literal section insertion in Gemma `auto`. The next measured opportunity is host-resolved nested frontmatter paths: the remaining frontmatter outcomes include 6 destructive, 8 wrong, and 12 operation errors. List removal remains a separate safety concern. Artifact SHA-256 values: raw `41dd936cb14c61bb5da2c6c9534d618c8ba9681d6d4ca67ba1d651277c5d1544`; graded `f817ff648683bfd480fc699fef66374b19180b685bb1fb0c45b7c69e83e9232c`; analysis `8ee81c7ac77c310d2a4355c1dc5d27ad32e49f4dfdfb6d409119d9bc1fd3d82d`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
