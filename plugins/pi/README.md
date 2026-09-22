@@ -20,6 +20,8 @@ Set `INCISE_PROFILE=safe-small` before starting Pi only to evaluate the experime
 
 Set `INCISE_PROFILE=minicpm-list` to evaluate the MiniCPM-specific list-addition pipeline. Each request must name exactly one Markdown path. Pi activates a required heading-and-ordinal selector, reads the selected list, then activates one append, after, or between content tool with exact current-item constraints. The adapter supplies the file and list address, validates relative anchors, writes with the read hash, and permits at most one successful mutation in that user turn. The adapter-independent arm reached 21/21 supported additions, but the real Pi composition still requires its preregistered live run; keep this profile opt-in. It supports adding list items only.
 
+The preregistered real-Pi run reached 16/21 rather than the adapter-independent arm’s 21/21. Every executed mutation was correct and no document was damaged, but five trials stopped in prose instead of invoking the sole active phase tool. The profile remains evaluation-only pending a forced-tool-choice measurement.
+
 ## Binary resolution
 
 The extension uses `INCISE_BIN` first, then the matching optional native package, then `incise` on `PATH`, and finally a release or debug binary from a development checkout. `/incise-doctor` reports the selected path, versions, schema status, and registered-tool count. Version mismatches from explicit overrides are warnings; a mismatched packaged binary disables the tools as an installation-integrity failure.

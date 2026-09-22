@@ -50,6 +50,21 @@ def mean(data, field):
     return round(sum(values) / len(values), 2) if values else None
 
 
+def successful_content_is_validated(row):
+    results = {
+        result["tool_call_id"]: result for result in row.get("tool_results", [])
+    }
+    successful = []
+    for call in row.get("tool_calls", []):
+        if call.get("function", {}).get("name") not in {
+                "list_append_item", "list_insert_after", "list_insert_between"}:
+            continue
+        result = results.get(call.get("id"))
+        if result is not None and not result.get("is_error"):
+            successful.append((result.get("details") or {}).get("validated") is True)
+    return bool(successful) and all(successful)
+
+
 def localize(raw, graded):
     if graded["outcome"] == "correct":
         return "correct"
@@ -105,7 +120,7 @@ def main():
             raw[key].get("route_correct") is True for key in expected),
         "executed_structure_was_validated": all(
             raw[key].get("selection_validated") is True
-            and raw[key].get("content_validated") is True
+            and successful_content_is_validated(raw[key])
             for key in expected if raw[key].get("successful_mutations", 0) > 0),
         "at_most_one_successful_mutation_per_turn": all(
             raw[key].get("successful_mutations", 0) <= 1 for key in expected),
@@ -139,7 +154,7 @@ def main():
                 any(call.get("function", {}).get("name") == "list_select"
                     for call in row.get("tool_calls", [])) for row in raw.values()),
             "validated_content_calls": sum(
-                row.get("content_validated") is True for row in raw.values()),
+                successful_content_is_validated(row) for row in raw.values()),
             "successful_mutations": sum(
                 row.get("successful_mutations", 0) for row in raw.values()),
         },

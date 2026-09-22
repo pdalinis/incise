@@ -1,0 +1,98 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_pi_list_profile_20260922_v2.jsonl": "b35e5c738b137bc31a71f88c78c2af829fe41b30771594ed81aa72404ff0f8c8",
+    "bench/results/minicpm5_pi_list_profile_20260922_v2_graded.jsonl": "157a1b17eb4ffd3d0881bfa6c6a5e4b4219f0d0820fee68a0b7b7170825bdabc",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "control_outcomes": {
+    "collateral:content": 1,
+    "correct": 13,
+    "op_error": 2,
+    "wrong": 5
+  },
+  "efficiency": {
+    "control_mean_completion_tokens": 116.95,
+    "treatment_mean_completion_tokens": 85.19,
+    "treatment_mean_elapsed_s": 3.59,
+    "treatment_mean_turns": 2.62
+  },
+  "failure_localization": {
+    "content_invocation": 1,
+    "correct": 16,
+    "tool_invocation": 4
+  },
+  "gate": {
+    "all_routes_match_preregistered_mapping": false,
+    "at_least_nineteen_correct": false,
+    "at_most_one_successful_mutation_per_turn": true,
+    "each_task_correct_in_two_seeds": false,
+    "executed_structure_was_validated": true,
+    "no_control_correct_regressed": false,
+    "no_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T01:44:14.305411+00:00",
+  "implementation_commit": "fd1776e",
+  "invocation": {
+    "selection_calls": 17,
+    "successful_mutations": 16,
+    "validated_content_calls": 16
+  },
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 13,
+    "control_only": 3,
+    "exact_mcnemar_p": 0.5078125,
+    "treatment": 16,
+    "treatment_only": 6
+  },
+  "pairs": 21,
+  "pi_version": "0.85.1",
+  "preflight_correction_commit": "9f213b0",
+  "preregistration_commit": "b53a9e9",
+  "source_sha256": {
+    "extension": [
+      "21e63f4cb2f3ea399d86e2135c278b24133cd93da708623bf6eecd8c3e0fd1ed"
+    ],
+    "pipeline": [
+      "fb82e3cbc935c697383b7fae11e8f1b37ca27cec7e5ab63759150397bc88b5a4"
+    ],
+    "worker": [
+      "73994256e0dc3b5311b7a170bfd3ae69b517dba7ff62be043829b2e7a48ae126"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-loose": {
+      "correct": 3
+    },
+    "add-item-mixed-markers": {
+      "correct": 3
+    },
+    "add-item-nested-asterisk": {
+      "correct": 3
+    },
+    "add-item-ordered-all-ones": {
+      "correct": 2,
+      "malformed": 1
+    },
+    "add-item-ordered-renumber": {
+      "correct": 1,
+      "malformed": 2
+    },
+    "add-item-paren-delimiter": {
+      "correct": 2,
+      "malformed": 1
+    },
+    "add-item-tight-dash": {
+      "correct": 2,
+      "wrong": 1
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 16,
+    "malformed": 4,
+    "wrong": 1
+  }
+}
