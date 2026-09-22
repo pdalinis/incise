@@ -26,7 +26,7 @@ EXPECTED = {
         "match": "third",
     },
     "remove-item-mixed": {
-        "list": {"heading": "Nested and mixed lists > Mixed with plain items", "ordinal": 0},
+        "list": {"heading": "Task lists > Mixed with plain items", "ordinal": 0},
         "match": "not a task, just an item",
     },
 }
