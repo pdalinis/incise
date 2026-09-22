@@ -168,7 +168,7 @@ For list selection, separately required `heading` and `ordinal` fields reached 6
 
 A preregistered integrated MiniCPM list pipeline combined structured heading-and-ordinal selection, automatic list inspection, host-owned append/after/between routing, and exact validated anchors. It improved the full supported add-item population from **13/21 to 21/21** (eight treatment-only wins, no regressions, exact McNemar p = 0.0078), with zero destructive or collateral outcomes and mean completion reduced from 117 to 68 tokens. This supports an opt-in MiniCPM integration path; default Gemma tools and schemas remain unchanged.
 
-The first real-Pi run of that profile reached **16/21**, not the direct arm’s 21/21. All 16 executed mutations were correct and no document was damaged, but MiniCPM sometimes answered in prose instead of calling Pi’s sole active tool. The Pi profile therefore remains experimental pending a measured forced-tool-choice follow-up; it is not enabled by default.
+The first real-Pi run of that profile reached **16/21**, not the direct arm’s 21/21. All 16 executed mutations were correct and no document was damaged, but MiniCPM sometimes answered in prose instead of calling Pi’s sole active tool. A preregistered forced-choice follow-up also scored 16/21: all 39 active-phase provider requests carried the exact advertised `tool_choice`, yet the local MiniCPM/llama.cpp path still returned prose on the same five phases. The ineffective forcing behavior was removed. The Pi profile remains experimental and is not enabled by default.
 
 ## Measured with small models
 
@@ -264,4 +264,3 @@ Report potential vulnerabilities through GitHub private vulnerability reporting 
 ## License
 
 Incise is available under the MIT License. See [`LICENSE`](LICENSE).
-
