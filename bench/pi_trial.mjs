@@ -46,20 +46,22 @@ function packageBinary(extensionPath) {
 }
 
 function modelFor(request) {
+	const configured = request.model ?? {};
 	return {
-		id: "gemma4-direct-q8",
-		name: "gemma-4-26B-A4B-it",
+		id: configured.id ?? "gemma4-direct-q8",
+		name: configured.name ?? "gemma-4-26B-A4B-it",
 		api: "openai-completions",
 		provider: "pi-composition-local",
 		baseUrl: request.endpoint.replace(/\/$/, ""),
 		reasoning: false,
 		input: ["text"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-		contextWindow: 65_536,
-		maxTokens: 8_192,
+		contextWindow: configured.contextWindow ?? 65_536,
+		maxTokens: configured.maxTokens ?? 8_192,
 		samplingParams: {
 			seed: request.seed ?? 0,
 			chat_template_kwargs: { enable_thinking: false },
+			...(configured.samplingParams ?? {}),
 		},
 		compat: {
 			maxTokensField: "max_tokens",
@@ -187,7 +189,11 @@ async function run(request, session) {
 	let turnsSeen = 0;
 	let capped = false;
 	let abortPromise;
+	const activeTools = [];
 	const unsubscribe = session.subscribe((event) => {
+		if (request.recordActiveTools && (event.type === "turn_start" || event.type === "tool_execution_start")) {
+			activeTools.push({ event: event.type, tools: session.getActiveToolNames() });
+		}
 		if (event.type !== "turn_end") return;
 		turnsSeen += 1;
 		if (turnsSeen >= request.maxTurns && session.isStreaming && !abortPromise) {
@@ -255,6 +261,7 @@ async function run(request, session) {
 		final_content: [...session.state.messages].reverse().find((message) => message.role === "assistant")
 			? textOf([...session.state.messages].reverse().find((message) => message.role === "assistant").content)
 			: "",
+		...(request.recordActiveTools ? { active_tools: activeTools } : {}),
 	};
 }
 
