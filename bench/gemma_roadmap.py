@@ -313,14 +313,18 @@ def run_one(args, condition, task, trial):
     else:
         config = config_for(condition, task, before)
         extension = TREATMENT_EXTENSION
-        tool_name = {
-            "section_insert": "section_insert_tree",
-            "section_guard": ("section_rename_target" if task["id"] == "rename-closed-atx"
-                              else "section_replace_target"),
-            "frontmatter": ("frontmatter_clear" if FRONTMATTER_TYPES[task["id"]] == "null"
-                            else f"frontmatter_set_{FRONTMATTER_TYPES[task['id']]}") ,
-            "table_query": "table_query",
-        }[condition]
+        if condition == "section_insert":
+            tool_name = "section_insert_tree"
+        elif condition == "section_guard":
+            tool_name = ("section_rename_target"
+                         if task["id"] == "rename-closed-atx"
+                         else "section_replace_target")
+        elif condition == "frontmatter":
+            value_type = FRONTMATTER_TYPES[task["id"]]
+            tool_name = ("frontmatter_clear" if value_type == "null"
+                         else f"frontmatter_set_{value_type}")
+        else:
+            tool_name = "table_query"
         tools = [tool_name]
         prompt = treatment_prompt(task, before, condition)
         max_turns = 2
