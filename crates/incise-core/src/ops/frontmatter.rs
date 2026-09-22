@@ -13,7 +13,7 @@
 //! a document rather than a document.
 
 use crate::describe::{line_counts, plural};
-use crate::error::{OpError, Result};
+use crate::error::{OpError, Repair, Result};
 use crate::front::{find_frontmatter, format_path, parse_path, Entry, Fmt, FrontMatter, Kind, Seg};
 use crate::json::{self, Value};
 use crate::similar::get_close_matches;
@@ -95,6 +95,24 @@ fn check_front_value(value: Option<&Value>) -> Result<Option<&Value>> {
             json::py_repr(v)
         ))),
         Some(v) => Ok(Some(v)),
+    }
+}
+
+/// One host-owned existence precondition.
+///
+/// These flags are deliberately absent from the measured default schema.  A
+/// router that has already classified create versus update intent supplies
+/// them so the model cannot turn an add request into an overwrite merely by
+/// choosing the wrong existing path.
+fn check_existence_flag(name: &str, value: Option<&Value>) -> Result<bool> {
+    match value {
+        None => Ok(false),
+        Some(Value::Bool(b)) => Ok(*b),
+        Some(v) => Err(OpError::new(format!(
+            "`{name}` must be a boolean, but arrived as {}.\n  Got: {}",
+            v.type_name(),
+            json::py_repr(v)
+        ))),
     }
 }
 
@@ -247,8 +265,40 @@ fn holds(entry: &Entry) -> &'static str {
 pub struct FrontKey {
     pub path: String,
     pub kind: &'static str,
+    pub value_type: &'static str,
     pub value: String,
     pub lines: usize,
+}
+
+fn front_value_type(entry: &Entry, fm: &FrontMatter) -> &'static str {
+    match entry.kind {
+        Kind::Map => "object",
+        Kind::Seq => "array",
+        Kind::Block => "string",
+        Kind::Null => "null",
+        Kind::Item if !front_children(fm, &entry.path).is_empty() => "object",
+        Kind::Item | Kind::Scalar => {
+            let value = entry.value.trim();
+            if (value.starts_with('"') && value.ends_with('"'))
+                || (value.starts_with('\'') && value.ends_with('\''))
+            {
+                "string"
+            } else if matches!(
+                value,
+                "true" | "false" | "True" | "False" | "TRUE" | "FALSE"
+            ) {
+                "boolean"
+            } else if value.is_empty() || matches!(value, "null" | "Null" | "NULL" | "~") {
+                "null"
+            } else if value.parse::<i64>().is_ok() {
+                "integer"
+            } else if value.parse::<f64>().is_ok() {
+                "number"
+            } else {
+                "string"
+            }
+        }
+    }
 }
 
 /// The block as structure: present, format, and every path with its value.
@@ -295,6 +345,7 @@ pub fn frontmatter_get(content: &str, key: Option<&Value>) -> Result<FrontState>
             .map(|e| FrontKey {
                 path: format_path(&e.path),
                 kind: e.kind.as_str(),
+                value_type: front_value_type(e, &fm),
                 value: e.value.clone(),
                 lines: e.end - e.line + 1,
             })
@@ -588,7 +639,7 @@ pub fn render_frontmatter_get(content: &str, path: &str, key: Option<&Value>) ->
             Kind::Block => {
                 let body = &lines[e.line + 1..=e.end];
                 out.push(format!(
-                    "  {p:<24} {} block scalar, {}:",
+                    "  {p:<24} [string] {} block scalar, {}:",
                     block_style(e),
                     plural(body.len(), "line")
                 ));
@@ -604,7 +655,8 @@ pub fn render_frontmatter_get(content: &str, path: &str, key: Option<&Value>) ->
             }
             Kind::Scalar => e.value.clone(),
         };
-        out.push(format!("  {p:<24} {what}"));
+        let value_type = front_value_type(e, &fm);
+        out.push(format!("  {p:<24} [{value_type}] {what}"));
     }
     Ok(out.join("\n"))
 }
@@ -681,12 +733,71 @@ pub fn frontmatter_set(
     key: Option<&Value>,
     value: Option<&Value>,
 ) -> Result<String> {
+    frontmatter_set_guarded(content, key, value, None, None)
+}
+
+/// Set one key with optional create-only or update-only semantics.
+///
+/// `must_absent` and `must_exist` are host preconditions, not alternative ways
+/// to address a key.  Calls carrying neither are exactly [`frontmatter_set`].
+pub fn frontmatter_set_guarded(
+    content: &str,
+    key: Option<&Value>,
+    value: Option<&Value>,
+    must_absent: Option<&Value>,
+    must_exist: Option<&Value>,
+) -> Result<String> {
     let fm = front(content, "edits")?;
     let path = check_key(key)?;
     let text = yaml_scalar(check_front_value(value)?);
+    let create_only = check_existence_flag("must_absent", must_absent)?;
+    let update_only = check_existence_flag("must_exist", must_exist)?;
+    if create_only && update_only {
+        return Err(OpError::new(
+            "`must_absent` and `must_exist` cannot both be true.\n  Choose \
+             create-only (`must_absent`) or update-only (`must_exist`).",
+        ));
+    }
     let eol = front_eol(content, &fm);
     // The key as the caller spelled it, for the two refusals that quote it back.
     let raw_key = key.and_then(Value::as_str).unwrap_or("");
+
+    let exists = fm.by_path(&path).is_some();
+    if create_only && exists {
+        let mut repair = Repair::new(
+            "frontmatter_key_exists",
+            "Use a new path for a create intent, or use update-only if replacing this value is intended.",
+        );
+        repair.argument = Some("key".to_string());
+        repair.received = Some(format_path(&path));
+        return Err(OpError::with_repair(
+            format!(
+                "`{}` already exists, but this edit requires an absent frontmatter key.\n  \
+                 Use a new path for a create intent, or use update-only if \
+                 replacing `{}` is intended.",
+                format_path(&path),
+                format_path(&path)
+            ),
+            repair,
+        ));
+    }
+    if update_only && !exists {
+        let mut repair = Repair::new(
+            "frontmatter_key_missing",
+            "Copy an exact path from frontmatter_get, or use create-only if adding a new key is intended.",
+        );
+        repair.argument = Some("key".to_string());
+        repair.received = Some(format_path(&path));
+        return Err(OpError::with_repair(
+            format!(
+                "`{}` does not exist, but this edit requires an existing frontmatter key.\n  \
+                 Copy an exact path from `frontmatter_get`, or use create-only \
+                 if adding a new key is intended.",
+                format_path(&path)
+            ),
+            repair,
+        ));
+    }
 
     if !fm.present {
         if path.len() > 1 {
@@ -741,14 +852,28 @@ pub fn frontmatter_set(
         let settable = matches!(e.kind, Kind::Scalar | Kind::Null)
             || (e.kind == Kind::Item && front_children(&fm, &path).is_empty());
         if !settable {
-            return Err(OpError::new(format!(
-                "`{}` holds {}, so setting it to a single value would delete \
+            let child_keys: Vec<String> = front_children(&fm, &path)
+                .iter()
+                .map(|child| format_path(&child.path))
+                .collect();
+            let mut repair = Repair::new(
+                "would_replace_container",
+                "Set one exact child key instead, or explicitly delete the container first.",
+            );
+            repair.argument = Some("key".to_string());
+            repair.received = Some(format_path(&path));
+            repair.candidates = child_keys;
+            return Err(OpError::with_repair(
+                format!(
+                    "`{}` holds {}, so setting it to a single value would delete \
                  what is under it.\n  Set one of its own keys instead, or \
                  delete `{}` first if replacing it is the intent.",
-                format_path(&path),
-                holds(e),
-                format_path(&path)
-            )));
+                    format_path(&path),
+                    holds(e),
+                    format_path(&path)
+                ),
+                repair,
+            ));
         }
         lines[e.line] = e.rebuilt(Some(&text));
         return Ok(lines.join("\n"));

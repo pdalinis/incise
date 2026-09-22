@@ -2,6 +2,7 @@ import { withFileMutationQueue, type ExtensionAPI } from "@earendil-works/pi-cod
 import type { TSchema } from "typebox";
 
 import { packageVersion, resolveBinary, type ResolvedBinary } from "./binary.ts";
+import { installMiniCpmListProfile, MINICPM_LIST_TOOL_NAMES } from "./minicpm-list.ts";
 import { prepareInvocation, READ_SUBCOMMAND, type ToolArguments } from "./normalize.ts";
 import { binaryVersion, processError, runIncise } from "./runner.ts";
 import { loadMeasuredSchemas, PROMPT_METADATA, STRUCTURAL_READ_SCHEMAS, type ToolSchema } from "./schemas.ts";
@@ -13,10 +14,15 @@ interface Diagnostics {
 	schemas: ToolSchema[];
 	error?: string;
 	fatalMismatch: boolean;
+	registeredTools?: string[];
+	schemasAvailable?: boolean;
 }
 
 function diagnosticText(diagnostics: Diagnostics): string {
-	const registered = diagnostics.schemas.length === 5 && !diagnostics.fatalMismatch
+	const schemasAvailable = diagnostics.schemasAvailable ?? diagnostics.schemas.length > 0;
+	const registered = diagnostics.registeredTools && !diagnostics.fatalMismatch
+		? diagnostics.registeredTools.join(", ")
+		: diagnostics.schemas.length > 0 && !diagnostics.fatalMismatch
 		? [...diagnostics.schemas, ...STRUCTURAL_READ_SCHEMAS].map((schema) => schema.name).join(", ")
 		: "none";
 	const lines = [
@@ -24,7 +30,7 @@ function diagnosticText(diagnostics: Diagnostics): string {
 		`binary: ${diagnostics.binary?.path ?? "not found"}`,
 		`binary source: ${diagnostics.binary?.source ?? "none"}`,
 		`binary version: ${diagnostics.binaryVersion ?? "unknown"}`,
-		`schemas: ${diagnostics.schemas.length === 5 ? "available" : "unavailable"}`,
+		`schemas: ${schemasAvailable ? "available" : "unavailable"}`,
 		`registered tools: ${registered}`,
 	];
 	if (diagnostics.binaryVersion && diagnostics.binaryVersion !== diagnostics.packageVersion) {
@@ -48,7 +54,7 @@ function registerDoctor(pi: ExtensionAPI, diagnostics: Diagnostics): void {
 
 function argvFor(name: string, operation: string, path: string, args: ToolArguments): string[] {
 	const argv = [operation, path];
-	if (!(name in READ_SUBCOMMAND) || name === "table_get") {
+	if (!(name in READ_SUBCOMMAND) || ["table_get", "list_get", "frontmatter_get"].includes(name)) {
 		argv.push("--args", JSON.stringify(args));
 	}
 	return argv;
@@ -93,6 +99,9 @@ function registerTool(pi: ExtensionAPI, binary: ResolvedBinary, schema: ToolSche
 					exitCode: result.code,
 					hash: result.payload.hash,
 					path: result.payload.path ?? invocation.path,
+					rows: result.payload.rows,
+					list: result.payload.list,
+					frontmatter: result.payload.frontmatter,
 				},
 			};
 		},
@@ -100,6 +109,10 @@ function registerTool(pi: ExtensionAPI, binary: ResolvedBinary, schema: ToolSche
 }
 
 export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
+	const configuredProfile = process.env.INCISE_PROFILE ?? "measured";
+	const profile = configuredProfile === "safe-small" ? "safe-small"
+		: configuredProfile === "minicpm-list" ? "minicpm-list"
+		: "measured";
 	const expectedVersion = packageVersion();
 	const binary = resolveBinary();
 	const diagnostics: Diagnostics = {
@@ -122,9 +135,16 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 		registerDoctor(pi, diagnostics);
 		return;
 	}
+	if (profile === "minicpm-list") {
+		diagnostics.schemasAvailable = true;
+		diagnostics.registeredTools = [...MINICPM_LIST_TOOL_NAMES];
+		registerDoctor(pi, diagnostics);
+		installMiniCpmListProfile(pi, binary);
+		return;
+	}
 
 	try {
-		diagnostics.schemas = await loadMeasuredSchemas(pi.exec.bind(pi), binary.path);
+		diagnostics.schemas = await loadMeasuredSchemas(pi.exec.bind(pi), binary.path, profile);
 	} catch (error) {
 		diagnostics.error = error instanceof Error ? error.message : String(error);
 		registerDoctor(pi, diagnostics);
@@ -132,7 +152,8 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 	}
 
 	registerDoctor(pi, diagnostics);
-	for (const schema of [...diagnostics.schemas, ...STRUCTURAL_READ_SCHEMAS]) {
+	const structural = profile === "safe-small" ? [] : STRUCTURAL_READ_SCHEMAS;
+	for (const schema of [...diagnostics.schemas, ...structural]) {
 		registerTool(pi, binary, schema);
 	}
 }

@@ -592,6 +592,8 @@ Requirements for the error contract:
   which matched two. A wrong suggestion is worse than none: it is authoritative
   and the model will follow it.
 
+Machine-readable repair data may accompany a refusal, but never replace or rewrite its human-readable message. Repair metadata uses a stable code plus the relevant argument, received value, copyable candidates, and remedy. Initial typed cases are ambiguous list-item matches, attempted replacement of a frontmatter container, and unconfirmed section-subtree deletion; callers that ignore the additional object continue to receive the original sentence byte-for-byte.
+
 ### 5.4 Token-frugal output
 
 Never echo the document. Default success output is a single confirmation line
@@ -691,6 +693,10 @@ Five decisions `table-get` inherits rather than re-opens:
   structured/renderer split above gives both for free at the call site, and
   §6.2's measured lesson is that an extra argument is a thing the model fills in
   wrongly.
+
+The read surface also includes `list-items` (`list_get` in agent schemas), which resolves one list through the same address path as list edits and returns each exact item text, depth, parent index, and checkbox state. This is the inspect step for placement-sensitive list edits: callers copy an exact returned item into `after` rather than ask the executor to guess. `frontmatter_get` likewise returns flattened paths, kinds, and values so nested and indexed keys can be copied into a later set. Both reads return the current content hash beside their structured result.
+
+Frontmatter leaf results MUST distinguish string, integer, number, boolean, and null values; containers report object or array. A version-like plain scalar containing more than one decimal point, such as `0.5.0`, is a string.
 
 ### 6.2 Table operations
 
@@ -1111,6 +1117,8 @@ Beyond the six: move a section (a delete and an insert that must be one
 transaction), and sort sibling sections. Unmeasured and unimplemented (§11
 Tier 3).
 
+`section-delete` deletes a leaf in one call. If the resolved section has descendants, it MUST refuse before mutation unless the caller supplies `subtree=true`; the refusal MUST report the descendant count and exact descendant paths. This acknowledgement is defense in depth for generic callers. Profiles aimed at small models SHOULD omit section deletion and body replacement entirely unless the task explicitly requires them.
+
 ### 6.4 List operations
 
 **Measured (`bench/FINDINGS.md` L1–L6, 600 trials). Settled at 94/100 with zero
@@ -1192,6 +1200,16 @@ block intact rather than removing the delimiters; and a TOML `+++` block is
 refused by name while tables, sections and lists on the same file keep working.
 `frontmatter_span` accepts `+++` so the other three families skip it correctly,
 which means a frontmatter op has to re-inspect the delimiter itself.
+
+`frontmatter-set` also accepts host-owned `must_absent` and `must_exist`
+preconditions. Omitting both preserves the original set-or-create behavior and
+all existing refusal bytes. `must_absent: true` refuses if the addressed path
+already exists; `must_exist: true` refuses if it does not; setting both refuses.
+These fields are not published in the measured default schema. A router that
+has already classified create versus update intent supplies the precondition so
+a model cannot turn an add request into an overwrite by choosing the wrong
+existing path. A precondition refusal returns no document and carries structured
+repair metadata naming the path and violated condition.
 
 `frontmatter-get` is a **read**, so it is off `apply_op` like `table-get` (§6.1)
 and its failure mode is a false report rather than a damaged document.

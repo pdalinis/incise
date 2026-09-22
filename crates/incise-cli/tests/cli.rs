@@ -638,6 +638,81 @@ fn rows_json_carries_the_structure_the_text_was_rendered_from() {
     assert!(s.is_untouched(), "a read wrote to the file");
 }
 
+#[test]
+fn items_json_carries_copyable_text_nesting_and_checkbox_state() {
+    let s = Scratch::of("lists/nested-mixed.md");
+    let spec = r#"{"list": {"heading": "Asterisk markers, four-space indent"}}"#;
+    let run = s.run(&["items", "@", "--args", spec, "--json"]);
+    assert_eq!(run.code, 0, "{}{}", run.out, run.err);
+
+    let payload = incise_core::json::parse(run.out.trim()).expect("not JSON");
+    let list = payload.get("list").expect("no `list` in the envelope");
+    let items = match list.get("items").unwrap() {
+        incise_core::json::Value::Array(items) => items,
+        other => panic!("items is not an array: {other:?}"),
+    };
+    assert_eq!(items.len(), 5);
+    assert_eq!(items[3].get("text").unwrap().as_str().unwrap(), "beta-two");
+    assert_eq!(
+        items[3].get("depth").unwrap(),
+        &incise_core::json::Value::Int(1)
+    );
+    assert_eq!(
+        items[3].get("parent").unwrap(),
+        &incise_core::json::Value::Int(1)
+    );
+    assert_eq!(
+        items[3].get("checked").unwrap(),
+        &incise_core::json::Value::Null
+    );
+
+    let args = incise_core::json::parse(spec).unwrap();
+    let address = incise_core::ops::list::list_address_fields(
+        incise_core::args::list_address(&args).unwrap().as_ref(),
+    );
+    let got = incise_core::list_get(&s.text(), &address).unwrap();
+    assert_eq!(
+        payload.get("text").unwrap().as_str().unwrap(),
+        incise_core::render_list_items(&got)
+    );
+    assert_eq!(
+        s.run(&[
+            "items",
+            "@",
+            "--list",
+            "Asterisk markers, four-space indent"
+        ])
+        .out,
+        format!("{}\n", incise_core::render_list_items(&got))
+    );
+    assert!(s.is_untouched(), "a read wrote to the file");
+}
+
+#[test]
+fn json_refusals_keep_the_message_and_add_copyable_repair_data() {
+    let s = Scratch::of("sections/deep-nesting.md");
+    let run = s.run(&[
+        "section-delete",
+        "@",
+        "--args",
+        r#"{"section":"Install > macOS"}"#,
+        "--json",
+    ]);
+    assert_eq!(run.code, 1, "{}{}", run.out, run.err);
+    let payload = incise_core::json::parse(run.out.trim()).expect("not JSON");
+    let message = payload.get("error").unwrap().as_str().unwrap();
+    assert!(message.contains("subtree=true"), "{message}");
+    let repair = payload.get("repair").expect("no repair object");
+    assert_eq!(
+        repair.get("code").unwrap().as_str().unwrap(),
+        "subtree_confirmation_required"
+    );
+    assert_eq!(repair.get("argument").unwrap().as_str().unwrap(), "subtree");
+    assert!(strings(repair.get("candidates").unwrap())
+        .contains(&"Deep heading nesting > Install > macOS > Apple Silicon".to_string()));
+    assert!(s.is_untouched(), "a refused deletion wrote to the file");
+}
+
 fn strings(v: &incise_core::json::Value) -> Vec<String> {
     match v {
         incise_core::json::Value::Array(items) => items
@@ -691,6 +766,7 @@ fn keys_json_carries_the_structure_the_text_was_rendered_from() {
     for (j, k) in keys.iter().zip(&got.keys) {
         assert_eq!(j.get("path").unwrap().as_str().unwrap(), k.path);
         assert_eq!(j.get("kind").unwrap().as_str().unwrap(), k.kind);
+        assert_eq!(j.get("type").unwrap().as_str().unwrap(), k.value_type);
         assert_eq!(j.get("value").unwrap().as_str().unwrap(), k.value);
         assert_eq!(
             j.get("lines").unwrap(),
@@ -777,6 +853,31 @@ fn a_frontmatter_edit_gets_the_frontmatter_description() {
         .collect();
     assert_eq!(moved.len(), 1, "more than one line moved: {moved:?}");
     assert_eq!(before.lines().count(), after.lines().count());
+}
+
+#[test]
+fn a_frontmatter_existence_guard_refuses_with_structured_repair() {
+    let s = Scratch::of("frontmatter/rich.md");
+    let run = s.run(&[
+        "frontmatter-set",
+        "@",
+        "--args",
+        r#"{"key":"build.target","value":true,"must_absent":true}"#,
+        "--json",
+    ]);
+    assert_eq!(run.code, 1, "{}{}", run.out, run.err);
+    let payload = incise_core::json::parse(run.out.trim()).expect("not JSON");
+    let repair = payload.get("repair").expect("no repair object");
+    assert_eq!(
+        repair.get("code").unwrap().as_str().unwrap(),
+        "frontmatter_key_exists"
+    );
+    assert_eq!(repair.get("argument").unwrap().as_str().unwrap(), "key");
+    assert_eq!(
+        repair.get("received").unwrap().as_str().unwrap(),
+        "build.target"
+    );
+    assert!(s.is_untouched(), "a refused guarded set wrote to the file");
 }
 
 // --------------------------------------------------------------------------

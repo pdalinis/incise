@@ -695,12 +695,33 @@ pub fn where_arg(args: &Value) -> Result<Option<Value>> {
 /// argument (§6.2). The named-only shape measured 3/10 on positionally-phrased
 /// instructions; accepting both took silent corruption to 0/60 (B6).
 pub fn values(args: &Value, field: &str) -> Result<Option<Value>> {
-    Ok(clean_keys(unstring(
+    let value = clean_keys(unstring(
         args.get(field),
         Expect::ObjectOrArray,
         field,
         false,
-    )?))
+    )?);
+
+    // MiniCPM5 serializes a named row as `[{...}]`. That shape cannot be an
+    // ordered row: ordered cells are scalars, and add-row inserts exactly one
+    // row rather than a batch. Recover the unambiguous named form at the wire
+    // boundary, then let every existing column and cell check run unchanged.
+    //
+    // Keep this on the shipping `values` spelling. The Python oracle also
+    // accepts `row` solely to replay the rejected scheme_d benchmark, and
+    // widening that historical alias would change evidence for a form the
+    // product deliberately does not expose.
+    if field == "values" {
+        if let Some(Value::Array(mut items)) = value {
+            if items.len() == 1 && matches!(items.first(), Some(Value::Object(_))) {
+                // Run key cleanup again: before unwrapping, the object was
+                // nested beneath an array and therefore was not visited.
+                return Ok(clean_keys(Some(items.remove(0))));
+            }
+            return Ok(Some(Value::Array(items)));
+        }
+    }
+    Ok(value)
 }
 
 #[cfg(test)]

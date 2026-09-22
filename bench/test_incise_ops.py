@@ -367,6 +367,27 @@ def test_ordered_values():
     _, err = apply_op(content, "table-add-row", {"table": addr})
     check("supplying neither refuses", bool(err), (err or "")[:80])
 
+    wrapped_args = {
+        "table": addr,
+        "values": [{"Default": "i", "Left": "j", "Center": "k", "Right": "l"}],
+    }
+    before_args = json.loads(json.dumps(wrapped_args))
+    wrapped, err = apply_op(content, "table-add-row", wrapped_args)
+    check("singleton object array is accepted as a named row",
+          not err and wrapped == named, err or "")
+    check("singleton object normalization does not mutate its caller",
+          wrapped_args == before_args, repr(wrapped_args))
+
+    _, err = apply_op(content, "table-add-row", {
+        "table": addr, "values": [{}]})
+    check("wrapped empty named row still refuses as empty",
+          bool(err) and "a row is required" in err, err or "")
+
+    _, err = apply_op(content, "table-add-row", {
+        "table": addr, "values": [{"NoSuchColumn": "x"}]})
+    check("wrapped named row still validates column names",
+          bool(err) and "no column" in err, err or "")
+
 
 def test_string_address():
     """A bare heading string must be equivalent to {"heading": ...}."""
@@ -864,7 +885,7 @@ def test_link_reference_footer():
           not any(LINKREF_RE.match(ln) for ln in body), body[-1])
 
     out, err = apply_op(content, "section-delete",
-                        {"section": "[1.2.0] - 2026-04-01"})
+                        {"section": "[1.2.0] - 2026-04-01", "subtree": True})
     check("and does delete the release",
           not err and "## [1.2.0] - 2026-04-01" not in out, err)
     # Including `[1.2.0]:` itself, now unreferenced. Cleaning that up would mean
@@ -1004,7 +1025,10 @@ def test_section_goldens():
         # did not change, so this test still pins the same bytes.
         after, err = before, None
         for i, ic in enumerate(task["ideal_calls"]):
-            after, err = apply_op(after, ic["op"], ic["args"])
+            args = dict(ic["args"])
+            if ic["op"] == "section-delete":
+                args["subtree"] = True
+            after, err = apply_op(after, ic["op"], args)
             if err:
                 err = f"call {i + 1}: {err}"
                 break
@@ -1038,8 +1062,10 @@ def test_section_grader():
           check_result(task, before, before))
 
     # Deleted the right section, then also lost one nobody asked about.
-    over, err = apply_op(before, "section-delete", {"section": "Install > macOS"})
-    over, err2 = apply_op(over, "section-delete", {"section": "Uninstall"})
+    over, err = apply_op(before, "section-delete",
+                         {"section": "Install > macOS", "subtree": True})
+    over, err2 = apply_op(over, "section-delete",
+                          {"section": "Uninstall", "subtree": True})
     check("grader: an extra deletion grades destructive",
           not err and not err2
           and check_result(task, before, over)[0] == "destructive",
@@ -1054,7 +1080,8 @@ def test_section_grader():
           check_result(task, before, partial))
 
     # The right deletion plus a blank line left behind.
-    good, _ = apply_op(before, "section-delete", {"section": "Install > macOS"})
+    good, _ = apply_op(before, "section-delete",
+                       {"section": "Install > macOS", "subtree": True})
     g = good.split("\n")
     loose = "\n".join(g[:10] + [""] + g[10:])
     check("grader: a stray blank line grades collateral:formatting",
@@ -1172,7 +1199,8 @@ def test_section_spans():
           err or out.split("\n")[9:13])
 
     # Deleting takes the subtree with it.
-    out, err = apply_op(content, "section-delete", {"section": "Install"})
+    out, err = apply_op(content, "section-delete",
+                        {"section": "Install", "subtree": True})
     left = [s.text for s in find_sections(out)] if not err else []
     for gone in ("Apple Silicon", "Intel", "Debian", "Fedora", "Windows"):
         check(f"delete removes subtree member {gone!r}", gone not in left)
@@ -1615,7 +1643,7 @@ def test_describe_change():
         # The one that has to carry a warning: `delete` on a section with
         # children removes four headings, and the response says so.
         (api, "section-delete",
-         {"section": "API reference > Accounts > list"},
+         {"section": "API reference > Accounts > list", "subtree": True},
          ['removed the section "list"', "3 sections nested under it"],
          ["added"]),
     ]
@@ -1923,6 +1951,55 @@ def test_frontmatter_refusals():
                       {"key": "dotted.key", "value": "x"})
     check("a key whose name contains a dot is refused, and explained",
           bool(err) and "dotted.key" in err and "separates" in err,
+          (err or "").replace("\n", " "))
+
+
+def test_frontmatter_existence_guards():
+    """Create/update intent refuses a wrong-path write before bytes can move."""
+    content = "---\nbuild:\n  target: release\n---\n\n# Project\n"
+
+    after, err = apply_op(content, "frontmatter-set", {
+        "key": "build.target", "value": True, "must_absent": True,
+    })
+    check("create-only refuses an existing key",
+          after is None and bool(err) and "requires an absent" in err,
+          (err or "").replace("\n", " "))
+
+    after, err = apply_op(content, "frontmatter-set", {
+        "key": "build.cache", "value": True, "must_exist": True,
+    })
+    check("update-only refuses an absent key",
+          after is None and bool(err) and "requires an existing" in err,
+          (err or "").replace("\n", " "))
+
+    created, err = apply_op(content, "frontmatter-set", {
+        "key": "build.cache", "value": True, "must_absent": True,
+    })
+    ordinary_create, ordinary_err = apply_op(
+        content, "frontmatter-set", {"key": "build.cache", "value": True})
+    check("create-only preserves a valid create",
+          err is None and ordinary_err is None and created == ordinary_create)
+
+    updated, err = apply_op(content, "frontmatter-set", {
+        "key": "build.target", "value": "debug", "must_exist": True,
+    })
+    ordinary_update, ordinary_err = apply_op(
+        content, "frontmatter-set", {"key": "build.target", "value": "debug"})
+    check("update-only preserves a valid update",
+          err is None and ordinary_err is None and updated == ordinary_update)
+
+    _, err = apply_op(content, "frontmatter-set", {
+        "key": "build.cache", "value": True,
+        "must_absent": True, "must_exist": True,
+    })
+    check("contradictory existence guards refuse", bool(err) and "cannot both" in err,
+          (err or "").replace("\n", " "))
+
+    _, err = apply_op(content, "frontmatter-set", {
+        "key": "build.cache", "value": True, "must_absent": "true",
+    })
+    check("existence guards require booleans",
+          bool(err) and "must be a boolean" in err,
           (err or "").replace("\n", " "))
 
 
@@ -2800,7 +2877,7 @@ def main():
                test_describe_change, test_section_crlf,
                test_frontmatter_goldens, test_frontmatter_roundtrip,
                test_frontmatter_touches_one_line, test_frontmatter_states,
-               test_frontmatter_refusals,
+               test_frontmatter_refusals, test_frontmatter_existence_guards,
                test_frontmatter_read, test_frontmatter_read_scheme,
                test_tasks_are_regenerable,
                test_action_check,

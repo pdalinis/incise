@@ -31,10 +31,10 @@ use clap::{Arg, ArgAction, ArgGroup, ArgMatches, Command};
 
 use incise_core::json::Value;
 use incise_core::ops::dispatch::to_address;
-use incise_core::ops::list::render_list_summary;
+use incise_core::ops::list::{list_address_fields, render_list_summary};
 use incise_core::{
-    args, frontmatter_get, render_frontmatter, render_frontmatter_get, render_section_outline,
-    render_table_list, render_table_rows, table_get,
+    args, frontmatter_get, list_get, render_frontmatter, render_frontmatter_get, render_list_items,
+    render_section_outline, render_table_list, render_table_rows, table_get,
 };
 
 mod io;
@@ -87,6 +87,7 @@ fn cli() -> Command {
             "Summarize the document's frontmatter.",
         ))
         .subcommand(rows_subcommand())
+        .subcommand(items_subcommand())
         .subcommand(keys_subcommand())
         .subcommand(
             Command::new("hash")
@@ -104,11 +105,19 @@ fn cli() -> Command {
                      incise to a model should read them from here rather than keep a copy.",
                 )
                 .arg(
+                    Arg::new("profile")
+                        .long("profile")
+                        .value_name("NAME")
+                        .value_parser(["measured", "safe-small"])
+                        .default_value("measured")
+                        .help("Schema composition: measured (default) or safe-small"),
+                )
+                .arg(
                     Arg::new("tool")
                         .long("tool")
                         .value_name("NAME")
-                        .value_parser(schema::TOOLS.to_vec())
-                        .help("Print one tool instead of all five"),
+                        .value_parser(schema::ALL_TOOLS.to_vec())
+                        .help("Print one tool from the selected profile"),
                 ),
         )
 }
@@ -194,6 +203,23 @@ fn rows_subcommand() -> Command {
         .group(
             ArgGroup::new("per-key")
                 .args(["table", "ordinal", "filter"])
+                .multiple(true),
+        )
+        .mut_arg("args", |a| a.conflicts_with("per-key"))
+        .mut_arg("args-file", |a| a.conflicts_with("per-key"))
+}
+
+/// Resolve one list and expose the item text a caller needs for a subsequent
+/// content-addressed edit.
+fn items_subcommand() -> Command {
+    read_subcommand("items", "Show a list's items.")
+        .arg(args_arg())
+        .arg(args_file_arg())
+        .arg(flag_arg(flag_named("list")))
+        .arg(ordinal_arg())
+        .group(
+            ArgGroup::new("per-key")
+                .args(["list", "ordinal"])
                 .multiple(true),
         )
         .mut_arg("args", |a| a.conflicts_with("per-key"))
@@ -328,6 +354,7 @@ fn run(m: &ArgMatches) -> i32 {
         Some(("lists", s)) => read(s, View::Lists),
         Some(("front", s)) => read(s, View::Front),
         Some(("rows", s)) => read(s, View::Rows),
+        Some(("items", s)) => read(s, View::Items),
         Some(("keys", s)) => read(s, View::Keys),
         Some(("hash", s)) => hash(s),
         Some(("schema", s)) => print_schema(s),
@@ -342,7 +369,7 @@ fn run(m: &ArgMatches) -> i32 {
             let json = std::env::args().any(|a| a == "--json");
             let f = Format { json, quiet: false };
             match incise_core::apply_op("", other, None) {
-                Err(e) => out::refusal(&f, e.message()),
+                Err(e) => out::refusal_error(&f, &e),
                 // Unreachable: the guard above claims every name in OPS.
                 Ok(_) => EXIT_USAGE,
             }
@@ -414,6 +441,14 @@ fn edit(op: &str, m: &ArgMatches) -> i32 {
         Ok(v) => v,
         Err(msg) => return out::usage(&f, &msg),
     };
+    if op == "table-add-row"
+        && std::env::var_os("INCISE_DEBUG").is_some()
+        && args.get("values").is_some_and(is_singleton_object_array)
+    {
+        eprintln!(
+            "incise debug: normalized table-add-row values from singleton object array to named row object"
+        );
+    }
 
     let bytes = match io::read_bytes(&path) {
         Ok(b) => b,
@@ -436,7 +471,7 @@ fn edit(op: &str, m: &ArgMatches) -> i32 {
     }
 
     match incise_core::apply_op(&before, op, Some(&args)) {
-        Err(e) => out::refusal(&f, e.message()),
+        Err(e) => out::refusal_error(&f, &e),
         Ok(after) => {
             let changed = after != before;
             let dry = m.get_flag("dry-run");
@@ -468,6 +503,16 @@ fn edit(op: &str, m: &ArgMatches) -> i32 {
             };
             out::success(&f, &description, &hash, changed, written, &path)
         }
+    }
+}
+
+fn is_singleton_object_array(value: &Value) -> bool {
+    match value {
+        Value::Array(items) => items.len() == 1 && matches!(items.first(), Some(Value::Object(_))),
+        Value::Str(text) => incise_core::json::parse(text.trim())
+            .as_ref()
+            .is_some_and(is_singleton_object_array),
+        _ => false,
     }
 }
 
@@ -532,6 +577,7 @@ enum View {
     Lists,
     Front,
     Rows,
+    Items,
     Keys,
 }
 
@@ -573,15 +619,30 @@ fn read(m: &ArgMatches, view: View) -> i32 {
             // cannot come to disagree about what an address means.
             let address = match args::address(&args) {
                 Ok(v) => to_address(v),
-                Err(e) => return out::refusal(&f, e.message()),
+                Err(e) => return out::refusal_error(&f, &e),
             };
             // The structure first, then the renderer over it. `render_table_get`
             // would read the table a second time to produce the same rows.
             let got = match table_get(&content, &address, args.get("filter")) {
                 Ok(r) => r,
-                Err(e) => return out::refusal(&f, e.message()),
+                Err(e) => return out::refusal_error(&f, &e),
             };
             return out::rows_view(&f, &render_table_rows(&got), &got, &hash, &path);
+        }
+        View::Items => {
+            let args = match collect_items_args(m) {
+                Ok(v) => v,
+                Err(msg) => return out::usage(&f, &msg),
+            };
+            let address = match args::list_address(&args) {
+                Ok(value) => list_address_fields(value.as_ref()),
+                Err(e) => return out::refusal_error(&f, &e),
+            };
+            let got = match list_get(&content, &address) {
+                Ok(items) => items,
+                Err(e) => return out::refusal_error(&f, &e),
+            };
+            return out::items_view(&f, &render_list_items(&got), &got, &hash, &path);
         }
         View::Keys => {
             let args = match collect_keys_args(m) {
@@ -594,14 +655,14 @@ fn read(m: &ArgMatches, view: View) -> i32 {
             let key = args.get("key");
             let got = match frontmatter_get(&content, key) {
                 Ok(g) => g,
-                Err(e) => return out::refusal(&f, e.message()),
+                Err(e) => return out::refusal_error(&f, &e),
             };
             let text = match render_frontmatter_get(&content, &shown, key) {
                 Ok(t) => t,
                 // Unreachable while the two agree: the renderer's only refusals
                 // come from the call above. Answered rather than asserted
                 // because the core owns which of them refuses first.
-                Err(e) => return out::refusal(&f, e.message()),
+                Err(e) => return out::refusal_error(&f, &e),
             };
             return out::keys_view(&f, &text, &got, &hash, &path);
         }
@@ -651,6 +712,29 @@ fn collect_rows_args(m: &ArgMatches) -> Result<Value, String> {
     Ok(Value::Object(pairs))
 }
 
+fn collect_items_args(m: &ArgMatches) -> Result<Value, String> {
+    if let Some(v) = raw_args(m)? {
+        return Ok(v);
+    }
+    let mut pairs: Vec<(String, Value)> = Vec::new();
+    if let Some(heading) = m.get_one::<String>("list") {
+        let address = match m.get_one::<i64>("ordinal") {
+            None => Value::Str(heading.clone()),
+            Some(ordinal) => Value::Object(vec![
+                ("heading".to_string(), Value::Str(heading.clone())),
+                ("ordinal".to_string(), Value::Int(*ordinal)),
+            ]),
+        };
+        pairs.push(("list".to_string(), address));
+    } else if m.get_one::<i64>("ordinal").is_some() {
+        return Err(
+            "--ordinal says which list sharing that heading, so it needs --list beside it."
+                .to_string(),
+        );
+    }
+    Ok(Value::Object(pairs))
+}
+
 /// `keys` builds its object the way `collect_rows_args` does, and for the same
 /// reason: `opargs::build` would offer this command eighteen keys it has no
 /// argument for.
@@ -694,12 +778,15 @@ fn hash(m: &ArgMatches) -> i32 {
 }
 
 fn print_schema(m: &ArgMatches) -> i32 {
+    let profile = m
+        .get_one::<String>("profile")
+        .map(String::as_str)
+        .unwrap_or("measured");
     match m.get_one::<String>("tool") {
-        None => println!("{}", schema::SCHEMAS),
-        Some(name) => match schema::one(name) {
+        None => println!("{}", schema::profile(profile)),
+        Some(name) => match schema::one_in(profile, name) {
             Some(one) => println!("{one}"),
-            // Unreachable: clap's value_parser holds it to `schema::TOOLS`.
-            None => return out::EXIT_USAGE,
+            None => return out::usage(&format_of(m), "tool is not part of the selected profile"),
         },
     }
     out::EXIT_OK

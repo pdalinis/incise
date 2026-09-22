@@ -378,7 +378,61 @@ pub const SCHEMAS: &str = r#"[
   }
 ]"#;
 
+/// Optional composition for models that benefit from one operation per tool
+/// and from inspecting exact structure before editing.  Unlike [`SCHEMAS`],
+/// this is explicitly an evaluation candidate rather than a measured default.
+/// Keeping it behind `--profile safe-small` prevents a promising compatibility
+/// profile from silently rewriting the product condition whose results are
+/// recorded in `bench/FINDINGS.md`.
+const SAFE_SMALL_OBJECTS: &[(&str, &str)] = &[
+    (
+        "md_tables",
+        r#"{"name":"md_tables","description":"List markdown tables and their exact headings, ordinals, columns, and row counts. Inspect before a table edit.","parameters":{"type":"object","properties":{"path":{"type":"string","description":"Markdown file to inspect."}},"required":["path"]}}"#,
+    ),
+    (
+        "table_add_row",
+        r#"{"name":"table_add_row","description":"Add one row to a markdown table. Inspect with md_tables first and copy the table address and column names exactly.","parameters":{"type":"object","properties":{"path":{"type":"string"},"table":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]},"values":{"description":"Named row object, or scalar values in column order."},"position":{"type":"string","enum":["end","start"]}},"required":["path","table","values"]}}"#,
+    ),
+    (
+        "table_update_cell",
+        r#"{"name":"table_update_cell","description":"Update one cell in exactly one markdown table row. Copy table and column spellings from structural reads.","parameters":{"type":"object","properties":{"path":{"type":"string"},"table":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]},"where":{"type":"object","additionalProperties":{"type":"string"}},"column":{"type":"string"},"value":{"type":"string"}},"required":["path","table","where","column","value"]}}"#,
+    ),
+    (
+        "md_lists",
+        r#"{"name":"md_lists","description":"List markdown lists and their exact headings, ordinals, kinds, nesting levels, and item counts. Use list_get to inspect actual item text.","parameters":{"type":"object","properties":{"path":{"type":"string"}},"required":["path"]}}"#,
+    ),
+    (
+        "list_get",
+        r#"{"name":"list_get","description":"Read one markdown list's exact item text, depth, parent index, and checkbox state. Use this before list_add_item when placement depends on an existing item.","parameters":{"type":"object","properties":{"path":{"type":"string"},"list":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]}},"required":["path","list"]}}"#,
+    ),
+    (
+        "list_add_item",
+        r#"{"name":"list_add_item","description":"Add one markdown list item. Copy an exact existing item from list_get into after when nesting or placement matters.","parameters":{"type":"object","properties":{"path":{"type":"string"},"list":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]},"text":{"type":"string"},"after":{"type":"string"},"position":{"type":"string","enum":["end","start"]},"checked":{"type":"boolean"}},"required":["path","list","text"]}}"#,
+    ),
+    (
+        "md_outline",
+        r#"{"name":"md_outline","description":"Read markdown heading paths, levels, ordinals, body presence, and descendant counts before a section edit.","parameters":{"type":"object","properties":{"path":{"type":"string"}},"required":["path"]}}"#,
+    ),
+    (
+        "section_insert",
+        r#"{"name":"section_insert","description":"Insert one new markdown section. parent is the existing section used as the placement anchor; use position last-child for a subsection.","parameters":{"type":"object","properties":{"path":{"type":"string"},"parent":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]},"position":{"type":"string","enum":["before","after","first-child","last-child"]},"new_heading":{"type":"string"},"body":{"type":"string"}},"required":["path","parent","position","new_heading"]}}"#,
+    ),
+    (
+        "section_append",
+        r#"{"name":"section_append","description":"Append text to one existing markdown section while preserving its current body and subsections.","parameters":{"type":"object","properties":{"path":{"type":"string"},"section":{"type":"object","properties":{"heading":{"type":"string"},"ordinal":{"type":"integer"}},"required":["heading"]},"text":{"type":"string"}},"required":["path","section","text"]}}"#,
+    ),
+    (
+        "frontmatter_get",
+        r#"{"name":"frontmatter_get","description":"Read flattened, copyable frontmatter paths with types and values. Inspect before setting a nested key or sequence item.","parameters":{"type":"object","properties":{"path":{"type":"string"},"key":{"type":"string","description":"Optional dotted path or indexed subtree to narrow the read."}},"required":["path"]}}"#,
+    ),
+    (
+        "frontmatter_set",
+        r#"{"name":"frontmatter_set","description":"Set one exact frontmatter path. Copy nested and indexed paths from frontmatter_get; do not guess a parent path.","parameters":{"type":"object","properties":{"path":{"type":"string"},"key":{"type":"string"},"value":{}},"required":["path","key","value"]}}"#,
+    ),
+];
+
 /// The tool names, in the order `SCHEMAS` lists them.
+#[allow(dead_code)]
 pub const TOOLS: &[&str] = &[
     "table_edit",
     "list_edit",
@@ -386,6 +440,64 @@ pub const TOOLS: &[&str] = &[
     "frontmatter_edit",
     "table_get",
 ];
+
+pub const SAFE_SMALL_TOOLS: &[&str] = &[
+    "md_tables",
+    "table_get",
+    "table_add_row",
+    "table_update_cell",
+    "md_lists",
+    "list_get",
+    "list_add_item",
+    "md_outline",
+    "section_insert",
+    "section_append",
+    "frontmatter_get",
+    "frontmatter_set",
+];
+
+pub const ALL_TOOLS: &[&str] = &[
+    "table_edit",
+    "list_edit",
+    "section_edit",
+    "frontmatter_edit",
+    "table_get",
+    "md_tables",
+    "table_add_row",
+    "table_update_cell",
+    "md_lists",
+    "list_get",
+    "list_add_item",
+    "md_outline",
+    "section_insert",
+    "section_append",
+    "frontmatter_get",
+    "frontmatter_set",
+];
+
+pub fn profile(name: &str) -> String {
+    if name == "measured" {
+        return SCHEMAS.to_string();
+    }
+    let objects: Vec<String> = SAFE_SMALL_TOOLS
+        .iter()
+        .filter_map(|tool| one_in("safe-small", tool))
+        .collect();
+    format!("[\n{}\n]", objects.join(",\n"))
+}
+
+pub fn one_in(profile: &str, name: &str) -> Option<String> {
+    if profile == "measured" {
+        return one(name);
+    }
+    if name == "table_get" {
+        return one(name);
+    }
+    SAFE_SMALL_OBJECTS
+        .iter()
+        .find(|(tool, _)| *tool == name)
+        .map(|(_, schema)| (*schema).to_string())
+}
 
 /// One tool's definition, as the substring of [`SCHEMAS`] that is its object.
 ///
@@ -439,5 +551,31 @@ mod tests {
             section.contains("\"description\": \"File to edit.\""),
             "`path` stopped meaning the file"
         );
+    }
+
+    #[test]
+    fn safe_small_is_opt_in_and_contains_only_narrow_writes() {
+        let parsed = incise_core::json::parse(&profile("safe-small")).unwrap();
+        let names: Vec<&str> = match parsed {
+            incise_core::json::Value::Array(ref tools) => tools
+                .iter()
+                .map(|tool| tool.get("name").unwrap().as_str().unwrap())
+                .collect(),
+            _ => panic!("safe-small profile is not an array"),
+        };
+        assert_eq!(names, SAFE_SMALL_TOOLS);
+        for excluded in [
+            "section_edit",
+            "section_delete",
+            "section_replace_body",
+            "frontmatter_edit",
+            "frontmatter_delete",
+        ] {
+            assert!(
+                !names.contains(&excluded),
+                "unsafe generic tool {excluded} leaked"
+            );
+        }
+        assert_eq!(profile("measured"), SCHEMAS);
     }
 }

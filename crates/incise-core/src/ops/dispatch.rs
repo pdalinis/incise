@@ -38,11 +38,11 @@
 use crate::args;
 use crate::error::{OpError, Result};
 use crate::json::{self, Value};
-use crate::ops::frontmatter::{frontmatter_delete, frontmatter_set};
+use crate::ops::frontmatter::{frontmatter_delete, frontmatter_set_guarded};
 use crate::ops::list::{list_add_item, list_remove_item, list_set_checked, ListAddress};
 use crate::ops::section::{
-    section_address_fields, section_append, section_delete, section_insert, section_rename,
-    section_replace_body, section_set_level, SectionAddress,
+    section_address_fields, section_append, section_insert, section_rename, section_replace_body,
+    section_set_level, SectionAddress,
 };
 use crate::ops::table::{
     table_add_row, table_delete_row, table_realign, table_update_cell, TableAddress, Values,
@@ -237,7 +237,8 @@ pub fn apply_op(content: &str, op: &str, args: Option<&Value>) -> Result<String>
         }
         "section-delete" => {
             let address = to_section_address(args::section_address(a)?);
-            section_delete(content, &address)
+            let confirm_subtree = a.get("subtree").is_some_and(json::py_truthy);
+            crate::ops::section::section_delete_confirmed(content, &address, confirm_subtree)
         }
         // `text` IS a spelling of the new name here, because a rename has no
         // body for it to mean instead.
@@ -268,7 +269,13 @@ pub fn apply_op(content: &str, op: &str, args: Option<&Value>) -> Result<String>
         // silently mean `frontmatter-set key null`. `Option<&Value>` already
         // says that — `None` is absent, `Some(Value::Null)` is the null — so
         // the distinction needs no sentinel here.
-        "frontmatter-set" => frontmatter_set(content, a.get("key"), a.get("value")),
+        "frontmatter-set" => frontmatter_set_guarded(
+            content,
+            a.get("key"),
+            a.get("value"),
+            a.get("must_absent"),
+            a.get("must_exist"),
+        ),
         "frontmatter-delete" => frontmatter_delete(content, a.get("key")),
         _ => unreachable!("op was checked against OPS above"),
     }
@@ -486,6 +493,72 @@ mod tests {
         // which it used to name and which this crate refuses.
         assert!(msg(Value::Array(vec![s("a")]))
             .starts_with("`values` is an array of 1, but the table has 3 columns"));
+    }
+
+    #[test]
+    fn singleton_object_array_is_the_named_row_without_mutating_arguments() {
+        let named = obj(&[("Component", s("gadget")), ("Status", s("active"))]);
+        let wrapped = obj(&[("values", Value::Array(vec![named.clone()]))]);
+        let direct = obj(&[("values", named)]);
+        let before = wrapped.clone();
+
+        let a = apply_op(DOC, "table-add-row", Some(&wrapped)).unwrap();
+        let b = apply_op(DOC, "table-add-row", Some(&direct)).unwrap();
+        assert_eq!(a, b);
+        assert_eq!(wrapped, before);
+
+        let empty = apply_op(
+            DOC,
+            "table-add-row",
+            Some(&obj(&[("values", Value::Array(vec![obj(&[])]))])),
+        )
+        .unwrap_err();
+        assert!(empty.message().starts_with("a row is required"));
+    }
+
+    #[test]
+    fn deleting_a_parent_requires_explicit_subtree_confirmation() {
+        let doc = "# Root\n\n## Parent\n\nBody.\n\n### Child\n\nChild body.\n\n## Keep\n";
+        let base = obj(&[("section", s("Parent"))]);
+        let refused = apply_op(doc, "section-delete", Some(&base)).unwrap_err();
+        assert!(refused.message().contains("1 descendant section"));
+        assert!(refused.message().contains("\"Root > Parent > Child\""));
+        assert!(refused.message().contains("subtree=true"));
+        let repair = refused.repair().expect("structured repair missing");
+        assert_eq!(repair.code, "subtree_confirmation_required");
+        assert_eq!(repair.argument.as_deref(), Some("subtree"));
+        assert_eq!(repair.candidates, ["Root > Parent > Child"]);
+
+        let confirmed = obj(&[("section", s("Parent")), ("subtree", Value::Bool(true))]);
+        let out = apply_op(doc, "section-delete", Some(&confirmed)).unwrap();
+        assert!(!out.contains("Parent") && !out.contains("Child"));
+        assert!(out.contains("Keep"));
+
+        // Leaf deletion keeps the common one-call path.
+        let leaf = obj(&[("section", s("Child"))]);
+        let out = apply_op(doc, "section-delete", Some(&leaf)).unwrap();
+        assert!(!out.contains("Child"));
+        assert!(out.contains("Parent") && out.contains("Keep"));
+    }
+
+    #[test]
+    fn frontmatter_existence_guards_are_host_owned_preconditions() {
+        let doc = "---\nbuild:\n  target: release\n---\n\n# Project\n";
+        let args = obj(&[
+            ("key", s("build.target")),
+            ("value", Value::Bool(true)),
+            ("must_absent", Value::Bool(true)),
+        ]);
+        let refused = apply_op(doc, "frontmatter-set", Some(&args)).unwrap_err();
+        assert_eq!(
+            refused.repair().map(|repair| repair.code.as_str()),
+            Some("frontmatter_key_exists")
+        );
+
+        let unguarded = obj(&[("key", s("build.target")), ("value", Value::Bool(true))]);
+        assert!(apply_op(doc, "frontmatter-set", Some(&unguarded))
+            .unwrap()
+            .contains("target: true"));
     }
 
     /// And the converse: `position` is raw, so a missing table outranks it.

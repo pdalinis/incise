@@ -374,7 +374,14 @@ def build():
         calls = args if isinstance(args, list) else [{"op": op, "args": args}]
         after = before
         for i, c in enumerate(calls):
-            after, err = apply_op(after, c["op"], c["args"])
+            execute_args = dict(c["args"])
+            # Historical task bytes predate the subtree acknowledgement. The
+            # task explicitly says "including everything in it", so the
+            # reference execution confirms that intent without rewriting the
+            # frozen ideal-call record used by earlier result pools.
+            if c["op"] == "section-delete":
+                execute_args["subtree"] = True
+            after, err = apply_op(after, c["op"], execute_args)
             if err:
                 raise SystemExit(
                     f"{tid}: reference implementation refused call {i + 1}: {err}")

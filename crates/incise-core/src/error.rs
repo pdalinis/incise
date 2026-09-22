@@ -9,15 +9,44 @@
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct OpError(pub String);
+pub struct Repair {
+    pub code: String,
+    pub argument: Option<String>,
+    pub received: Option<String>,
+    pub candidates: Vec<String>,
+    pub remedy: String,
+}
+
+impl Repair {
+    pub fn new(code: impl Into<String>, remedy: impl Into<String>) -> Self {
+        Repair {
+            code: code.into(),
+            argument: None,
+            received: None,
+            candidates: Vec::new(),
+            remedy: remedy.into(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OpError(pub String, pub Option<Box<Repair>>);
 
 impl OpError {
     pub fn new(msg: impl Into<String>) -> Self {
-        OpError(msg.into())
+        OpError(msg.into(), None)
+    }
+
+    pub fn with_repair(msg: impl Into<String>, repair: Repair) -> Self {
+        OpError(msg.into(), Some(Box::new(repair)))
     }
 
     pub fn message(&self) -> &str {
         &self.0
+    }
+
+    pub fn repair(&self) -> Option<&Repair> {
+        self.1.as_deref()
     }
 }
 

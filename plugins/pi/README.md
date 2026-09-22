@@ -16,6 +16,10 @@ Prebuilt binaries are provided for macOS arm64/x64 and glibc Linux arm64/x64. Wi
 
 The package registers `table_edit`, `list_edit`, `section_edit`, `frontmatter_edit`, `table_get`, `md_tables`, `md_lists`, and `md_outline`. Inspect document structure with the relevant read tool before editing, and follow the remedy in any Incise refusal.
 
+Set `INCISE_PROFILE=safe-small` before starting Pi only to evaluate the experimental small-model composition. It exposes `md_tables`, `table_get`, `table_add_row`, `table_update_cell`, `md_lists`, `list_get`, `list_add_item`, `md_outline`, `section_insert`, `section_append`, `frontmatter_get`, and `frontmatter_set`. It intentionally omits generic multi-action tools and destructive section/frontmatter operations. A preregistered MiniCPM5 run found a significant list-addition gain but section and frontmatter regressions, including 0/27 correct frontmatter trials, so this profile is not recommended for general use. Without the environment variable, Pi registers the measured default composition.
+
+Set `INCISE_PROFILE=minicpm-list` to evaluate the MiniCPM-specific list-addition pipeline. Each request must name exactly one Markdown path. Pi activates a required heading-and-ordinal selector, reads the selected list, then activates one append, after, or between content tool with exact current-item constraints. The adapter supplies the file and list address, validates relative anchors, writes with the read hash, and permits at most one successful mutation in that user turn. The adapter-independent arm reached 21/21 supported additions, but the real Pi composition still requires its preregistered live run; keep this profile opt-in. It supports adding list items only.
+
 ## Binary resolution
 
 The extension uses `INCISE_BIN` first, then the matching optional native package, then `incise` on `PATH`, and finally a release or debug binary from a development checkout. `/incise-doctor` reports the selected path, versions, schema status, and registered-tool count. Version mismatches from explicit overrides are warnings; a mismatched packaged binary disables the tools as an installation-integrity failure.

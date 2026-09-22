@@ -23,7 +23,8 @@ use incise_core::ops::frontmatter::{
     describe_frontmatter_change, frontmatter_get, render_frontmatter, render_frontmatter_get,
 };
 use incise_core::ops::list::{
-    list_lists, render_list_summary, resolve_item, resolve_list, ListAddress,
+    list_get, list_lists, render_list_get, render_list_summary, resolve_item, resolve_list,
+    ListAddress,
 };
 use incise_core::ops::section::{
     render_section_outline, resolve_section, section_outline, SectionAddress,
@@ -569,9 +570,10 @@ fn run(content: &str, op: &str, a: &Args) -> (&'static str, String) {
             )];
             for k in &got.keys {
                 dump.push(format!(
-                    "{}|{}|{}|{}",
+                    "{}|{}|{}|{}|{}",
                     k.path,
                     k.kind,
+                    k.value_type,
                     esc(&k.value),
                     k.lines
                 ));
@@ -600,6 +602,35 @@ fn run(content: &str, op: &str, a: &Args) -> (&'static str, String) {
             "ok",
             render_list_summary(content, a.get("path").map(String::as_str).unwrap_or("")),
         ),
+        "list_get" => {
+            let address = list_address(a);
+            let got = match list_get(content, &address) {
+                Ok(got) => got,
+                Err(e) => return ("err", e.0),
+            };
+            let text = match render_list_get(content, &address) {
+                Ok(text) => text,
+                Err(e) => return ("err", e.0),
+            };
+            let mut dump = vec![format!(
+                "{}|{}|{}",
+                got.heading,
+                got.ordinal,
+                got.items.len()
+            )];
+            for item in &got.items {
+                dump.push(format!(
+                    "{}|{}|{}|{}",
+                    esc(&item.text),
+                    item.depth,
+                    opt(item.parent.map(|value| value.to_string())),
+                    opt(item.checked.map(|value| value.to_string()))
+                ));
+            }
+            dump.push("--".to_string());
+            dump.push(text);
+            ("ok", dump.join("\n"))
+        }
         // The section outline, field by field, and its rendering one case
         // below. The render is the section family's prompt context, so a
         // divergence in it is a divergence in what a model was measured on.
