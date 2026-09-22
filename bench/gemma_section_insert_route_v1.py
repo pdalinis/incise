@@ -21,6 +21,12 @@ from stats import mcnemar_exact  # noqa: E402
 
 TASKS = roadmap.SECTION_INSERT_TASKS
 TOOL = "section_insert_target"
+EXPECTED_ANCHORS = {
+    "insert-release-at-top": "Changelog > [1.4.2] - 2026-08-14",
+    "insert-subsection-last": "Deep heading nesting > Install",
+    "insert-nested-ratelimits": "Deep heading nesting > Reference > API",
+    "insert-troubleshooting": "Deep heading nesting",
+}
 FULL_TOOLS = roadmap.BASELINE_TOOLS + [
     "section_rename_target", "section_replace_target", TOOL, "table_query",
 ]
@@ -100,7 +106,7 @@ def run_one(args, task, trial):
         "initial_sha256": pi_bench.sha256_bytes(before.encode()),
         "final_sha256": pi_bench.sha256_bytes(after.encode()),
         "final_document": after,
-        "expected_anchor": ideal["section"],
+        "expected_anchor": EXPECTED_ANCHORS[task["id"]],
         "expected_position": ideal["position"],
     }
     outcome, detail = pi_bench.grade_actual(task, row, before, after)

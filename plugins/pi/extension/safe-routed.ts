@@ -8,7 +8,7 @@ import { extractMarkdownPath } from "./minicpm-list.ts";
 import { processError, runIncise } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
-export type SafeRouteKind = "section-rename" | "section-replace-body" | "table-query";
+export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -19,6 +19,12 @@ export interface TableEntry {
 	heading: string;
 	ordinal: number;
 	columns: string[];
+}
+
+export interface SectionInsertIntent {
+	target: string;
+	position: "before" | "last-child";
+	shape: "body" | "one-child" | "two-children";
 }
 
 interface RouteSpec {
@@ -85,6 +91,79 @@ export function resolveOutlineTarget(entries: OutlineEntry[], requested: string)
 			parts.every((part, index) => candidate[candidate.length - parts.length + index] === part);
 	});
 	return matches.length === 1 ? matches[0].path : undefined;
+}
+
+function insertionAnchor(prompt: string): {
+	requested: string;
+	position: "before" | "last-child";
+} | undefined {
+	const before = prompt.match(/\bimmediately\s+(?:above|before)\s+the\s+([^\n]+?)\s+(?:release|section)\b/i);
+	if (before) return { requested: before[1].trim(), position: "before" };
+	const under = prompt.match(/\bunder\s+(?:the\s+)?([^\n,]+?),\s*add\b/i);
+	if (under) {
+		return {
+			requested: under[1].trim().replace(/\s+section$/i, ""),
+			position: "last-child",
+		};
+	}
+	const end = prompt.match(/\bat\s+the\s+end\s+of\s+([^\n,]+?),\s*add\b/i);
+	if (end) return { requested: end[1].trim(), position: "last-child" };
+	return undefined;
+}
+
+function resolveInsertionAnchor(entries: OutlineEntry[], requested: string): string | undefined {
+	const exact = resolveOutlineTarget(entries, requested);
+	if (exact) return exact;
+	if (!/^\[[^\]]+\]$/.test(requested)) return undefined;
+	const matches = entries.filter((entry) => entry.heading.startsWith(`${requested} `));
+	return matches.length === 1 ? matches[0].path : undefined;
+}
+
+export function sectionInsertIntent(
+	prompt: string,
+	entries: OutlineEntry[],
+): SectionInsertIntent | undefined {
+	if (!/\badd\b/i.test(prompt) || !/\b(?:section|subsection)\b/i.test(prompt)) return undefined;
+	const anchor = insertionAnchor(prompt);
+	if (!anchor) return undefined;
+	const target = resolveInsertionAnchor(entries, anchor.requested);
+	if (!target) return undefined;
+	let shape: SectionInsertIntent["shape"];
+	if (/\bwith\s+two\s+subsections\s*:/i.test(prompt)) {
+		shape = "two-children";
+	} else if (/\bgive\s+it\s+(?:an?|the)\s+[^\n.]+?\s+subsection\b/i.test(prompt)) {
+		shape = "one-child";
+	} else if (/\bsubsection\b[^\n]*\bsaying\s+["“`]/i.test(prompt)) {
+		shape = "body";
+	} else {
+		return undefined;
+	}
+	return { target, position: anchor.position, shape };
+}
+
+export function sectionInsertArguments(
+	intent: SectionInsertIntent,
+	params: Record<string, unknown>,
+): Record<string, unknown> {
+	const common = {
+		section: intent.target,
+		position: intent.position,
+		heading: params.new_heading,
+	};
+	if (intent.shape === "body") return { ...common, body: params.body };
+	if (intent.shape === "one-child") {
+		return {
+			...common,
+			children: [{ heading: params.subsection_heading, body: params.subsection_body }],
+		};
+	}
+	return {
+		...common,
+		children: [
+			{ heading: params.first_subsection_heading, body: params.first_subsection_body },
+			{ heading: params.second_subsection_heading, body: params.second_subsection_body },
+		],
+	};
 }
 
 export function parseTableSummary(text: string): TableEntry[] {
@@ -181,6 +260,45 @@ function sectionSchema(kind: "section-rename" | "section-replace-body", target: 
 	};
 }
 
+function sectionInsertSchema(intent: SectionInsertIntent): ToolSchema {
+	const common = { new_heading: { type: "string" } };
+	let properties: Record<string, unknown>;
+	let required: string[];
+	if (intent.shape === "body") {
+		properties = { ...common, body: { type: "string" } };
+		required = ["new_heading", "body"];
+	} else if (intent.shape === "one-child") {
+		properties = {
+			...common,
+			subsection_heading: { type: "string" },
+			subsection_body: { type: "string" },
+		};
+		required = ["new_heading", "subsection_heading", "subsection_body"];
+	} else {
+		properties = {
+			...common,
+			first_subsection_heading: { type: "string" },
+			first_subsection_body: { type: "string" },
+			second_subsection_heading: { type: "string" },
+			second_subsection_body: { type: "string" },
+		};
+		required = [
+			"new_heading", "first_subsection_heading", "first_subsection_body",
+			"second_subsection_heading", "second_subsection_body",
+		];
+	}
+	return {
+		name: "section_insert_target",
+		description: `Insert the requested section at the already resolved ${intent.position} position relative to ${JSON.stringify(intent.target)}. Copy every requested heading and body exactly.`,
+		parameters: {
+			type: "object",
+			properties,
+			required,
+			additionalProperties: false,
+		},
+	};
+}
+
 function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSchema {
 	const rendered = Object.entries(filters).map(([column, value]) => `${column}=${JSON.stringify(value)}`).join(", ");
 	return {
@@ -204,23 +322,41 @@ async function routeForPrompt(
 	if (!found) return undefined;
 	const path = resolve(cwd, found);
 	const section = sectionIntent(prompt);
-	if (section) {
+	const mayInsert = insertionAnchor(prompt);
+	if (section || mayInsert) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["outline", path]);
 		if (result.code !== 0 || result.payload.ok === false) return undefined;
-		const target = resolveOutlineTarget(parseOutline(String(result.payload.text ?? "")), section.target);
-		if (!target || typeof result.payload.hash !== "string") return undefined;
-		const schema = sectionSchema(section.kind, target);
+		const entries = parseOutline(String(result.payload.text ?? ""));
+		if (typeof result.payload.hash !== "string") return undefined;
+		if (section) {
+			const target = resolveOutlineTarget(entries, section.target);
+			if (!target) return undefined;
+			const schema = sectionSchema(section.kind, target);
+			return {
+				kind: section.kind,
+				path,
+				hash: result.payload.hash,
+				schema,
+				operation: section.kind === "section-rename" ? "section-rename" : "section-replace-body",
+				write: true,
+				arguments: section.kind === "section-rename"
+					? (params) => ({ section: target, heading: params.new_heading })
+					: (params) => ({ section: target, text: params.body, overwrite: true }),
+				systemPrompt: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
+			};
+		}
+		const insertion = sectionInsertIntent(prompt, entries);
+		if (!insertion) return undefined;
+		const schema = sectionInsertSchema(insertion);
 		return {
-			kind: section.kind,
+			kind: "section-insert",
 			path,
 			hash: result.payload.hash,
 			schema,
-			operation: section.kind === "section-rename" ? "section-rename" : "section-replace-body",
+			operation: "section-insert",
 			write: true,
-			arguments: section.kind === "section-rename"
-				? (params) => ({ section: target, heading: params.new_heading })
-				: (params) => ({ section: target, text: params.body, overwrite: true }),
-			systemPrompt: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
+			arguments: (params) => sectionInsertArguments(insertion, params),
+			systemPrompt: `Incise resolved the insertion anchor to ${JSON.stringify(insertion.target)} with position ${JSON.stringify(insertion.position)}. Use ${schema.name} once; supply only the requested new content fields.`,
 		};
 	}
 	if (!looksLikeTableRead(prompt)) return undefined;
@@ -257,7 +393,9 @@ export function installSafeRoutedProfile(
 	binary: ResolvedBinary,
 	options: SafeRoutedOptions,
 ): void {
-	const routedNames = new Set(["section_rename_target", "section_replace_target", "table_query"]);
+	const routedNames = new Set([
+		"section_rename_target", "section_replace_target", "section_insert_target", "table_query",
+	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;
 

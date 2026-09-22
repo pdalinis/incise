@@ -7,6 +7,8 @@ import {
 	parseTableSummary,
 	requestedTable,
 	resolveOutlineTarget,
+	sectionInsertArguments,
+	sectionInsertIntent,
 	sectionIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
@@ -21,6 +23,63 @@ test("section routing recognizes only explicit rename and body-replacement reque
 		{ kind: "section-replace-body", target: "Upgrade > Linux" },
 	);
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);
+});
+
+test("section insertion routing freezes anchors and exposes only required content shapes", () => {
+	const entries = parseOutline([
+		"Sections in `x.md`:",
+		"  Changelog   (body, 1 subsection)",
+		"    [1.4.2] - 2026-08-14   (body)",
+		"  Deep heading nesting   (body, 2 subsections)",
+		"    Install   (body)",
+		"    Reference   (body, 1 subsection)",
+		"      API   (body)",
+	].join("\n"));
+	const release = sectionInsertIntent(
+		'Add a new release section for version 1.5.0, dated 2026-09-06, immediately above the [1.4.2] release. Give it an Added subsection containing the line "- flag."',
+		entries,
+	);
+	assert.deepEqual(release, {
+		target: "Changelog > [1.4.2] - 2026-08-14",
+		position: "before",
+		shape: "one-child",
+	});
+	assert.deepEqual(sectionInsertIntent(
+		'Under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
+		entries,
+	), {
+		target: "Deep heading nesting > Install",
+		position: "last-child",
+		shape: "body",
+	});
+	const nested = sectionInsertIntent(
+		'Under the API section, add a Rate limits section, and give it a Headers subsection saying "Exact."',
+		entries,
+	);
+	assert.deepEqual(nested, {
+		target: "Deep heading nesting > Reference > API",
+		position: "last-child",
+		shape: "one-child",
+	});
+	assert.deepEqual(sectionInsertIntent(
+		'At the end of Deep heading nesting, add a Troubleshooting section with two subsections: Logs, saying "Log.", and Common errors, saying "FAQ."',
+		entries,
+	), {
+		target: "Deep heading nesting",
+		position: "last-child",
+		shape: "two-children",
+	});
+	assert.deepEqual(sectionInsertArguments(nested!, {
+		new_heading: "Rate limits",
+		subsection_heading: "Headers",
+		subsection_body: "Exact.",
+	}), {
+		section: "Deep heading nesting > Reference > API",
+		position: "last-child",
+		heading: "Rate limits",
+		children: [{ heading: "Headers", body: "Exact." }],
+	});
+	assert.equal(sectionInsertIntent("Add a section somewhere under API.", entries), undefined);
 });
 
 test("outline parsing resolves a unique suffix but refuses an ambiguous leaf", () => {

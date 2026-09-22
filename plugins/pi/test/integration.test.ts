@@ -252,6 +252,29 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.deepEqual([...active], ["foreign_tool"]);
 	assert.match(await readFile(path, "utf8"), /### Closed ATX heading ###/);
 
+	const insertPath = join(directory, "insert.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), insertPath);
+	const insertPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @insert.md, under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(insertPrepared.systemPrompt, /resolved the insertion anchor/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_insert_target"]);
+	const inserted = await tools.get("section_insert_target").execute(
+		"insert", { new_heading: "FreeBSD", body: "Use pkg." }, undefined, undefined, context,
+	);
+	assert.equal(inserted.details.route, "section-insert");
+	assert.deepEqual(inserted.details.resolvedArguments, {
+		section: "Deep heading nesting > Install",
+		position: "last-child",
+		heading: "FreeBSD",
+		body: "Use pkg.",
+	});
+	assert.match(await readFile(insertPath, "utf8"), /### FreeBSD\n\nUse pkg\./);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
 	await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: "Summarize @sections.md without changing it.",
