@@ -4,7 +4,14 @@ import type { TSchema } from "typebox";
 import { packageVersion, resolveBinary, type ResolvedBinary } from "./binary.ts";
 import { installMiniCpmListProfile, MINICPM_LIST_TOOL_NAMES } from "./minicpm-list.ts";
 import { prepareInvocation, READ_SUBCOMMAND, type ToolArguments } from "./normalize.ts";
+import {
+	requestedProfile,
+	selectProfile,
+	type ProfileDecision,
+	type RequestedProfile,
+} from "./profiles.ts";
 import { binaryVersion, processError, runIncise } from "./runner.ts";
+import { installSafeRoutedProfile, type SafeRouteKind } from "./safe-routed.ts";
 import { loadMeasuredSchemas, PROMPT_METADATA, STRUCTURAL_READ_SCHEMAS, type ToolSchema } from "./schemas.ts";
 
 interface Diagnostics {
@@ -16,6 +23,9 @@ interface Diagnostics {
 	fatalMismatch: boolean;
 	registeredTools?: string[];
 	schemasAvailable?: boolean;
+	requestedProfile?: RequestedProfile;
+	profileDecision?: ProfileDecision;
+	activeRoute?: SafeRouteKind | "standard";
 }
 
 function diagnosticText(diagnostics: Diagnostics): string {
@@ -33,6 +43,16 @@ function diagnosticText(diagnostics: Diagnostics): string {
 		`schemas: ${schemasAvailable ? "available" : "unavailable"}`,
 		`registered tools: ${registered}`,
 	];
+	if (diagnostics.requestedProfile) {
+		lines.push(`profile requested: ${diagnostics.requestedProfile}`);
+		lines.push(`profile effective: ${diagnostics.profileDecision?.effective ?? "pending first model-bearing turn"}`);
+	}
+	if (diagnostics.profileDecision) {
+		lines.push(`model: ${diagnostics.profileDecision.model}`);
+		lines.push(`model family: ${diagnostics.profileDecision.family}`);
+		lines.push(`profile reason: ${diagnostics.profileDecision.reason}`);
+	}
+	if (diagnostics.activeRoute) lines.push(`last route: ${diagnostics.activeRoute}`);
 	if (diagnostics.binaryVersion && diagnostics.binaryVersion !== diagnostics.packageVersion) {
 		lines.push(`warning: package ${diagnostics.packageVersion} is using incise ${diagnostics.binaryVersion}`);
 	}
@@ -109,10 +129,6 @@ function registerTool(pi: ExtensionAPI, binary: ResolvedBinary, schema: ToolSche
 }
 
 export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
-	const configuredProfile = process.env.INCISE_PROFILE ?? "measured";
-	const profile = configuredProfile === "safe-small" ? "safe-small"
-		: configuredProfile === "minicpm-list" ? "minicpm-list"
-		: "measured";
 	const expectedVersion = packageVersion();
 	const binary = resolveBinary();
 	const diagnostics: Diagnostics = {
@@ -121,6 +137,15 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 		schemas: [],
 		fatalMismatch: false,
 	};
+	let profile: RequestedProfile;
+	try {
+		profile = requestedProfile(process.env.INCISE_PROFILE);
+		diagnostics.requestedProfile = profile;
+	} catch (error) {
+		diagnostics.error = error instanceof Error ? error.message : String(error);
+		registerDoctor(pi, diagnostics);
+		return;
+	}
 
 	if (!binary) {
 		diagnostics.error = "No Incise binary is available for this platform. Set INCISE_BIN or install incise on PATH.";
@@ -136,6 +161,7 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 		return;
 	}
 	if (profile === "minicpm-list") {
+		diagnostics.profileDecision = selectProfile(profile, undefined);
 		diagnostics.schemasAvailable = true;
 		diagnostics.registeredTools = [...MINICPM_LIST_TOOL_NAMES];
 		registerDoctor(pi, diagnostics);
@@ -144,16 +170,51 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 	}
 
 	try {
-		diagnostics.schemas = await loadMeasuredSchemas(pi.exec.bind(pi), binary.path, profile);
+		diagnostics.schemas = await loadMeasuredSchemas(
+			pi.exec.bind(pi),
+			binary.path,
+			profile === "safe-small" ? "safe-small" : "measured",
+		);
 	} catch (error) {
 		diagnostics.error = error instanceof Error ? error.message : String(error);
 		registerDoctor(pi, diagnostics);
 		return;
 	}
 
-	registerDoctor(pi, diagnostics);
 	const structural = profile === "safe-small" ? [] : STRUCTURAL_READ_SCHEMAS;
-	for (const schema of [...diagnostics.schemas, ...structural]) {
+	const schemas = [...diagnostics.schemas, ...structural];
+	diagnostics.registeredTools = schemas.map((schema) => schema.name);
+	for (const schema of schemas) {
 		registerTool(pi, binary, schema);
 	}
+
+	if (profile !== "auto") diagnostics.profileDecision = selectProfile(profile, undefined);
+	if (profile === "auto" || profile === "safe-routed") {
+		let decision = diagnostics.profileDecision;
+		const familyOverride = profile === "auto" ? process.env.INCISE_MODEL_FAMILY : undefined;
+		if (profile === "auto" && familyOverride) {
+			try {
+				decision = selectProfile(profile, undefined, familyOverride);
+				diagnostics.profileDecision = decision;
+			} catch (error) {
+				diagnostics.error = error instanceof Error ? error.message : String(error);
+			}
+		}
+		if (diagnostics.error) {
+			registerDoctor(pi, diagnostics);
+			return;
+		}
+		installSafeRoutedProfile(pi, binary, {
+			standardTools: schemas.map((schema) => schema.name),
+			isEnabled(ctx) {
+				if (!decision && ctx.model) {
+					decision = selectProfile(profile, ctx.model, familyOverride);
+					diagnostics.profileDecision = decision;
+				}
+				return decision?.effective === "safe-routed";
+			},
+			onRoute(route) { diagnostics.activeRoute = route; },
+		});
+	}
+	registerDoctor(pi, diagnostics);
 }

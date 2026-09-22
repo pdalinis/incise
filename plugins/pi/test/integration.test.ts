@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -194,4 +194,90 @@ test("minicpm-list profile validates two phases and permits one successful write
 		/has changed since it was read/,
 	);
 	assert.equal(await readFile(path, "utf8"), externallyChanged);
+});
+
+test("safe-routed profile resolves section targets and preserves foreign tools", async () => {
+	const repository = resolve(process.cwd(), "..", "..");
+	const binary = resolve(repository, "target", "debug", "incise");
+	const tools = new Map<string, any>();
+	const commands = new Map<string, any>();
+	const events = new Map<string, any>();
+	const active = new Set<string>(["foreign_tool"]);
+	const pi = {
+		exec,
+		registerTool(tool: any) {
+			tools.set(tool.name, tool);
+			active.add(tool.name);
+		},
+		registerCommand(name: string, command: any) { commands.set(name, command); },
+		on(name: string, handler: any) { events.set(name, handler); },
+		getActiveTools() { return [...active]; },
+		setActiveTools(names: string[]) {
+			active.clear();
+			for (const name of names) active.add(name);
+		},
+	} as unknown as ExtensionAPI;
+
+	const previousBinary = process.env.INCISE_BIN;
+	const previousProfile = process.env.INCISE_PROFILE;
+	process.env.INCISE_BIN = binary;
+	process.env.INCISE_PROFILE = "safe-routed";
+	try {
+		await inciseExtension(pi);
+	} finally {
+		if (previousBinary === undefined) delete process.env.INCISE_BIN;
+		else process.env.INCISE_BIN = previousBinary;
+		if (previousProfile === undefined) delete process.env.INCISE_PROFILE;
+		else process.env.INCISE_PROFILE = previousProfile;
+	}
+
+	const directory = await mkdtemp(join(tmpdir(), "pi-incise-safe-routed-"));
+	const path = join(directory, "sections.md");
+	await copyFile(resolve(repository, "corpus", "sections", "setext-and-atx.md"), path);
+	const context = { cwd: directory, model: { id: "unrelated-model" } } as any;
+	const prepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @sections.md, rename "Closed ATX level 3" to "Closed ATX heading".',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(prepared.systemPrompt, /resolved the requested section/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_rename_target"]);
+
+	const renamed = await tools.get("section_rename_target").execute(
+		"rename", { new_heading: "Closed ATX heading" }, undefined, undefined, context,
+	);
+	assert.match(renamed.content[0].text, /^Applied:/);
+	assert.equal(renamed.details.validated, true);
+	assert.deepEqual([...active], ["foreign_tool"]);
+	assert.match(await readFile(path, "utf8"), /### Closed ATX heading ###/);
+
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "Summarize @sections.md without changing it.",
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert(active.has("foreign_tool"));
+	assert(active.has("section_edit"));
+	assert(active.has("md_outline"));
+	assert(!active.has("section_rename_target"));
+	assert.equal(active.size, 9);
+
+	const tablePath = join(directory, "tables.md");
+	await copyFile(resolve(repository, "corpus", "tables", "sortable.md"), tablePath);
+	const tablePrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @tables.md, in the Packages table, find the package that is priority low AND at version 2.0.0. What date was it released?",
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(tablePrepared.systemPrompt, /resolved the requested table/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_query"]);
+	const queried = await tools.get("table_query").execute(
+		"query", { Priority: "low", Version: "2.0.0" }, undefined, undefined, context,
+	);
+	assert.match(queried.content[0].text, /echo/);
+	assert.equal(queried.details.route, "table-query");
+	assert.deepEqual([...active], ["foreign_tool"]);
 });

@@ -140,7 +140,9 @@ pi install npm:pi-incise
 pi
 ```
 
-The package provides native binaries for macOS arm64/x64 and glibc Linux arm64/x64. It registers the three structural readers, `table_get`, and all four structured edit tools. Run `/incise-doctor` inside Pi to inspect the selected binary and schema status.
+The package provides native binaries for macOS arm64/x64 and glibc Linux arm64/x64. The default `standard` profile registers the three structural readers, `table_get`, and all four structured edit tools. Run `/incise-doctor` inside Pi to inspect the selected binary, schemas, tools, and profile decision.
+
+For the experimental model-agnostic router, start Pi with `INCISE_PROFILE=safe-routed`. Its currently measured capabilities resolve exact section rename/body-replacement targets and constrained table reads before exposing one small action-specific tool; other requests retain the standard tools. `INCISE_PROFILE=auto` selects that routed behavior for Gemma and stays on `standard` for model families without a validated general profile. See [`plugins/pi/README.md`](plugins/pi/README.md) for model detection, overrides, and evaluation status.
 
 ## Safety model
 
