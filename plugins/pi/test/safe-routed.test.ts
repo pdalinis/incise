@@ -35,8 +35,14 @@ test("section insertion routing freezes structure and exact literal content", ()
 		"    Reference   (body, 1 subsection)",
 		"      API   (body)",
 	].join("\n"));
+	const framed = (request: string) => [
+		'Sections in `x.md` (address by heading path, e.g. "Deep heading nesting > Install"):',
+		"  Deep heading nesting   (body)",
+		"",
+		request,
+	].join("\n");
 	const release = sectionInsertIntent(
-		'Add a new release section for version 1.5.0, dated 2026-09-06, immediately above the [1.4.2] release. Give it an Added subsection containing the line "- flag."',
+		framed('Add a new release section for version 1.5.0, dated 2026-09-06, immediately above the [1.4.2] release. Give it an Added subsection containing the line "- flag."'),
 		entries,
 	);
 	assert.deepEqual(release, {
@@ -46,7 +52,7 @@ test("section insertion routing freezes structure and exact literal content", ()
 		children: [{ heading: "Added", body: "- flag." }],
 	});
 	assert.deepEqual(sectionInsertIntent(
-		'Under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
+		framed('Under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."'),
 		entries,
 	), {
 		target: "Deep heading nesting > Install",
@@ -55,7 +61,7 @@ test("section insertion routing freezes structure and exact literal content", ()
 		body: "Use pkg.",
 	});
 	const nested = sectionInsertIntent(
-		'Under the API section, add a Rate limits section, and give it a Headers subsection saying "Exact."',
+		framed('Under the API section, add a Rate limits section, and give it a Headers subsection saying "Exact."'),
 		entries,
 	);
 	assert.deepEqual(nested, {
@@ -65,7 +71,7 @@ test("section insertion routing freezes structure and exact literal content", ()
 		children: [{ heading: "Headers", body: "Exact." }],
 	});
 	assert.deepEqual(sectionInsertIntent(
-		'At the end of Deep heading nesting, add a Troubleshooting section with two subsections: Logs, saying "Log.", and Common errors, saying "FAQ."',
+		framed('At the end of Deep heading nesting, add a Troubleshooting section with two subsections: Logs, saying "Log.", and Common errors, saying "FAQ."'),
 		entries,
 	), {
 		target: "Deep heading nesting",

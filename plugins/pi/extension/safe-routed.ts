@@ -121,27 +121,35 @@ function resolveInsertionAnchor(entries: OutlineEntry[], requested: string): str
 	return matches.length === 1 ? matches[0].path : undefined;
 }
 
+function sectionInsertionRequest(prompt: string): string {
+	const framed = prompt.match(
+		/^Sections in `[^`]+` \(address by heading path,[\s\S]*?\r?\n\r?\n/,
+	);
+	return framed ? prompt.slice(framed[0].length) : prompt;
+}
+
 export function sectionInsertIntent(
 	prompt: string,
 	entries: OutlineEntry[],
 ): SectionInsertIntent | undefined {
-	if (!/\badd\b/i.test(prompt) || !/\b(?:section|subsection)\b/i.test(prompt)) return undefined;
-	const anchor = insertionAnchor(prompt);
+	const request = sectionInsertionRequest(prompt);
+	if (!/\badd\b/i.test(request) || !/\b(?:section|subsection)\b/i.test(request)) return undefined;
+	const anchor = insertionAnchor(request);
 	if (!anchor) return undefined;
 	const target = resolveInsertionAnchor(entries, anchor.requested);
 	if (!target) return undefined;
-	const release = prompt.match(
+	const release = request.match(
 		/\badd\s+a\s+new\s+release\s+section\s+for\s+version\s+([0-9A-Za-z.+-]+),\s*dated\s+(\d{4}-\d{2}-\d{2}),/i,
 	);
-	const ordinary = prompt.match(/,\s*add\s+(?:an?|the)\s+(.+?)\s+(?:section|subsection)\b/i);
+	const ordinary = request.match(/,\s*add\s+(?:an?|the)\s+(.+?)\s+(?:section|subsection)\b/i);
 	const heading = release
 		? `[${release[1].replace(/^\[|\]$/g, "")}] - ${release[2]}`
 		: ordinary?.[1]?.trim();
 	if (!heading) return undefined;
-	const quoted = [...prompt.matchAll(/"([^"]+)"|“([^”]+)”/g)]
+	const quoted = [...request.matchAll(/"([^"]+)"|“([^”]+)”/g)]
 		.map((match) => (match[1] ?? match[2]).trim());
-	if (/\bwith\s+two\s+subsections\s*:/i.test(prompt)) {
-		const children = prompt.match(
+	if (/\bwith\s+two\s+subsections\s*:/i.test(request)) {
+		const children = request.match(
 			/\bwith\s+two\s+subsections\s*:\s*([^,\n]+),\s*saying\s+(?:"[^"]+"|“[^”]+”)\s*,\s*and\s+([^,\n]+),\s*saying\s+(?:"[^"]+"|“[^”]+”)/i,
 		);
 		if (!children || quoted.length !== 2) return undefined;
@@ -155,7 +163,7 @@ export function sectionInsertIntent(
 			],
 		};
 	}
-	const child = prompt.match(/\bgive\s+it\s+(?:an?|the)\s+([^\n.]+?)\s+subsection\b/i);
+	const child = request.match(/\bgive\s+it\s+(?:an?|the)\s+([^\n.]+?)\s+subsection\b/i);
 	if (child) {
 		if (quoted.length !== 1) return undefined;
 		return {
@@ -165,7 +173,7 @@ export function sectionInsertIntent(
 			children: [{ heading: child[1].trim(), body: quoted[0] }],
 		};
 	}
-	if (/\bsubsection\b[^\n]*\bsaying\s+["“]/i.test(prompt)) {
+	if (/\bsubsection\b[^\n]*\bsaying\s+["“]/i.test(request)) {
 		if (quoted.length !== 1) return undefined;
 		return { target, position: anchor.position, heading, body: quoted[0] };
 	}

@@ -256,7 +256,12 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), insertPath);
 	const insertPrepared = await events.get("before_agent_start")({
 		type: "before_agent_start",
-		prompt: 'In @insert.md, under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
+		prompt: [
+			'Sections in `insert.md` (address by heading path, e.g. "Deep heading nesting > Install"):',
+			"  Deep heading nesting   (body)",
+			"",
+			'In @insert.md, under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
+		].join("\n"),
 		systemPrompt: "System.",
 		systemPromptOptions: {},
 	}, context);
