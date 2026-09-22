@@ -34,6 +34,15 @@ class ListHandleTests(unittest.TestCase):
             schema["parameters"]["properties"]["handle"]["enum"],
             [value for value, _entry in options])
 
+    def test_address_schema_requires_heading_and_ordinal(self):
+        options = treatment.handles(self.content(self.task()))
+        schema = treatment.address_schema(options)
+        self.assertEqual(
+            set(schema["parameters"]["properties"]), {"heading", "ordinal"})
+        self.assertEqual(
+            schema["parameters"]["required"], ["heading", "ordinal"])
+        self.assertIn(2, schema["parameters"]["properties"]["ordinal"]["enum"])
+
     def test_expected_handle_comes_from_target_list(self):
         for task in treatment.tasks():
             options = treatment.handles(self.content(task))

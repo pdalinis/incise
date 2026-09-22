@@ -20,6 +20,7 @@ from runner import call, record  # noqa: E402
 
 TASK_IDS = {"add-item-loose", "add-item-mixed-markers"}
 SCHEME = "minicpm_list_handle"
+ADDRESS_SCHEME = "minicpm_list_address"
 
 
 def tasks():
@@ -57,6 +58,37 @@ def select_schema(options):
                 },
             },
             "required": ["handle"],
+        },
+    }
+
+
+def address_schema(options):
+    headings = []
+    ordinals = []
+    for _handle, entry in options:
+        if entry["heading"] not in headings:
+            headings.append(entry["heading"])
+        if entry["ordinal"] not in ordinals:
+            ordinals.append(entry["ordinal"])
+    return {
+        "name": "list_select",
+        "description": (
+            "Choose the one existing list matching every constraint in the "
+            "request. Copy its exact full heading and ordinal from the summary."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "heading": {
+                    "type": "string", "enum": headings,
+                    "description": "Exact full heading path of the target list.",
+                },
+                "ordinal": {
+                    "type": "integer", "enum": sorted(ordinals),
+                    "description": "Exact ordinal of the target list under that heading.",
+                },
+            },
+            "required": ["heading", "ordinal"],
         },
     }
 
@@ -102,7 +134,7 @@ def sample(endpoint, payload):
     return response, record(response, elapsed)
 
 
-def run_trial(endpoint, task, seed):
+def run_trial(endpoint, task, seed, structured=False):
     fixture = os.path.join(ROOT, task["fixture"])
     with open(fixture, newline="") as fh:
         before = fh.read()
@@ -110,7 +142,11 @@ def run_trial(endpoint, task, seed):
     options = handles(before)
     by_handle = dict(options)
     expected_handle = options[task["target_list"]][0]
-    selection_schema = select_schema(options)
+    expected_entry = options[task["target_list"]][1]
+    expected_address = {
+        "heading": expected_entry["heading"], "ordinal": expected_entry["ordinal"]}
+    selection_schema = (address_schema(options) if structured
+                        else select_schema(options))
     payload = armb.build_payload(task, "compose_5", seed)
     payload["tools"] = [{"type": "function", "function": selection_schema}]
     payload["tool_choice"] = routed.forced("list_select")
@@ -122,10 +158,28 @@ def run_trial(endpoint, task, seed):
     turns = [selection]
     parsed, phase_error = routed._parse_call(selection, "list_select")
     selection_call = selection_calls[0] if selection_calls else None
-    selected_handle = parsed[1].get("handle") if parsed is not None else None
+    selected_handle = (
+        parsed[1].get("handle") if parsed is not None and not structured else None)
+    selected_address = None
     selected_entry = None
     if phase_error is None:
-        if not isinstance(selected_handle, str) or selected_handle not in by_handle:
+        if structured:
+            heading = parsed[1].get("heading")
+            ordinal = parsed[1].get("ordinal")
+            if (not isinstance(heading, str) or isinstance(ordinal, bool)
+                    or not isinstance(ordinal, int)):
+                phase_error = "`heading` and integer `ordinal` are both required"
+            else:
+                selected_address = {"heading": heading, "ordinal": ordinal}
+                matches = [
+                    entry for _handle, entry in options
+                    if entry["heading"] == heading and entry["ordinal"] == ordinal]
+                if len(matches) != 1:
+                    phase_error = (
+                        "the selected heading and ordinal are not one actual list")
+                else:
+                    selected_entry = matches[0]
+        elif not isinstance(selected_handle, str) or selected_handle not in by_handle:
             phase_error = "`handle` must be one complete exact published handle"
         else:
             selected_entry = by_handle[selected_handle]
@@ -185,6 +239,9 @@ def run_trial(endpoint, task, seed):
         "expected_handle": expected_handle,
         "selected_handle": selected_handle,
         "handle_correct": selected_handle == expected_handle,
+        "expected_address": expected_address,
+        "selected_address": selected_address,
+        "address_correct": selected_address == expected_address,
         "selected_entry": selected_entry,
         "content": content,
         "tool_calls": [composed] if composed is not None else [],
@@ -195,6 +252,8 @@ def run_trial(endpoint, task, seed):
         "execution_error": execution_error,
         "document_changed": doc != before,
         "address_from_handle": composed is None or selected_handle in by_handle,
+        "address_from_entries": composed is None or selected_entry in [
+            entry for _handle, entry in options],
         "n_turns": len(turns),
         "max_turns": 2,
         "result_shape": "terminal-success",
@@ -226,16 +285,17 @@ def run(args):
         if (task["id"], trial) not in done
     ]
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
-    print(f"{len(work)} trials to run, scheme={SCHEME}")
+    scheme = ADDRESS_SCHEME if args.structured else SCHEME
+    print(f"{len(work)} trials to run, scheme={scheme}")
     started = time.time()
     with open(args.out, "a") as fh:
         for index, (task, trial) in enumerate(work, 1):
             try:
-                row = run_trial(args.endpoint, task, trial)
-                row.update(task_id=task["id"], trial=trial, scheme=SCHEME, error=None)
+                row = run_trial(args.endpoint, task, trial, args.structured)
+                row.update(task_id=task["id"], trial=trial, scheme=scheme, error=None)
             except Exception as exc:  # noqa: BLE001
                 row = {
-                    "task_id": task["id"], "trial": trial, "scheme": SCHEME,
+                    "task_id": task["id"], "trial": trial, "scheme": scheme,
                     "error": f"{type(exc).__name__}: {exc}", "elapsed_s": None,
                 }
             fh.write(json.dumps(row) + "\n")
@@ -244,7 +304,7 @@ def run(args):
             eta = elapsed / index * (len(work) - index) / 60
             print(
                 f"[{index}/{len(work)}] {task['id']:27s} t{trial} "
-                f"handle={'yes' if row.get('handle_correct') else 'no ':3s} "
+                f"select={'yes' if (row.get('address_correct') if args.structured else row.get('handle_correct')) else 'no ':3s} "
                 f"{row.get('elapsed_s') or 0:5.1f}s eta {eta:.0f}m",
                 flush=True,
             )
@@ -268,6 +328,8 @@ def grade(args):
                 "scheme": row.get("scheme", SCHEME), "outcome": outcome,
                 "detail": detail, "handle_correct": row.get("handle_correct"),
                 "address_from_handle": row.get("address_from_handle"),
+                "address_correct": row.get("address_correct"),
+                "address_from_entries": row.get("address_from_entries"),
             }) + "\n")
     print(dict(outcomes))
 
@@ -280,6 +342,10 @@ def main():
     parser.add_argument("--out", required=True)
     parser.add_argument("--graded", required=True)
     parser.add_argument("--grade", action="store_true")
+    parser.add_argument(
+        "--structured", action="store_true",
+        help="require separate heading and ordinal selection fields",
+    )
     args = parser.parse_args()
     (grade if args.grade else run)(args)
 
