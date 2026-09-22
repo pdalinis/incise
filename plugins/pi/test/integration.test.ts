@@ -281,3 +281,70 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.equal(queried.details.route, "table-query");
 	assert.deepEqual([...active], ["foreign_tool"]);
 });
+
+test("auto profile selects once from the active model and reports the decision", async () => {
+	const repository = resolve(process.cwd(), "..", "..");
+	const binary = resolve(repository, "target", "debug", "incise");
+	const tools = new Map<string, any>();
+	const commands = new Map<string, any>();
+	const events = new Map<string, any>();
+	const active = new Set<string>();
+	const pi = {
+		exec,
+		registerTool(tool: any) { tools.set(tool.name, tool); active.add(tool.name); },
+		registerCommand(name: string, command: any) { commands.set(name, command); },
+		on(name: string, handler: any) { events.set(name, handler); },
+		getActiveTools() { return [...active]; },
+		setActiveTools(names: string[]) {
+			active.clear();
+			for (const name of names) active.add(name);
+		},
+	} as unknown as ExtensionAPI;
+
+	const previousBinary = process.env.INCISE_BIN;
+	const previousProfile = process.env.INCISE_PROFILE;
+	process.env.INCISE_BIN = binary;
+	process.env.INCISE_PROFILE = "auto";
+	try {
+		await inciseExtension(pi);
+	} finally {
+		if (previousBinary === undefined) delete process.env.INCISE_BIN;
+		else process.env.INCISE_BIN = previousBinary;
+		if (previousProfile === undefined) delete process.env.INCISE_PROFILE;
+		else process.env.INCISE_PROFILE = previousProfile;
+	}
+
+	const directory = await mkdtemp(join(tmpdir(), "pi-incise-auto-"));
+	await copyFile(
+		resolve(repository, "corpus", "sections", "setext-and-atx.md"),
+		join(directory, "sections.md"),
+	);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @sections.md, rename "Closed ATX level 3" to "Closed ATX heading".',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, { cwd: directory, model: { id: "gemma4-direct-q8" } } as any);
+	assert.deepEqual([...active], ["section_rename_target"]);
+
+	let notice = "";
+	await commands.get("incise-doctor").handler("", {
+		ui: { notify(text: string) { notice = text; } },
+	} as any);
+	assert.match(notice, /profile requested: auto/);
+	assert.match(notice, /profile effective: safe-routed/);
+	assert.match(notice, /model family: gemma/);
+	assert.match(notice, /last route: section-rename/);
+
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "Summarize @sections.md.",
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, { cwd: directory, model: { id: "openbmb/MiniCPM5-2B" } } as any);
+	assert(active.has("section_edit"));
+	await commands.get("incise-doctor").handler("", {
+		ui: { notify(text: string) { notice = text; } },
+	} as any);
+	assert.match(notice, /model: gemma4-direct-q8/);
+});
