@@ -831,6 +831,14 @@ The exact quoted-item route was frozen at ac1e8dd and tested on the two list-rem
 
 The first audit incorrectly expected the mixed-list fixture under a parent heading from a different corpus file. That audit-v0 result is retained; correcting only the expected fixture address, without resampling or changing raw calls, passes every preregistered gate. The result licenses the full v5 composition run, not adoption by itself. Artifact SHA-256 values: raw 8d5e68ddc45fc10014c7c2ab8beb9e9748ed3807c849c535c68e70c17664d415; graded ec80ed32779b3ea90d9b569586a4c891a0aa1fcf5d37fc4af4fceaa6ca9922a2; corrected analysis 4a90f696029265f1b00b2f4faf11351296236f49cc0291342a5756bae2f12ce0.
 
+## F-gemma-full-v5 — exact list removal raises the profile to 469/479
+
+The preregistered full v5 composition attempted all 480 pairs. rename-setext seed 1 repeated its v4 behavior by hitting the fixed 240-second timeout on both the initial attempt and sole retry, leaving the same 479 usable pairs. Against full v4, correctness rose from 462/479 to 469/479: nine treatment-only wins, two control-only wins, and descriptive two-sided exact McNemar p = 0.0654296875. The p-value was not an adoption gate because the new route had only five addressable v4 failures and a best-case two-sided floor of 0.0625. Harmful outcomes fell from 10 to 5.
+
+Family results were tables 60/60, lists 100/100, sections 145/149, frontmatter 104/110, and table reads 60/60. All 170 routed trials were correct with no route, filter, section-tree, frontmatter-argument, list-argument, or multiple-mutation errors; all 309 usable fallback trials retained the standard eight-tool surface. Every preregistered safety and family gate passed. This licenses retaining exact quoted-item list removal in Gemma auto; unsupported or ambiguous removal wording continues to fall back.
+
+Artifact SHA-256 values: raw 371117e8e08c973af957f92fa1cb3c9c3e6aa400f7628b943c52cc350eb12462; graded 8554dee32caf8d12aa21d4f4721a8e8aa5dbe03bd7b53f2ed1cbcc78b36f3d4a; analysis 7985f0d07ac4e8d554f1daa345d91e27c7359234d819948685d6743aac4d2008.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
