@@ -16,6 +16,8 @@ import minicpm_section_semantic_plan as semantic  # noqa: E402
 CONTROL = "bench/results/minicpm5_section_pipeline_20260921.jsonl"
 TREATMENT = "bench/results/minicpm5_section_semantic_plan_20260921.jsonl"
 GRADED = "bench/results/minicpm5_section_semantic_plan_20260921_graded.jsonl"
+ORIGINAL_GRADED = GRADED
+GRADED = "bench/results/minicpm5_section_semantic_plan_20260921_regraded.jsonl"
 OUT = "bench/results/minicpm5_section_semantic_plan_analysis_20260921.json"
 
 
@@ -58,7 +60,7 @@ def main():
     exact = sum(row.get("plan_exact") is True for row in treatment.values())
     fields = {
         field: sum((row.get("field_matches") or {}).get(field) is True
-                   for row in treatment.values())
+                   for row in graded.values())
         for field in ("anchor", "relationship", "order", "content_shape")
     }
     by_task = defaultdict(Counter)
@@ -106,9 +108,17 @@ def main():
             "mean_elapsed_s": mean("elapsed_s"),
         },
         "gate": gate,
-        "harness_sha256": sha256("bench/minicpm_section_semantic_plan.py"),
+        "sampling_harness_sha256": sorted({
+            row.get("harness_sha256") for row in treatment.values()
+        }),
+        "grading_harness_sha256": sha256(
+            "bench/minicpm_section_semantic_plan.py"),
+        "schema_sha256": sorted({
+            row.get("schema_sha256") for row in treatment.values()
+        }),
         "artifacts": {
-            path: sha256(path) for path in (CONTROL, TREATMENT, GRADED)
+            path: sha256(path) for path in (
+                CONTROL, TREATMENT, ORIGINAL_GRADED, GRADED)
         },
     }
     with open(os.path.join(ROOT, OUT), "w") as fh:

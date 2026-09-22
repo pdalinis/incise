@@ -54,6 +54,21 @@ class SemanticPlanTests(unittest.TestCase):
         self.assertIsNone(canonical)
         self.assertIn("ambiguous", error)
 
+    def test_field_matches_survive_an_invalid_sibling_field(self):
+        task = self.task("insert-troubleshooting")
+        content = self.content(task)
+        expected = semantic.expected_plan(task)
+        matches = semantic.independent_field_matches(content, {
+            "anchor": "Deep heading nesting",
+            "relationship": "after-existing",
+            "order": "after-existing",
+            "content_shape": "two-subsections",
+        }, expected)
+        self.assertEqual(matches, {
+            "anchor": True, "relationship": False,
+            "order": True, "content_shape": True,
+        })
+
 
 if __name__ == "__main__":
     unittest.main()

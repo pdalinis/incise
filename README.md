@@ -60,6 +60,8 @@ incise tables vault/Projects.md
 incise outline vault/Projects.md
 ```
 
+For exact values after structural discovery, use `incise rows notes.md --table Components`, `incise items notes.md --list Tasks`, or `incise keys notes.md`. Their JSON forms carry the structured rows, list items, or flattened frontmatter keys together with the file hash.
+
 ### Make a semantic edit
 
 ```bash
@@ -149,6 +151,14 @@ Incise is designed around five guarantees:
 * **Loud ambiguity:** malformed, unsupported, or non-unique targets produce an actionable refusal.
 * **Safe writes:** the CLI supports dry runs, atomic replacement, no-op detection, and content-hash preconditions.
 * **Token-frugal results:** successful writes describe the change instead of returning the whole document.
+
+An experimental `safe-small` profile is available with `INCISE_PROFILE=safe-small` in Hermes or Pi, and its schemas can be inspected with `incise schema --profile safe-small`. It adds structural reads, one-operation write tools, and omits destructive operations. It is **not recommended as a general profile**: a preregistered MiniCPM5 run improved list additions from 8/21 to 15/21 but regressed sections from 8/27 to 4/27 and frontmatter from 14/27 to 0/27.
+
+A subsequent preregistered routed experiment constrained MiniCPM5 to action-specific tools and stopped after the first mutation. It improved the pooled result from 40/90 to 54/90 (`p = 0.0125`) while cutting mean generation from 247 to 109 tokens, but two wrong-key frontmatter overwrites violated the zero-data-loss gate. A preregistered stored-call replay then added host-owned create/update preconditions: both destructive calls became loud refusals and all 18 previously correct frontmatter results remained byte-identical. Merely exposing nested atomic section children remained 0/12 because MiniCPM ignored the field; moving structure into the host and using optional flat slots reached 6/12, while cardinality-routed micro-schemas with every requested slot required reached 12/12. The default remains unchanged: the result validates the architecture, but the classifier that must derive file, anchor, position, and child count from real requests is not yet measured.
+
+The follow-up classifier is now measured: a two-phase MiniCPM planner recovered only 3/12 section insertions, versus 12/12 when the host already knew the structure. It remained safe, with no destructive or collateral edits, but the model confused executor placement terms and subsection counts. MiniCPM support therefore remains opt-in and host-routed; Gemma and the default schemas are unchanged.
+
+A planner-only follow-up using request-language labels also failed (0/12 exact plans). MiniCPM copied section anchors reliably, but it did not reliably distinguish sibling placement from subsection placement or body text from named nested headings. Further schema-only section routing is therefore not planned.
 
 ## Measured with small models
 

@@ -133,6 +133,21 @@ def canonical_plan(content, received):
     }, None
 
 
+def independent_field_matches(content, received, expected):
+    """Score fields independently even when another field makes the plan invalid."""
+    received = received if isinstance(received, dict) else {}
+    try:
+        anchor = canonical_anchor(content, received.get("anchor"))
+    except (OpError, TypeError):
+        anchor = None
+    return {
+        "anchor": anchor == expected["anchor"],
+        "relationship": received.get("relationship") == expected["relationship"],
+        "order": received.get("order") == expected["order"],
+        "content_shape": received.get("content_shape") == expected["content_shape"],
+    }
+
+
 def run_trial(endpoint, task, seed):
     fixture = os.path.join(ROOT, task["fixture"])
     with open(fixture, newline="") as fh:
@@ -150,10 +165,7 @@ def run_trial(endpoint, task, seed):
     if error is None:
         canonical, error = canonical_plan(content, received)
     expected = expected_plan(task)
-    matches = {
-        field: canonical is not None and canonical.get(field) == value
-        for field, value in expected.items()
-    }
+    matches = independent_field_matches(content, received, expected)
     return {
         "model": response.get("model"),
         "finish_reason": sampled.get("finish_reason"),
@@ -221,8 +233,14 @@ def run(args):
 
 def grade(args):
     counts = Counter()
+    tasks = {task["id"]: task for task in prior.slots.tasks()}
     with open(args.graded, "w") as out:
         for _key, row in sorted(read_last(args.out).items()):
+            task = tasks[row["task_id"]]
+            with open(os.path.join(ROOT, task["fixture"]), newline="") as fh:
+                content = fh.read()
+            field_matches = independent_field_matches(
+                content, row.get("received_plan"), row.get("expected_plan"))
             if row.get("error") or row.get("plan_error"):
                 outcome = "invalid_plan"
                 detail = row.get("error") or row.get("plan_error")
@@ -236,7 +254,7 @@ def grade(args):
                 "scheme": row.get("scheme", SCHEME), "outcome": outcome,
                 "detail": detail, "expected_plan": row.get("expected_plan"),
                 "canonical_plan": row.get("canonical_plan"),
-                "field_matches": row.get("field_matches"),
+                "field_matches": field_matches,
                 "plan_exact": row.get("plan_exact"),
             }) + "\n")
     print(dict(counts))

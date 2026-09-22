@@ -1,0 +1,86 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_routed_sections_20260921.jsonl": "a23f7256b74b1de1de0da04985d0b2ae460684210f57eb723ac7f551b7a4af38",
+    "bench/results/minicpm5_routed_sections_20260921_graded.jsonl": "aabf2d28fad3849a4751630f7f5b5de489c0445aa1598397f105341d8470e081",
+    "bench/results/minicpm5_section_pipeline_20260921.jsonl": "2fad9f4b51930f231092ba43a16e0fd63eb2277bf5df8187df20374c6ed4a4f6",
+    "bench/results/minicpm5_section_pipeline_20260921_graded.jsonl": "ce08e5d62cc6de9109b8e43a3775f46938e3838ba4f45000a7f1dd35e6d6271e",
+    "bench/results/minicpm5_section_required_slots_20260921.jsonl": "3a228eb0a374498aa048a806b55916f1f7f0bf308c1e46ce92517299557ff4d9",
+    "bench/results/minicpm5_section_required_slots_20260921_graded.jsonl": "f2c09d9c1884d7899317455c3599394fc05d6179fe1f06561a972005181f440a"
+  },
+  "efficiency": {
+    "content_mean_completion_tokens": 50.83,
+    "content_mean_elapsed_s": 1.59,
+    "original_routed_mean_completion_tokens": 106.42,
+    "pipeline_mean_completion_tokens": 101.5,
+    "pipeline_mean_elapsed_s": 3.14,
+    "plan_mean_completion_tokens": 50.67,
+    "plan_mean_elapsed_s": 1.55,
+    "required_slot_mean_completion_tokens": 72.5
+  },
+  "failure_stages": {
+    "anchor": 2,
+    "child_count": 1,
+    "position": 6
+  },
+  "gate": {
+    "at_least_eleven_exact_plans": false,
+    "at_least_ten_correct_final_documents": false,
+    "every_task_correct_in_two_seeds": false,
+    "no_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-21T23:58:20.449236+00:00",
+  "harness_sha256": "1d9f62158518b91336fb9feebeed8ac5978c7b61129667599cc33897b9e32ff7",
+  "model": "minicpm5-2b-q8",
+  "paired_vs_original_routed": {
+    "control_correct": 0,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.25,
+    "treatment_correct": 3,
+    "treatment_only": 3
+  },
+  "paired_vs_required_slot_ceiling": {
+    "control_correct": 12,
+    "control_only": 9,
+    "exact_mcnemar_p": 0.00390625,
+    "treatment_correct": 3,
+    "treatment_only": 0
+  },
+  "pairs": 12,
+  "plan_accuracy": {
+    "exact": 3,
+    "field_mismatches": {
+      "anchor": 2,
+      "child_count": 7,
+      "position": 8
+    },
+    "total": 12
+  },
+  "preregistration_commit": "72f5ec0",
+  "schema_sha256": {
+    "content": "3c0518805c255cf66c40c63acc861ab504005d8cf344d63eab0792eade2f8e0d",
+    "plan": "19ef8e711f2bac04d01ca06bab57f2bff0d1a18a17246ea88f4e21a1cd09de1b"
+  },
+  "treatment_by_task": {
+    "insert-nested-ratelimits": {
+      "op_error": 2,
+      "wrong": 1
+    },
+    "insert-release-at-top": {
+      "correct": 3
+    },
+    "insert-subsection-last": {
+      "op_error": 1,
+      "wrong": 2
+    },
+    "insert-troubleshooting": {
+      "wrong": 3
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 3,
+    "op_error": 3,
+    "wrong": 6
+  }
+}
