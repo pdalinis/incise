@@ -34,6 +34,14 @@ PROFILE_TOOLS = [
     "list_select", "list_append_item", "list_insert_after", "list_insert_between",
 ]
 SCHEME = "minicpm_pi_list_profile"
+COMPACT_SYSTEM_PROMPT = """You are a helpful coding agent. You edit one Markdown list by calling the current Incise list tool.
+
+You do not need direct file access. The host has inspected the file and supplies the exact file and validated list structure. When one tool is available, call it exactly once to continue the requested edit. Do not answer in prose instead of calling that tool. After the edit succeeds, briefly report completion.
+
+The host handles marker characters, indentation, blank lines, ordered-list numbering, addressing, and writes. Supply only the fields required by the current tool. Make only the edit that was asked for."""
+PROMPT_SUFFIX = (
+    "Use list_select once. Copy the exact full heading and ordinal for the "
+    "requested list.")
 
 
 def sha256_bytes(value):
@@ -182,6 +190,18 @@ def validation_report(row):
             "actual": actual,
             "correct": actual == expected,
             "advertised": expected in request.get("tools", []),
+            "tool_choice": choice,
+            "system_prompt_sha256": request.get("system_prompt_sha256"),
+            "system_prompt_bytes": request.get("system_prompt_bytes"),
+            "prompt_correct": (
+                isinstance(request.get("system_prompt"), str)
+                and request["system_prompt"].startswith(
+                    f"{COMPACT_SYSTEM_PROMPT}\n\nLists in `")
+                and request["system_prompt"].endswith(PROMPT_SUFFIX)
+                and "expert coding assistant operating inside pi"
+                not in request["system_prompt"]
+            ),
+            "automatic_choice": choice is None or choice == "auto",
         })
     return {
         "selection_validated": bool(selected) and all(selected),
@@ -191,6 +211,10 @@ def validation_report(row):
         "forced_choice_correct": bool(phase_requests) and all(
             request["correct"] and request["advertised"]
             for request in phase_requests),
+        "compact_prompt_correct": bool(phase_requests) and all(
+            request["prompt_correct"] for request in phase_requests),
+        "automatic_tool_choice": bool(phase_requests) and all(
+            request["automatic_choice"] for request in phase_requests),
     }
 
 
@@ -276,6 +300,8 @@ def run_one(args, task, trial):
         "successful_mutations": row["successful_mutations"],
         "forced_choice_correct": row["forced_choice_correct"],
         "phase_provider_request_count": len(row["phase_provider_requests"]),
+        "compact_prompt_correct": row["compact_prompt_correct"],
+        "automatic_tool_choice": row["automatic_tool_choice"],
     }
     return row, graded
 

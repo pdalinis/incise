@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { accessSync, constants, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
@@ -11,6 +12,15 @@ const RESULT_PREFIX = "PI_BENCH_RESULT=";
 function textOf(content) {
 	if (!Array.isArray(content)) return typeof content === "string" ? content : "";
 	return content.filter((part) => part?.type === "text").map((part) => part.text).join("");
+}
+
+function systemPromptOf(messages) {
+	if (!Array.isArray(messages)) return "";
+	return messages
+		.filter((message) => message?.role === "system")
+		.map((message) => textOf(message.content))
+		.filter(Boolean)
+		.join("\n\n");
 }
 
 function packageRootFor(extensionPath) {
@@ -212,12 +222,16 @@ async function run(request, session) {
 				if (typeof init?.body === "string") {
 					const payload = JSON.parse(init.body);
 					if (payload && typeof payload === "object" && Array.isArray(payload.messages)) {
+						const systemPrompt = systemPromptOf(payload.messages);
 						providerRequests.push({
 							active_tools: session.getActiveToolNames(),
 							tool_choice: payload.tool_choice ?? null,
 							tools: Array.isArray(payload.tools)
 								? payload.tools.map((tool) => tool?.function?.name ?? null)
 								: [],
+							system_prompt: systemPrompt,
+							system_prompt_sha256: createHash("sha256").update(systemPrompt).digest("hex"),
+							system_prompt_bytes: Buffer.byteLength(systemPrompt),
 						});
 					}
 				}

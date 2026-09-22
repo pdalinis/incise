@@ -39,6 +39,12 @@ export const MINICPM_LIST_TOOL_NAMES = [
 	"list_insert_between",
 ] as const;
 
+export const MINICPM_LIST_SYSTEM_PROMPT = `You are a helpful coding agent. You edit one Markdown list by calling the current Incise list tool.
+
+You do not need direct file access. The host has inspected the file and supplies the exact file and validated list structure. When one tool is available, call it exactly once to continue the requested edit. Do not answer in prose instead of calling that tool. After the edit succeeds, briefly report completion.
+
+The host handles marker characters, indentation, blank lines, ordered-list numbering, addressing, and writes. Supply only the fields required by the current tool. Make only the edit that was asked for.`;
+
 export function extractMarkdownPath(prompt: string): string | undefined {
 	const found = new Set<string>();
 	const patterns = [
@@ -357,7 +363,7 @@ export function installMiniCpmListProfile(
 		registerSelectionTool(schema);
 		pi.setActiveTools([schema.name]);
 		return {
-			systemPrompt: `${event.systemPrompt}\n\n${text}\n\nUse list_select once. Copy the exact full heading and ordinal for the requested list.`,
+			systemPrompt: `${MINICPM_LIST_SYSTEM_PROMPT}\n\n${text}\n\nUse list_select once. Copy the exact full heading and ordinal for the requested list.`,
 		};
 	});
 }
