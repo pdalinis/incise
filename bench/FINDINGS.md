@@ -741,6 +741,18 @@ The result reproduces the isolated benchmark-extension result through real targe
 
 Artifacts: `gemma_safe_routed_profile_20260922.jsonl` (SHA-256 `7091806c341e68a0c1dd4a98ce480aa6110f43e7a6bc93eda253177a9da49165`), its graded pool (SHA-256 `a74c63319e18fcb76e24e9c6701801666b64f5d7193100743960196056512466`), and analysis (SHA-256 `0eb6db69e2ad57f02daf1f9338ecdcde04de1510827958cf9e112a424b1d51ed`).
 
+## F-gemma-full — the narrow routes pass and the generic classifier does not
+
+The full production-profile plan and harness were frozen at `3aba17f`. It ran all 480 Gemma/Pi trials and then repeated the two transport rows once. Both `rename-setext` retries hit the same 240-second generation timeout, leaving 478 usable pairs and independently failing the all-pairs gate.
+
+Among usable pairs, control was 389/478 correct and treatment 390/478. There were 35 control-only and 36 treatment-only wins, exact paired McNemar `p = 1.0`. Harmful outcomes fell from 40 to 23, but that safety movement did not become an accuracy gain. Every family cleared its noninferiority floor except table reads, which fell to 43/60.
+
+The full run found two classifier defects outside the narrow confirmation. First, `List every component ... with its status and owner` was misread as an `Owner` predicate because `and Owner` counted as a filter. All ten whole-table reads received `table_query` instead of the standard tools and returned no rows. Second, `what is the Value cell ... whose Case is escaped pipe` incorrectly treated the requested output column `Value` as another required filter because `is the Value` matched the predicate heuristic. That route reached only 7/10; three trials failed schema validation after correctly supplying `Case`. The newly reached single-column priority route scored 6/10 because four calls changed prompt value `high` to `High`, and exact table matching returned no rows.
+
+The two previously confirmed table routes remained 20/20 and the two section routes remained 20/20. The result therefore rejects default `auto`, not routed execution itself. `safe-routed` remains opt-in. The next treatment must replace loose column-word detection with explicit column/value predicate extraction, leave output-only and whole-table reads on fallback, and make parsed filter values host-owned before another targeted confirmation.
+
+Artifacts: `gemma_safe_routed_full_20260922.jsonl` (SHA-256 `eb904c98063a3038bb1a0dcffeccdc5afed58325eb3fc5afa023c59d17ac7446`), its graded pool (SHA-256 `cba00a29684bd4b09fa63d5637f372065b1abd3a7b953426a2646dcb02f4b4d4`), and analysis (SHA-256 `2ba88dce7e0c9431188d316d7c47cdaf6c24c7074dee45dbc9c7ded4e5b186d9`).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
