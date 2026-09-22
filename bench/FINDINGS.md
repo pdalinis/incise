@@ -753,6 +753,16 @@ The two previously confirmed table routes remained 20/20 and the two section rou
 
 Artifacts: `gemma_safe_routed_full_20260922.jsonl` (SHA-256 `eb904c98063a3038bb1a0dcffeccdc5afed58325eb3fc5afa023c59d17ac7446`), its graded pool (SHA-256 `cba00a29684bd4b09fa63d5637f372065b1abd3a7b953426a2646dcb02f4b4d4`), and analysis (SHA-256 `2ba88dce7e0c9431188d316d7c47cdaf6c24c7074dee45dbc9c7ded4e5b186d9`).
 
+## F-gemma-table-v2 — predicates belong to the host
+
+The table-route v2 implementation and preregistration were frozen at `8583b43`. The treatment replaced loose column-word detection with explicit column/value predicate extraction and made the parsed filter values host-owned. Filtered reads received a zero-argument `table_query`; whole-table and ordinal reads retained the standard eight tools.
+
+The full six-task table-read population reached 60/60 correct. Each task was 10/10, every first provider request carried exactly the preregistered routed or fallback tool surface, and every routed execution recorded filter arguments byte-for-byte equal to the task ideal filter. There were no transport, malformed, misreported, unfiltered, destructive, collateral, or tool-error outcomes.
+
+This closes all three defects from F-gemma-full: whole-table projection no longer becomes an `Owner` filter, output column `Value` no longer becomes a predicate, and the model can no longer change request value `high` to `High`. The gate passes and licenses a second full-composition run; it does not yet license default `auto`.
+
+Artifacts: `gemma_table_route_v2_20260922.jsonl` (SHA-256 `ec140500b442351ef4247733760112d427af9955fe4e8c15a2b8a847fa08ce68`), its graded pool (SHA-256 `9c3820e78f0dea7deec8f6ed5ee6de047534b4d91597c1a626db0b880abb1b3f`), and analysis (SHA-256 `f9759e2ba4ab43f7e7c433202b8f5753a97789e0d216aec678c067f4281eed3c`).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
