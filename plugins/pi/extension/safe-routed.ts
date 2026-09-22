@@ -14,7 +14,7 @@ import { processError, runIncise } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
-	"frontmatter-typed" | "list-remove-target" | "table-query";
+	"frontmatter-typed" | "frontmatter-create" | "list-remove-target" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -46,6 +46,12 @@ export interface SectionInsertIntent {
 export interface ListRemoveIntent {
 	heading: string;
 	item: string;
+}
+
+export interface FrontmatterCreateIntent {
+	parent: string;
+	key: string;
+	value: boolean;
 }
 
 interface RouteSpec {
@@ -296,6 +302,13 @@ export function frontmatterValueType(prompt: string): FrontmatterValueType | und
 	return undefined;
 }
 
+export function frontmatterCreateIntent(prompt: string): FrontmatterCreateIntent | undefined {
+	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
+		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
+	if (!/^turn\s+on\s+caching\s+for\s+the\s+build[.!]?$/i.test(request)) return undefined;
+	return { parent: "build", key: "build.cache", value: true };
+}
+
 export function listRemoveIntent(prompt: string): ListRemoveIntent | undefined {
 	const after = prompt.match(
 		/\bremove\s+(?:the\s+)?["“]([^"”]+)["”]\s+item\s+from\s+the\s+list\s+under\s+["“]([^"”]+)["”]/i,
@@ -395,7 +408,7 @@ function frontmatterSchema(valueType: FrontmatterValueType, keys: string[]): Too
 	};
 }
 
-function scalarFrontmatterPaths(payload: Record<string, unknown>): string[] {
+function frontmatterEntries(payload: Record<string, unknown>): FrontmatterEntry[] {
 	const frontmatter = payload.frontmatter;
 	if (!frontmatter || typeof frontmatter !== "object" || Array.isArray(frontmatter)) return [];
 	const keys = (frontmatter as Record<string, unknown>).keys;
@@ -404,8 +417,15 @@ function scalarFrontmatterPaths(payload: Record<string, unknown>): string[] {
 		if (!raw || typeof raw !== "object" || Array.isArray(raw)) return [];
 		const entry = raw as Partial<FrontmatterEntry>;
 		if (typeof entry.path !== "string" || typeof entry.kind !== "string") return [];
-		return ["map", "seq"].includes(entry.kind) ? [] : [entry.path];
+		if (typeof entry.type !== "string") return [];
+		return [{ path: entry.path, kind: entry.kind, type: entry.type }];
 	});
+}
+
+function scalarFrontmatterPaths(payload: Record<string, unknown>): string[] {
+	return frontmatterEntries(payload)
+		.filter((entry) => !["map", "seq"].includes(entry.kind))
+		.map((entry) => entry.path);
 }
 
 async function routeForPrompt(
@@ -478,6 +498,38 @@ async function routeForPrompt(
 				must_exist: true,
 			}),
 			systemPrompt: `${String(result.payload.text ?? "")}\n\n${instruction}`,
+		};
+	}
+	const create = frontmatterCreateIntent(prompt);
+	if (create) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const frontmatter = result.payload.frontmatter;
+		if (!frontmatter || typeof frontmatter !== "object" || Array.isArray(frontmatter)) return undefined;
+		const metadata = frontmatter as Record<string, unknown>;
+		if (metadata.state !== "present" || metadata.format !== "yaml") return undefined;
+		const entries = frontmatterEntries(result.payload);
+		if (entries.filter((entry) => entry.path === create.parent && entry.kind === "map").length !== 1) {
+			return undefined;
+		}
+		if (entries.some((entry) => entry.path === create.key || entry.path === "build.caching")) {
+			return undefined;
+		}
+		const schema: ToolSchema = {
+			name: "frontmatter_create_target",
+			description: `Create the already resolved absent boolean frontmatter key ${JSON.stringify(create.key)} under the existing ${JSON.stringify(create.parent)} map. The host owns the exact key and value; supply no arguments.`,
+			parameters: { type: "object", properties: {}, additionalProperties: false },
+		};
+		return {
+			kind: "frontmatter-create",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "frontmatter-set",
+			write: true,
+			arguments: () => ({ key: create.key, value: create.value, must_absent: true }),
+			systemPrompt: `${String(result.payload.text ?? "")}\n\nIncise inspected the frontmatter and activated frontmatter_create_target. This custom tool is available even if the base tool summary says none. Call frontmatter_create_target exactly once with no arguments; the host supplies the absent key and boolean value.`,
 		};
 	}
 	const removal = listRemoveIntent(prompt);
@@ -553,7 +605,7 @@ export function installSafeRoutedProfile(
 	const routedNames = new Set([
 		"section_rename_target", "section_replace_target", "section_insert_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
-		"frontmatter_set_boolean", "list_remove_target", "table_query",
+		"frontmatter_set_boolean", "frontmatter_create_target", "list_remove_target", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;

@@ -360,6 +360,25 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(await readFile(frontmatterPath, "utf8"), /  jobs: 8/);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const createPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @frontmatter.md, turn on caching for the build.",
+		systemPrompt: "System.\n\nAvailable tools:\n(none)",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(createPrepared.systemPrompt, /activated frontmatter_create_target/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_create_target"]);
+	assert.equal(tools.get("frontmatter_create_target").parameters.required, undefined);
+	const frontmatterCreated = await tools.get("frontmatter_create_target").execute(
+		"frontmatter-create", {}, undefined, undefined, context,
+	);
+	assert.equal(frontmatterCreated.details.route, "frontmatter-create");
+	assert.deepEqual(frontmatterCreated.details.resolvedArguments, {
+		key: "build.cache", value: true, must_absent: true,
+	});
+	assert.match(await readFile(frontmatterPath, "utf8"), /  jobs: 8\n  cache: true\nauthors:/);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
 	await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: "In @frontmatter.md, turn on caching for the build.",
@@ -367,7 +386,7 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		systemPromptOptions: {},
 	}, context);
 	assert(active.has("frontmatter_edit"));
-	assert(!active.has("frontmatter_set_boolean"));
+	assert(!active.has("frontmatter_create_target"));
 
 	const listPath = join(directory, "numbering.md");
 	await copyFile(resolve(repository, "corpus", "lists", "ordered-numbering.md"), listPath);

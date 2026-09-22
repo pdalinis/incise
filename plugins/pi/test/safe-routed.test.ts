@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
 	filterColumns,
+	frontmatterCreateIntent,
 	frontmatterValueType,
 	listRemoveIntent,
 	parseOutline,
@@ -14,6 +15,20 @@ import {
 	sectionIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
+
+test("frontmatter creation routing recognizes only the measured build-cache request", () => {
+	assert.deepEqual(
+		frontmatterCreateIntent("Turn on caching for the build."),
+		{ parent: "build", key: "build.cache", value: true },
+	);
+	assert.deepEqual(
+		frontmatterCreateIntent("In @frontmatter.md, turn on caching for the build."),
+		{ parent: "build", key: "build.cache", value: true },
+	);
+	assert.equal(frontmatterCreateIntent("Turn off caching for the build."), undefined);
+	assert.equal(frontmatterCreateIntent("Do not turn on caching for the build."), undefined);
+	assert.equal(frontmatterCreateIntent("Turn on caching for deployment."), undefined);
+});
 
 test("list removal routing requires exact quoted items and headings", () => {
 	assert.deepEqual(
