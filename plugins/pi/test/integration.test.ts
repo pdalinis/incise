@@ -275,10 +275,38 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(tablePrepared.systemPrompt, /resolved the requested table/);
 	assert.deepEqual([...active].sort(), ["foreign_tool", "table_query"]);
 	const queried = await tools.get("table_query").execute(
-		"query", { Priority: "low", Version: "2.0.0" }, undefined, undefined, context,
+		"query", {}, undefined, undefined, context,
 	);
 	assert.match(queried.content[0].text, /echo/);
 	assert.equal(queried.details.route, "table-query");
+	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const componentsPath = join(directory, "components.md");
+	await copyFile(resolve(repository, "corpus", "tables", "ragged.md"), componentsPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @components.md, list every component in the Components table with its status and owner.",
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert(active.has("table_get"));
+	assert(!active.has("table_query"));
+
+	const cellsPath = join(directory, "cells.md");
+	await copyFile(resolve(repository, "corpus", "tables", "cell-edge-cases.md"), cellsPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @cells.md, in the Hazardous cells table, what is the Value cell of the row whose Case is "escaped pipe"?',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_query"]);
+	assert.deepEqual(tools.get("table_query").parameters.required, undefined);
+	const escaped = await tools.get("table_query").execute(
+		"escaped", {}, undefined, undefined, context,
+	);
+	assert.match(escaped.content[0].text, /a \\\| b/);
+	assert.deepEqual(escaped.details.resolvedArguments.filter, { Case: "escaped pipe" });
 	assert.deepEqual([...active], ["foreign_tool"]);
 });
 

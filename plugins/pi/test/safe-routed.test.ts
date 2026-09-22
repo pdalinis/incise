@@ -8,6 +8,7 @@ import {
 	requestedTable,
 	resolveOutlineTarget,
 	sectionIntent,
+	tablePredicates,
 } from "../extension/safe-routed.ts";
 
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
@@ -47,8 +48,36 @@ test("table routing resolves one named table and separates filters from requeste
 	const table = requestedTable(entries, prompt);
 	assert.equal(table?.heading, "Sortable table > Packages");
 	assert.deepEqual(filterColumns(table?.columns ?? [], prompt), ["Version", "Priority"]);
+	assert.deepEqual(tablePredicates(table?.columns ?? [], prompt), {
+		Version: "2.0.0",
+		Priority: "low",
+	});
 	assert.deepEqual(
 		filterColumns(table?.columns ?? [], "Which packages in the Packages table are priority urgent?"),
 		["Priority"],
+	);
+});
+
+test("table predicates exclude projected columns and retain exact requested values", () => {
+	assert.deepEqual(
+		tablePredicates(
+			["Component", "Status", "Owner"],
+			"List every component in the Components table with its status and owner.",
+		),
+		{},
+	);
+	assert.deepEqual(
+		tablePredicates(
+			["Case", "Value", "Note"],
+			'In the Hazardous cells table, what is the Value cell of the row whose Case is "escaped pipe"?',
+		),
+		{ Case: "escaped pipe" },
+	);
+	assert.deepEqual(
+		tablePredicates(
+			["Name", "Priority"],
+			"Which packages in the Packages table are priority high?",
+		),
+		{ Priority: "high" },
 	);
 });

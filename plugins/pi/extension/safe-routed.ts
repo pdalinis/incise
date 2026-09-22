@@ -114,12 +114,41 @@ export function requestedTable(entries: TableEntry[], prompt: string): TableEntr
 	return matches.length === 1 ? matches[0] : undefined;
 }
 
-export function filterColumns(columns: string[], prompt: string): string[] {
-	return columns.filter((column) => {
+function capturedValue(match: RegExpMatchArray | null): string | undefined {
+	if (!match) return undefined;
+	const quoted = match[1] ?? match[2] ?? match[3];
+	const value = (quoted ?? match[4])?.trim().replace(/[.,;:]+$/, "");
+	if (!value || /^(?:cell|column|field|row|rows|table)$/i.test(value)) return undefined;
+	return value;
+}
+
+export function tablePredicates(
+	columns: string[],
+	prompt: string,
+): Record<string, string> | undefined {
+	const predicates: Record<string, string> = {};
+	const value = '(?:"([^"]+)"|“([^”]+)”|`([^`]+)`|([^\\s,;?!]+))';
+	for (const column of columns) {
 		const escaped = escapeRegex(column);
-		return new RegExp(`\\b(?:is|are|at|with|where|and)\\s+(?:the\\s+)?${escaped}\\b`, "i").test(prompt) ||
-			new RegExp(`\\b${escaped}\\s+(?:is|are|equals?|=)\\b`, "i").test(prompt);
-	});
+		const candidates = [
+			capturedValue(prompt.match(new RegExp(
+				`\\b(?:is|are|at|where)\\s+(?:the\\s+)?${escaped}\\s+${value}`,
+				"i",
+			))),
+			capturedValue(prompt.match(new RegExp(
+				`\\b${escaped}\\s+(?:is|are|equals?|=)\\s+${value}`,
+				"i",
+			))),
+		].filter((candidate): candidate is string => candidate !== undefined);
+		const unique = [...new Set(candidates)];
+		if (unique.length > 1) return undefined;
+		if (unique.length === 1) predicates[column] = unique[0];
+	}
+	return predicates;
+}
+
+export function filterColumns(columns: string[], prompt: string): string[] {
+	return Object.keys(tablePredicates(columns, prompt) ?? {});
 }
 
 function looksLikeTableRead(prompt: string): boolean {
@@ -152,14 +181,14 @@ function sectionSchema(kind: "section-rename" | "section-replace-body", target: 
 	};
 }
 
-function tableSchema(table: TableEntry, columns: string[]): ToolSchema {
+function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSchema {
+	const rendered = Object.entries(filters).map(([column, value]) => `${column}=${JSON.stringify(value)}`).join(", ");
 	return {
 		name: "table_query",
-		description: `Query the already resolved ${JSON.stringify(table.heading)} table. Supply every requested filter exactly once.`,
+		description: `Run the already resolved query on ${JSON.stringify(table.heading)} using ${rendered}. The host owns the exact filters; supply no arguments.`,
 		parameters: {
 			type: "object",
-			properties: Object.fromEntries(columns.map((column) => [column, { type: "string" }])),
-			required: columns,
+			properties: {},
 			additionalProperties: false,
 		},
 	};
@@ -199,17 +228,17 @@ async function routeForPrompt(
 	if (result.code !== 0 || result.payload.ok === false) return undefined;
 	const table = requestedTable(parseTableSummary(String(result.payload.text ?? "")), prompt);
 	if (!table) return undefined;
-	const columns = filterColumns(table.columns, prompt);
-	if (columns.length === 0) return undefined;
-	const schema = tableSchema(table, columns);
+	const filters = tablePredicates(table.columns, prompt);
+	if (!filters || Object.keys(filters).length === 0) return undefined;
+	const schema = tableSchema(table, filters);
 	return {
 		kind: "table-query",
 		path,
 		schema,
 		operation: "rows",
 		write: false,
-		arguments: (params) => ({ table: { heading: table.heading, ordinal: table.ordinal }, filter: params }),
-		systemPrompt: `Incise resolved the requested table and filter columns. Use table_query once, then answer only from its returned rows.`,
+		arguments: () => ({ table: { heading: table.heading, ordinal: table.ordinal }, filter: filters }),
+		systemPrompt: `Incise resolved the requested table and exact filter values. Use table_query once with no arguments, then answer only from its returned rows.`,
 	};
 }
 
@@ -265,6 +294,7 @@ export function installSafeRoutedProfile(
 						changed: Boolean(result.payload.changed),
 						rows: result.payload.rows,
 						route: spec.kind,
+						resolvedArguments: args,
 						validated: true,
 					},
 				);
