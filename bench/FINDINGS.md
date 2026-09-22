@@ -775,6 +775,16 @@ The full gate passes. This licenses recommending INCISE_PROFILE=auto for Gemma i
 
 Artifacts: gemma_safe_routed_full_v2_20260922.jsonl (SHA-256 bc027cd8a5a043c01ae16f8f8dd278b2c502da861029d457dff9b25655224c57), its graded pool (SHA-256 af00ca67c1c2dba25e42e2490c4b8d2ac7acf708bd4857706f3fb5b06e85df54), and analysis (SHA-256 8b71674779b9cc9aa819b1910d74322f2a6111ce46c71fd04385aca5446209c8).
 
+## F-gemma-section-insert-v1 — structure is solved; literal content is not
+
+The production candidate was preregistered at 65282bb and implemented at cc6d1b6. It routed the four frozen insertion tasks through one host-resolved anchor and relation, a content-hash precondition, one atomic section-insert call, and a one-success latch.
+
+The gate failed despite a large improvement: the full-profile-v2 control scored 4/40 and treatment scored 28/40, with 24 treatment-only wins, no control-only regression, and exact paired McNemar p = 0.00000011920928955078125. There were zero destructive or collateral outcomes, zero route or structural-anchor errors, and zero multiple mutations. FreeBSD scored 10/10, nested Rate limits 8/10, and Troubleshooting 10/10; release insertion scored 0/10, below both the 32/40 overall gate and its 7/10 task floor.
+
+All ten release calls supplied the correct host-owned anchor and before relation, but seven copied an outline path into new_heading and three supplied Changelog. The two Rate limits misses prefixed the exact quoted body with redundant Headers text. This isolates the remaining failure to literal content copying: the host can derive the new headings and quoted bodies unambiguously from these explicit request forms, just as it already owns table filter literals. A v2 treatment may therefore expose a zero-argument confirmation tool only when every insertion field parses exactly; ambiguous wording must fall back.
+
+Artifacts: gemma_section_insert_route_v1_20260922.jsonl (SHA-256 e841ccbe684bc26390e888e097a43a5af0dab449490ec4df4fcfd019f856e2ff), its graded pool (SHA-256 9ae076d174e2f8248691f170928fc4796b334355e849817ecdc6e50d6d606b14), and analysis (SHA-256 db44577643a7ab49cdabc340e1eb0678d00e45ba2ed24747b81ce8ba0cf7314b).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
