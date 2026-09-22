@@ -431,6 +431,30 @@ def count_outcomes(rows):
     return dict(sorted(Counter(row["outcome"] for row in rows).items()))
 
 
+def raw_path_for(graded_path):
+    path = Path(graded_path)
+    suffix = "_graded.jsonl"
+    if not path.name.endswith(suffix):
+        raise RuntimeError(f"graded pool name does not end in {suffix}: {path}")
+    return path.with_name(path.name[:-len(suffix)] + ".jsonl")
+
+
+def efficiency(rows):
+    rows = list(rows)
+    if not rows:
+        return {"n": 0, "mean_elapsed_s": 0, "mean_completion_tokens": 0,
+                "mean_tool_calls": 0, "mean_turns": 0}
+    return {
+        "n": len(rows),
+        "mean_elapsed_s": round(sum(row.get("elapsed_s") or 0 for row in rows) / len(rows), 3),
+        "mean_completion_tokens": round(
+            sum(row.get("completion_tokens") or 0 for row in rows) / len(rows), 3),
+        "mean_tool_calls": round(
+            sum(len(row.get("tool_calls") or []) for row in rows) / len(rows), 3),
+        "mean_turns": round(sum(row.get("n_turns") or 0 for row in rows) / len(rows), 3),
+    }
+
+
 def analyse(args):
     baseline = latest_rows(args.baseline)
     treatments = {arm: latest_rows(path) for arm, path in (
@@ -439,14 +463,44 @@ def analyse(args):
         ("frontmatter", args.frontmatter),
         ("table_query", args.table_query),
     )}
+    graded_paths = {
+        "baseline": Path(args.baseline),
+        "section_insert": Path(args.section_insert),
+        "section_guard": Path(args.section_guard),
+        "frontmatter": Path(args.frontmatter),
+        "table_query": Path(args.table_query),
+    }
+    raw_paths = {name: raw_path_for(path) for name, path in graded_paths.items()}
+    raw_rows = {name: latest_rows(path) for name, path in raw_paths.items()}
     expected_baseline = args.trials * 48
     report = {
         "status": "complete",
+        "condition": {
+            "model_ids": sorted({
+                row.get("model") for rows in raw_rows.values() for row in rows.values()
+                if row.get("model")
+            }),
+            "pi_version": "0.85.1",
+            "incise_version": "0.1.3 current checkout",
+            "trials_per_task": args.trials,
+            "preregistration_commit": "a69fc62",
+            "no_sample_dispatch_fix_commit": "71ce41c",
+        },
+        "artifacts": {
+            name: {
+                "raw": str(raw_paths[name].resolve().relative_to(ROOT)),
+                "raw_sha256": pi_bench.sha256_file(raw_paths[name]),
+                "graded": str(graded_paths[name].resolve().relative_to(ROOT)),
+                "graded_sha256": pi_bench.sha256_file(graded_paths[name]),
+            }
+            for name in graded_paths
+        },
         "baseline": {
             "expected": expected_baseline,
             "observed": len(baseline),
             "outcomes": count_outcomes(baseline.values()),
             "families": {},
+            "efficiency": efficiency(raw_rows["baseline"].values()),
         },
         "arms": {},
     }
@@ -519,6 +573,12 @@ def analyse(args):
             "gate": {
                 "minimum_correct": gate_thresholds[arm],
                 "regression_limit": regression_limit,
+            },
+            "efficiency": {
+                "baseline_subset": efficiency(
+                    raw_rows["baseline"][key] for key in usable),
+                "treatment": efficiency(
+                    raw_rows[arm][key] for key in usable),
             },
             "tasks": per_task,
         }

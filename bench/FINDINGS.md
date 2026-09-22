@@ -11200,3 +11200,15 @@ The extra surface also costs work. Mean calls rose from 1.52 to 1.69, mean turns
 It does not license a claim about Windows, which is out of scope; other operating systems or architectures; other models; later Pi releases; or a larger tool surface. It also does not erase the efficiency cost or the `md_outline` cross-family behavior. A later package or Pi version needs a new named run rather than overwriting this pool.
 
 Pools are `bench/results/pi_0_1_1_{control,treatment}.jsonl` and their graded siblings. The primary decision is `pi_0_1_1_analysis.json`, secondary diagnostics are `pi_0_1_1_secondary.json`, and `pi_0_1_1_run_manifest.json` pins exact execution and artifact hashes. Historical F-compose remains current within its stated condition.
+
+## F-gemma-roadmap — narrow routing wins; generic atomic insertion does not
+
+The preregistered current-checkout Pi refresh ran all 480 frozen Gemma 4 26B pairs with no transport exclusions. It scored 390/480 (81.3%): tables 60/60, lists 93/100, sections 109/150 (72.7%), frontmatter 79/110 (71.8%), and table reads 49/60 (81.7%). This is a new current-checkout condition, not a replacement for the published Pi 0.1.1 package claim.
+
+Four paired, evaluation-only treatments followed. A host-resolved section target with action-specific content fields improved the two destructive target-selection tasks from 17/20 to 20/20, with no regressions or damage. A constrained one-shot table query improved the two filtered-read tasks from 9/20 to 20/20 (exact McNemar p = 0.0009765625), eliminating ten unfiltered results and one destructive wrong-family action. Both preregistered gates passed.
+
+Typed existing-key frontmatter moved 26/50 to 45/50 (p = 0.0000209808349609375) and eliminated all destructive outcomes, but failed its strict gate: one baseline-correct `clear-title` pair became a no-tool prose response. The other four misses were also no-tool responses, not bad writes. This licenses a forced-tool-choice follow-up, not adoption of the measured treatment.
+
+The atomic section-tree treatment failed: 7/40 to 1/40, with seven baseline-correct regressions and one collateral-content result. Gemma understood `children` but invented body prose, selected the wrong placement anchor, or reconstructed existing outline sections. Structured children alone must not ship for Gemma. The next section experiment should split planning from content: host-resolve the literal anchor and relation, then expose a required-slot content tool whose schema contains only the requested heading/body/child fields.
+
+The plan and harness were committed at `a69fc62` (dispatch-only no-sample correction at `71ce41c`). Raw, graded, and paired artifacts use `bench/results/gemma_roadmap_20260921_*`; `gemma_roadmap_20260921_analysis.json` records the gates.

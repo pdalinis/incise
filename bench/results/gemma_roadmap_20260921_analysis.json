@@ -1,0 +1,416 @@
+{
+  "arms": {
+    "frontmatter": {
+      "baseline_correct": 26,
+      "discordant": {
+        "mcnemar_exact_p": 2.09808349609375e-05,
+        "only_baseline": 1,
+        "only_treatment": 20
+      },
+      "efficiency": {
+        "baseline_subset": {
+          "mean_completion_tokens": 200.78,
+          "mean_elapsed_s": 8.545,
+          "mean_tool_calls": 2.12,
+          "mean_turns": 3.12,
+          "n": 50
+        },
+        "treatment": {
+          "mean_completion_tokens": 71.76,
+          "mean_elapsed_s": 2.8,
+          "mean_tool_calls": 0.92,
+          "mean_turns": 1.92,
+          "n": 50
+        }
+      },
+      "expected": 50,
+      "forbidden_outcomes": 0,
+      "gate": {
+        "minimum_correct": 45,
+        "regression_limit": 0
+      },
+      "observed": 50,
+      "paired": 50,
+      "status": "fail",
+      "tasks": {
+        "clear-title": {
+          "baseline": {
+            "correct": 7,
+            "op_error": 1,
+            "wrong": 2
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 8,
+            "malformed": 2
+          }
+        },
+        "set-build-jobs": {
+          "baseline": {
+            "correct": 5,
+            "destructive": 4,
+            "op_error": 1
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 9,
+            "malformed": 1
+          }
+        },
+        "set-build-target": {
+          "baseline": {
+            "correct": 6,
+            "destructive": 2,
+            "op_error": 2
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        },
+        "set-dana-role": {
+          "baseline": {
+            "correct": 3,
+            "destructive": 3,
+            "op_error": 4
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        },
+        "set-draft-true": {
+          "baseline": {
+            "correct": 5,
+            "op_error": 1,
+            "wrong": 4
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 8,
+            "malformed": 2
+          }
+        }
+      },
+      "transport_pairs": [],
+      "treatment_correct": 45,
+      "treatment_outcomes": {
+        "correct": 45,
+        "malformed": 5
+      }
+    },
+    "section_guard": {
+      "baseline_correct": 17,
+      "discordant": {
+        "mcnemar_exact_p": 0.25,
+        "only_baseline": 0,
+        "only_treatment": 3
+      },
+      "efficiency": {
+        "baseline_subset": {
+          "mean_completion_tokens": 176.35,
+          "mean_elapsed_s": 6.5,
+          "mean_tool_calls": 1.3,
+          "mean_turns": 2.3,
+          "n": 20
+        },
+        "treatment": {
+          "mean_completion_tokens": 70.15,
+          "mean_elapsed_s": 2.705,
+          "mean_tool_calls": 1.0,
+          "mean_turns": 2.0,
+          "n": 20
+        }
+      },
+      "expected": 20,
+      "forbidden_outcomes": 0,
+      "gate": {
+        "minimum_correct": 18,
+        "regression_limit": 0
+      },
+      "observed": 20,
+      "paired": 20,
+      "status": "pass",
+      "tasks": {
+        "rename-closed-atx": {
+          "baseline": {
+            "correct": 8,
+            "destructive": 2
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        },
+        "replace-linux-body": {
+          "baseline": {
+            "correct": 9,
+            "destructive": 1
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        }
+      },
+      "transport_pairs": [],
+      "treatment_correct": 20,
+      "treatment_outcomes": {
+        "correct": 20
+      }
+    },
+    "section_insert": {
+      "baseline_correct": 7,
+      "discordant": {
+        "mcnemar_exact_p": 0.0703125,
+        "only_baseline": 7,
+        "only_treatment": 1
+      },
+      "efficiency": {
+        "baseline_subset": {
+          "mean_completion_tokens": 455.925,
+          "mean_elapsed_s": 18.737,
+          "mean_tool_calls": 3.375,
+          "mean_turns": 4.35,
+          "n": 40
+        },
+        "treatment": {
+          "mean_completion_tokens": 212.1,
+          "mean_elapsed_s": 7.656,
+          "mean_tool_calls": 1.625,
+          "mean_turns": 2.575,
+          "n": 40
+        }
+      },
+      "expected": 40,
+      "forbidden_outcomes": 1,
+      "gate": {
+        "minimum_correct": 32,
+        "regression_limit": 2
+      },
+      "observed": 40,
+      "paired": 40,
+      "status": "fail",
+      "tasks": {
+        "insert-nested-ratelimits": {
+          "baseline": {
+            "op_error": 10
+          },
+          "n": 10,
+          "treatment": {
+            "collateral:content": 1,
+            "op_error": 8,
+            "wrong": 1
+          }
+        },
+        "insert-release-at-top": {
+          "baseline": {
+            "collateral:formatting": 1,
+            "op_error": 9
+          },
+          "n": 10,
+          "treatment": {
+            "op_error": 2,
+            "wrong": 8
+          }
+        },
+        "insert-subsection-last": {
+          "baseline": {
+            "correct": 7,
+            "op_error": 3
+          },
+          "n": 10,
+          "treatment": {
+            "op_error": 10
+          }
+        },
+        "insert-troubleshooting": {
+          "baseline": {
+            "collateral:content": 8,
+            "destructive": 2
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 1,
+            "op_error": 3,
+            "wrong": 6
+          }
+        }
+      },
+      "transport_pairs": [],
+      "treatment_correct": 1,
+      "treatment_outcomes": {
+        "collateral:content": 1,
+        "correct": 1,
+        "op_error": 23,
+        "wrong": 15
+      }
+    },
+    "table_query": {
+      "baseline_correct": 9,
+      "discordant": {
+        "mcnemar_exact_p": 0.0009765625,
+        "only_baseline": 0,
+        "only_treatment": 11
+      },
+      "efficiency": {
+        "baseline_subset": {
+          "mean_completion_tokens": 129.4,
+          "mean_elapsed_s": 5.371,
+          "mean_tool_calls": 1.75,
+          "mean_turns": 2.75,
+          "n": 20
+        },
+        "treatment": {
+          "mean_completion_tokens": 60.5,
+          "mean_elapsed_s": 2.506,
+          "mean_tool_calls": 1.0,
+          "mean_turns": 2.0,
+          "n": 20
+        }
+      },
+      "expected": 20,
+      "forbidden_outcomes": 0,
+      "gate": {
+        "minimum_correct": 18,
+        "regression_limit": 0
+      },
+      "observed": 20,
+      "paired": 20,
+      "status": "pass",
+      "tasks": {
+        "get-filter-no-match": {
+          "baseline": {
+            "correct": 1,
+            "destructive": 1,
+            "unfiltered": 8
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        },
+        "get-filter-two-columns": {
+          "baseline": {
+            "correct": 8,
+            "unfiltered": 2
+          },
+          "n": 10,
+          "treatment": {
+            "correct": 10
+          }
+        }
+      },
+      "transport_pairs": [],
+      "treatment_correct": 20,
+      "treatment_outcomes": {
+        "correct": 20
+      }
+    }
+  },
+  "artifacts": {
+    "baseline": {
+      "graded": "bench/results/gemma_roadmap_20260921_baseline_graded.jsonl",
+      "graded_sha256": "f112ebca959c7a7b8cda90930c48a291f6a2171e6b7972461fbbd61f46c7ac5f",
+      "raw": "bench/results/gemma_roadmap_20260921_baseline.jsonl",
+      "raw_sha256": "4c5458dddb2c1a95c27405d9e5a7547cf914f070bf1b5d494b0c26f90c700958"
+    },
+    "frontmatter": {
+      "graded": "bench/results/gemma_roadmap_20260921_frontmatter_graded.jsonl",
+      "graded_sha256": "c3825e775a5853b762507ed916644729cf77780273c76487329605f1cbf8e0d2",
+      "raw": "bench/results/gemma_roadmap_20260921_frontmatter.jsonl",
+      "raw_sha256": "ee50a36105747d70e6d17a8db53495f39d4fb29f0e6b3372415dfcbeddfc246b"
+    },
+    "section_guard": {
+      "graded": "bench/results/gemma_roadmap_20260921_section_guard_graded.jsonl",
+      "graded_sha256": "a79ca08701ee8261a39ee3e0325408676cf11781b2a23e58f9fd7629ea9f7ac6",
+      "raw": "bench/results/gemma_roadmap_20260921_section_guard.jsonl",
+      "raw_sha256": "1ae9912a266491e230c81d50e1098781a9b4a31ca25da58cf4cea22fbc778c09"
+    },
+    "section_insert": {
+      "graded": "bench/results/gemma_roadmap_20260921_section_insert_graded.jsonl",
+      "graded_sha256": "e01fb368f498e1be4451ee88f0db125f9fd97f1cd4b7a4f7d41a494411319bb0",
+      "raw": "bench/results/gemma_roadmap_20260921_section_insert.jsonl",
+      "raw_sha256": "f4d31c3c52242e0f1dd29835e059f8be6c9ab9de34f2c8c04df99ed8b64dfe0b"
+    },
+    "table_query": {
+      "graded": "bench/results/gemma_roadmap_20260921_table_query_graded.jsonl",
+      "graded_sha256": "d07e0d936a684b54c8b38e037333d6c7cbeaccee037973fbca6731e543d8ab0c",
+      "raw": "bench/results/gemma_roadmap_20260921_table_query.jsonl",
+      "raw_sha256": "292e7e72d860d8e4e269ccbddc77f573145b03299f7c98d4e6876c27697fe127"
+    }
+  },
+  "baseline": {
+    "efficiency": {
+      "mean_completion_tokens": 175.535,
+      "mean_elapsed_s": 7.078,
+      "mean_tool_calls": 1.627,
+      "mean_turns": 2.619,
+      "n": 480
+    },
+    "expected": 480,
+    "families": {
+      "frontmatter": {
+        "n": 110,
+        "outcomes": {
+          "correct": 79,
+          "destructive": 9,
+          "op_error": 12,
+          "wrong": 10
+        }
+      },
+      "list": {
+        "n": 100,
+        "outcomes": {
+          "collateral:content": 2,
+          "correct": 93,
+          "destructive": 2,
+          "op_error": 3
+        }
+      },
+      "section": {
+        "n": 150,
+        "outcomes": {
+          "collateral:content": 8,
+          "collateral:formatting": 3,
+          "correct": 109,
+          "destructive": 5,
+          "op_error": 25
+        }
+      },
+      "table": {
+        "n": 60,
+        "outcomes": {
+          "correct": 60
+        }
+      },
+      "table-read": {
+        "n": 60,
+        "outcomes": {
+          "correct": 49,
+          "destructive": 1,
+          "unfiltered": 10
+        }
+      }
+    },
+    "observed": 480,
+    "outcomes": {
+      "collateral:content": 10,
+      "collateral:formatting": 3,
+      "correct": 390,
+      "destructive": 17,
+      "op_error": 40,
+      "unfiltered": 10,
+      "wrong": 10
+    }
+  },
+  "condition": {
+    "incise_version": "0.1.3 current checkout",
+    "model_ids": [],
+    "no_sample_dispatch_fix_commit": "71ce41c",
+    "pi_version": "0.85.1",
+    "preregistration_commit": "a69fc62",
+    "trials_per_task": 10
+  },
+  "status": "complete"
+}
