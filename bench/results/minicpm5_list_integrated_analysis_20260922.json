@@ -1,0 +1,103 @@
+{
+  "address_selection": {
+    "correct": 21,
+    "total": 21
+  },
+  "artifacts": {
+    "bench/results/minicpm5_list_integrated_20260922.jsonl": "d052507ee407f42ccbd994c9196b5cf94fb43abb45dd3c07fee4faced4ecd6da",
+    "bench/results/minicpm5_list_integrated_20260922_graded.jsonl": "f34446f466bf31a33f05d51eee3dc9d608fc6ad059b645306b733ee1622aee39",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "control_outcomes": {
+    "collateral:content": 1,
+    "correct": 13,
+    "op_error": 2,
+    "wrong": 5
+  },
+  "efficiency": {
+    "content_mean_completion_tokens": 29.1,
+    "control_mean_completion_tokens": 116.95,
+    "select_mean_completion_tokens": 39.14,
+    "treatment_mean_completion_tokens": 68.24,
+    "treatment_mean_elapsed_s": 2.28
+  },
+  "failure_localization": {
+    "correct": 21
+  },
+  "gate": {
+    "all_routes_match_preregistered_mapping": true,
+    "at_least_nineteen_correct": true,
+    "each_task_correct_in_two_seeds": true,
+    "executed_structure_was_validated": true,
+    "no_control_correct_regressed": true,
+    "no_destructive_or_collateral": true,
+    "passed": true,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T01:27:21.371463+00:00",
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 13,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.0078125,
+    "treatment": 21,
+    "treatment_only": 8
+  },
+  "pairs": 21,
+  "pre_sampling_amendment_commit": "ab0e487",
+  "preregistration_commit": "9564eee",
+  "request_routing": {
+    "correct": 21,
+    "mapping": {
+      "add-item-loose": "append",
+      "add-item-mixed-markers": "append",
+      "add-item-nested-asterisk": "after",
+      "add-item-ordered-all-ones": "append",
+      "add-item-ordered-renumber": "between",
+      "add-item-paren-delimiter": "append",
+      "add-item-tight-dash": "append"
+    },
+    "total": 21
+  },
+  "sampling_harness_sha256": [
+    "973b6f8f5d40fb2cd17a448cf7b76b3f331dbfec17b92818c42a14287a56f8e4"
+  ],
+  "schema_sha256": {
+    "content": [
+      "353c71e6bc4f4d4ed24b0fecaecd43a6aac6a950dc2c59b878617d69cc8ad0b1",
+      "538dbf2ebf19bc12c73e935f7f7787a73d1b07929d3fbd4d796faeedb27d8cb7",
+      "fa777e36ce2a545ec6d15b505f3258a48370ad38947b2ea2340737619e87bb9c"
+    ],
+    "selection": [
+      "0eb05f53345e2e162cc4895b79ef54d7885d772d1fd0157b3b57af13650ca73c",
+      "968c542e91620a3f544bf8a0cc8b885850afa528a43161aa723a8f3447cb42da"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-loose": {
+      "correct": 3
+    },
+    "add-item-mixed-markers": {
+      "correct": 3
+    },
+    "add-item-nested-asterisk": {
+      "correct": 3
+    },
+    "add-item-ordered-all-ones": {
+      "correct": 3
+    },
+    "add-item-ordered-renumber": {
+      "correct": 3
+    },
+    "add-item-paren-delimiter": {
+      "correct": 3
+    },
+    "add-item-tight-dash": {
+      "correct": 3
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 21
+  }
+}

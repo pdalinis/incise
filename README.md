@@ -166,6 +166,8 @@ When both list-placement tools were exposed together, final edits reached 6/6, b
 
 For list selection, separately required `heading` and `ordinal` fields reached 6/6 correct addresses and edits, while a single serialized metadata handle reached only 1/6. MiniCPM integrations should prefer small required fields with host validation over compound string encodings.
 
+A preregistered integrated MiniCPM list pipeline combined structured heading-and-ordinal selection, automatic list inspection, host-owned append/after/between routing, and exact validated anchors. It improved the full supported add-item population from **13/21 to 21/21** (eight treatment-only wins, no regressions, exact McNemar p = 0.0078), with zero destructive or collateral outcomes and mean completion reduced from 117 to 68 tokens. This supports an opt-in MiniCPM integration path; default Gemma tools and schemas remain unchanged.
+
 ## Measured with small models
 
 The recorded benchmark compares direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader.
