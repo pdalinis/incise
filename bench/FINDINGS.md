@@ -731,6 +731,16 @@ The mechanism moved exactly as predicted: all 21 trials invoked `list_select`, a
 
 All writes remained structurally validated and limited to one mutation; there were no destructive or collateral outcomes, and default schemas stayed byte-identical. The preregistered gate nevertheless failed the per-task and no-Pi-control-regression rules. The compact prompt is removed rather than shipped. Under the stopping rule, Pi list prompt/schema tuning ends here: the unforced opt-in profile remains at its measured 16/21, while further improvement requires a different runtime/model or deterministic host-derived list selection rather than another wording variant. Artifacts use `bench/results/minicpm5_pi_list_profile_20260922_v4*` and `minicpm5_pi_list_prompt_analysis_20260922_v4.json`.
 
+## F-gemma-profile — production routing reproduces the candidate gains
+
+The production `safe-routed` Pi profile was frozen with its preregistration in commit `db66b43` before any new samples. The confirmation reused the four supported Gemma tasks, seeds 0 through 9, the existing prompts and graders, and the same local `gemma4-direct-q8` endpoint.
+
+All 40 trials were correct: exact section rename and body replacement were 20/20, compared with 17/20 in the matching historical baseline; constrained table reads were 20/20, compared with 9/20. There were zero destructive, collateral, unfiltered, or misreported outcomes and zero regressions among baseline-correct pairs. Every first provider request advertised exactly the single action-specific tool chosen by the production classifier; `route_errors` is empty. Both preregistered arms pass.
+
+The result reproduces the isolated benchmark-extension result through real target discovery, dynamic tool activation, content-hash writes, and the production one-success latch. It licenses continued opt-in use of `safe-routed`. It does not license changing the package default or enabling a general MiniCPM profile; those still require full-composition evidence. `auto` therefore maps Gemma to the routed capabilities and conservatively maps MiniCPM and unknown model families to `standard`.
+
+Artifacts: `gemma_safe_routed_profile_20260922.jsonl` (SHA-256 `7091806c341e68a0c1dd4a98ce480aa6110f43e7a6bc93eda253177a9da49165`), its graded pool (SHA-256 `a74c63319e18fcb76e24e9c6701801666b64f5d7193100743960196056512466`), and analysis (SHA-256 `0eb6db69e2ad57f02daf1f9338ecdcde04de1510827958cf9e112a424b1d51ed`).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
