@@ -845,6 +845,14 @@ The guarded create route was frozen at 854b522 and tested on all ten add-build-c
 
 Every request exposed only frontmatter_create_target under automatic tool choice, every model call supplied an empty object, and every host-resolved call used key build.cache, boolean true, and must_absent=true with the preceding structured-read hash. The adapter also verified that build was an existing map and that neither build.cache nor build.caching existed; the one-success latch held. This licenses the full v6 composition run, not adoption by itself. Artifact SHA-256 values: raw 408e06fab9edb10dddab0f6527bcef6625f222e5585332c5751532b22bd1dd2b; graded 740c17e1d47fb4248cad98de8f00047a6bb73b502ab32538d0f12bb60988cc02; analysis 6ff3d9639e61aca6b69618855a570399c76c2d40e22a26f4b9d85a37192a7c02.
 
+## F-gemma-full-v6 — guarded creation brings frontmatter to 110/110
+
+The preregistered full v6 treatment completed all 480 trials without transport. The paired comparison still excludes rename-setext seed 1 because its full-v5 control row is the preregistered persistent transport, leaving 479 matched pairs. Correctness rose from 469/479 to 473/479: eight treatment-only wins, four control-only wins, and descriptive two-sided exact McNemar p = 0.3876953125. Harmful outcomes fell from five to one.
+
+Frontmatter reached 110/110, up from 104/110. Tables and table reads stayed 60/60, lists were 99/100 with one loud fallback error, and sections were 144/149 with four loud fallback errors and the same single formatting-collateral result. All 180 routed trials were correct with no route, filter, section-tree, existing-key frontmatter, create-key, list-argument, or multiple-mutation errors. All 299 fallback trials retained the standard eight-tool surface. Every preregistered gate passed, licensing guarded build.cache creation in Gemma auto.
+
+Artifact SHA-256 values: raw b050e9be50c2eb81615cf9a2c4998a7bfe6c765fc4fef2612691fed24dd01e04; graded 287befce58f1357e4335569e44848a3923581c61a6903692984a50bbd548e706; analysis 6174bc4a838f5e3fbd648514ffdf4819c6e3fe00122da118d44b3c326a2e5ef1.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
