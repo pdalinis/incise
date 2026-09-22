@@ -15,9 +15,9 @@ import minicpm_list_integrated as treatment  # noqa: E402
 
 CONTROL_RAW = "bench/results/minicpm5_routed_lists_20260921.jsonl"
 CONTROL_GRADED = "bench/results/minicpm5_routed_lists_20260921_graded.jsonl"
-TREATMENT_RAW = "bench/results/minicpm5_pi_list_profile_20260922.jsonl"
-TREATMENT_GRADED = "bench/results/minicpm5_pi_list_profile_20260922_graded.jsonl"
-OUT = "bench/results/minicpm5_pi_list_profile_analysis_20260922.json"
+TREATMENT_RAW = "bench/results/minicpm5_pi_list_profile_20260922_v2.jsonl"
+TREATMENT_GRADED = "bench/results/minicpm5_pi_list_profile_20260922_v2_graded.jsonl"
+OUT = "bench/results/minicpm5_pi_list_profile_analysis_20260922_v2.json"
 TASKS = set(treatment.EXPECTED_ROUTE)
 
 
@@ -115,6 +115,7 @@ def main():
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "preregistration_commit": "b53a9e9",
+        "preflight_correction_commit": "9f213b0",
         "implementation_commit": "fd1776e",
         "model": "minicpm5-2b-q8",
         "pi_version": "0.85.1",

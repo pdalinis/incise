@@ -30,6 +30,9 @@ DEFAULT_BINARY = ROOT / "target" / "debug" / "incise"
 DEFAULT_SANDBOX = Path("/private/tmp/incise-minicpm-pi-list-profile")
 MARKER = ".incise-minicpm-pi-list-profile"
 CONTENT_TOOLS = {"list_append_item", "list_insert_after", "list_insert_between"}
+PROFILE_TOOLS = [
+    "list_select", "list_append_item", "list_insert_after", "list_insert_between",
+]
 SCHEME = "minicpm_pi_list_profile"
 
 
@@ -88,7 +91,10 @@ def worker_request(args, sandbox, task, trial):
         "extension": str(Path(args.extension).resolve()),
         "piSdk": str(Path(args.pi_sdk).resolve()),
         "endpoint": args.endpoint,
-        "tools": [],
+        # Pi interprets this SDK field as an allowlist. Dynamic tools need to be
+        # named here even though list_select is not registered until the
+        # before_agent_start hook has inspected the current file.
+        "tools": PROFILE_TOOLS,
         "seed": trial,
         "maxTurns": 4,
         "prompt": prompt_for(task),
