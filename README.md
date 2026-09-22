@@ -142,7 +142,7 @@ pi
 
 The package provides native binaries for macOS arm64/x64 and glibc Linux arm64/x64. The default `standard` profile registers the three structural readers, `table_get`, and all four structured edit tools. Run `/incise-doctor` inside Pi to inspect the selected binary, schemas, tools, and profile decision.
 
-For the experimental model-agnostic router, start Pi with `INCISE_PROFILE=safe-routed`. Its currently measured capabilities resolve exact section rename/body-replacement targets and constrained table reads before exposing one small action-specific tool; other requests retain the standard tools. `INCISE_PROFILE=auto` selects that routed behavior for Gemma and stays on `standard` for model families without a validated general profile. See [`plugins/pi/README.md`](plugins/pi/README.md) for model detection, overrides, and evaluation status.
+For Gemma, the recommended Pi setup is `INCISE_PROFILE=auto pi`. Auto-detection enables the measured `safe-routed` capabilities for Gemma and stays on `standard` for model families without a validated general profile. The routed profile host-resolves exact section rename/body-replacement targets and explicit table predicates before exposing one small action-specific tool; other requests retain the standard tools. In the full 480-pair Pi evaluation, it improved correctness from 390 to 406, reduced harmful outcomes from 40 to 28, and scored 60/60 on table reads. The package default remains `standard` for compatibility. See [`plugins/pi/README.md`](plugins/pi/README.md) for model detection, overrides, and evaluation details.
 
 ## Safety model
 

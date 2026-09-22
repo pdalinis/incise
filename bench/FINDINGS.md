@@ -763,6 +763,18 @@ This closes all three defects from F-gemma-full: whole-table projection no longe
 
 Artifacts: `gemma_table_route_v2_20260922.jsonl` (SHA-256 `ec140500b442351ef4247733760112d427af9955fe4e8c15a2b8a847fa08ce68`), its graded pool (SHA-256 `9c3820e78f0dea7deec8f6ed5ee6de047534b4d91597c1a626db0b880abb1b3f`), and analysis (SHA-256 `f9759e2ba4ab43f7e7c433202b8f5753a97789e0d216aec678c067f4281eed3c`).
 
+## F-gemma-full-v2 — explicit predicates pass the full Pi gate
+
+The second full production-profile plan and harness were frozen at e30b1d2 after the targeted v2 table gate passed. It ran the same 480 Gemma/Pi pairs as F-gemma-full. One set-build-target trial hit the 240-second transport deadline and succeeded on its single preregistered retry, leaving all 480 usable pairs.
+
+The treatment improved correctness from 390/480 to 406/480. Discordants were 36 treatment-only and 20 baseline-only, for exact paired McNemar p = 0.0440465461. Harmful outcomes fell from 40 to 28. Every family cleared its floor: tables 60/60, lists 93/100, sections 107/150, frontmatter 86/110, and table reads 60/60.
+
+All 60 planned routed trials were usable and correct, with no forbidden calls, route errors, or filter errors. The remaining 420 fallback trials preserved the standard tool surface. Host-owned explicit table predicates fixed all three defects in the first full run: whole-table and ordinal reads stayed on fallback, output-column words were not treated as predicates, and the model could not rewrite exact filter values.
+
+The full gate passes. This licenses recommending INCISE_PROFILE=auto for Gemma in Pi while retaining standard as the package compatibility default for one release cycle. It does not license a general MiniCPM profile. The next measured opportunities are host-resolved section insertion and host-resolved nested frontmatter paths; the full run exposed repeated safe refusals and harmful wrong-target edits in those fallback families.
+
+Artifacts: gemma_safe_routed_full_v2_20260922.jsonl (SHA-256 bc027cd8a5a043c01ae16f8f8dd278b2c502da861029d457dff9b25655224c57), its graded pool (SHA-256 af00ca67c1c2dba25e42e2490c4b8d2ac7acf708bd4857706f3fb5b06e85df54), and analysis (SHA-256 8b71674779b9cc9aa819b1910d74322f2a6111ce46c71fd04385aca5446209c8).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
