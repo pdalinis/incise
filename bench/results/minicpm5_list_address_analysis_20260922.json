@@ -1,0 +1,62 @@
+{
+  "address_selection": {
+    "correct": 6,
+    "total": 6
+  },
+  "artifacts": {
+    "bench/results/minicpm5_list_address_20260922.jsonl": "acece40d8507c93865987eb209f0c244e4b0f51f9454d183529861e791fbdf6d",
+    "bench/results/minicpm5_list_address_20260922_graded.jsonl": "2ee6527140813ee6ba32bc30e6675cd5b45f45e0351b8ede438c62eb25d2ebad",
+    "bench/results/minicpm5_list_handle_20260922_graded.jsonl": "788ed6049536d8380f08338aed8a77a8400979adc480cca4638fba7dd411c1e3",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "efficiency": {
+    "content_mean_completion_tokens": 23.67,
+    "generic_mean_completion_tokens": 113.67,
+    "select_mean_completion_tokens": 43.67,
+    "treatment_mean_completion_tokens": 67.33,
+    "treatment_mean_elapsed_s": 2.24
+  },
+  "gate": {
+    "at_least_five_correct_addresses": true,
+    "at_least_five_correct_documents": true,
+    "each_task_correct_in_two_seeds": true,
+    "executed_addresses_from_entries": true,
+    "no_destructive_or_collateral": true,
+    "no_generic_control_correct_regressed": true,
+    "passed": true,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T01:18:59.504834+00:00",
+  "model": "minicpm5-2b-q8",
+  "paired_vs_composite_handle": {
+    "control_correct": 1,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.0625,
+    "treatment_correct": 6,
+    "treatment_only": 5
+  },
+  "paired_vs_generic": {
+    "control_correct": 4,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.5,
+    "treatment_correct": 6,
+    "treatment_only": 2
+  },
+  "pairs": 6,
+  "preregistration_commit": "ba0016e",
+  "sampling_harness_sha256": [
+    "2ff3db3d81ad8e33acc6903e126416f40ff87d0b07c6a290b8b241c31fd87c60"
+  ],
+  "treatment_by_task": {
+    "add-item-loose": {
+      "correct": 3
+    },
+    "add-item-mixed-markers": {
+      "correct": 3
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 6
+  }
+}

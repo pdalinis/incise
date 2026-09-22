@@ -164,6 +164,8 @@ List placement responds better to request-shaped routing. After `list_get`, requ
 
 When both list-placement tools were exposed together, final edits reached 6/6, but MiniCPM always chose the after-style tool; the preregistered routing gate therefore failed. The result supports exact dynamic anchors, not autonomous relation routing.
 
+For list selection, separately required `heading` and `ordinal` fields reached 6/6 correct addresses and edits, while a single serialized metadata handle reached only 1/6. MiniCPM integrations should prefer small required fields with host validation over compound string encodings.
+
 ## Measured with small models
 
 The recorded benchmark compares direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader.

@@ -1,0 +1,6 @@
+{"task_id": "add-item-loose", "trial": 0, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
+{"task_id": "add-item-loose", "trial": 1, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
+{"task_id": "add-item-loose", "trial": 2, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
+{"task_id": "add-item-mixed-markers", "trial": 0, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
+{"task_id": "add-item-mixed-markers", "trial": 1, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
+{"task_id": "add-item-mixed-markers", "trial": 2, "scheme": "minicpm_list_address", "outcome": "correct", "detail": null, "handle_correct": false, "address_from_handle": false, "address_correct": true, "address_from_entries": true}
