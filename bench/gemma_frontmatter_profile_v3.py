@@ -151,6 +151,8 @@ def analyse(args):
             errors.append([task_id, trial, "model arguments", call])
         details = results[calls[0]["id"]].get("details") or {}
         resolved = {**expected_args, "must_exist": True}
+        if expected_tool == "frontmatter_clear":
+            resolved["value"] = None
         if (details.get("route") != "frontmatter-typed"
                 or details.get("resolvedArguments") != resolved):
             errors.append([task_id, trial, "resolved arguments", details])
