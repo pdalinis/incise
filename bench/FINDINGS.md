@@ -785,6 +785,16 @@ All ten release calls supplied the correct host-owned anchor and before relation
 
 Artifacts: gemma_section_insert_route_v1_20260922.jsonl (SHA-256 e841ccbe684bc26390e888e097a43a5af0dab449490ec4df4fcfd019f856e2ff), its graded pool (SHA-256 9ae076d174e2f8248691f170928fc4796b334355e849817ecdc6e50d6d606b14), and analysis (SHA-256 db44577643a7ab49cdabc340e1eb0678d00e45ba2ed24747b81ce8ba0cf7314b).
 
+## F-gemma-section-insert-v2 — parse the request, not its structural preamble
+
+The host-owned-literal v2 plan was frozen at fd61513 and its implementation at b6c0005. The treatment failed at 3/40 versus v1 at 28/40: 28 loud operation errors, seven content-collateral outcomes, two destructive outcomes, and all 40 route-surface checks failed.
+
+This did not sample the intended zero-argument tool. The real Pi benchmark prompt prepends a structural summary whose example address is quoted. The literal parser counted that example together with the quoted request bodies, treated every request as ambiguous, and conservatively activated the standard eight-tool fallback. The resulting outcome distribution is another observation of the known generic insertion path, including nine harmful Troubleshooting outcomes.
+
+The correction is mechanical but benchmark-relevant: when the prompt begins with the known Incise structural-summary framing, parse insertion literals only from the request block after its blank-line boundary. Ordinary user prompts remain whole. A regression test must use the exact composed preamble before another live run.
+
+Artifacts: gemma_section_insert_route_v2_20260922.jsonl (SHA-256 0c23d30329559737dcae970f6a5f208726ae2b81405e4f1ea9f2fa8d9d4178d4), its graded pool (SHA-256 27fbc3558cf557b9b8e1cb0cf2d58763e7ca54f2a573e80e714d7a2eb8819ea7), and analysis (SHA-256 77ae637c06fd5fc88b1595499f11b259f4c0586bfa7d25122be678f98a6128fd).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
