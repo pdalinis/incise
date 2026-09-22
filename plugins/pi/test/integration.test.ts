@@ -368,6 +368,29 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	}, context);
 	assert(active.has("frontmatter_edit"));
 	assert(!active.has("frontmatter_set_boolean"));
+
+	const listPath = join(directory, "numbering.md");
+	await copyFile(resolve(repository, "corpus", "lists", "ordered-numbering.md"), listPath);
+	const listPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @numbering.md, remove the "third" item from the list under "Non-sequential".',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(listPrepared.systemPrompt, /resolved the exact quoted list item/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_remove_target"]);
+	assert.equal(tools.get("list_remove_target").parameters.required, undefined);
+	const removed = await tools.get("list_remove_target").execute(
+		"remove", {}, undefined, undefined, context,
+	);
+	assert.equal(removed.details.route, "list-remove-target");
+	assert.deepEqual(removed.details.resolvedArguments, {
+		list: { heading: "Ordered list numbering > Non-sequential", ordinal: 0 },
+		match: "third",
+	});
+	const numbering = await readFile(listPath, "utf8");
+	assert.match(numbering, /## Non-sequential[\s\S]*?1\. first\n7\. seventh\n\n## Nested under unordered/);
+	assert.deepEqual([...active], ["foreign_tool"]);
 });
 
 test("auto profile selects once from the active model and reports the decision", async () => {

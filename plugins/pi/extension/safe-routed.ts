@@ -4,12 +4,17 @@ import { withFileMutationQueue, type ExtensionAPI } from "@earendil-works/pi-cod
 import type { TSchema } from "typebox";
 
 import type { ResolvedBinary } from "./binary.ts";
-import { extractMarkdownPath } from "./minicpm-list.ts";
+import {
+	extractMarkdownPath,
+	listItems,
+	parseListSummary,
+	type ListEntry,
+} from "./minicpm-list.ts";
 import { processError, runIncise } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
-	"frontmatter-typed" | "table-query";
+	"frontmatter-typed" | "list-remove-target" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -36,6 +41,11 @@ export interface SectionInsertIntent {
 	heading: string;
 	body?: string;
 	children?: Array<{ heading: string; body: string }>;
+}
+
+export interface ListRemoveIntent {
+	heading: string;
+	item: string;
 }
 
 interface RouteSpec {
@@ -286,6 +296,29 @@ export function frontmatterValueType(prompt: string): FrontmatterValueType | und
 	return undefined;
 }
 
+export function listRemoveIntent(prompt: string): ListRemoveIntent | undefined {
+	const after = prompt.match(
+		/\bremove\s+(?:the\s+)?["“]([^"”]+)["”]\s+item\s+from\s+the\s+list\s+under\s+["“]([^"”]+)["”]/i,
+	);
+	if (after) return { item: after[1].trim(), heading: after[2].trim() };
+	const before = prompt.match(
+		/\bin\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*,\s*remove\s+the\s+item\s+["“]([^"”]+)["”]/i,
+	);
+	if (before) return { heading: before[1].trim(), item: before[2].trim() };
+	return undefined;
+}
+
+function resolveListEntry(entries: ListEntry[], requested: string): ListEntry | undefined {
+	const parts = requested.split(">").map((part) => part.trim()).filter(Boolean);
+	if (parts.length === 0) return undefined;
+	const matches = entries.filter((entry) => {
+		const candidate = entry.heading.split(" > ");
+		return candidate.length >= parts.length &&
+			parts.every((part, index) => candidate[candidate.length - parts.length + index] === part);
+	});
+	return matches.length === 1 ? matches[0] : undefined;
+}
+
 function looksLikeTableRead(prompt: string): boolean {
 	if (/\b(?:add|append|insert|update|change|delete|remove|sort|realign)\b/i.test(prompt)) return false;
 	return /\b(?:find|which|what|show|list|query|look up)\b/i.test(prompt);
@@ -447,6 +480,42 @@ async function routeForPrompt(
 			systemPrompt: `${String(result.payload.text ?? "")}\n\n${instruction}`,
 		};
 	}
+	const removal = listRemoveIntent(prompt);
+	if (removal) {
+		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["lists", path]);
+		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
+		const selected = resolveListEntry(
+			parseListSummary(String(summary.payload.text ?? "")), removal.heading,
+		);
+		if (!selected) return undefined;
+		const readArgs = { list: { heading: selected.heading, ordinal: selected.ordinal } };
+		const result = await runIncise(
+			pi.exec.bind(pi), binary.path,
+			["items", path, "--args", JSON.stringify(readArgs)],
+		);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const items = listItems(result.payload, selected);
+		if (items.filter((item) => item.text === removal.item).length !== 1) return undefined;
+		const schema: ToolSchema = {
+			name: "list_remove_target",
+			description: `Remove the already resolved existing item ${JSON.stringify(removal.item)} from ${JSON.stringify(selected.heading)}. The host owns the exact file, list, and item; supply no arguments.`,
+			parameters: { type: "object", properties: {}, additionalProperties: false },
+		};
+		return {
+			kind: "list-remove-target",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "list-remove-item",
+			write: true,
+			arguments: () => ({
+				list: { heading: selected.heading, ordinal: selected.ordinal },
+				match: removal.item,
+			}),
+			systemPrompt: `${String(result.payload.text ?? "")}\n\nIncise resolved the exact quoted list item. Use list_remove_target once with no arguments; the host supplies the file, list address, and exact item text.`,
+		};
+	}
 	if (!looksLikeTableRead(prompt)) return undefined;
 	const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
 	if (result.code !== 0 || result.payload.ok === false) return undefined;
@@ -484,7 +553,7 @@ export function installSafeRoutedProfile(
 	const routedNames = new Set([
 		"section_rename_target", "section_replace_target", "section_insert_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
-		"frontmatter_set_boolean", "table_query",
+		"frontmatter_set_boolean", "list_remove_target", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;

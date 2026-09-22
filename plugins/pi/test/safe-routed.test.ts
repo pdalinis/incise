@@ -4,6 +4,7 @@ import test from "node:test";
 import {
 	filterColumns,
 	frontmatterValueType,
+	listRemoveIntent,
 	parseOutline,
 	parseTableSummary,
 	requestedTable,
@@ -13,6 +14,19 @@ import {
 	sectionIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
+
+test("list removal routing requires exact quoted items and headings", () => {
+	assert.deepEqual(
+		listRemoveIntent('Remove the "third" item from the list under "Non-sequential".'),
+		{ item: "third", heading: "Non-sequential" },
+	);
+	assert.deepEqual(
+		listRemoveIntent('In the list under "Mixed with plain items", remove the item "not a task, just an item".'),
+		{ item: "not a task, just an item", heading: "Mixed with plain items" },
+	);
+	assert.equal(listRemoveIntent("Remove the third item from the Non-sequential list."), undefined);
+	assert.equal(listRemoveIntent('Add "third" under "Non-sequential".'), undefined);
+});
 
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
 	const supported = new Map<string, string>([

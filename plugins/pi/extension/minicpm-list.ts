@@ -209,7 +209,7 @@ export function composeListAdd(
 	return composed;
 }
 
-function listItems(payload: IncisePayload, selected: ListEntry): ListItem[] {
+export function listItems(payload: IncisePayload, selected: ListEntry): ListItem[] {
 	const list = payload.list;
 	if (!list || typeof list !== "object" || Array.isArray(list)) {
 		throw new Error("incise items did not return a structured list.");
