@@ -25,7 +25,7 @@ test("section routing recognizes only explicit rename and body-replacement reque
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);
 });
 
-test("section insertion routing freezes anchors and exposes only required content shapes", () => {
+test("section insertion routing freezes structure and exact literal content", () => {
 	const entries = parseOutline([
 		"Sections in `x.md`:",
 		"  Changelog   (body, 1 subsection)",
@@ -42,7 +42,8 @@ test("section insertion routing freezes anchors and exposes only required conten
 	assert.deepEqual(release, {
 		target: "Changelog > [1.4.2] - 2026-08-14",
 		position: "before",
-		shape: "one-child",
+		heading: "[1.5.0] - 2026-09-06",
+		children: [{ heading: "Added", body: "- flag." }],
 	});
 	assert.deepEqual(sectionInsertIntent(
 		'Under Install, add a FreeBSD subsection after the existing ones, saying "Use pkg."',
@@ -50,7 +51,8 @@ test("section insertion routing freezes anchors and exposes only required conten
 	), {
 		target: "Deep heading nesting > Install",
 		position: "last-child",
-		shape: "body",
+		heading: "FreeBSD",
+		body: "Use pkg.",
 	});
 	const nested = sectionInsertIntent(
 		'Under the API section, add a Rate limits section, and give it a Headers subsection saying "Exact."',
@@ -59,7 +61,8 @@ test("section insertion routing freezes anchors and exposes only required conten
 	assert.deepEqual(nested, {
 		target: "Deep heading nesting > Reference > API",
 		position: "last-child",
-		shape: "one-child",
+		heading: "Rate limits",
+		children: [{ heading: "Headers", body: "Exact." }],
 	});
 	assert.deepEqual(sectionInsertIntent(
 		'At the end of Deep heading nesting, add a Troubleshooting section with two subsections: Logs, saying "Log.", and Common errors, saying "FAQ."',
@@ -67,13 +70,13 @@ test("section insertion routing freezes anchors and exposes only required conten
 	), {
 		target: "Deep heading nesting",
 		position: "last-child",
-		shape: "two-children",
+		heading: "Troubleshooting",
+		children: [
+			{ heading: "Logs", body: "Log." },
+			{ heading: "Common errors", body: "FAQ." },
+		],
 	});
-	assert.deepEqual(sectionInsertArguments(nested!, {
-		new_heading: "Rate limits",
-		subsection_heading: "Headers",
-		subsection_body: "Exact.",
-	}), {
+	assert.deepEqual(sectionInsertArguments(nested!), {
 		section: "Deep heading nesting > Reference > API",
 		position: "last-child",
 		heading: "Rate limits",

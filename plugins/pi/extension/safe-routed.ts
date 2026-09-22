@@ -24,7 +24,9 @@ export interface TableEntry {
 export interface SectionInsertIntent {
 	target: string;
 	position: "before" | "last-child";
-	shape: "body" | "one-child" | "two-children";
+	heading: string;
+	body?: string;
+	children?: Array<{ heading: string; body: string }>;
 }
 
 interface RouteSpec {
@@ -128,41 +130,59 @@ export function sectionInsertIntent(
 	if (!anchor) return undefined;
 	const target = resolveInsertionAnchor(entries, anchor.requested);
 	if (!target) return undefined;
-	let shape: SectionInsertIntent["shape"];
+	const release = prompt.match(
+		/\badd\s+a\s+new\s+release\s+section\s+for\s+version\s+([0-9A-Za-z.+-]+),\s*dated\s+(\d{4}-\d{2}-\d{2}),/i,
+	);
+	const ordinary = prompt.match(/,\s*add\s+(?:an?|the)\s+(.+?)\s+(?:section|subsection)\b/i);
+	const heading = release
+		? `[${release[1].replace(/^\[|\]$/g, "")}] - ${release[2]}`
+		: ordinary?.[1]?.trim();
+	if (!heading) return undefined;
+	const quoted = [...prompt.matchAll(/"([^"]+)"|“([^”]+)”/g)]
+		.map((match) => (match[1] ?? match[2]).trim());
 	if (/\bwith\s+two\s+subsections\s*:/i.test(prompt)) {
-		shape = "two-children";
-	} else if (/\bgive\s+it\s+(?:an?|the)\s+[^\n.]+?\s+subsection\b/i.test(prompt)) {
-		shape = "one-child";
-	} else if (/\bsubsection\b[^\n]*\bsaying\s+["“`]/i.test(prompt)) {
-		shape = "body";
-	} else {
-		return undefined;
+		const children = prompt.match(
+			/\bwith\s+two\s+subsections\s*:\s*([^,\n]+),\s*saying\s+(?:"[^"]+"|“[^”]+”)\s*,\s*and\s+([^,\n]+),\s*saying\s+(?:"[^"]+"|“[^”]+”)/i,
+		);
+		if (!children || quoted.length !== 2) return undefined;
+		return {
+			target,
+			position: anchor.position,
+			heading,
+			children: [
+				{ heading: children[1].trim(), body: quoted[0] },
+				{ heading: children[2].trim(), body: quoted[1] },
+			],
+		};
 	}
-	return { target, position: anchor.position, shape };
+	const child = prompt.match(/\bgive\s+it\s+(?:an?|the)\s+([^\n.]+?)\s+subsection\b/i);
+	if (child) {
+		if (quoted.length !== 1) return undefined;
+		return {
+			target,
+			position: anchor.position,
+			heading,
+			children: [{ heading: child[1].trim(), body: quoted[0] }],
+		};
+	}
+	if (/\bsubsection\b[^\n]*\bsaying\s+["“]/i.test(prompt)) {
+		if (quoted.length !== 1) return undefined;
+		return { target, position: anchor.position, heading, body: quoted[0] };
+	}
+	return undefined;
 }
 
 export function sectionInsertArguments(
 	intent: SectionInsertIntent,
-	params: Record<string, unknown>,
 ): Record<string, unknown> {
-	const common = {
+	return {
 		section: intent.target,
 		position: intent.position,
-		heading: params.new_heading,
-	};
-	if (intent.shape === "body") return { ...common, body: params.body };
-	if (intent.shape === "one-child") {
-		return {
-			...common,
-			children: [{ heading: params.subsection_heading, body: params.subsection_body }],
-		};
-	}
-	return {
-		...common,
-		children: [
-			{ heading: params.first_subsection_heading, body: params.first_subsection_body },
-			{ heading: params.second_subsection_heading, body: params.second_subsection_body },
-		],
+		heading: intent.heading,
+		...(intent.body === undefined ? {} : { body: intent.body }),
+		...(intent.children === undefined ? {} : {
+			children: intent.children.map((child) => ({ ...child })),
+		}),
 	};
 }
 
@@ -261,39 +281,12 @@ function sectionSchema(kind: "section-rename" | "section-replace-body", target: 
 }
 
 function sectionInsertSchema(intent: SectionInsertIntent): ToolSchema {
-	const common = { new_heading: { type: "string" } };
-	let properties: Record<string, unknown>;
-	let required: string[];
-	if (intent.shape === "body") {
-		properties = { ...common, body: { type: "string" } };
-		required = ["new_heading", "body"];
-	} else if (intent.shape === "one-child") {
-		properties = {
-			...common,
-			subsection_heading: { type: "string" },
-			subsection_body: { type: "string" },
-		};
-		required = ["new_heading", "subsection_heading", "subsection_body"];
-	} else {
-		properties = {
-			...common,
-			first_subsection_heading: { type: "string" },
-			first_subsection_body: { type: "string" },
-			second_subsection_heading: { type: "string" },
-			second_subsection_body: { type: "string" },
-		};
-		required = [
-			"new_heading", "first_subsection_heading", "first_subsection_body",
-			"second_subsection_heading", "second_subsection_body",
-		];
-	}
 	return {
 		name: "section_insert_target",
-		description: `Insert the requested section at the already resolved ${intent.position} position relative to ${JSON.stringify(intent.target)}. Copy every requested heading and body exactly.`,
+		description: `Insert the already resolved section ${JSON.stringify(intent.heading)} at the ${intent.position} position relative to ${JSON.stringify(intent.target)}. The host owns all requested headings and bodies; supply no arguments.`,
 		parameters: {
 			type: "object",
-			properties,
-			required,
+			properties: {},
 			additionalProperties: false,
 		},
 	};
@@ -355,8 +348,8 @@ async function routeForPrompt(
 			schema,
 			operation: "section-insert",
 			write: true,
-			arguments: (params) => sectionInsertArguments(insertion, params),
-			systemPrompt: `Incise resolved the insertion anchor to ${JSON.stringify(insertion.target)} with position ${JSON.stringify(insertion.position)}. Use ${schema.name} once; supply only the requested new content fields.`,
+			arguments: () => sectionInsertArguments(insertion),
+			systemPrompt: `Incise resolved the complete section insertion, including all literal headings and bodies. Use ${schema.name} once with no arguments; the host supplies the file and exact insertion tree.`,
 		};
 	}
 	if (!looksLikeTableRead(prompt)) return undefined;

@@ -260,10 +260,11 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		systemPrompt: "System.",
 		systemPromptOptions: {},
 	}, context);
-	assert.match(insertPrepared.systemPrompt, /resolved the insertion anchor/);
+	assert.match(insertPrepared.systemPrompt, /resolved the complete section insertion/);
 	assert.deepEqual([...active].sort(), ["foreign_tool", "section_insert_target"]);
+	assert.equal(tools.get("section_insert_target").parameters.required, undefined);
 	const inserted = await tools.get("section_insert_target").execute(
-		"insert", { new_heading: "FreeBSD", body: "Use pkg." }, undefined, undefined, context,
+		"insert", {}, undefined, undefined, context,
 	);
 	assert.equal(inserted.details.route, "section-insert");
 	assert.deepEqual(inserted.details.resolvedArguments, {
