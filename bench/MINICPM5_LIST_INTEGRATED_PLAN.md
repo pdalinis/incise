@@ -36,7 +36,7 @@ After selection, the host reads that list and returns the existing `list_get` re
 
 Classify the fixed request text deterministically before sampling phase 2:
 
-- contains the standalone phrase `between` -> between route;
+- contains both standalone `insert` and `between` -> between route;
 - otherwise contains `immediately after` -> after route;
 - otherwise -> append route.
 
