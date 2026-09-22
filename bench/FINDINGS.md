@@ -839,6 +839,12 @@ Family results were tables 60/60, lists 100/100, sections 145/149, frontmatter 1
 
 Artifact SHA-256 values: raw 371117e8e08c973af957f92fa1cb3c9c3e6aa400f7628b943c52cc350eb12462; graded 8554dee32caf8d12aa21d4f4721a8e8aa5dbe03bd7b53f2ed1cbcc78b36f3d4a; analysis 7985f0d07ac4e8d554f1daa345d91e27c7359234d819948685d6743aac4d2008.
 
+## F-gemma-frontmatter-create-v1 — create-only routing closes the key-name gap
+
+The guarded create route was frozen at 854b522 and tested on all ten add-build-cache seeds against matching full-v5 control rows. Correctness rose from 4/10 to 10/10: all six control failures became correct, no control-correct pair regressed, and two-sided exact McNemar p = 0.03125. The four wrong build.caching writes and two loud multi-tool failures were eliminated, with zero destructive or collateral outcomes.
+
+Every request exposed only frontmatter_create_target under automatic tool choice, every model call supplied an empty object, and every host-resolved call used key build.cache, boolean true, and must_absent=true with the preceding structured-read hash. The adapter also verified that build was an existing map and that neither build.cache nor build.caching existed; the one-success latch held. This licenses the full v6 composition run, not adoption by itself. Artifact SHA-256 values: raw 408e06fab9edb10dddab0f6527bcef6625f222e5585332c5751532b22bd1dd2b; graded 740c17e1d47fb4248cad98de8f00047a6bb73b502ab32538d0f12bb60988cc02; analysis 6ff3d9639e61aca6b69618855a570399c76c2d40e22a26f4b9d85a37192a7c02.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
