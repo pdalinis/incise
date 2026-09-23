@@ -119,7 +119,7 @@ def worker_request(args, task, trial, prompt):
         "endpoint": args.endpoint,
         "tools": ALL_TOOLS,
         "model": MODEL,
-        "thinkingLevel": "high",
+        "thinkingLevel": "high" if args.thinking == "on" else "off",
         "seed": trial,
         "maxTurns": 4,
         "prompt": prompt,
@@ -170,6 +170,7 @@ def run_one(args, task, trial):
         **result,
         "condition": args.condition,
         "profile": PROFILES[args.condition],
+        "thinking": args.thinking,
         "model": MODEL["id"],
         "task_id": task["id"],
         "task_file": task["_task_file"],
@@ -215,7 +216,10 @@ def validate_framing(row):
         "model": MODEL["id"], "seed": row["seed"], "max_tokens": 8192,
         "temperature": 0.6, "top_p": 0.95, "top_k": 20, "min_p": 0,
         "presence_penalty": 0, "repeat_penalty": 1,
-        "chat_template_kwargs": {"enable_thinking": True, "preserve_thinking": True},
+        "chat_template_kwargs": {
+            "enable_thinking": row.get("thinking", "on") == "on",
+            "preserve_thinking": True,
+        },
     }
     for key, value in expected.items():
         if first.get(key) != value:
@@ -237,6 +241,12 @@ def selected_tasks(args):
     tasks = load_tasks()
     if args.command == "smoke":
         return [tasks[task_id] for task_id in sorted(SMOKE_TASKS)]
+    if args.task_id:
+        unknown = sorted(set(args.task_id) - set(tasks))
+        if unknown:
+            raise SystemExit(f"unknown task IDs: {', '.join(unknown)}")
+        wanted = set(args.task_id)
+        return [task for task in tasks.values() if task["id"] in wanted]
     return list(tasks.values())
 
 
@@ -249,7 +259,11 @@ def run(args):
     trials = range(args.seed_start, args.seed_start + args.trials)
     work = [(task, trial) for task in tasks for trial in trials
             if (task["id"], trial) not in done]
-    print(f"{len(work)} Ornith trials, condition={args.condition}", flush=True)
+    print(
+        f"{len(work)} Ornith trials, condition={args.condition}, "
+        f"thinking={args.thinking}",
+        flush=True,
+    )
     started = time.time()
     with open(raw_path, "a", encoding="utf-8", newline="\n") as raw_handle, \
             open(graded_path, "a", encoding="utf-8", newline="\n") as graded_handle:
@@ -387,6 +401,7 @@ def add_runtime(parser):
     parser.add_argument("--endpoint", default="http://127.0.0.1:8081/v1")
     parser.add_argument("--sandbox", default=str(DEFAULT_SANDBOX))
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--thinking", choices=("on", "off"), default="on")
 
 
 def main():
@@ -402,6 +417,7 @@ def main():
         add_runtime(runner)
         runner.add_argument("--trials", type=int, default=1 if command == "smoke" else 10)
         runner.add_argument("--seed-start", type=int, default=0)
+        runner.add_argument("--task-id", action="append")
         runner.add_argument("--out", required=True)
         runner.add_argument("--graded", required=True)
         runner.set_defaults(func=run)
