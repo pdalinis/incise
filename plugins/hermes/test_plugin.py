@@ -30,6 +30,7 @@ import sys
 import tempfile
 import threading
 import time
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -668,6 +669,43 @@ def test_check_fn():
         plugin.runner.reset_cache()
 
 
+def test_source_binary_prefers_newest_build():
+    """A stale optimized build must not shadow current checkout behavior."""
+    with tempfile.TemporaryDirectory(prefix="incise-runner-") as root:
+        release = os.path.join(root, "target", "release", "incise")
+        debug = os.path.join(root, "target", "debug", "incise")
+        for path in (release, debug):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as fh:
+                fh.write("placeholder")
+            os.chmod(path, 0o755)
+
+        os.utime(release, ns=(1_000_000_000, 1_000_000_000))
+        os.utime(debug, ns=(2_000_000_000, 2_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "newer debug build wins stale release",
+            candidates == [debug, release],
+            str(candidates),
+        )
+
+        os.utime(release, ns=(3_000_000_000, 3_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "newer release build wins",
+            candidates == [release, debug],
+            str(candidates),
+        )
+
+        os.utime(debug, ns=(3_000_000_000, 3_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "release wins timestamp tie",
+            candidates == [release, debug],
+            str(candidates),
+        )
+
+
 def test_every_published_action_can_be_invoked():
     """Every action in a published enum has to be a subcommand the binary has.
 
@@ -806,6 +844,7 @@ def main():
     test_register()
     test_every_published_action_can_be_invoked()
     test_check_fn()
+    test_source_binary_prefers_newest_build()
     print("plugin: safe-small profile")
     test_safe_small_profile()
 

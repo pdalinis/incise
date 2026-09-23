@@ -31,6 +31,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import sys
 import threading
 from contextlib import contextmanager
 from typing import Any, Dict, Optional, Tuple
@@ -334,6 +335,17 @@ def register(ctx) -> None:
             runner.available() or "`incise schema` did not return a tool list.",
         )
         return
+
+    # Plugin Doctor runs registration under an isolated temporary HERMES_HOME.
+    # Emit the resolved executable there because a stale binary can otherwise
+    # make a source checkout appear to validate while exercising older code.
+    hermes_home = os.environ.get("HERMES_HOME", "")
+    if os.path.basename(hermes_home).startswith("hermes-plugin-doctor-"):
+        print(
+            "incise plugin: binary "
+            f"{runner.binary()} ({runner.binary_source() or 'unknown source'})",
+            file=sys.stderr,
+        )
 
     for schema in schemas + schema_cache.structural_tools():
         name = schema["name"]
