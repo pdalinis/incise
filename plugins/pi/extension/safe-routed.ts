@@ -14,6 +14,7 @@ import { processError, runIncise } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
+	"section-append" |
 	"frontmatter-typed" | "frontmatter-create" | "list-remove-target" | "table-query";
 
 export interface OutlineEntry {
@@ -41,6 +42,11 @@ export interface SectionInsertIntent {
 	heading: string;
 	body?: string;
 	children?: Array<{ heading: string; body: string }>;
+}
+
+export interface SectionAppendIntent {
+	target: string;
+	text: string;
 }
 
 export interface ListRemoveIntent {
@@ -151,6 +157,24 @@ function sectionInsertionRequest(prompt: string): string {
 		/^Sections in `[^`]+` \(address by heading path,[\s\S]*?\r?\n\r?\n/,
 	);
 	return framed ? prompt.slice(framed[0].length) : prompt;
+}
+
+export function sectionAppendIntent(
+	prompt: string,
+	entries: OutlineEntry[],
+): SectionAppendIntent | undefined {
+	const request = sectionInsertionRequest(prompt).trim();
+	const match = request.match(
+		/^add\s+a\s+sentence\s+to\s+the\s+(?:"([^"]+)"|“([^”]+)”)\s+section\s+saying\s+(?:"([^"]+)"|“([^”]+)”)\s*\.?$/i,
+	);
+	if (!match) return undefined;
+	const requested = match[1] ?? match[2];
+	const text = match[3] ?? match[4];
+	if (!requested || !text || requested !== requested.trim() || text !== text.trim()) {
+		return undefined;
+	}
+	const target = resolveOutlineTarget(entries, requested);
+	return target ? { target, text } : undefined;
 }
 
 export function sectionInsertIntent(
@@ -374,6 +398,18 @@ function sectionInsertSchema(intent: SectionInsertIntent): ToolSchema {
 	};
 }
 
+function sectionAppendSchema(intent: SectionAppendIntent): ToolSchema {
+	return {
+		name: "section_append_target",
+		description: `Append the already resolved exact sentence to ${JSON.stringify(intent.target)}. The host owns the section and literal text; supply no arguments.`,
+		parameters: {
+			type: "object",
+			properties: {},
+			additionalProperties: false,
+		},
+	};
+}
+
 function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSchema {
 	const rendered = Object.entries(filters).map(([column, value]) => `${column}=${JSON.stringify(value)}`).join(", ");
 	return {
@@ -439,7 +475,10 @@ async function routeForPrompt(
 	const path = resolve(cwd, found);
 	const section = sectionIntent(prompt);
 	const mayInsert = insertionAnchor(prompt);
-	if (section || mayInsert) {
+	const mayAppend = /\badd\s+a\s+sentence\s+to\s+the\s+["“]/i.test(
+		sectionInsertionRequest(prompt),
+	);
+	if (section || mayInsert || mayAppend) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["outline", path]);
 		if (result.code !== 0 || result.payload.ok === false) return undefined;
 		const entries = parseOutline(String(result.payload.text ?? ""));
@@ -459,6 +498,20 @@ async function routeForPrompt(
 					? (params) => ({ section: target, heading: params.new_heading })
 					: (params) => ({ section: target, text: params.body, overwrite: true }),
 				systemPrompt: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
+			};
+		}
+		const append = sectionAppendIntent(prompt, entries);
+		if (append) {
+			const schema = sectionAppendSchema(append);
+			return {
+				kind: "section-append",
+				path,
+				hash: result.payload.hash,
+				schema,
+				operation: "section-append",
+				write: true,
+				arguments: () => ({ section: append.target, text: append.text }),
+				systemPrompt: `Incise resolved the requested section and exact quoted sentence, and activated section_append_target. Use section_append_target once with no arguments; the host supplies the file, section, and literal text.`,
 			};
 		}
 		const insertion = sectionInsertIntent(prompt, entries);
@@ -604,6 +657,7 @@ export function installSafeRoutedProfile(
 ): void {
 	const routedNames = new Set([
 		"section_rename_target", "section_replace_target", "section_insert_target",
+		"section_append_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
 		"frontmatter_set_boolean", "frontmatter_create_target", "list_remove_target", "table_query",
 	]);

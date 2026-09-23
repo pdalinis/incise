@@ -281,6 +281,42 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(await readFile(insertPath, "utf8"), /### FreeBSD\n\nUse pkg\./);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const appendPath = join(directory, "fences.md");
+	await copyFile(resolve(repository, "corpus", "hazards", "code-fences.md"), appendPath);
+	const appendBefore = await readFile(appendPath, "utf8");
+	const appendPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: [
+			'Sections in `fences.md` (address by heading path, e.g. "Code fences > Fenced headings and lists"):',
+			"  Code fences   (body, 6 subsections)",
+			"    Fenced headings and lists   (body)",
+			"",
+			'Add a sentence to the "Fenced headings and lists" section saying "None of the above is parsed as markdown."',
+		].join("\n"),
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(appendPrepared.systemPrompt, /activated section_append_target/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_append_target"]);
+	assert.equal(tools.get("section_append_target").parameters.required, undefined);
+	const appended = await tools.get("section_append_target").execute(
+		"append", {}, undefined, undefined, context,
+	);
+	assert.equal(appended.details.route, "section-append");
+	assert.deepEqual(appended.details.resolvedArguments, {
+		section: "Code fences > Fenced headings and lists",
+		text: "None of the above is parsed as markdown.",
+	});
+	const appendAfter = await readFile(appendPath, "utf8");
+	assert.equal(
+		appendAfter,
+		appendBefore.replace(
+			"---\n```\n\n## Tilde fences",
+			"---\n```\n\nNone of the above is parsed as markdown.\n\n## Tilde fences",
+		),
+	);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
 	await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: "Summarize @sections.md without changing it.",

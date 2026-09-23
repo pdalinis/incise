@@ -10,6 +10,7 @@ import {
 	parseTableSummary,
 	requestedTable,
 	resolveOutlineTarget,
+	sectionAppendIntent,
 	sectionInsertArguments,
 	sectionInsertIntent,
 	sectionIntent,
@@ -74,6 +75,40 @@ test("section routing recognizes only explicit rename and body-replacement reque
 		{ kind: "section-replace-body", target: "Upgrade > Linux" },
 	);
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);
+});
+
+test("section append routing freezes the exact quoted sentence", () => {
+	const entries = parseOutline([
+		"Sections in `x.md`:",
+		"  Code fences   (body, 1 subsection)",
+		"    Fenced headings and lists   (body)",
+	].join("\n"));
+	const framed = (request: string) => [
+		'Sections in `x.md` (address by heading path, e.g. "Code fences > Fenced headings and lists"):',
+		"  Code fences   (body, 1 subsection)",
+		"    Fenced headings and lists   (body)",
+		"",
+		request,
+	].join("\n");
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add a sentence to the "Fenced headings and lists" section saying "None of the above is parsed as markdown."'),
+		entries,
+	), {
+		target: "Code fences > Fenced headings and lists",
+		text: "None of the above is parsed as markdown.",
+	});
+	assert.equal(sectionAppendIntent(
+		framed('Add text to the "Fenced headings and lists" section: "Different shape."'),
+		entries,
+	), undefined);
+	assert.equal(sectionAppendIntent(
+		framed('Add a sentence to the "Missing" section saying "No target."'),
+		entries,
+	), undefined);
+	assert.equal(sectionAppendIntent(
+		framed('Add a sentence to the "Fenced headings and lists" section saying " leading space"'),
+		entries,
+	), undefined);
 });
 
 test("section insertion routing freezes structure and exact literal content", () => {
