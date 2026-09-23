@@ -115,6 +115,7 @@ def reset_sandbox(path, task=None):
 
 def worker_request(args, task, trial, prompt):
     sandbox = Path(args.sandbox).resolve()
+    model = {**MODEL, "maxTokens": args.max_tokens}
     return {
         "mode": "run",
         "cwd": str(sandbox),
@@ -123,7 +124,7 @@ def worker_request(args, task, trial, prompt):
         "piSdk": str(Path(args.pi_sdk).resolve()),
         "endpoint": args.endpoint,
         "tools": ALL_TOOLS,
-        "model": MODEL,
+        "model": model,
         "thinkingLevel": "high" if args.thinking == "on" else "off",
         "seed": trial,
         "maxTurns": 4,
@@ -208,6 +209,7 @@ def run_one(args, task, trial):
         "trial": trial,
         "seed": trial,
         "max_turns": 4,
+        "max_tokens": args.max_tokens,
         "error": error,
         "initial_sha256": pi_bench.sha256_bytes(before.encode()),
         "final_sha256": pi_bench.sha256_bytes(after.encode()),
@@ -243,7 +245,8 @@ def validate_framing(row):
         return ["no provider request recorded"]
     first = requests[0]
     expected = {
-        "model": MODEL["id"], "seed": row["seed"], "max_tokens": 8192,
+        "model": MODEL["id"], "seed": row["seed"],
+        "max_tokens": row.get("max_tokens", 8192),
         "temperature": 0.6, "top_p": 0.95, "top_k": 20, "min_p": 0,
         "presence_penalty": 0, "repeat_penalty": 1,
         "chat_template_kwargs": {
@@ -432,6 +435,7 @@ def add_runtime(parser):
     parser.add_argument("--sandbox", default=str(DEFAULT_SANDBOX))
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--thinking", choices=("on", "off"), default="on")
+    parser.add_argument("--max-tokens", type=int, default=8192)
 
 
 def main():
