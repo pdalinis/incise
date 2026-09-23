@@ -12,6 +12,19 @@ pi install npm:pi-incise
 
 Prebuilt binaries are provided for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not supported in v1.
 
+## Recommended model setups
+
+Choose the profile when starting Pi:
+
+* **Gemma (recommended):** `INCISE_PROFILE=auto pi`
+* **MiniCPM general editing:** `INCISE_PROFILE=standard pi`
+* **MiniCPM list-addition evaluation:** `INCISE_PROFILE=minicpm-list pi`
+* **Unknown or changing model families:** `INCISE_PROFILE=standard pi`
+
+The package default is `standard` for compatibility. `auto` currently enables the measured `safe-routed` profile only for Gemma; MiniCPM and unknown families stay on `standard`. If a local provider exposes a generic model ID, add `INCISE_MODEL_FAMILY=gemma` or `INCISE_MODEL_FAMILY=minicpm`.
+
+After Pi starts, run `/incise-doctor`. It reports the requested and effective profiles, detected model family, selected binary, schema state, registered tools, and last route.
+
 ## Tools
 
 The default `standard` profile registers `table_edit`, `list_edit`, `section_edit`, `frontmatter_edit`, `table_get`, `md_tables`, `md_lists`, and `md_outline`. Inspect document structure with the relevant read tool before editing, and follow the remedy in any Incise refusal. The former `measured` profile name remains an alias for `standard`.
@@ -25,6 +38,14 @@ Set `INCISE_PROFILE=safe-small` only to evaluate the experimental small-model co
 Set `INCISE_PROFILE=minicpm-list` to evaluate the MiniCPM-specific list-addition pipeline. Each request must name exactly one Markdown path. Pi activates a required heading-and-ordinal selector, reads the selected list, then activates one append, after, or between content tool with exact current-item constraints. The adapter supplies the file and list address, validates relative anchors, writes with the read hash, and permits at most one successful mutation in that user turn. The adapter-independent arm reached 21/21 supported additions, while the real Pi composition reached 16/21; keep this profile opt-in. It supports adding list items only.
 
 The preregistered real-Pi run reached 16/21 rather than the adapter-independent result of 21/21. Every executed mutation was correct and no document was damaged, but five trials stopped in prose instead of invoking the sole active phase tool. A paired forced-choice follow-up also reached 16/21 even though every observed active-phase request transmitted the exact advertised tool choice; the local MiniCPM/llama.cpp path did not enforce it. Compact list-only framing reached 19/21 and eliminated all no-call failures, but two previously correct trials wrote the wrong new item text. Neither treatment is shipped, and the profile remains evaluation-only.
+
+## Measured results
+
+The current Gemma `auto` profile completed **475/479 usable full-composition trials (99.2%) with zero harmful outcomes**. Tables, lists, frontmatter, and table reads were perfect; sections were 145/149 with four loud refusals. All **200/200 routed trials** were correct, and every unsupported request retained the standard tool surface.
+
+The MiniCPM-specific list pipeline is narrower. Its adapter-independent arm reached **21/21** supported additions from a 13/21 control, while the real Pi profile reached **16/21**. Every executed Pi mutation was correct and no document was damaged; the remaining failures were model no-calls. Keep it opt-in.
+
+These results are tied to the recorded models, llama.cpp runtime, Pi version, prompts, schemas, tasks, seeds, and graders. See [the full findings](../../bench/FINDINGS.md) and [Gemma v8 analysis](../../bench/results/gemma_safe_routed_full_v8_20260922_analysis.json).
 
 ## Binary resolution
 

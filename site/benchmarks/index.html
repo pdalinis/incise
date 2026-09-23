@@ -2,26 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Incise Benchmarks — Structured vs Direct Markdown Editing</title>
-  <meta name="description" content="Measured results comparing direct Markdown patching with deterministic Incise operations for a small local language model.">
+  <title>Incise Benchmarks — Gemma at 99.2% with Zero Harmful Edits</title>
+  <meta name="description" content="Incise's measured Gemma/Pi profile reached 475/479 correct with zero harmful outcomes. Explore full results, MiniCPM progress, raw calls, and caveats.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/benchmarks/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
-  <meta property="og:type" content="website"><meta property="og:title" content="Incise Markdown editing benchmarks"><meta property="og:description" content="Structured operations remove mechanical failure modes from agent editing."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 99.2% correct, zero harmful outcomes"><meta property="og:description" content="A preregistered 480-trial Gemma/Pi evaluation with raw calls, graders, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta name="twitter:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
 </head>
 <body>
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
-    <div class="eyebrow">Published evidence</div><h1>Structured editing removes mechanical failures.</h1>
-    <p class="lede">The benchmark compares direct patch calls with Incise operations on the same tasks, model, seeds, and grader.</p>
+    <div class="eyebrow">Published, reproducible evidence</div><h1>99.2% correct. Zero harmful edits.</h1>
+    <p class="lede">The latest full Gemma/Pi profile completed 475 of 479 usable trials. Every routed request succeeded, and every remaining failure was a loud refusal.</p>
 
+    <table><thead><tr><th>Gemma/Pi family</th><th>Correct</th><th>Outcome</th></tr></thead><tbody>
+      <tr><td>Tables</td><td><strong>60/60</strong></td><td>Perfect</td></tr>
+      <tr><td>Lists</td><td><strong>100/100</strong></td><td>Perfect</td></tr>
+      <tr><td>Sections</td><td><strong>145/149</strong></td><td>Four loud refusals</td></tr>
+      <tr><td>Frontmatter</td><td><strong>110/110</strong></td><td>Perfect</td></tr>
+      <tr><td>Table reads</td><td><strong>60/60</strong></td><td>Perfect</td></tr>
+      <tr><td>Routed subset</td><td><strong>200/200</strong></td><td>No routing or argument errors</td></tr>
+    </tbody></table>
+
+    <div class="callout"><strong>Scope matters.</strong> The preregistered run attempted 480 trials with Gemma 4 26B through Pi. One <code>rename-setext</code> pair hit the fixed generation timeout twice and was excluded under the frozen rule, leaving 479 paired results. The latest incremental route moved 473/479 to 475/479; that delta is descriptive (<code>p = 0.625</code>), while the zero-harm and target-repair gates passed.</div>
+
+    <h2>Why the Gemma profile works</h2>
+    <div class="grid">
+      <article class="card"><h3>Inspect before editing</h3><p>Pi reads the current table, list, outline, or flattened frontmatter structure and retains its content hash.</p></article>
+      <article class="card"><h3>Route only exact intent</h3><p>Unambiguous requests receive one small action-specific tool. Unsupported wording keeps the standard interface.</p></article>
+      <article class="card"><h3>Own dangerous arguments</h3><p>The host supplies resolved targets, exact predicates, typed values, and create/update preconditions, then stops after one successful routed mutation.</p></article>
+    </div>
+
+    <h2>MiniCPM: strong targeted gains, conservative defaults</h2>
+    <table><thead><tr><th>Measured path</th><th>Result</th><th>Disposition</th></tr></thead><tbody>
+      <tr><td>Singleton-object table rows</td><td><strong>18/18</strong>, including 9/9 normalized calls</td><td>Shipped compatibility</td></tr>
+      <tr><td>Host-routed list pipeline, direct arm</td><td><strong>13/21 → 21/21</strong>, <code>p = 0.0078</code></td><td>Validates the architecture</td></tr>
+      <tr><td>MiniCPM list profile through Pi</td><td><strong>16/21</strong>; all 16 executed edits correct</td><td>Opt-in evaluation profile</td></tr>
+      <tr><td>General small-model profile</td><td>Failed family and safety gates</td><td>Not enabled by default</td></tr>
+    </tbody></table>
+    <p>MiniCPM’s remaining Pi failures were model no-calls rather than corrupted documents. Incise keeps the general profile disabled until it passes the same zero-data-loss and no-regression standards as Gemma.</p>
+
+    <h2>Structured operations versus direct patching</h2>
+    <p>The original controlled benchmark used identical tasks, seeds, model, and grader:</p>
     <table><thead><tr><th>Operation</th><th>Direct patch</th><th>Incise</th></tr></thead><tbody>
       <tr><td>Tables</td><td>60.0% (36/60)</td><td><strong>100% (60/60)</strong></td></tr>
       <tr><td>Lists</td><td>63.0% (63/100)</td><td><strong>91.0% (91/100)</strong></td></tr>
       <tr><td>Sections</td><td>19.0% (19/100)</td><td><strong>74.0% (74/100)</strong></td></tr>
     </tbody></table>
-
-    <div class="callout"><strong>Scope matters.</strong> These are results for one small local model under recorded conditions, not a promise that every model will achieve the same rates.</div>
 
     <h2>What the operations remove</h2>
     <div class="grid">
@@ -31,8 +58,8 @@
     </div>
 
     <h2>Reproducible evidence</h2>
-    <p>The complete tasks, prompts, raw results, statistical comparisons, caveats, and reversed conclusions are versioned with the source. The Rust core is also compared byte-for-byte with an independent Python oracle across 110,406 generated cases over 54 fixtures.</p>
-    <div class="actions"><a class="button" href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md">Read the full findings</a><a class="button secondary" href="https://github.com/pdalinis/incise/tree/main/bench">Browse the benchmark</a></div>
+    <p>The complete tasks, prompts, raw calls, graders, preregistered plans, statistical comparisons, caveats, failed treatments, and reversed conclusions are versioned with the source. The Rust core is also compared byte-for-byte with an independent Python oracle across 110,406 generated cases over 54 fixtures.</p>
+    <div class="actions"><a class="button" href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md">Read the full findings</a><a class="button secondary" href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_safe_routed_full_v8_20260922_analysis.json">Gemma v8 analysis</a><a class="button secondary" href="https://github.com/pdalinis/incise/tree/main/bench/results">Browse raw results</a></div>
   </main>
   <footer><div class="wrap footer-row"><span>Claims stay tied to their recorded population.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
 </body>

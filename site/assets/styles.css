@@ -62,6 +62,10 @@ h3 { margin-top: 2rem; font-size: 1.25rem; }
 .card h3 { margin-top: 0; }
 .card p:last-child { margin-bottom: 0; }
 .muted { color: var(--muted); }
+.fineprint { max-width: 62rem; color: var(--muted); font-size: 0.9rem; }
+.metrics { margin-top: -1.5rem; }
+.metrics .card { border-color: rgba(118, 224, 181, 0.34); }
+.metrics h3 { margin: 0.25rem 0 0.6rem; }
 
 pre { overflow-x: auto; padding: 1.2rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--code); color: #d9e3ee; }
 code { font: 0.92em/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; }
