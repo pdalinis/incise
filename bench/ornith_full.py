@@ -16,6 +16,7 @@ BENCH = ROOT / "bench"
 sys.path.insert(0, str(BENCH))
 
 import pi_composition as pi_bench  # noqa: E402
+from grade import check_result  # noqa: E402
 
 
 MODEL = {
@@ -56,6 +57,10 @@ SMOKE_TASKS = {
     "set-build-target", "get-filter-two-columns",
 }
 HARMFUL = {"wrong", "destructive", "collateral:content", "collateral:formatting"}
+ROUTED_TABLE_TASKS = {
+    "get-filter-one-column", "get-filter-two-columns",
+    "get-filter-no-match", "get-escaped-cell",
+}
 FAMILY_FLOORS = {
     "table": (57, 60),
     "list": (100, 100),
@@ -149,6 +154,31 @@ def call_worker(args, request):
     return json.loads(matches[0][len(pi_bench.RESULT_PREFIX):])
 
 
+def successful_result(row, name):
+    results = {result["tool_call_id"]: result
+               for result in row.get("tool_results", [])}
+    for call in row.get("tool_calls", []):
+        if call.get("function", {}).get("name") != name:
+            continue
+        result = results.get(call.get("id"))
+        if result is not None and not result.get("is_error"):
+            return call, result
+    return None, None
+
+
+def grade_row(task, row, before, after):
+    if task["id"] not in ROUTED_TABLE_TASKS:
+        return pi_bench.grade_actual(task, row, before, after)
+    call, result = successful_result(row, "table_query")
+    if call is None:
+        return pi_bench.grade_actual(task, row, before, after)
+    if row.get("error"):
+        return ("transport" if pi_bench.is_transport(row["error"])
+                else "malformed", row["error"])
+    report = (result.get("details") or {}).get("rows")
+    return check_result(task, before, after, report)
+
+
 def run_one(args, task, trial):
     sandbox = reset_sandbox(args.sandbox, task)
     fixture = sandbox / task["fixture"]
@@ -183,7 +213,7 @@ def run_one(args, task, trial):
         "final_sha256": pi_bench.sha256_bytes(after.encode()),
         "final_document": after,
     }
-    outcome, detail = pi_bench.grade_actual(task, row, before, after)
+    outcome, detail = grade_row(task, row, before, after)
     document_outcome = None
     document_detail = None
     if after != before:
