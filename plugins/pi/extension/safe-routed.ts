@@ -15,7 +15,8 @@ import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
 	"section-append" |
-	"frontmatter-typed" | "frontmatter-create" | "list-remove-target" | "table-query";
+	"frontmatter-typed" | "frontmatter-create" | "list-remove-target" |
+	"list-append-target" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -52,6 +53,12 @@ export interface SectionAppendIntent {
 export interface ListRemoveIntent {
 	heading: string;
 	item: string;
+}
+
+export interface ListContainsAppendIntent {
+	heading: string;
+	text: string;
+	existingItem: string;
 }
 
 export interface FrontmatterCreateIntent {
@@ -345,14 +352,32 @@ export function listRemoveIntent(prompt: string): ListRemoveIntent | undefined {
 	return undefined;
 }
 
-function resolveListEntry(entries: ListEntry[], requested: string): ListEntry | undefined {
+export function listContainsAppendIntent(prompt: string): ListContainsAppendIntent | undefined {
+	const match = prompt.match(
+		/\bunder\s+["“]([^"”]+)["”]\s*,\s*add\s+an?\s+item\s+["“]([^"”]+)["”]\s+to\s+the\s+list\s+that\s+contains\s+the\s+([^\n]+?\bitem)\s*[.!]?\s*$/i,
+	);
+	if (!match) return undefined;
+	const heading = match[1];
+	const text = match[2];
+	const existingItem = match[3];
+	if ([heading, text, existingItem].some((value) => !value || value !== value.trim())) {
+		return undefined;
+	}
+	return { heading, text, existingItem };
+}
+
+function matchingListEntries(entries: ListEntry[], requested: string): ListEntry[] {
 	const parts = requested.split(">").map((part) => part.trim()).filter(Boolean);
-	if (parts.length === 0) return undefined;
-	const matches = entries.filter((entry) => {
+	if (parts.length === 0) return [];
+	return entries.filter((entry) => {
 		const candidate = entry.heading.split(" > ");
 		return candidate.length >= parts.length &&
 			parts.every((part, index) => candidate[candidate.length - parts.length + index] === part);
 	});
+}
+
+function resolveListEntry(entries: ListEntry[], requested: string): ListEntry | undefined {
+	const matches = matchingListEntries(entries, requested);
 	return matches.length === 1 ? matches[0] : undefined;
 }
 
@@ -474,9 +499,12 @@ async function routeForPrompt(
 	if (!found) return undefined;
 	const path = resolve(cwd, found);
 	const section = sectionIntent(prompt);
-	const mayInsert = insertionAnchor(prompt);
+	const insertionRequest = sectionInsertionRequest(prompt);
+	const mayInsert = /\b(?:section|subsection)\b/i.test(insertionRequest)
+		? insertionAnchor(prompt)
+		: undefined;
 	const mayAppend = /\badd\s+a\s+sentence\s+to\s+the\s+["“]/i.test(
-		sectionInsertionRequest(prompt),
+		insertionRequest,
 	);
 	if (section || mayInsert || mayAppend) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["outline", path]);
@@ -585,6 +613,51 @@ async function routeForPrompt(
 			systemPrompt: `${String(result.payload.text ?? "")}\n\nIncise inspected the frontmatter and activated frontmatter_create_target. This custom tool is available even if the base tool summary says none. Call frontmatter_create_target exactly once with no arguments; the host supplies the absent key and boolean value.`,
 		};
 	}
+	const containingAppend = listContainsAppendIntent(prompt);
+	if (containingAppend) {
+		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["lists", path]);
+		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
+		const candidates = matchingListEntries(
+			parseListSummary(String(summary.payload.text ?? "")), containingAppend.heading,
+		);
+		if (candidates.length === 0) return undefined;
+		const matches: Array<{ entry: ListEntry; hash: string }> = [];
+		for (const entry of candidates) {
+			const readArgs = { list: { heading: entry.heading, ordinal: entry.ordinal } };
+			const result = await runIncise(
+				pi.exec.bind(pi), binary.path,
+				["items", path, "--args", JSON.stringify(readArgs)],
+			);
+			if (result.code !== 0 || result.payload.ok === false) return undefined;
+			if (typeof result.payload.hash !== "string") return undefined;
+			const items = listItems(result.payload, entry);
+			if (items.filter((item) => item.text === containingAppend.existingItem).length === 1 &&
+				!items.some((item) => item.text === containingAppend.text)) {
+				matches.push({ entry, hash: result.payload.hash });
+			}
+		}
+		if (matches.length !== 1) return undefined;
+		const selected = matches[0];
+		const schema: ToolSchema = {
+			name: "list_append_target",
+			description: `Append the exact requested item to the uniquely resolved list containing ${JSON.stringify(containingAppend.existingItem)}. The host owns the file, list, and new text; supply no arguments.`,
+			parameters: { type: "object", properties: {}, additionalProperties: false },
+		};
+		return {
+			kind: "list-append-target",
+			path,
+			hash: selected.hash,
+			schema,
+			operation: "list-add-item",
+			write: true,
+			arguments: () => ({
+				list: { heading: selected.entry.heading, ordinal: selected.entry.ordinal },
+				text: containingAppend.text,
+				position: "end",
+			}),
+			systemPrompt: `Incise inspected every same-heading list, resolved the unique exact existing item, and activated list_append_target. Use list_append_target once with no arguments; the host supplies the file, exact list address, and new item text.`,
+		};
+	}
 	const removal = listRemoveIntent(prompt);
 	if (removal) {
 		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["lists", path]);
@@ -659,7 +732,8 @@ export function installSafeRoutedProfile(
 		"section_rename_target", "section_replace_target", "section_insert_target",
 		"section_append_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
-		"frontmatter_set_boolean", "frontmatter_create_target", "list_remove_target", "table_query",
+		"frontmatter_set_boolean", "frontmatter_create_target", "list_remove_target",
+		"list_append_target", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;

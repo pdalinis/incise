@@ -446,6 +446,52 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	const numbering = await readFile(listPath, "utf8");
 	assert.match(numbering, /## Non-sequential[\s\S]*?1\. first\n7\. seventh\n\n## Nested under unordered/);
 	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const mixedPath = join(directory, "nested-mixed.md");
+	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), mixedPath);
+	const mixedBefore = await readFile(mixedPath, "utf8");
+	const mixedPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: [
+			"Lists in `nested-mixed.md`:",
+			'  heading "Nested and mixed lists > Mixed markers at the same level"  ordinal 0',
+			'    bullet list, marker "-", 1 items, tight',
+			'  heading "Nested and mixed lists > Mixed markers at the same level"  ordinal 1',
+			'    bullet list, marker "*", 1 items, tight',
+			'  heading "Nested and mixed lists > Mixed markers at the same level"  ordinal 2',
+			'    bullet list, marker "+", 1 items, tight',
+			"",
+			'Under "Mixed markers at the same level", add an item "second star item" to the list that contains the star item.',
+		].join("\n"),
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(mixedPrepared.systemPrompt, /activated list_append_target/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	assert.equal(tools.get("list_append_target").parameters.required, undefined);
+	const mixedAdded = await tools.get("list_append_target").execute(
+		"list-append", {}, undefined, undefined, context,
+	);
+	assert.equal(mixedAdded.details.route, "list-append-target");
+	assert.deepEqual(mixedAdded.details.resolvedArguments, {
+		list: { heading: "Nested and mixed lists > Mixed markers at the same level", ordinal: 1 },
+		text: "second star item",
+		position: "end",
+	});
+	assert.equal(
+		await readFile(mixedPath, "utf8"),
+		mixedBefore.replace("* star item\n\n+ plus item", "* star item\n* second star item\n\n+ plus item"),
+	);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @nested-mixed.md, under "Mixed markers at the same level", add an item "second star item" to the list that contains the star item.',
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert(active.has("list_edit"));
+	assert(!active.has("list_append_target"));
 });
 
 test("auto profile selects once from the active model and reports the decision", async () => {

@@ -5,6 +5,7 @@ import {
 	filterColumns,
 	frontmatterCreateIntent,
 	frontmatterValueType,
+	listContainsAppendIntent,
 	listRemoveIntent,
 	parseOutline,
 	parseTableSummary,
@@ -42,6 +43,25 @@ test("list removal routing requires exact quoted items and headings", () => {
 	);
 	assert.equal(listRemoveIntent("Remove the third item from the Non-sequential list."), undefined);
 	assert.equal(listRemoveIntent('Add "third" under "Non-sequential".'), undefined);
+});
+
+test("containing-item list routing requires explicit quoted target and new text", () => {
+	assert.deepEqual(
+		listContainsAppendIntent('Under "Mixed markers at the same level", add an item "second star item" to the list that contains the star item.'),
+		{
+			heading: "Mixed markers at the same level",
+			text: "second star item",
+			existingItem: "star item",
+		},
+	);
+	assert.equal(
+		listContainsAppendIntent("Under Mixed markers, add second star item to the star list."),
+		undefined,
+	);
+	assert.equal(
+		listContainsAppendIntent('Under "Mixed markers", remove an item "star item".'),
+		undefined,
+	);
 });
 
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
