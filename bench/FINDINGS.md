@@ -861,6 +861,14 @@ Treatment scored **10/10 correct** versus **9/10** in the full-v6 control. The o
 
 With only one discordant pair, descriptive two-sided exact McNemar `p = 1.0`; this is a demonstrated repair of the observed failure mode, not a general effectiveness claim. It licenses the preregistered full-v7 composition run. Artifact SHA-256 values: raw `96c2026b72f8976ff71f20a3ddccdc7c7c86dd0e8717660000f131ae133c1ddb`; graded `059997ffd857fd037b7b4299f63077be2b57b943b86f493d58de41d372794063`; analysis `7edee357d894eaef5f0c54d95fa5395d4ee7100297bff25972f285a2df2b1ff8`.
 
+## F-gemma-full-v7 — exact append removes section harm while the aggregate holds
+
+The preregistered full-v7 composition attempted all 480 Gemma/Pi pairs. `rename-setext` seed 1 hit the fixed 240-second timeout on both its initial attempt and sole allowed retry, leaving 479 usable pairs. Against matching full-v6 rows, correctness was unchanged at **473/479**: three treatment-only wins, three control-only wins, and descriptive two-sided exact McNemar `p = 1.0`. Harmful outcomes remained one.
+
+The intended pair, `append-after-fence` seed 1, moved from formatting collateral to correct, and all ten exact-append trials were correct. The sole treatment harm instead came from the unrelated standard-profile fallback `add-item-mixed-markers` seed 7, which changed from a loud v6 refusal to collateral content. Sections therefore had zero harmful outcomes: 144/149 usable were correct and five were loud errors. Frontmatter stayed 110/110; tables and table reads stayed 60/60; lists were 99/100.
+
+All 190 routed trials were correct with no route, filter, section-tree, frontmatter, list, append-argument, or multiple-mutation errors. All 289 usable fallback trials retained the standard eight-tool surface. Every preregistered gate passed. This licenses retaining exact quoted section append in Gemma `auto`, but it does not support an aggregate correctness-gain claim: the measured value is removal of the targeted section failure while overall correctness and harmful count hold. Artifact SHA-256 values: raw `17ab67269ee30b287e2e527e23b5c04bf4104fed3a31f4d730f01f371ffa292f`; graded `316fa9c9a857458e892e0327cc76c68656855b4f9cab6aa1f771a8bc97b00ed8`; analysis `6cdc579f1ca8928575d6b0295f4873c9988012fffc472f14b31bb8fb0c4b4104`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
