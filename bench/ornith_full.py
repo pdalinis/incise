@@ -52,7 +52,7 @@ ROUTED_TOOLS = [
 ALL_TOOLS = STANDARD_TOOLS + ROUTED_TOOLS
 PROFILES = {"auto-standard": "auto", "forced-safe-routed": "safe-routed"}
 SMOKE_TASKS = {
-    "add-row-named", "insert-nested-item", "insert-nested-ratelimits",
+    "add-row-aligned-short", "add-item-nested-asterisk", "insert-nested-ratelimits",
     "set-build-target", "get-filter-two-columns",
 }
 HARMFUL = {"wrong", "destructive", "collateral:content", "collateral:formatting"}
