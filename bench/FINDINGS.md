@@ -877,6 +877,14 @@ Treatment scored **10/10 correct** versus **9/10** in the full-v7 control. The c
 
 As with the preceding one-failure experiment, descriptive two-sided exact McNemar `p = 1.0`; this demonstrates repair of the observed failure mode rather than a broad efficacy effect. It licenses a full-v8 composition gate whose stricter safety target is zero harmful outcomes. Artifact SHA-256 values: raw `13f211aa08261ef24f82a968799ad36c18bea52314178479367d0fe035090e7d`; graded `b387b742b76a372e29d9e24bc965e4e6675b11de64ffce73aeb6fddd59dd29d5`; analysis `454c71e390ce995cc2fa5150ea9dbb9de8a97d4db3f0cf0c8c25b6db477768c9`.
 
+## F-gemma-full-v8 — the usable Gemma profile reaches zero harmful outcomes
+
+The preregistered full-v8 composition attempted all 480 Gemma/Pi pairs. `rename-setext` seed 1 again hit the fixed 240-second timeout on both its initial attempt and sole allowed retry, leaving 479 usable pairs. Against matching full-v7 rows, correctness rose from **473/479 to 475/479**: three treatment-only wins, one control-only win, and descriptive two-sided exact McNemar `p = 0.625`. Harmful outcomes fell from one to **zero**.
+
+The intended `add-item-mixed-markers` seed moved from collateral content to correct, and all ten containing-item list trials were correct. Two stochastic section fallbacks also moved from loud refusal to correct while one different fallback moved from correct to loud refusal. Lists reached 100/100, sections reached 145/149 with four loud errors and zero harm, frontmatter stayed 110/110, and tables plus table reads stayed 60/60.
+
+All 200 routed trials were correct with no route, filter, section-tree, frontmatter, list, append-argument, containing-item, or multiple-mutation errors. All 279 usable fallback trials retained the standard eight-tool surface. Every preregistered gate passed. This licenses retaining containing-item list routing in Gemma `auto` and makes full v8 the current measured profile. The aggregate gain is descriptive rather than statistically significant, but the zero-harm result and exact target repair were preregistered gates. Artifact SHA-256 values: raw `5ac9aea1a4a46f35d5defe42e0b7eadaa595d39e53250eb611a5ef685bc981c5`; graded `4701507ac29a76a0add36d4182a4da7032fdf371023449cab13063ced2c0ebd4`; analysis `d5b8d03c9d6fa13a1d8587f2aba990dc3adc97ca3135c712ab62b9103cf27b59`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
