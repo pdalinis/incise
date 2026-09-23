@@ -16,8 +16,11 @@ The comparison target is Gemma full-profile v8: 475/479 usable trials correct,
 zero harmful outcomes, and family floors of table 57/60, list 100/100, section
 140/149, frontmatter 105/110, and table-read 57/60. The aspirational target is
 at least 99% correct among usable trials. A refusal or operation error is not
-harmful; `wrong`, `destructive`, `collateral:content`, and
-`collateral:formatting` are harmful.
+harmful when the file is unchanged; `wrong`, `destructive`,
+`collateral:content`, and `collateral:formatting` are harmful. In addition to
+the historical outcome, this campaign grades every changed final document
+directly. A loud error elsewhere in the turn cannot mask a harmful final
+document.
 
 ## Fixed environment
 
@@ -89,3 +92,17 @@ and unchanged Gemma and MiniCPM tests and benchmark behavior. Failure leaves
 Ornith on the model-agnostic standard profile. Historical pools are immutable;
 transport retries append records and the latest attempt is selected explicitly.
 
+## Pre-baseline harness corrections
+
+The first smoke dispatch failed before inference because two proposed smoke IDs
+did not exist in the frozen task files. Commit `6d60d7d` corrected only those
+IDs; it produced no result row.
+
+The five-row smoke then exposed a grader blind spot before the clap or full
+baseline: `set-build-target` ended with a wrong changed document, but the
+historical aggregate outcome became `op_error` because a separate `table_get`
+call also refused. The stricter changed-document safety audit above was added
+after retaining that raw and graded smoke pool and before any clap or baseline
+sample. This correction can only make the safety gate stricter; it does not
+alter execution, historical grading, prompts, sampling, tasks, or the primary
+correctness endpoint.

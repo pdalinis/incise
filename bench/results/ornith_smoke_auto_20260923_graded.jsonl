@@ -1,0 +1,5 @@
+{"condition":"auto-standard","task_id":"add-item-nested-asterisk","family":"list","trial":0,"outcome":"correct","detail":null,"framing_errors":[]}
+{"condition":"auto-standard","task_id":"add-row-aligned-short","family":"table","trial":0,"outcome":"correct","detail":null,"framing_errors":[]}
+{"condition":"auto-standard","task_id":"get-filter-two-columns","family":"table-read","trial":0,"outcome":"unfiltered","detail":"reported 5 rows of the right table; the 1 the question asked for are among them","framing_errors":[]}
+{"condition":"auto-standard","task_id":"insert-nested-ratelimits","family":"section","trial":0,"outcome":"correct","detail":null,"framing_errors":[]}
+{"condition":"auto-standard","task_id":"set-build-target","family":"frontmatter","trial":0,"outcome":"op_error","detail":"'build.target' holds 'debug# inline comment, must survive a sibling edit', expected 'debug'; after: no table under heading \"top-level\".\n  Near matches: none\n  Headings with tables: ","framing_errors":[]}
