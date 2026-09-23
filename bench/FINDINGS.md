@@ -869,6 +869,14 @@ The intended pair, `append-after-fence` seed 1, moved from formatting collateral
 
 All 190 routed trials were correct with no route, filter, section-tree, frontmatter, list, append-argument, or multiple-mutation errors. All 289 usable fallback trials retained the standard eight-tool surface. Every preregistered gate passed. This licenses retaining exact quoted section append in Gemma `auto`, but it does not support an aggregate correctness-gain claim: the measured value is removal of the targeted section failure while overall correctness and harmful count hold. Artifact SHA-256 values: raw `17ab67269ee30b287e2e527e23b5c04bf4104fed3a31f4d730f01f371ffa292f`; graded `316fa9c9a857458e892e0327cc76c68656855b4f9cab6aa1f771a8bc97b00ed8`; analysis `6cdc579f1ca8928575d6b0295f4873c9988012fffc472f14b31bb8fb0c4b4104`.
 
+## F-gemma-list-contains-v1 — current items resolve the last harmful list ambiguity
+
+The preregistered containing-item treatment routed only the explicit request that quoted the heading and new item while identifying one of several same-heading lists by an existing item. Pi inspected every candidate list, selected the unique list containing exactly one `star item`, required `second star item` to be absent, retained the item-read hash, exposed only zero-argument `list_append_target`, and supplied the full address plus exact new text to `list-add-item`. No marker-name mapping, fuzzy matching, or executor behavior changed.
+
+Treatment scored **10/10 correct** versus **9/10** in the full-v7 control. The collateral-content seed became correct; no control-correct pair regressed, and there were zero harmful outcomes or audit errors. Every request exposed the expected single tool, every model call supplied `{}`, every resolved argument was canonical, and the one-success latch held.
+
+As with the preceding one-failure experiment, descriptive two-sided exact McNemar `p = 1.0`; this demonstrates repair of the observed failure mode rather than a broad efficacy effect. It licenses a full-v8 composition gate whose stricter safety target is zero harmful outcomes. Artifact SHA-256 values: raw `13f211aa08261ef24f82a968799ad36c18bea52314178479367d0fe035090e7d`; graded `b387b742b76a372e29d9e24bc965e4e6675b11de64ffce73aeb6fddd59dd29d5`; analysis `454c71e390ce995cc2fa5150ea9dbb9de8a97d4db3f0cf0c8c25b6db477768c9`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
