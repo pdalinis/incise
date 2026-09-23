@@ -853,6 +853,14 @@ Frontmatter reached 110/110, up from 104/110. Tables and table reads stayed 60/6
 
 Artifact SHA-256 values: raw b050e9be50c2eb81615cf9a2c4998a7bfe6c765fc4fef2612691fed24dd01e04; graded 287befce58f1357e4335569e44848a3923581c61a6903692984a50bbd548e706; analysis 6174bc4a838f5e3fbd648514ffdf4819c6e3fe00122da118d44b3c326a2e5ef1.
 
+## F-gemma-section-append-v1 — exact literal append removes the last harmful result
+
+The preregistered exact-append treatment routed only the explicit quoted-sentence request for `append-after-fence`. Pi inspected the outline, resolved `Code fences > Fenced headings and lists`, retained its hash, exposed only zero-argument `section_append_target`, and supplied the exact quoted text to `section-append`. The executor and standard section schema were unchanged.
+
+Treatment scored **10/10 correct** versus **9/10** in the full-v6 control. The one observed leading-space formatting result became correct; no control-correct pair regressed, and there were zero harmful outcomes or audit errors. Every request exposed the expected single tool, every model call supplied `{}`, every resolved argument was canonical, and the one-success latch held.
+
+With only one discordant pair, descriptive two-sided exact McNemar `p = 1.0`; this is a demonstrated repair of the observed failure mode, not a general effectiveness claim. It licenses the preregistered full-v7 composition run. Artifact SHA-256 values: raw `96c2026b72f8976ff71f20a3ddccdc7c7c86dd0e8717660000f131ae133c1ddb`; graded `059997ffd857fd037b7b4299f63077be2b57b943b86f493d58de41d372794063`; analysis `7edee357d894eaef5f0c54d95fa5395d4ee7100297bff25972f285a2df2b1ff8`.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
