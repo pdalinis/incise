@@ -20,15 +20,20 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 
 ## Why Incise?
 
-Language models can identify the change a document needs but are less reliable at reproducing surrounding Markdown exactly. A one-cell table update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.
+Language models are often good at identifying the change a document needs and much less reliable at reproducing the surrounding Markdown exactly. A one-cell update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.
+
+> **Latest Gemma result:** the recommended Pi `auto` profile completed **475/479 usable trials (99.2%) with zero harmful outcomes**. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149, with the remaining four outcomes all loud refusals. All 200 routed trials were correct.
 
 Incise separates intent from mechanics:
 
 * **Semantic addresses:** select headings, rows, items, and keys by content rather than line number.
 * **Minimal edits:** change only the targeted structural range.
 * **Actionable refusals:** ambiguous or unsafe requests fail loudly instead of choosing a plausible target.
+* **Model-aware composition:** integrations can expose a smaller, safer action surface while retaining the standard tools as a fallback.
 
 It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.
+
+The Gemma figure is from a preregistered 480-trial Pi evaluation with one persistent generation timeout excluded from paired analysis. It is evidence for that model, runtime, task set, and profile—not a universal model claim.
 
 ## Quick start
 
@@ -59,6 +64,8 @@ Before modifying a document, inspect only the structure the agent needs:
 incise tables vault/Projects.md
 incise outline vault/Projects.md
 ```
+
+For exact values after structural discovery, use `incise rows notes.md --table Components`, `incise items notes.md --list Tasks`, or `incise keys notes.md`. Their JSON forms carry the structured rows, list items, or flattened frontmatter keys together with the file hash.
 
 ### Make a semantic edit
 
@@ -106,6 +113,8 @@ These schemas are measured artifacts rather than handwritten approximations. A f
 
 Incise includes a Hermes adapter under [`plugins/hermes/`](plugins/hermes/).
 
+Install the version-matched plugin bundle, enable its `incise` toolset, and run `hermes plugins doctor --ci incise`. Doctor prints the exact binary it validated. See the [Hermes integration guide](plugins/hermes/README.md) for complete installation and safety details.
+
 For Markdown structures represented by Incise, give the agent an explicit preference for structured editing:
 
 ```markdown
@@ -123,9 +132,9 @@ rewriting the document. Use raw editing only for prose changes that Incise does
 not represent.
 ```
 
-The Hermes adapter exposes the measured edit and table-read schemas together with structural reads. See [`plugins/hermes/README.md`](plugins/hermes/README.md) for installation and safety details.
+The adapter exposes the standard model-agnostic edit and read schemas behind Hermes’s native file-safety policy. The current release-candidate smoke completed all five representative tasks on both Gemma and MiniCPM with exact expected diffs. This is an integration check, not the Pi-specific 99.2% composition benchmark.
 
-Incise is deliberately scoped to Markdown structures it understands. Generic editing remains appropriate for ordinary prose and for creating the initial contents of a new document.
+Incise remains deliberately scoped to Markdown structures it understands. Generic editing is appropriate for ordinary prose and initial document creation.
 
 ---
 
@@ -135,10 +144,25 @@ Install the published [`pi-incise` package from npm](https://www.npmjs.com/packa
 
 ```bash
 pi install npm:pi-incise
-pi
 ```
 
-The package provides native binaries for macOS arm64/x64 and glibc Linux arm64/x64. It registers the three structural readers, `table_get`, and all four structured edit tools. Run `/incise-doctor` inside Pi to inspect the selected binary and schema status.
+For Gemma, start Pi with the measured automatic profile:
+
+```bash
+INCISE_PROFILE=auto pi
+```
+
+`auto` detects Gemma and enables the guarded `safe-routed` profile. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run `/incise-doctor` to see the detected model, effective profile, binary, schemas, registered tools, and last route.
+
+For MiniCPM, use the standard profile for general editing:
+
+```bash
+INCISE_PROFILE=standard pi
+```
+
+An opt-in `minicpm-list` profile is available for the measured list-addition workflow only. It reached 16/21 through real Pi with every executed mutation correct, but it is not a general MiniCPM profile and remains experimental.
+
+The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See [the Pi integration guide](plugins/pi/README.md) for profile behavior, model overrides, and exact evaluation scope.
 
 ## Safety model
 
@@ -150,19 +174,51 @@ Incise is designed around five guarantees:
 * **Safe writes:** the CLI supports dry runs, atomic replacement, no-op detection, and content-hash preconditions.
 * **Token-frugal results:** successful writes describe the change instead of returning the whole document.
 
+The standard interface remains model-agnostic. Model-specific profiles are additive integration behavior: they narrow the active tool surface, validate current structure, retain content hashes, and stop after one successful routed mutation.
+
+MiniCPM support is intentionally conservative. Core singleton-row compatibility passed 18/18 live table trials, including all 9 singleton-object-array calls. The opt-in list pipeline also shows strong targeted results, but broader MiniCPM profiles have not cleared the project’s zero-data-loss and no-regression gates. Incise therefore does not silently enable a general MiniCPM profile.
+
+Refusals are part of the safety contract. If an operation cannot prove one target or preserve the requested structure, it reports the conflicting matches or missing requirement and writes nothing.
+
 ## Measured with small models
 
-The recorded benchmark compares direct `patch` calls with Incise operations on the same tasks, model, seeds, and grader.
+The headline result is the current Gemma/Pi `auto` profile: **475 of 479 usable trials correct (99.2%) with zero harmful outcomes**.
 
-| Operation | Direct `patch` | Incise         | Mean Incise output |
-| --------- | -------------: | -------------: | -----------------: |
-| Tables    | 60.0% (36/60)  | 100% (60/60)   | 66 tokens          |
-| Lists     | 63.0% (63/100) | 91.0% (91/100) | 58 tokens          |
-| Sections  | 19.0% (19/100) | 74.0% (74/100) | 60 tokens          |
+### Current Gemma/Pi profile
 
-These results describe one small local model under recorded conditions, not every model. The useful result is the class of failure removed: character arithmetic, structural-boundary mistakes, and byte-for-byte reconstruction.
+| Family | Correct | Safety result |
+| --- | ---: | --- |
+| Tables | **60/60** | Zero harmful outcomes |
+| Lists | **100/100** | Zero harmful outcomes |
+| Sections | **145/149** | Four loud refusals; no wrong edits |
+| Frontmatter | **110/110** | Zero harmful outcomes |
+| Table reads | **60/60** | Read-only |
+| Routed subset | **200/200** | No route, argument, filter, or multiple-mutation errors |
 
-Read the [benchmark summary](https://pdalinis.github.io/incise/benchmarks/), the complete [`bench/FINDINGS.md`](bench/FINDINGS.md), or jump to the source findings for [tables](bench/FINDINGS.md#f1--alignment-maintenance-is-the-failure-isolated), [lists](bench/FINDINGS.md#lists--the-second-op-family), [sections](bench/FINDINGS.md#s7--the-sections-arm-a-baseline-19-correct-28-data-loss), and [frontmatter](bench/FINDINGS.md#f-frontmatter--the-fourth-family-and-the-verb-that-deleted-the-version).
+The preregistered run attempted 480 trials. One `rename-setext` pair hit the fixed generation timeout twice and was excluded under the frozen analysis rule, leaving 479 paired results. The latest incremental route moved correctness from 473/479 to 475/479 and harmful outcomes from one to zero; that incremental difference is descriptive (`p = 0.625`), while the zero-harm and targeted-repair gates passed.
+
+### MiniCPM progress
+
+MiniCPM is promising, but the supported surface is deliberately narrower:
+
+* Singleton-object table rows passed **18/18** live trials, including **9/9** compatibility normalizations, with no corruption or data loss.
+* An adapter-independent, host-routed list pipeline improved supported additions from **13/21 to 21/21** (`p = 0.0078`) with no regressions or harmful outcomes.
+* The same opt-in pipeline reached **16/21** through real Pi. All 16 executed mutations were correct; five failures were no-call prose responses.
+* Broader MiniCPM compositions remain experimental because they have not passed the project’s family and zero-data-loss gates.
+
+### Structured operations versus direct patching
+
+The original recorded benchmark compared direct `patch` calls with Incise operations on identical tasks, seeds, model, and grader:
+
+| Operation | Direct `patch` | Incise | Mean Incise output |
+| --- | ---: | ---: | ---: |
+| Tables | 60.0% (36/60) | **100% (60/60)** | 66 tokens |
+| Lists | 63.0% (63/100) | **91.0% (91/100)** | 58 tokens |
+| Sections | 19.0% (19/100) | **74.0% (74/100)** | 60 tokens |
+
+These are scoped model measurements, not promises about every model or runtime. The reusable result is the failure class removed: character arithmetic, structural-boundary guesses, ambiguous targeting, and byte-for-byte document reconstruction.
+
+Read the [benchmark summary](https://pdalinis.github.io/incise/benchmarks/), the complete [`bench/FINDINGS.md`](bench/FINDINGS.md), or inspect the raw [Gemma v8 result pool](bench/results/gemma_safe_routed_full_v8_20260922_graded.jsonl) and [analysis](bench/results/gemma_safe_routed_full_v8_20260922_analysis.json).
 
 The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across **110,406 generated cases over 54 fixtures**. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.
 
@@ -244,4 +300,3 @@ Report potential vulnerabilities through GitHub private vulnerability reporting 
 ## License
 
 Incise is available under the MIT License. See [`LICENSE`](LICENSE).
-

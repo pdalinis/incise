@@ -159,6 +159,14 @@ ALLOWED_BACKTICKS = {
     # the refusals that say which action was asked for.
     "replace-body": ("a section_edit action", None),
     "frontmatter-set": ("a frontmatter op name", None),
+    # Host-owned MiniCPM routing preconditions are intentionally absent from
+    # the measured default schemas. They appear only in refusals for guarded
+    # calls the host constructed, never as fields the model is told to repair.
+    "must_absent": ("a host-owned create precondition", "cannot both be true"),
+    "must_exist": ("a host-owned update precondition", "cannot both be true"),
+    # The missing-key guarded refusal is emitted only by the routed path, whose
+    # preceding phase exposed this evaluation-only read tool.
+    "frontmatter_get": ("the routed frontmatter inspection tool", "Copy an exact path"),
     # The one legitimate mention of the retired argument, and the reason this
     # check exists. This refusal fires only when the model sent both `values`
     # and `row`, so it names what arrived. Every other mention recommended an

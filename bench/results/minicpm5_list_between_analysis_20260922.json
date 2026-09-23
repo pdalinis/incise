@@ -1,0 +1,42 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_list_between_20260922.jsonl": "05f4c65bb24ac219d472e95ea2df14baf38f4ccb27bf5f7137cabc2f54ed0ead",
+    "bench/results/minicpm5_list_between_20260922_graded.jsonl": "845e8bc6e1cc343f872fee63f5a90847347cfb2aa39a761aaf670812f9bf3926",
+    "bench/results/minicpm5_list_required_after_20260922.jsonl": "887611ab9dee71cc8629435f7e7d851026ae9d6d7e16c0ae7465ed9d88686d91",
+    "bench/results/minicpm5_list_required_after_20260922_graded.jsonl": "25cb66d4451b658e163ef50913eb34b482031461bd7c7593c427067581f56f4c"
+  },
+  "control_outcomes": {
+    "correct": 1,
+    "wrong": 2
+  },
+  "efficiency": {
+    "control_mean_completion_tokens": 78.33,
+    "treatment_mean_completion_tokens": 90.33,
+    "treatment_mean_elapsed_s": 3.1
+  },
+  "gate": {
+    "executed_boundaries_validated": true,
+    "no_control_correct_regressed": true,
+    "no_destructive_or_collateral": true,
+    "passed": true,
+    "refusals_left_fixture_unchanged": true,
+    "three_of_three_correct": true
+  },
+  "generated_at": "2026-09-22T00:44:23.129810+00:00",
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 1,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.5,
+    "treatment": 3,
+    "treatment_only": 2
+  },
+  "pairs": 3,
+  "preregistration_commit": "24276e6",
+  "sampling_harness_sha256": [
+    "bdfabdd89105a00ca085df49d2358538cb3e5795662d693b37b3945ecc72821c"
+  ],
+  "treatment_outcomes": {
+    "correct": 3
+  }
+}

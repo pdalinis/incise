@@ -176,7 +176,11 @@ def execute(binary, sb, op, op_args):
 # return different structures: `TableRows` and `FrontState`. A single hardcoded
 # key would have silently handed the grader `None` for every frontmatter read,
 # which is the shape of a bug that looks like a model failure.
-READ_SUBCOMMANDS = {"table-get": ("rows", "rows"),
+READ_SUBCOMMANDS = {"md-tables": ("tables", "text"),
+                    "table-get": ("rows", "rows"),
+                    "md-lists": ("lists", "text"),
+                    "list-get": ("items", "list"),
+                    "md-outline": ("outline", "text"),
                     "frontmatter-get": ("keys", "frontmatter")}
 
 
@@ -232,7 +236,12 @@ def _argv(binary, sb, subcommand, op_args):
         if target != sb.root and not target.startswith(sb.root + os.sep):
             return None, f"refused: {path!r} resolves outside the sandbox"
         argv.append(path)
-    return argv + ["--args", json.dumps(op_args), "--json"], None
+    # Discovery reads have no argument payload. Every edit and addressed read
+    # must receive the model's complete object; dropping it turns a valid call
+    # into a misleading core refusal for whichever required field comes first.
+    if subcommand not in ("tables", "lists", "outline"):
+        argv += ["--args", json.dumps(op_args)]
+    return argv + ["--json"], None
 
 
 def _run(argv, sb):

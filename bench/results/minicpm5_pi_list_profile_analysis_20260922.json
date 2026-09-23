@@ -1,0 +1,89 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_pi_list_profile_20260922.jsonl": "4e62ac1a9ae37ca00055a603798f42176701cb386574689f74ae7017816adfe7",
+    "bench/results/minicpm5_pi_list_profile_20260922_graded.jsonl": "b6bc2103350866564b884c1bee60ecd522d3b42e87af52db5c2a02742a562403",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "control_outcomes": {
+    "collateral:content": 1,
+    "correct": 13,
+    "op_error": 2,
+    "wrong": 5
+  },
+  "efficiency": {
+    "control_mean_completion_tokens": 116.95,
+    "treatment_mean_completion_tokens": 41.95,
+    "treatment_mean_elapsed_s": 1.37,
+    "treatment_mean_turns": 1.0
+  },
+  "failure_localization": {
+    "tool_invocation": 21
+  },
+  "gate": {
+    "all_routes_match_preregistered_mapping": false,
+    "at_least_nineteen_correct": false,
+    "at_most_one_successful_mutation_per_turn": true,
+    "each_task_correct_in_two_seeds": false,
+    "executed_structure_was_validated": true,
+    "no_control_correct_regressed": false,
+    "no_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T01:38:59.686925+00:00",
+  "implementation_commit": "fd1776e",
+  "invocation": {
+    "selection_calls": 0,
+    "successful_mutations": 0,
+    "validated_content_calls": 0
+  },
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 13,
+    "control_only": 13,
+    "exact_mcnemar_p": 0.000244140625,
+    "treatment": 0,
+    "treatment_only": 0
+  },
+  "pairs": 21,
+  "pi_version": "0.85.1",
+  "preregistration_commit": "b53a9e9",
+  "source_sha256": {
+    "extension": [
+      "21e63f4cb2f3ea399d86e2135c278b24133cd93da708623bf6eecd8c3e0fd1ed"
+    ],
+    "pipeline": [
+      "fb82e3cbc935c697383b7fae11e8f1b37ca27cec7e5ab63759150397bc88b5a4"
+    ],
+    "worker": [
+      "73994256e0dc3b5311b7a170bfd3ae69b517dba7ff62be043829b2e7a48ae126"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-loose": {
+      "malformed": 3
+    },
+    "add-item-mixed-markers": {
+      "malformed": 3
+    },
+    "add-item-nested-asterisk": {
+      "malformed": 3
+    },
+    "add-item-ordered-all-ones": {
+      "malformed": 3
+    },
+    "add-item-ordered-renumber": {
+      "malformed": 3
+    },
+    "add-item-paren-delimiter": {
+      "malformed": 3
+    },
+    "add-item-tight-dash": {
+      "malformed": 3
+    }
+  },
+  "treatment_outcomes": {
+    "malformed": 21
+  }
+}

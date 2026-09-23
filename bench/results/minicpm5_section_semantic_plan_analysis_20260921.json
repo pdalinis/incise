@@ -1,0 +1,64 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_section_pipeline_20260921.jsonl": "2fad9f4b51930f231092ba43a16e0fd63eb2277bf5df8187df20374c6ed4a4f6",
+    "bench/results/minicpm5_section_semantic_plan_20260921.jsonl": "d8bd9f1a9c920897d5b1a1412d8641887be16309d141031f0e80d67d45e86d44",
+    "bench/results/minicpm5_section_semantic_plan_20260921_graded.jsonl": "74bd19630fcf4d5bdfaef977e88ed574b0bd231dbdadafcfb4cd56cc80c82c52",
+    "bench/results/minicpm5_section_semantic_plan_20260921_regraded.jsonl": "eb2905eef8aee5fc4598e7eb1affad6a5f80ee76d79d8aa7a31afc8986d529ab"
+  },
+  "by_task": {
+    "insert-nested-ratelimits": {
+      "not_exact": 3
+    },
+    "insert-release-at-top": {
+      "not_exact": 3
+    },
+    "insert-subsection-last": {
+      "not_exact": 3
+    },
+    "insert-troubleshooting": {
+      "not_exact": 3
+    }
+  },
+  "efficiency": {
+    "mean_completion_tokens": 66.92,
+    "mean_elapsed_s": 1.99
+  },
+  "exact_plans": 0,
+  "field_correct": {
+    "anchor": 12,
+    "content_shape": 3,
+    "order": 11,
+    "relationship": 8
+  },
+  "gate": {
+    "all_anchors_resolve_canonically": true,
+    "at_least_ten_exact_plans": false,
+    "every_task_exact_in_two_seeds": false,
+    "no_edit_executor_called": true,
+    "passed": false,
+    "relationship_order_shape_at_least_eleven": false
+  },
+  "generated_at": "2026-09-22T00:14:45.751848+00:00",
+  "grading_harness_sha256": "c02f54ace28d8524366ff9e232afac22852532a9f594477bc1276ea9768aba18",
+  "model": "minicpm5-2b-q8",
+  "outcomes": {
+    "invalid_plan": 2,
+    "wrong_plan": 10
+  },
+  "paired_vs_dynamic_planner": {
+    "control_exact": 3,
+    "control_only": 3,
+    "exact_mcnemar_p": 0.25,
+    "treatment_exact": 0,
+    "treatment_only": 0
+  },
+  "pairs": 12,
+  "preregistration_commit": "e3ec099",
+  "sampling_harness_sha256": [
+    "69daf45ac514af3d79d36873c5740ca55d52dd59aaa765203abd17e7e70b951d"
+  ],
+  "schema_sha256": [
+    "da41cdecbd96d4f2fc53e45a7210878f5e19e1eef8b6f4669bdaaaf3b73a3f2d",
+    "e55a7c8a1031a1895c32559ddf0f1c1ffb20bfab24a822438bb5908e8fdf0f38"
+  ]
+}

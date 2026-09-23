@@ -1,0 +1,141 @@
+{
+  "artifacts": {
+    "graded": "bench/results/gemma_list_remove_route_v1_20260922_graded.jsonl",
+    "graded_sha256": "ec80ed32779b3ea90d9b569586a4c891a0aa1fcf5d37fc4af4fceaa6ca9922a2",
+    "raw": "bench/results/gemma_list_remove_route_v1_20260922.jsonl",
+    "raw_sha256": "8d5e68ddc45fc10014c7c2ab8beb9e9748ed3807c849c535c68e70c17664d415"
+  },
+  "audit_errors": [
+    [
+      "remove-item-mixed",
+      0,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      1,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      2,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      3,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      4,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      5,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      6,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      7,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      8,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ],
+    [
+      "remove-item-mixed",
+      9,
+      {},
+      {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    ]
+  ],
+  "control_correct": 15,
+  "expected": 20,
+  "harmful": 0,
+  "observed": 20,
+  "outcomes": {
+    "correct": 20
+  },
+  "paired": 20,
+  "regressions": [],
+  "status": "fail",
+  "treatment_correct": 20
+}

@@ -30,7 +30,7 @@
 //! ports only the ratio. FINDINGS records it as the front end's to carry.
 
 use crate::args::{self, check_heading_named, check_ordinal, PyInt};
-use crate::error::{OpError, Result};
+use crate::error::{OpError, Repair, Result};
 use crate::heading::{find_sections, heading_gap, inert_headings, Section};
 use crate::json::{self, Value};
 use crate::scan::{py_strip, split_lines, HeadingStyle};
@@ -743,6 +743,45 @@ pub fn section_delete(content: &str, address: &SectionAddress) -> Result<String>
     let mut out: Vec<&str> = lines[..sec.start].to_vec();
     out.extend_from_slice(&lines[stop..]);
     Ok(out.join("\n"))
+}
+
+/// Delete a section through the agent-facing safety boundary.
+///
+/// A leaf needs no extra acknowledgement. A section with descendants requires
+/// `subtree=true`, after a refusal that names the exact descendant paths at
+/// risk. This keeps the underlying splice reusable for trusted round-trip
+/// invariants while making the dispatched operation fail closed.
+pub fn section_delete_confirmed(
+    content: &str,
+    address: &SectionAddress,
+    confirm_subtree: bool,
+) -> Result<String> {
+    let target = resolve_section(content, address)?;
+    let descendants: Vec<String> = find_sections(content)
+        .into_iter()
+        .filter(|section| section.start > target.start && section.start <= target.end)
+        .map(|section| format!("\"{}\"", section.slug()))
+        .collect();
+    if !descendants.is_empty() && !confirm_subtree {
+        let mut repair = Repair::new(
+            "subtree_confirmation_required",
+            "Repeat the call with subtree=true only if deleting every named descendant is intended.",
+        );
+        repair.argument = Some("subtree".to_string());
+        repair.received = Some("false".to_string());
+        repair.candidates = descendants
+            .iter()
+            .map(|path| path.trim_matches('"').to_string())
+            .collect();
+        return Err(OpError::with_repair(format!(
+            "deleting \"{}\" would also delete {} descendant section{}: {}.\n  If you intend to delete the whole subtree, pass subtree=true.",
+            target.slug(),
+            descendants.len(),
+            if descendants.len() == 1 { "" } else { "s" },
+            descendants.join("; ")
+        ), repair));
+    }
+    section_delete(content, address)
 }
 
 /// Change a heading's text, preserving the syntax it was written in.

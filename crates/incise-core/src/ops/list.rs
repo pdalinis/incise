@@ -14,7 +14,7 @@
 use std::collections::HashMap;
 
 use crate::args::{check_heading, check_ordinal, check_position_in, PosFamily, Position};
-use crate::error::{OpError, Result};
+use crate::error::{OpError, Repair, Result};
 use crate::json;
 use crate::list::{find_lists, ListItem, MdList};
 use crate::ops::table::heading_path_at;
@@ -39,6 +39,27 @@ pub struct ListEntry {
     pub levels: usize,
     pub loose: bool,
     pub tasks: usize,
+}
+
+/// One item returned by [`list_get`].  This is intentionally smaller than the
+/// parser's [`ListItem`]: marker spelling and line spans are executor
+/// bookkeeping, while text, nesting and checkbox state are the facts a caller
+/// needs to address a subsequent edit without guessing.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListReadItem {
+    pub text: String,
+    pub depth: usize,
+    /// Index in `items`, so the relationship survives repeated parent text.
+    pub parent: Option<usize>,
+    pub checked: Option<bool>,
+}
+
+/// The structured result of [`list_get`].
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListItems {
+    pub heading: String,
+    pub ordinal: usize,
+    pub items: Vec<ListReadItem>,
 }
 
 /// The structural summary, one entry per top-level list.
@@ -269,6 +290,71 @@ pub fn resolve_list(content: &str, address: &ListAddress) -> Result<MdList> {
     )))
 }
 
+/// Return the addressable contents of one list.
+///
+/// Unlike [`list_lists`], this is an explicit inspection read: item text is the
+/// point.  It shares the exact resolver used by edits, so copying a returned
+/// `text` into `after` or `item` names the same list item the executor saw.
+pub fn list_get(content: &str, address: &ListAddress) -> Result<ListItems> {
+    let list = resolve_list(content, address)?;
+    let index = find_lists(content)
+        .iter()
+        .position(|candidate| candidate.start == list.start)
+        .ok_or_else(|| OpError::new("internal: resolved list has no summary entry."))?;
+    let entry = list_lists(content)
+        .into_iter()
+        .nth(index)
+        .ok_or_else(|| OpError::new("internal: resolved list has no summary entry."))?;
+    let items = list
+        .items
+        .iter()
+        .map(|item| ListReadItem {
+            text: item.text.clone(),
+            depth: item.depth,
+            parent: item.parent,
+            checked: item.checkbox.map(|mark| mark == 'x' || mark == 'X'),
+        })
+        .collect();
+    Ok(ListItems {
+        heading: entry.heading,
+        ordinal: entry.ordinal,
+        items,
+    })
+}
+
+/// Model-readable rendering of [`list_get`].
+pub fn render_list_items(got: &ListItems) -> String {
+    let mut out = vec![format!(
+        "List {} ordinal {} -- {} items",
+        json::dumps_str(&got.heading),
+        got.ordinal,
+        got.items.len()
+    )];
+    for (index, item) in got.items.iter().enumerate() {
+        let parent = item
+            .parent
+            .map(|value| value.to_string())
+            .unwrap_or_else(|| "null".to_string());
+        let checked = item
+            .checked
+            .map(|value| value.to_string())
+            .unwrap_or_else(|| "null".to_string());
+        out.push(format!(
+            "  [{}] text={} depth={} parent={} checked={}",
+            index,
+            json::dumps_str(&item.text),
+            item.depth,
+            parent,
+            checked
+        ));
+    }
+    out.join("\n")
+}
+
+pub fn render_list_get(content: &str, address: &ListAddress) -> Result<String> {
+    list_get(content, address).map(|got| render_list_items(&got))
+}
+
 /// Index of the one item `text` names, or a refusal.
 ///
 /// Three passes, narrowest first: exact, case-insensitive exact, then unique
@@ -308,13 +394,24 @@ pub fn resolve_item(lst: &MdList, text: Option<&str>, field: &str) -> Result<usi
             return Ok(hits[0]);
         }
         if hits.len() > 1 {
-            let shown: Vec<String> = hits.iter().map(|i| format!("\"{}\"", texts[*i])).collect();
-            return Err(OpError::new(format!(
-                "\"{}\" matches {} items; it must identify exactly one.\n  Matches: {}",
-                want,
-                hits.len(),
-                shown.join("; ")
-            )));
+            let matches: Vec<String> = hits.iter().map(|i| texts[*i].clone()).collect();
+            let shown: Vec<String> = matches.iter().map(|text| format!("\"{}\"", text)).collect();
+            let mut repair = Repair::new(
+                "ambiguous_item",
+                "Repeat the call with one exact item text from candidates.",
+            );
+            repair.argument = Some(field.to_string());
+            repair.received = Some(want.to_string());
+            repair.candidates = matches;
+            return Err(OpError::with_repair(
+                format!(
+                    "\"{}\" matches {} items; it must identify exactly one.\n  Matches: {}",
+                    want,
+                    hits.len(),
+                    shown.join("; ")
+                ),
+                repair,
+            ));
         }
     }
     let near = get_close_matches(want, &texts, 3, 0.4);

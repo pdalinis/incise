@@ -58,11 +58,11 @@ use incise_core::json;
 use incise_core::list::{find_lists, MdList};
 use incise_core::ops::frontmatter::{
     describe_frontmatter_change, frontmatter_delete, frontmatter_get, frontmatter_set,
-    render_frontmatter, render_frontmatter_get, FrontKey,
+    frontmatter_set_guarded, render_frontmatter, render_frontmatter_get, FrontKey,
 };
 use incise_core::ops::list::{
-    list_add_item, list_lists, list_remove_item, list_set_checked, resolve_item, resolve_list,
-    ListAddress,
+    list_add_item, list_get, list_lists, list_remove_item, list_set_checked, resolve_item,
+    resolve_list, ListAddress,
 };
 use incise_core::ops::section::{
     resolve_section, section_append, section_delete, section_insert, section_outline,
@@ -77,6 +77,31 @@ use incise_core::table::{find_tables, outside_table, Table};
 /// Short enough never to widen a column — this is a round-trip test, not a
 /// re-pad test, and a widening value would legitimately fail to shrink back.
 const SENTINEL: &str = "zq7";
+
+#[test]
+fn the_list_read_exposes_exact_text_and_nesting_without_parser_bookkeeping() {
+    let by_rel: std::collections::BTreeMap<String, String> = corpus().into_iter().collect();
+    let content = &by_rel["corpus/lists/nested-mixed.md"];
+    let got = list_get(
+        content,
+        &ListAddress::heading("Asterisk markers, four-space indent"),
+    )
+    .unwrap();
+    assert_eq!(
+        got.items
+            .iter()
+            .map(|item| item.text.as_str())
+            .collect::<Vec<_>>(),
+        ["alpha", "beta", "beta-one", "beta-two", "gamma"]
+    );
+    assert_eq!(
+        got.items.iter().map(|item| item.depth).collect::<Vec<_>>(),
+        [0, 0, 1, 1, 0]
+    );
+    assert_eq!(got.items[2].parent, Some(1));
+    assert_eq!(got.items[3].parent, Some(1));
+    assert!(got.items.iter().all(|item| item.checked.is_none()));
+}
 
 fn corpus() -> Vec<(String, String)> {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -1522,6 +1547,52 @@ fn a_frontmatter_set_then_delete_is_byte_identical() {
     assert!(checked > 5, "only {checked} round-trips exercised");
 }
 
+/// Create/update intent is a precondition, not permission to retarget.
+#[test]
+fn frontmatter_existence_guards_refuse_without_writing() {
+    let content = "---\nbuild:\n  target: release\n---\n\n# Project\n";
+    let existing = json::Value::Str("build.target".to_string());
+    let absent = json::Value::Str("build.cache".to_string());
+    let value = json::Value::Bool(true);
+    let yes = json::Value::Bool(true);
+
+    let create_wrong =
+        frontmatter_set_guarded(content, Some(&existing), Some(&value), Some(&yes), None)
+            .unwrap_err();
+    assert!(create_wrong
+        .message()
+        .contains("requires an absent frontmatter key"));
+    assert_eq!(
+        create_wrong.repair().map(|r| r.code.as_str()),
+        Some("frontmatter_key_exists")
+    );
+
+    let update_wrong =
+        frontmatter_set_guarded(content, Some(&absent), Some(&value), None, Some(&yes))
+            .unwrap_err();
+    assert!(update_wrong
+        .message()
+        .contains("requires an existing frontmatter key"));
+    assert_eq!(
+        update_wrong.repair().map(|r| r.code.as_str()),
+        Some("frontmatter_key_missing")
+    );
+
+    let created =
+        frontmatter_set_guarded(content, Some(&absent), Some(&value), Some(&yes), None).unwrap();
+    assert_eq!(
+        created,
+        frontmatter_set(content, Some(&absent), Some(&value)).unwrap()
+    );
+
+    let updated =
+        frontmatter_set_guarded(content, Some(&existing), Some(&value), None, Some(&yes)).unwrap();
+    assert_eq!(
+        updated,
+        frontmatter_set(content, Some(&existing), Some(&value)).unwrap()
+    );
+}
+
 /// A set rewrites the key's own line and no other, for every settable key.
 ///
 /// The containers are the other half of the claim, and they are counted rather
@@ -1731,6 +1802,20 @@ fn the_frontmatter_read_supplies_what_the_summary_omits() {
     let by_rel: std::collections::BTreeMap<String, String> = corpus().into_iter().collect();
     let rel = "corpus/frontmatter/rich.md";
     let rich = &by_rel[rel];
+    let typed = frontmatter_get(rich, None).unwrap();
+    let version = typed.keys.iter().find(|key| key.path == "version").unwrap();
+    let jobs = typed
+        .keys
+        .iter()
+        .find(|key| key.path == "build.jobs")
+        .unwrap();
+    let draft = typed.keys.iter().find(|key| key.path == "draft").unwrap();
+    assert_eq!(
+        version.value_type, "string",
+        "0.4.1 must not become a number"
+    );
+    assert_eq!(jobs.value_type, "integer");
+    assert_eq!(draft.value_type, "boolean");
     let read = render_frontmatter_get(rich, rel, None).unwrap();
     assert!(!render_frontmatter(rich, rel).contains("Dana"));
     assert!(read.contains("Dana") && read.contains("Peter"));

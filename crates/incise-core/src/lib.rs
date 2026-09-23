@@ -31,18 +31,21 @@ pub mod similar;
 pub mod table;
 
 pub use describe::describe_change;
-pub use error::{OpError, Result};
+pub use error::{OpError, Repair, Result};
 pub use front::{find_frontmatter, format_path, parse_path, Entry, Fmt, FrontMatter, Kind, Seg};
 pub use heading::{find_sections, heading_gap, inert_headings, Section};
 pub use ops::dispatch::{apply_op, OPS};
 pub use ops::frontmatter::{
     describe_frontmatter_change, frontmatter_delete, frontmatter_get, frontmatter_set,
-    render_frontmatter, render_frontmatter_get, FrontKey, FrontState,
+    frontmatter_set_guarded, render_frontmatter, render_frontmatter_get, FrontKey, FrontState,
+};
+pub use ops::list::{
+    list_get, render_list_get, render_list_items, ListAddress, ListItems, ListReadItem,
 };
 pub use ops::section::{
-    render_section_outline, resolve_section, section_append, section_delete, section_insert,
-    section_outline, section_rename, section_replace_body, section_set_level, SectionAddress,
-    SectionEntry, POSITIONS,
+    render_section_outline, resolve_section, section_append, section_delete,
+    section_delete_confirmed, section_insert, section_outline, section_rename,
+    section_replace_body, section_set_level, SectionAddress, SectionEntry, POSITIONS,
 };
 pub use ops::table::{
     caption, heading_path, list_tables, render_table_get, render_table_list, render_table_rows,

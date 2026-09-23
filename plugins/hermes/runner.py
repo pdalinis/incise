@@ -14,7 +14,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
 
 # The exit codes the CLI documents. Each means something different to a caller,
 # which is the whole reason they are distinct: a refusal should be answered by
@@ -26,44 +26,81 @@ EXIT_USAGE = 2
 EXIT_STALE = 3
 
 _BINARY: Optional[str] = None
+_BINARY_SOURCE: Optional[str] = None
 _SEARCHED = False
+
+
+def _checkout_root(start: Path) -> Optional[Path]:
+    """Return the source checkout containing *start*, if there is one."""
+    for parent in start.resolve().parents:
+        if (parent / "Cargo.toml").exists() and (parent / "crates").is_dir():
+            return parent
+    return None
+
+
+def _source_candidates(root: Path) -> Iterable[str]:
+    """Yield executable checkout builds from newest to oldest.
+
+    Source-linked Hermes installs are development installs. Prefer the build
+    produced most recently instead of assuming an older optimized binary is
+    more representative than a newer debug build. A release build wins an
+    exact timestamp tie.
+    """
+    paths = [
+        root / "target" / profile / "incise"
+        for profile in ("release", "debug")
+    ]
+    existing = [path for path in paths if path.is_file() and os.access(path, os.X_OK)]
+    existing.sort(
+        key=lambda path: (path.stat().st_mtime_ns, path.parent.name == "release"),
+        reverse=True,
+    )
+    yield from (str(path) for path in existing)
 
 
 def _candidates():
     env = os.environ.get("INCISE_BIN")
     if env:
-        yield env
+        yield env, "INCISE_BIN"
+
+    # A source-linked plugin should exercise the checkout it came from, not an
+    # unrelated installed binary. Hermes Plugin Doctor may not preserve a
+    # one-shot INCISE_BIN override, which makes this ordering load-bearing for
+    # development and release validation.
+    root = _checkout_root(Path(__file__))
+    if root is not None:
+        for path in _source_candidates(root):
+            yield path, "source checkout (newest build)"
+
     found = shutil.which("incise")
     if found:
-        yield found
-    # Development: the plugin directory lives inside the repo, so a build in the
-    # workspace target dir is right there. Release first -- a debug binary is
-    # correct but slow enough to notice on a large document.
-    here = Path(__file__).resolve()
-    for parent in here.parents:
-        if (parent / "Cargo.toml").exists() and (parent / "crates").is_dir():
-            for profile in ("release", "debug"):
-                yield str(parent / "target" / profile / "incise")
-            break
+        yield found, "PATH"
 
 
 def binary() -> Optional[str]:
     """The `incise` executable, or None. Resolved once."""
-    global _BINARY, _SEARCHED
+    global _BINARY, _BINARY_SOURCE, _SEARCHED
     if _SEARCHED:
         return _BINARY
     _SEARCHED = True
-    for path in _candidates():
+    for path, source in _candidates():
         if path and os.path.isfile(path) and os.access(path, os.X_OK):
             _BINARY = path
+            _BINARY_SOURCE = source
             break
     return _BINARY
 
 
+def binary_source() -> Optional[str]:
+    """How the cached binary was selected, for installation diagnostics."""
+    binary()
+    return _BINARY_SOURCE
+
+
 def reset_cache() -> None:
     """Forget the resolved binary. For tests, and for a mid-session rebuild."""
-    global _BINARY, _SEARCHED
-    _BINARY, _SEARCHED = None, False
+    global _BINARY, _BINARY_SOURCE, _SEARCHED
+    _BINARY, _BINARY_SOURCE, _SEARCHED = None, None, False
 
 
 def available() -> Optional[str]:

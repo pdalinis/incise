@@ -34,7 +34,7 @@
 use std::path::Path;
 
 use incise_core::json::dumps_str;
-use incise_core::{Fmt, FrontState, TableRows};
+use incise_core::{Fmt, FrontState, ListItems, OpError, TableRows};
 
 pub const EXIT_OK: i32 = 0;
 pub const EXIT_REFUSED: i32 = 1;
@@ -126,6 +126,42 @@ pub fn rows_view(f: &Format, text: &str, got: &TableRows, hash: &str, path: &Pat
     EXIT_OK
 }
 
+/// `items`: [`view`] plus item text, nesting, parent relationship and checkbox
+/// state. Parent indices refer to this same ordered array.
+pub fn items_view(f: &Format, text: &str, got: &ListItems, hash: &str, path: &Path) -> i32 {
+    if !f.json {
+        return view(f, text, hash, path);
+    }
+    let items: Vec<String> = got
+        .items
+        .iter()
+        .map(|item| {
+            format!(
+                "{{\"text\": {}, \"depth\": {}, \"parent\": {}, \"checked\": {}}}",
+                dumps_str(&item.text),
+                item.depth,
+                item.parent
+                    .map(|value| value.to_string())
+                    .unwrap_or_else(|| "null".to_string()),
+                item.checked
+                    .map(|value| value.to_string())
+                    .unwrap_or_else(|| "null".to_string()),
+            )
+        })
+        .collect();
+    println!(
+        "{{\"ok\": true, \"text\": {}, \"list\": {{\"heading\": {}, \"ordinal\": {}, \
+         \"items\": [{}]}}, \"hash\": {}, \"path\": {}}}",
+        dumps_str(text),
+        dumps_str(&got.heading),
+        got.ordinal,
+        items.join(", "),
+        dumps_str(hash),
+        dumps_str(&path.display().to_string()),
+    );
+    EXIT_OK
+}
+
 /// `keys`: [`view`] plus the structure, exactly as [`rows_view`] does it.
 ///
 /// `state` and `format` are carried because neither appears in the rendered
@@ -143,9 +179,10 @@ pub fn keys_view(f: &Format, text: &str, got: &FrontState, hash: &str, path: &Pa
         .iter()
         .map(|k| {
             format!(
-                "{{\"path\": {}, \"kind\": {}, \"value\": {}, \"lines\": {}}}",
+                "{{\"path\": {}, \"kind\": {}, \"type\": {}, \"value\": {}, \"lines\": {}}}",
                 dumps_str(&k.path),
                 dumps_str(k.kind),
+                dumps_str(k.value_type),
                 dumps_str(&k.value),
                 k.lines,
             )
@@ -188,6 +225,35 @@ pub fn refusal(f: &Format, message: &str) -> i32 {
     } else {
         eprintln!("Error: {message}");
     }
+    EXIT_REFUSED
+}
+
+/// A core refusal with optional machine-readable repair data. The human-facing
+/// `error` string stays byte-for-byte identical; capable callers can ignore the
+/// additional object, while smaller models can copy its candidates directly.
+pub fn refusal_error(f: &Format, error: &OpError) -> i32 {
+    if !f.json || error.repair().is_none() {
+        return refusal(f, error.message());
+    }
+    let repair = error.repair().unwrap();
+    println!(
+        "{{\"ok\": false, \"error\": {}, \"repair\": {{\"code\": {}, \
+         \"argument\": {}, \"received\": {}, \"candidates\": {}, \"remedy\": {}}}}}",
+        dumps_str(error.message()),
+        dumps_str(&repair.code),
+        repair
+            .argument
+            .as_ref()
+            .map(|value| dumps_str(value))
+            .unwrap_or_else(|| "null".to_string()),
+        repair
+            .received
+            .as_ref()
+            .map(|value| dumps_str(value))
+            .unwrap_or_else(|| "null".to_string()),
+        dumps_strs(&repair.candidates),
+        dumps_str(&repair.remedy),
+    );
     EXIT_REFUSED
 }
 

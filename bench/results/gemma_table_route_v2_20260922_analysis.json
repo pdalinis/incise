@@ -1,0 +1,31 @@
+{
+  "correct": 60,
+  "expected": 60,
+  "filter_errors": [],
+  "observed": 60,
+  "outcomes": {
+    "correct": 60
+  },
+  "per_task": {
+    "get-escaped-cell": {
+      "correct": 10
+    },
+    "get-filter-no-match": {
+      "correct": 10
+    },
+    "get-filter-one-column": {
+      "correct": 10
+    },
+    "get-filter-two-columns": {
+      "correct": 10
+    },
+    "get-ordinal-table": {
+      "correct": 10
+    },
+    "get-whole-table": {
+      "correct": 10
+    }
+  },
+  "route_errors": [],
+  "status": "pass"
+}

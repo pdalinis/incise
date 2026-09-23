@@ -1,0 +1,30 @@
+{
+  "arms": {
+    "section_guard": {
+      "baseline_correct_regressions": 0,
+      "correct": 20,
+      "expected": 20,
+      "forbidden": 0,
+      "observed": 20,
+      "outcomes": {
+        "correct": 20
+      },
+      "status": "pass"
+    },
+    "table_query": {
+      "baseline_correct_regressions": 0,
+      "correct": 20,
+      "expected": 20,
+      "forbidden": 0,
+      "observed": 20,
+      "outcomes": {
+        "correct": 20
+      },
+      "status": "pass"
+    }
+  },
+  "expected": 40,
+  "observed": 40,
+  "route_errors": [],
+  "status": "pass"
+}

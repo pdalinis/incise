@@ -666,6 +666,18 @@ FRONT_DISPATCH_ARGS = [
     '{"key": "new_key", "value": null}',
     '{"key": "build.new_key", "value": "x"}',
     '{"key": "deep.new_key", "value": "x"}',
+    # Host-owned create/update preconditions. False is the unguarded path;
+    # true reaches both successful and refusing existence checks. Malformed
+    # flags and the contradictory pair pin the repair rather than relying on a
+    # router to have behaved perfectly.
+    '{"key": "{K}", "value": "x", "must_absent": false}',
+    '{"key": "{K}", "value": "x", "must_absent": true}',
+    '{"key": "{K}", "value": "x", "must_exist": true}',
+    '{"key": "new_key", "value": "x", "must_absent": true}',
+    '{"key": "new_key", "value": "x", "must_exist": true}',
+    '{"key": "new_key", "value": "x", "must_absent": true, "must_exist": true}',
+    '{"key": "new_key", "value": "x", "must_absent": "true"}',
+    '{"key": "new_key", "value": "x", "must_exist": null}',
 ]
 
 FRONT_DISPATCH_OPS = ["frontmatter-set", "frontmatter-delete"]
@@ -850,6 +862,7 @@ def generate(files):
         emit(rel, "resolve_list")
         for l, e in zip(find_lists(content), F.list_lists(content, rel)):
             laddr = {"heading": e["heading"], "ordinal": str(e["ordinal"])}
+            emit(rel, "list_get", **laddr)
             emit(rel, "resolve_list", **laddr)
             emit(rel, "resolve_list", heading=e["heading"])
             emit(rel, "resolve_list", heading=e["heading"], ordinal="99")
@@ -1519,6 +1532,20 @@ def py_run(content, rel, op, args):
             for e in F.list_lists(content, rel))
     if op == "render_list_summary":
         return "ok", F.render_list_summary(content, args.get("path", ""))
+    if op == "list_get":
+        try:
+            got = F.list_get(content, addr)
+            text = F.render_list_get(content, addr)
+        except F.OpError as e:
+            return "err", str(e)
+        dump = [f'{got["heading"]}|{got["ordinal"]}|{len(got["items"])}']
+        for item in got["items"]:
+            parent = "-" if item["parent"] is None else str(item["parent"])
+            checked = ("-" if item["checked"] is None
+                       else str(item["checked"]).lower())
+            dump.append(f'{esc(item["text"])}|{item["depth"]}|{parent}|{checked}')
+        dump.extend(["--", text])
+        return "ok", "\n".join(dump)
     if op == "section_outline":
         return "ok", "\n".join(
             f'{e["level"]}|{e["path"]}|{e["text"]}|{e["style"]}|{e["ordinal"]}|'
@@ -1576,7 +1603,7 @@ def py_run(content, rel, op, args):
         except F.OpError as e:
             return "err", str(e)
         head = f'{got["state"]}|{got["format"]}|{len(got["keys"])}'
-        rows = [f'{k["path"]}|{k["kind"]}|{esc(k["value"])}|{k["lines"]}'
+        rows = [f'{k["path"]}|{k["kind"]}|{k["type"]}|{esc(k["value"])}|{k["lines"]}'
                 for k in got["keys"]]
         return "ok", "\n".join([head] + rows + ["--"] + [text])
 

@@ -1,0 +1,64 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_list_required_after_20260922.jsonl": "887611ab9dee71cc8629435f7e7d851026ae9d6d7e16c0ae7465ed9d88686d91",
+    "bench/results/minicpm5_list_required_after_20260922_graded.jsonl": "25cb66d4451b658e163ef50913eb34b482031461bd7c7593c427067581f56f4c",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "control_outcomes": {
+    "op_error": 1,
+    "wrong": 5
+  },
+  "efficiency": {
+    "control_mean_completion_tokens": 121.5,
+    "edit_mean_completion_tokens": 30.5,
+    "read_mean_completion_tokens": 53.17,
+    "treatment_mean_completion_tokens": 83.67,
+    "treatment_mean_elapsed_s": 2.89
+  },
+  "gate": {
+    "at_least_five_correct": false,
+    "each_task_correct_in_two_seeds": false,
+    "every_executed_after_from_read": true,
+    "no_control_correct_regressed": true,
+    "no_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T00:32:28.099806+00:00",
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 0,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.125,
+    "treatment": 4,
+    "treatment_only": 4
+  },
+  "pairs": 6,
+  "preregistration_commit": "f12ab5d",
+  "sampling_harness_sha256": [
+    "db3327d4c15336335b49c1b99ed451564c93d6a9fb83593ddb9514032f12041e"
+  ],
+  "schema_sha256": {
+    "dynamic_edit": [
+      "b658701d07f2db703c1d2b5d10dd43484b7ee2e8811f3650d2a4fc1d706e9e50",
+      "fa777e36ce2a545ec6d15b505f3258a48370ad38947b2ea2340737619e87bb9c"
+    ],
+    "list_get": [
+      "b64c37abab6d5fe0763f30e480cd2d2a4fd0d8044cb1481950c1d540f9560af0"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-nested-asterisk": {
+      "correct": 3
+    },
+    "add-item-ordered-renumber": {
+      "correct": 1,
+      "wrong": 2
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 4,
+    "wrong": 2
+  }
+}

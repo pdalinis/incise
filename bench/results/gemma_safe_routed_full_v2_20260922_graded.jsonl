@@ -1,0 +1,481 @@
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-short","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-aligned-repad","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-ragged","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-row-alignment-markers","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-row-aligned","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"update-cell-multi-table","family":"table","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-tight-dash","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-nested-asterisk","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-loose","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-renumber","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-ordered-all-ones","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-paren-delimiter","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":7,"routed":false,"outcome":"op_error","detail":"no list item matching \"the exact text of the existing asterisk item in that list? I don't know it yet. Let me read the file first to find out what the single item is.\".\n  Near matches: none\n  Items: star item"}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-item-mixed-markers","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":3,"routed":false,"outcome":"destructive","detail":"existing item lost: 'seventh'"}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":5,"routed":false,"outcome":"destructive","detail":"existing item lost: 'seventh'"}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":6,"routed":false,"outcome":"destructive","detail":"existing item lost: 'seventh'"}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":7,"routed":false,"outcome":"op_error","detail":"`text` is required and must not be empty."}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":8,"routed":false,"outcome":"destructive","detail":"existing item lost: 'seventh'"}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-non-sequential","family":"list","trial":9,"routed":false,"outcome":"destructive","detail":"existing item lost: 'seventh'"}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"check-task-nested","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"remove-item-mixed","family":"list","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":0,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":1,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"### Added\\n- `plan --explain` flag.\",\n  \"level\": 3,\n  \"new_heading\": \"Added\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.5.0] - 2026-09-06\"\n  },\n  \"text\": \"# Changelog\\n\\n## [Unreleased]\\n\\n### Added\\n... (placeholder) ...\\n\\n## [1.5.0] - 2026-09-06\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":2,"routed":false,"outcome":"op_error","detail":"line 28: '- `plan --explain` flag.\\\\n', expected '- `plan --explain` flag.'; after: `body` contains a heading ('Added'), and it is inserted as literal text -- the level would not be worked out for you.\n  Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created.\n  If 'Added' is meant to be prose, drop the `#` marks."}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":3,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Changelog > [Unreleased]\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":4,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": {\n    \"heading\": \"Changelog > [1.4.2] - 2026-08-14\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":5,"routed":false,"outcome":"collateral:formatting","detail":"whitespace only, line 27: '- `plan --explain` flag.', expected ''"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":6,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"### Added\\n\\n- `plan --explain` flag.\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Changelog\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":7,"routed":false,"outcome":"op_error","detail":"`body` contains a heading ('[1.5.0] - 2026-09-06'), and it is inserted as literal text -- the level would not be worked out for you.\n  Make the section first, then add the subsection with a second call: action=insert, position=last-child, `section` = the section you just created.\n  If '[1.5.0] - 2026-09-06' is meant to be prose, drop the `#` marks."}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":8,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n  - section: must be object\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"[1.5.0] - 2026-09-06\",\n  \"position\": \"before\",\n  \"section\": \"Changelog > [1.4.2] - 2026-08-14`}<tool_call|><|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-release-at-top","family":"section","trial":9,"routed":false,"outcome":"op_error","detail":"missing section 'Changelog > [1.5.0] - 2026-09-06 > Added'; have ['Changelog', 'Changelog > [1.2.0] - 2026-04-01', 'Changelog > [1.2.0] - 2026-04-01 > Added', 'Changelog > [1.2.0] - 2026-04-01 > Security', 'Changelog > [1.3.0] - 2026-05-19', 'Changelog > [1.3.0] - 2026-05-19 > Added', 'Changelog > [1.3.0] - 2026-05-19 > Removed', 'Changelog > [1.4.0] - 2026-07-02', 'Changelog > [1.4.0] - 2026-07-02 > Added', 'Changelog > [1.4.0] - 2026-07-02 > Changed', 'Changelog > [1.4.0] - 2026-07-02 > Deprecated', 'Changelog > [1.4.1] - 2026-07-30', 'Changelog > [1.4.1] - 2026-07-30 > Fixed', 'Changelog > [1.4.2] - 2026-08-14', 'Changelog > [1.4.2] - 2026-08-14 > Changed', 'Changelog > [1.4.2] - 2026-08-14 > Fixed', 'Changelog > [1.5.0] - 2026-09-06', 'Changelog > [Unreleased]', 'Changelog > [Unreleased] > Added']; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path, section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"text\": \"\\n\\n#### Added\\n\\n- `plan --explain` flag.`,path:\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":3,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install</span>}}<tool_call|><|channel>thought\\n<channel|>I apologize, but I encountered an error while attempting to add the `FreeBSD` subsection in `corpus/sections/deep-nesting.md`. It appears there was a syntax error in my previous attempt when constructing the tool call (a missing closing brace and incorrect character). \\n\\nI will try again with the correct command.\\n\\n```python\\n# Corrected call structure\\nsection_edit(\\n    path=\\\"corpus/sections/deep-nesting.md\\\",\\n    action=\\\"insert\\\",\\n    section={\\\"heading\\\": \\\"Deep heading nesting > Install\\\"},\\n    new_heading=\\\"FreeBSD\\\",\\n    position=\\\"last-child\\\",\\n    body=\\\"Use pkg.\\\"\\n)\\n```<|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":4,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install</div>,path:\",\n    \"/private/tmp/incise-gemma-safe-routed-full-v2-20260922/corpus/sections/deep-nesting.md<|\\\"|>,subtree\": true\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":6,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  },\n  \"text\": \"Use pkg.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":7,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":8,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  },\n  \"text\": \"Use pkg.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-subsection-last","family":"section","trial":9,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Use pkg.\",\n  \"new_heading\": \"FreeBSD\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Install\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":5,"routed":false,"outcome":"op_error","detail":"line 26: '\\\\nThis release is a hotfix.', expected 'This release is a hotfix.'; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"path\": \"corpus/documents/changelog.md\",\n  \"text\": \"\\nThis release is a hotfix.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-hotfix-note","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-setext","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"rename-closed-atx","family":"section","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-install-macos","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":2,"routed":false,"outcome":"op_error","detail":"missing section 'Deep heading nesting > API > Endpoints'; have ['Deep heading nesting', 'Deep heading nesting > API', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: deleting \"Deep heading nesting > Reference > API\" would also delete 2 descendant sections: \"Deep heading nesting > Reference > API > Endpoints\"; \"Deep heading nesting > Reference > API > Endpoints > Authentication\".\n  If you intend to delete the whole subtree, pass subtree=true."}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":6,"routed":false,"outcome":"op_error","detail":"missing section 'Deep heading nesting > API > Endpoints'; have ['Deep heading nesting', 'Deep heading nesting > API', 'Deep heading nesting > Install', 'Deep heading nesting > Install > Linux', 'Deep heading nesting > Install > Linux > Debian', 'Deep heading nesting > Install > Linux > Fedora', 'Deep heading nesting > Install > Windows', 'Deep heading nesting > Install > macOS', 'Deep heading nesting > Install > macOS > Apple Silicon', 'Deep heading nesting > Install > macOS > Intel', 'Deep heading nesting > Reference', 'Deep heading nesting > Reference > API', 'Deep heading nesting > Reference > API > Endpoints', 'Deep heading nesting > Reference > API > Endpoints > Authentication', 'Deep heading nesting > Uninstall', 'Deep heading nesting > Uninstall > macOS', 'Deep heading nesting > Upgrade', 'Deep heading nesting > Upgrade > Linux', 'Deep heading nesting > Upgrade > macOS']; after: `level` must be a number from 1 to 6, not None."}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":7,"routed":false,"outcome":"op_error","detail":"deleting \"Deep heading nesting > Reference > API\" would also delete 2 descendant sections: \"Deep heading nesting > Reference > API > Endpoints\"; \"Deep heading nesting > Reference > API > Endpoints > Authentication\".\n  If you intend to delete the whole subtree, pass subtree=true."}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"promote-api","family":"section","trial":9,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"API\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting > Reference\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":2,"routed":false,"outcome":"op_error","detail":"\"Deep heading nesting > Install\" already has a body, and `replace-body` discards it.\n  If you meant to add to it, use action=append.\n  If you really meant to replace it, pass overwrite=true."}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-install-preamble","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"notes-second-ordinal","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":1,"routed":false,"outcome":"collateral:formatting","detail":"line 30: ' None of the above is parsed as markdown.', expected 'None of the above is parsed as markdown.'"}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-after-fence","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-atx-line","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"append-macos-note","family":"section","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"replace-linux-body","family":"section","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":0,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Some information about rate limiting.\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":1,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints\"\n  },\n  \"text\": \"This section provides information about rate limiting.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":2,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Reference > API</div>\"\n  },\n  \"text\": \"# Headers\\\\nEvery response carries `X-RateLimit-*`.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":3,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"body\": \"Every response carries `X-RateLimit-*`.\",\n  \"level\": 3,\n  \"new_heading\": \"Headers\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Rate limits\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":4,"routed":false,"outcome":"op_error","detail":"line 70: '(end of change)', expected 'Every response carries `X-RateLimit-*`.'; after: no section at path \"Deep heading nesting > Install > Upgrade > Reference > API\".\n  Near matches: API\n  Paths: \"Deep heading nesting\"; \"Deep heading nesting > Install\"; \"Deep heading nesting > Install > macOS\"; \"Deep heading nesting > Install > macOS > Apple Silicon\"; \"Deep heading nesting > Install > macOS > Intel\"; \"Deep heading nesting > Install > Linux\"; \"Deep heading nesting > Install > Linux > Debian\"; \"Deep heading nesting > Install > Linux > Fedora\"; \"Deep heading nesting > Install > Windows\"; \"Deep heading nesting > Upgrade\"; ..."}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":5,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  },\n  \"text\": \"Details about rate limiting.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":6,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints\"\n  },\n  \"text\": \"Every response carries X-RateLimit-*.\\\"\\\"\\\"}<tool_call|><|tool_call>call:section_edit{action:\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":7,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"after\",\n  \"section\": {\n    \"heading\": \"Reference > API\"\n  },\n  \"text\": \"Information regarding rate limiting.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":8,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints\"\n  },\n  \"text\": \"# Rate limits\\\\n\\\\n## Headers\\\\n\\\\nEvery response carries `X-RateLimit-*`.\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-nested-ratelimits","family":"section","trial":9,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Rate limits\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Reference > API > Endpoints`} ,text:``}<tool_call|><|channel>thought\\n<channel|><|tool_call>call:section_edit{action:\"\n  }\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":0,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":1,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":2,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - path: must have required properties path\n  - text: must be string\n\nReceived arguments:\n{\n  \"action\": \"insert\",\n  \"new_heading\": \"Troubleshooting\",\n  \"position\": \"last-child\",\n  \"section\": {\n    \"heading\": \"Deep heading nesting\"\n  },\n  \"text\": {}\n}"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":3,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":4,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":5,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":6,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":7,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":8,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"insert-troubleshooting","family":"section","trial":9,"routed":false,"outcome":"collateral:content","detail":"text before the edited region changed"}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":2,"routed":false,"outcome":"op_error","detail":"no table under heading \"Rich frontmatter\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":6,"routed":false,"outcome":"op_error","detail":"no table under heading \"Frontmatter in `corpus/frontmatter/rich.md`\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":7,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: \\\"\\\"\\nversion: \\\"\\\"\\ndraft: false\\ntags: []\\nbuild:\\n  target: \\\"\\\"\\n  features: []\\n  jobs: 8\\nauthors:\\n  - name: \\\"\\\"\\n    role: \\\"\\\"\\n  - name: \\\"\\\"\\n    role: \\\"\\\"\\nempty_value: null\\nquoted_key: \\\"\\\"\\nmultiline: |\\n  line1\\n  line2\\nfolded: >\\n  field1\\n  field2\\nkey with spaces: \\\"\\\"\\nnested:\\n  deeply:\\n    buried: \\\"\\\"\\n---\\n\\n# Frontmatter in `corpus/frontmatter/rich.md`\\n\\n| Key | Type | Value |\\n| :--- | :--- | :--- |\\n| title | scalar | |\\n| version | scalar | |\\n| draft | scalar | |\\n| tags | 3 items | |\\n| build | 3 keys below it | |\\n| build.target | scalar | |\\n| build.features | 2 items | |\\n| build.jobs | scalar | 8 |\\n| authors | 2 items | |\\n| authors[0].name | scalar | |\\n| authors[0].role | scalar | |\\n| authors[1].name | scalar | |\\n| authors[1].role | scalar | |\\n| empty_value | empty (null) | |\\n| quoted_key | scalar | |\\n| multiline | literal block scalar, 2 lines | line1<br>line2 |\\n| folded | folded block scalar, 2 lines | field1<br>field2 |\\n| key with spaces | scalar | |\\n| nested | 1 key below it | |\\n| nested.deeply | 1 key below it | |\\n| nested.deeply.buried | scalar | |\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-jobs","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":0,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: Example Document\\nversion: 1.0.0\\ndraft: false\\ntags:\\n  - tag1\\n  - tag2\\n  - tag3\\nbuild:\\n  target: debug\\n  features:\\n    - feature1\\n    - feature2\\n  jobs: debug-job\\nauthors:\\n  - name: Alice\\n    role: Author\\n  - name: Bob\\n    role: Editor\\nempty_value:\\nquoted_key: \\\"Quoted Value\\\"\\nmultiline: |\\n  Line 1\\n  Line 2\\nfolded: >\\n  This is a folded\\n  block scalar.\\nkey with spaces: value\\nnested:\\n  deeply:\\n    buried: value\\n---\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":2,"routed":false,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":6,"routed":false,"outcome":"op_error","detail":"no table under heading \"Frontmatter in `corpus/frontmatter/rich.md`\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":8,"routed":false,"outcome":"transport","detail":"TimeoutExpired: Command '['node', '/Users/peter/projects/fastmd/bench/pi_trial.mjs']' timed out after 240 seconds"}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":2,"routed":false,"outcome":"op_error","detail":"no table under heading \"Rich frontmatter\".\n  Near matches: none\n  Headings with tables: "}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":3,"routed":false,"outcome":"op_error","detail":"'authors[1].role' holds 'Maintainer', expected 'maintainer'; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"title: Rich Frontmatter Examples\\nversion: 1.0.0\\ndraft: false\\ntags:\\n  - example\\n  - yaml\\n  - frontmatter\\nbuild:\\n  target: web\\n  features:\\n    - fast\\n    - efficient\\n  jobs: build_all\\nauthors:\\n  - name: Alice\\n    role: Original Author\\n  - name: Dana\\n    role: Maintainer\\nempty_value:\\n\\nquoted_key: \\\"example\\\"\\nmultiline: |\\n  This is a\\n  multiline string.\\nfolded: >\\n  This is a\\n  folded string.\\nkey with spaces: value\\nnested:\\n  middle: value\\n  deeply:\\n    buried: value\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":5,"routed":false,"outcome":"op_error","detail":"'authors[1].role' holds 'Maintainer', expected 'maintainer'; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"---\\ntitle: Example Document\\nversion: 1.0\\ndraft: false\\ntags:\\n  - tag1\\n  - tag2\\n  - tag3\\nbuild:\\n  target: web\\n  features:\\n    - feature1\\n    - feature2\\n  jobs: build-job\\nauthors:\\n  - name: Original Author\\n    role: Creator\\n  - name: Dana\\n    role: Maintainer\\nempty_value: null\\nquoted_key: \\\"some value\\\"\\nmultiline: |\\n  line one\\n  line two\\nfolded: >\\n  this is a folded\\n  block scalar\\nkey with spaces: some value\\nnested:\\n  deeply:\\n    buried: something\\n---\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":6,"routed":false,"outcome":"op_error","detail":"Validation failed for tool \"table_get\":\n  - table: must be object\n\nReceived arguments:\n{\n  \"filter\": {\n    \"Name\": \"Dana\"\n  },\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"table\": \"Authors List\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":7,"routed":false,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":8,"routed":false,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"safe-routed-full-v2","task_id":"set-dana-role","family":"frontmatter","trial":9,"routed":false,"outcome":"destructive","detail":"existing line lost: 'Purpose: `frontmatter-set build.jobs 8` must change exactly that value. Key'"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":0,"routed":false,"outcome":"op_error","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']; after: Validation failed for tool \"section_edit\":\n  - section: must be object\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"body\": \"build:\\n  target: web\\n  features: [a, b]\\n  jobs: null\\n  caching: true\",\n  \"overwrite\": false,\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"section\": \"Build\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":2,"routed":false,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":4,"routed":false,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":7,"routed":false,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":8,"routed":false,"outcome":"op_error","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']; after: Validation failed for tool \"section_edit\":\n  - section: must have required properties section\n\nReceived arguments:\n{\n  \"action\": \"append\",\n  \"path\": \"corpus/frontmatter/rich.md\",\n  \"text\": \"build:\\n  caching: true\"\n}"}
+{"condition":"safe-routed-full-v2","task_id":"add-build-cache","family":"frontmatter","trial":9,"routed":false,"outcome":"wrong","detail":"missing key 'build.cache'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.caching', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":1,"routed":false,"outcome":"op_error","detail":"'title' holds '\"\"', expected ''; after: Validation failed for tool \"section_edit\":\n  - path: must have required properties path, section\n\nReceived arguments:\n{\n  \"action\": \"replace-body\",\n  \"overwrite\": true\n}"}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":6,"routed":false,"outcome":"wrong","detail":"'title' holds 'null', expected ''"}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"clear-title","family":"frontmatter","trial":9,"routed":false,"outcome":"wrong","detail":"'title' holds '\"\"', expected ''"}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-draft","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"delete-build","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":2,"routed":false,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":6,"routed":false,"outcome":"wrong","detail":"'draft' holds 'false', expected 'true'"}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-draft-true","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"release-bump","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"create-on-absent","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"fill-empty","family":"frontmatter","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-whole-table","family":"table-read","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-one-column","family":"table-read","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-two-columns","family":"table-read","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-filter-no-match","family":"table-read","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":0,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":1,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":2,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":3,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":4,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":5,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":6,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":7,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":8,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-ordinal-table","family":"table-read","trial":9,"routed":false,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":0,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":1,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":2,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":3,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":4,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":5,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":6,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":7,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":8,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"get-escaped-cell","family":"table-read","trial":9,"routed":true,"outcome":"correct","detail":null}
+{"condition":"safe-routed-full-v2","task_id":"set-build-target","family":"frontmatter","trial":8,"routed":false,"outcome":"correct","detail":null}

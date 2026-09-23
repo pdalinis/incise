@@ -1,0 +1,96 @@
+{
+  "expected": 480,
+  "fallback": {
+    "n": 329,
+    "tool_surface_drift": []
+  },
+  "families": {
+    "frontmatter": {
+      "correct": 104,
+      "floor": 95,
+      "n": 110,
+      "outcomes": {
+        "correct": 104,
+        "op_error": 2,
+        "wrong": 4
+      },
+      "status": "pass"
+    },
+    "list": {
+      "correct": 94,
+      "floor": 88,
+      "n": 100,
+      "outcomes": {
+        "collateral:content": 1,
+        "correct": 94,
+        "destructive": 4,
+        "op_error": 1
+      },
+      "status": "pass"
+    },
+    "section": {
+      "correct": 144,
+      "floor": 135,
+      "n": 149,
+      "outcomes": {
+        "collateral:formatting": 1,
+        "correct": 144,
+        "op_error": 4
+      },
+      "status": "pass"
+    },
+    "table": {
+      "correct": 60,
+      "floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 60,
+      "floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "status": "pass"
+    }
+  },
+  "observed": 480,
+  "overall": {
+    "baseline_correct": 443,
+    "baseline_harmful": 18,
+    "mcnemar_exact_p": 0.0005461126565933228,
+    "only_baseline": 5,
+    "only_treatment": 24,
+    "outcomes": {
+      "collateral:content": 1,
+      "collateral:formatting": 1,
+      "correct": 462,
+      "destructive": 4,
+      "op_error": 7,
+      "wrong": 4
+    },
+    "treatment_correct": 462,
+    "treatment_harmful": 10
+  },
+  "paired": 479,
+  "routed": {
+    "correct": 150,
+    "filter_errors": [],
+    "frontmatter_errors": [],
+    "insertion_argument_errors": [],
+    "multiple_mutations": [],
+    "n": 150,
+    "route_errors": []
+  },
+  "status": "pass",
+  "transport_pairs": [
+    [
+      "rename-setext",
+      1
+    ]
+  ]
+}

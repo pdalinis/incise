@@ -1,0 +1,3 @@
+{"task_id": "add-item-ordered-renumber", "trial": 0, "scheme": "minicpm_list_between", "outcome": "correct", "detail": null, "after_from_read": true, "boundaries_validated": true}
+{"task_id": "add-item-ordered-renumber", "trial": 1, "scheme": "minicpm_list_between", "outcome": "correct", "detail": null, "after_from_read": true, "boundaries_validated": true}
+{"task_id": "add-item-ordered-renumber", "trial": 2, "scheme": "minicpm_list_between", "outcome": "correct", "detail": null, "after_from_read": true, "boundaries_validated": true}

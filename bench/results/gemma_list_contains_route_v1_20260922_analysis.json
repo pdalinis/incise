@@ -1,0 +1,23 @@
+{
+  "artifacts": {
+    "graded": "bench/results/gemma_list_contains_route_v1_20260922_graded.jsonl",
+    "graded_sha256": "b387b742b76a372e29d9e24bc965e4e6675b11de64ffce73aeb6fddd59dd29d5",
+    "raw": "bench/results/gemma_list_contains_route_v1_20260922.jsonl",
+    "raw_sha256": "13f211aa08261ef24f82a968799ad36c18bea52314178479367d0fe035090e7d"
+  },
+  "audit_errors": [],
+  "control_correct": 9,
+  "expected": 10,
+  "harmful": 0,
+  "mcnemar_exact_p_descriptive": 1.0,
+  "observed": 10,
+  "only_control": 0,
+  "only_treatment": 1,
+  "outcomes": {
+    "correct": 10
+  },
+  "paired": 10,
+  "regressions": [],
+  "status": "pass",
+  "treatment_correct": 10
+}

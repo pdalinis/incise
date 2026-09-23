@@ -31,6 +31,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import sys
 import threading
 from contextlib import contextmanager
 from typing import Any, Dict, Optional, Tuple
@@ -64,6 +65,14 @@ EMOJI = {
     "md_lists": "🔎",
     "md_outline": "🔎",
     "table_get": "🔎",
+    "list_get": "🔎",
+    "frontmatter_get": "🔎",
+    "table_add_row": "📊",
+    "table_update_cell": "📊",
+    "list_add_item": "☑️",
+    "section_insert": "📝",
+    "section_append": "📝",
+    "frontmatter_set": "🏷️",
 }
 
 
@@ -144,6 +153,29 @@ def normalize(name: str, args: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
         return "section-" + str(args.get("action")), args
     if name == "frontmatter_edit":
         return "frontmatter-" + str(args.get("action")), args
+    narrow = {
+        "table_add_row": "table-add-row",
+        "table_update_cell": "table-update-cell",
+        "list_add_item": "list-add-item",
+        "section_append": "section-append",
+        "frontmatter_set": "frontmatter-set",
+    }
+    if name in narrow:
+        return narrow[name], args
+    if name == "section_insert":
+        args = dict(args)
+        if "parent" in args:
+            args["section"] = args.pop("parent")
+        if "new_heading" in args:
+            args["heading"] = args.pop("new_heading")
+        if "body" in args:
+            args["text"] = args.pop("body")
+        sec = args.get("section")
+        if isinstance(sec, dict) and "heading" in sec and "path" not in sec:
+            sec = dict(sec)
+            sec["path"] = sec.pop("heading")
+            args["section"] = sec
+        return "section-insert", args
     raise ValueError(f"not an edit tool: {name}")
 
 
@@ -200,7 +232,8 @@ def _handle_edit(name: str, args: Dict[str, Any]) -> str:
         return tool_error(message, stale=True)
     if code == runner.EXIT_USAGE:
         return tool_error(message, usage=True)
-    return tool_error(message)
+    extra = {"repair": payload["repair"]} if isinstance(payload.get("repair"), dict) else {}
+    return tool_error(message, **extra)
 
 
 # The read subcommands, by tool name. One tool per renderer -- see the comment
@@ -237,18 +270,28 @@ def _handle_view(name: str, args: Dict[str, Any]) -> str:
         return tool_error(blocked)
 
     argv = [_VIEWS[name], path]
-    if name == "table_get":
+    if name in {"table_get", "list_get", "frontmatter_get"}:
         argv += ["--args", json.dumps(args)]
 
     code, payload, _ = runner.invoke(argv)
     if code != runner.EXIT_OK:
-        return tool_error(payload.get("error") or f"incise exited {code} with nothing to say.")
+        message = payload.get("error") or f"incise exited {code} with nothing to say."
+        extra = {"repair": payload["repair"]} if isinstance(payload.get("repair"), dict) else {}
+        return tool_error(message, **extra)
 
     # The renderer's string, untouched. `render_table_list` is not a convenience
     # view -- it *is* the Arm B prompt (section 11, Tier 2), and every rate
     # measured against it was measured against these bytes. The content hash
     # section 5.5 asks for goes beside it in its own field, never inside it.
-    return tool_result(text=payload.get("text", ""), hash=payload.get("hash", ""), path=path)
+    result = {
+        "text": payload.get("text", ""),
+        "hash": payload.get("hash", ""),
+        "path": path,
+    }
+    for field in ("rows", "list", "frontmatter"):
+        if field in payload:
+            result[field] = payload[field]
+    return tool_result(**result)
 
 
 def _make_edit_handler(name: str):
@@ -293,7 +336,18 @@ def register(ctx) -> None:
         )
         return
 
-    for schema in schemas + schema_cache.READ_TOOLS:
+    # Plugin Doctor runs registration under an isolated temporary HERMES_HOME.
+    # Emit the resolved executable there because a stale binary can otherwise
+    # make a source checkout appear to validate while exercising older code.
+    hermes_home = os.environ.get("HERMES_HOME", "")
+    if os.path.basename(hermes_home).startswith("hermes-plugin-doctor-"):
+        print(
+            "incise plugin: binary "
+            f"{runner.binary()} ({runner.binary_source() or 'unknown source'})",
+            file=sys.stderr,
+        )
+
+    for schema in schemas + schema_cache.structural_tools():
         name = schema["name"]
         is_read = name in schema_cache.READ_SUBCOMMAND
         ctx.register_tool(

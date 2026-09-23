@@ -1,0 +1,193 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_pi_list_profile_20260922_v2.jsonl": "b35e5c738b137bc31a71f88c78c2af829fe41b30771594ed81aa72404ff0f8c8",
+    "bench/results/minicpm5_pi_list_profile_20260922_v2_graded.jsonl": "157a1b17eb4ffd3d0881bfa6c6a5e4b4219f0d0820fee68a0b7b7170825bdabc",
+    "bench/results/minicpm5_pi_list_profile_20260922_v3.jsonl": "7b87369846dbd8a6cd7dc14a85918c70ddc7665195e77e4a23e246fe2ff2591a",
+    "bench/results/minicpm5_pi_list_profile_20260922_v3_graded.jsonl": "e595e097840dd69d8a0304451e1af763b06eef6375d06336e853d33a20d5d7f7",
+    "bench/results/minicpm5_routed_lists_20260921.jsonl": "d70c5aa515a2cfc03aba5c2a1ace181e403967d18df50637582877e3739e0d89",
+    "bench/results/minicpm5_routed_lists_20260921_graded.jsonl": "af72cc797a605474b9733b0f0193c97be864040ad21c73e07e90e6974fd0a5ee"
+  },
+  "efficiency": {
+    "pi_control_mean_completion_tokens": 85.19,
+    "treatment_mean_completion_tokens": 85.19,
+    "treatment_mean_elapsed_s": 3.59,
+    "treatment_mean_turns": 2.62
+  },
+  "failure_localization": {
+    "content_invocation_or_arguments": 1,
+    "correct": 16,
+    "selection_invocation_or_arguments": 4
+  },
+  "gate": {
+    "all_routes_match_preregistered_mapping": false,
+    "at_least_nineteen_correct": false,
+    "at_most_one_successful_mutation_per_turn": true,
+    "default_schema_snapshot_byte_identical": true,
+    "each_task_correct_in_two_seeds": false,
+    "every_active_request_forced_exact_advertised_tool": false,
+    "executed_structure_was_validated": true,
+    "no_destructive_or_collateral": true,
+    "no_generic_control_correct_regressed": false,
+    "no_pi_control_correct_regressed": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-22T01:51:25.012942+00:00",
+  "implementation_commit": "08b65e2",
+  "invocation": {
+    "selection_calls": 17,
+    "successful_mutations": 16,
+    "validated_content_calls": 16
+  },
+  "model": "minicpm5-2b-q8",
+  "paired_vs_generic_control": {
+    "control": 13,
+    "control_only": 3,
+    "exact_mcnemar_p": 0.5078125,
+    "treatment": 16,
+    "treatment_only": 6
+  },
+  "paired_vs_pi_control": {
+    "control": 16,
+    "control_only": 0,
+    "exact_mcnemar_p": 1.0,
+    "treatment": 16,
+    "treatment_only": 0
+  },
+  "pairs": 21,
+  "pi_version": "0.85.1",
+  "preregistration_commit": "4ae14da",
+  "provider_request_audit": {
+    "active_phase_requests": 39,
+    "all_exact": true,
+    "all_expected_tools_advertised": true,
+    "every_pair_covers_both_phases": false,
+    "phase_sequences": {
+      "add-item-loose:0": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-loose:1": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-loose:2": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-mixed-markers:0": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-mixed-markers:1": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-mixed-markers:2": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-nested-asterisk:0": [
+        "list_select",
+        "list_insert_after"
+      ],
+      "add-item-nested-asterisk:1": [
+        "list_select",
+        "list_insert_after"
+      ],
+      "add-item-nested-asterisk:2": [
+        "list_select",
+        "list_insert_after"
+      ],
+      "add-item-ordered-all-ones:0": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-ordered-all-ones:1": [
+        "list_select"
+      ],
+      "add-item-ordered-all-ones:2": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-ordered-renumber:0": [
+        "list_select"
+      ],
+      "add-item-ordered-renumber:1": [
+        "list_select",
+        "list_insert_between",
+        "list_insert_between"
+      ],
+      "add-item-ordered-renumber:2": [
+        "list_select"
+      ],
+      "add-item-paren-delimiter:0": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-paren-delimiter:1": [
+        "list_select"
+      ],
+      "add-item-paren-delimiter:2": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-tight-dash:0": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-tight-dash:1": [
+        "list_select",
+        "list_append_item"
+      ],
+      "add-item-tight-dash:2": [
+        "list_select",
+        "list_append_item"
+      ]
+    }
+  },
+  "schema_test_output": "5 tools, byte-identical to the schemes they were measured as.",
+  "source_sha256": {
+    "extension": [
+      "21e63f4cb2f3ea399d86e2135c278b24133cd93da708623bf6eecd8c3e0fd1ed"
+    ],
+    "pipeline": [
+      "0b46f84fdd48d67f6f25dc5722e9006e040aeda759463018be0d3902cb24f7b3"
+    ],
+    "worker": [
+      "9cc7970af096bb30f4944bc43ee809042bccdbdb6c3759ec81ad7cacef715c90"
+    ]
+  },
+  "treatment_by_task": {
+    "add-item-loose": {
+      "correct": 3
+    },
+    "add-item-mixed-markers": {
+      "correct": 3
+    },
+    "add-item-nested-asterisk": {
+      "correct": 3
+    },
+    "add-item-ordered-all-ones": {
+      "correct": 2,
+      "malformed": 1
+    },
+    "add-item-ordered-renumber": {
+      "correct": 1,
+      "malformed": 2
+    },
+    "add-item-paren-delimiter": {
+      "correct": 2,
+      "malformed": 1
+    },
+    "add-item-tight-dash": {
+      "correct": 2,
+      "wrong": 1
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 16,
+    "malformed": 4,
+    "wrong": 1
+  }
+}

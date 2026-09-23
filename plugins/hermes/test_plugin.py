@@ -30,6 +30,7 @@ import sys
 import tempfile
 import threading
 import time
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -455,12 +456,15 @@ def test_read_tools_have_nothing_to_absorb():
     editable = {"action", "view", "values", "where", "column", "value", "position",
                 "list", "section", "text", "body", "match", "checked", "after",
                 "level", "subtree", "new_heading", "overwrite", "key"}
-    reads = list(plugin.schema_cache.READ_TOOLS) + [
+    reads = list(plugin.schema_cache.structural_tools()) + [
         t for t in plugin.schema_cache.edit_tools()
         if t["name"] in plugin.schema_cache.READ_SUBCOMMAND
     ]
-    check("every renderer has a tool",
-          {s["name"] for s in reads} == set(plugin.schema_cache.READ_SUBCOMMAND),
+    published = {s["name"] for s in plugin.schema_cache.edit_tools()
+                 + plugin.schema_cache.structural_tools()}
+    check("every published renderer has a tool",
+          {s["name"] for s in reads}
+          == published.intersection(plugin.schema_cache.READ_SUBCOMMAND),
           str(sorted({s["name"] for s in reads})))
     for schema in reads:
         props = set(schema["parameters"].get("properties", {}))
@@ -665,6 +669,43 @@ def test_check_fn():
         plugin.runner.reset_cache()
 
 
+def test_source_binary_prefers_newest_build():
+    """A stale optimized build must not shadow current checkout behavior."""
+    with tempfile.TemporaryDirectory(prefix="incise-runner-") as root:
+        release = os.path.join(root, "target", "release", "incise")
+        debug = os.path.join(root, "target", "debug", "incise")
+        for path in (release, debug):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as fh:
+                fh.write("placeholder")
+            os.chmod(path, 0o755)
+
+        os.utime(release, ns=(1_000_000_000, 1_000_000_000))
+        os.utime(debug, ns=(2_000_000_000, 2_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "newer debug build wins stale release",
+            candidates == [debug, release],
+            str(candidates),
+        )
+
+        os.utime(release, ns=(3_000_000_000, 3_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "newer release build wins",
+            candidates == [release, debug],
+            str(candidates),
+        )
+
+        os.utime(debug, ns=(3_000_000_000, 3_000_000_000))
+        candidates = list(plugin.runner._source_candidates(Path(root)))
+        check(
+            "release wins timestamp tie",
+            candidates == [release, debug],
+            str(candidates),
+        )
+
+
 def test_every_published_action_can_be_invoked():
     """Every action in a published enum has to be a subcommand the binary has.
 
@@ -714,6 +755,73 @@ def test_every_published_action_can_be_invoked():
     check("some actions were actually checked", seen > 0, str(seen))
 
 
+def test_safe_small_profile():
+    saved_profile = os.environ.get("INCISE_PROFILE")
+    saved_binary = os.environ.get("INCISE_BIN")
+    os.environ["INCISE_PROFILE"] = "safe-small"
+    os.environ["INCISE_BIN"] = os.path.join(ROOT, "target", "debug", "incise")
+    plugin.runner.reset_cache()
+    plugin.schema_cache.reset_cache()
+    try:
+        schemas = plugin.schema_cache.edit_tools()
+        names = [schema["name"] for schema in schemas]
+        check("safe-small publishes twelve tools", len(names) == 12, str(names))
+        check("safe-small exposes list inspection",
+              "list_get" in names and "frontmatter_get" in names, str(names))
+        check("safe-small omits destructive and generic section tools",
+              not {"section_edit", "section_delete", "section_replace_body"}.intersection(names),
+              str(names))
+
+        list_path = scratch("corpus/lists/nested-mixed.md")
+        got = call("list_get", {
+            "path": list_path,
+            "list": {"heading": "Asterisk markers, four-space indent"},
+        })
+        check("list_get returns exact nested item text", "beta-two" in got.get("text", ""),
+              json.dumps(got)[:200])
+        check("list_get keeps its structured result",
+              got.get("list", {}).get("items", [None] * 4)[3].get("text") == "beta-two",
+              json.dumps(got)[:300])
+
+        front_path = scratch("corpus/frontmatter/rich.md")
+        got = call("frontmatter_get", {"path": front_path, "key": "build"})
+        check("frontmatter_get returns flattened child paths",
+              "build.target" in got.get("text", ""), json.dumps(got)[:200])
+        check("frontmatter_get keeps its structured result",
+              any(key.get("path") == "build.target"
+                  for key in got.get("frontmatter", {}).get("keys", [])),
+              json.dumps(got)[:300])
+        types = {key.get("path"): key.get("type")
+                 for key in got.get("frontmatter", {}).get("keys", [])}
+        check("frontmatter_get distinguishes strings and integers",
+              types.get("build.target") == "string"
+              and types.get("build.jobs") == "integer", str(types))
+
+        op, normalized = plugin.normalize("section_insert", {
+            "path": "doc.md",
+            "parent": {"heading": "Reference > API"},
+            "position": "last-child",
+            "new_heading": "Rate limits",
+            "body": "Limits.",
+        })
+        check("narrow section insert maps to the core op", op == "section-insert", op)
+        check("narrow section fields normalize",
+              normalized.get("section") == {"path": "Reference > API"}
+              and normalized.get("heading") == "Rate limits"
+              and normalized.get("text") == "Limits.", json.dumps(normalized))
+    finally:
+        if saved_profile is None:
+            os.environ.pop("INCISE_PROFILE", None)
+        else:
+            os.environ["INCISE_PROFILE"] = saved_profile
+        if saved_binary is None:
+            os.environ.pop("INCISE_BIN", None)
+        else:
+            os.environ["INCISE_BIN"] = saved_binary
+        plugin.runner.reset_cache()
+        plugin.schema_cache.reset_cache()
+
+
 def main():
     print("plugin: translation")
     test_normalize()
@@ -736,6 +844,9 @@ def main():
     test_register()
     test_every_published_action_can_be_invoked()
     test_check_fn()
+    test_source_binary_prefers_newest_build()
+    print("plugin: safe-small profile")
+    test_safe_small_profile()
 
     print()
     if FAILURES:

@@ -1,0 +1,46 @@
+{
+  "artifacts": {
+    "graded": "bench/results/gemma_frontmatter_prompt_v2_20260922_graded.jsonl",
+    "graded_sha256": "bfd3fb8a075e3741af3fc0a72a6bb20eb329939136c2720fe6f80fe732b97fcb",
+    "raw": "bench/results/gemma_frontmatter_prompt_v2_20260922.jsonl",
+    "raw_sha256": "ff09c00cf765768b71cfee8f67e40af821b9c44db433c65bfa357b39551ac4d7"
+  },
+  "call_errors": [],
+  "config_errors": [],
+  "control_correct": 45,
+  "expected": 50,
+  "harmful": 0,
+  "mcnemar_exact_p": 0.0625,
+  "observed": 50,
+  "only_control": [],
+  "only_treatment": [
+    [
+      "clear-title",
+      1
+    ],
+    [
+      "clear-title",
+      6
+    ],
+    [
+      "set-build-jobs",
+      6
+    ],
+    [
+      "set-draft-true",
+      1
+    ],
+    [
+      "set-draft-true",
+      6
+    ]
+  ],
+  "paired": 50,
+  "request_errors": [],
+  "status": "pass",
+  "transport_pairs": [],
+  "treatment_correct": 50,
+  "treatment_outcomes": {
+    "correct": 50
+  }
+}

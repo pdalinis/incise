@@ -1365,7 +1365,17 @@ def _where(a):
 
 
 def _values(a, field="values"):
-    return _clean_keys(_unstring(a.get(field), (dict, list), field))
+    value = _clean_keys(_unstring(a.get(field), (dict, list), field))
+    # MiniCPM5 serializes a named row as `[{...}]`. It cannot be an ordered
+    # row -- ordered cells are scalars and add-row is singular -- so unwrap it
+    # before the existing named-row validation. Keep the compatibility rule on
+    # `values`; `row` exists only so the rejected scheme_d trials stay
+    # regradable and is not part of the shipping contract.
+    if (field == "values" and isinstance(value, list) and len(value) == 1
+            and isinstance(value[0], dict)):
+        # The outer `_clean_keys` could not see through the list.
+        return _clean_keys(value[0])
+    return value
 
 
 # ==========================================================================
@@ -1495,6 +1505,50 @@ def resolve_list(content, address):
     raise OpError(
         f'no list with ordinal {want_o} under "{want_h}".\n'
         f'  Valid ordinals: {", ".join(str(e["ordinal"]) for _, e in matched)}')
+
+
+def list_get(content, address):
+    """Return copyable item text and nesting for one resolved list."""
+    resolved = resolve_list(content, address)
+    lists = find_lists(content)
+    index = next((i for i, candidate in enumerate(lists)
+                  if candidate.start == resolved.start), None)
+    if index is None:
+        raise OpError("internal: resolved list has no summary entry.")
+    entry = list_lists(content)[index]
+    return {
+        "heading": entry["heading"],
+        "ordinal": entry["ordinal"],
+        "items": [
+            {
+                "text": item.text,
+                "depth": item.depth,
+                # The Python parser uses -1 for a root item; the Rust parser
+                # uses None. The read contract exposes JSON null in either
+                # implementation.
+                "parent": (None if item.parent in (None, -1) else item.parent),
+                "checked": (item.checkbox.lower() == "x"
+                            if item.checkbox is not None else None),
+            }
+            for item in resolved.items
+        ],
+    }
+
+
+def render_list_items(got):
+    out = [f'List {json.dumps(got["heading"])} '
+           f'ordinal {got["ordinal"]} -- {len(got["items"])} items']
+    for index, item in enumerate(got["items"]):
+        out.append(
+            f'  [{index}] text={json.dumps(item["text"])} '
+            f'depth={item["depth"]} '
+            f'parent={json.dumps(item["parent"])} '
+            f'checked={json.dumps(item["checked"])}')
+    return "\n".join(out)
+
+
+def render_list_get(content, address):
+    return render_list_items(list_get(content, address))
 
 
 def resolve_item(lst, text, field="item"):
@@ -2382,6 +2436,20 @@ def section_delete(content, address):
     return "\n".join(lines[:sec.start] + lines[stop:])
 
 
+def section_delete_confirmed(content, address, confirm_subtree=False):
+    """Agent-facing deletion guard; leaf deletion remains one call."""
+    target = resolve_section(content, address)
+    descendants = [f'"{section.slug}"' for section in find_sections(content)
+                   if section.start > target.start and section.start <= target.end]
+    if descendants and not confirm_subtree:
+        plural = "" if len(descendants) == 1 else "s"
+        raise OpError(
+            f'deleting "{target.slug}" would also delete {len(descendants)} '
+            f'descendant section{plural}: {"; ".join(descendants)}.\n'
+            "  If you intend to delete the whole subtree, pass subtree=true.")
+    return section_delete(content, address)
+
+
 def section_rename(content, address, heading):
     """Change a heading's text, preserving the syntax it was written in.
 
@@ -2874,6 +2942,36 @@ def _holds(entry):
     return "a map on its `-` line"
 
 
+def _front_value_type(entry, fm):
+    if entry.kind == "map":
+        return "object"
+    if entry.kind == "seq":
+        return "array"
+    if entry.kind == "block":
+        return "string"
+    if entry.kind == "null":
+        return "null"
+    if entry.kind == "item" and _front_children(fm, entry.path):
+        return "object"
+    value = entry.value.strip()
+    if ((value.startswith('"') and value.endswith('"'))
+            or (value.startswith("'") and value.endswith("'"))):
+        return "string"
+    if value in ("true", "false", "True", "False", "TRUE", "FALSE"):
+        return "boolean"
+    if not value or value in ("null", "Null", "NULL", "~"):
+        return "null"
+    try:
+        int(value)
+        return "integer"
+    except ValueError:
+        try:
+            float(value)
+            return "number"
+        except ValueError:
+            return "string"
+
+
 def frontmatter_get(content, key=None):
     """The block as structure: present, format, and every path with its value.
 
@@ -2897,6 +2995,7 @@ def frontmatter_get(content, key=None):
         "format": fm.fmt,
         "keys": [{"path": mdfront.format_path(e.path),
                   "kind": e.kind,
+                  "type": _front_value_type(e, fm),
                   "value": e.value,
                   "lines": e.end - e.line + 1}
                  for e in entries],
@@ -3120,7 +3219,7 @@ def render_frontmatter_get(content, path, key=None):
             style = "literal" if e.value.startswith("|") else "folded"
             body = lines[e.line + 1:e.end + 1]
             what = f"{style} block scalar, {_plural(len(body), 'line')}:"
-            out.append(f"  {p:<24s} {what}")
+            out.append(f"  {p:<24s} [string] {what}")
             # The body is the value, so it is shown. Indented past the column
             # the values sit in, and never re-wrapped: a folded scalar's line
             # breaks are the thing the author chose and the thing an edit has
@@ -3129,7 +3228,7 @@ def render_frontmatter_get(content, path, key=None):
             continue
         else:
             what = e.value
-        out.append(f"  {p:<24s} {what}")
+        out.append(f"  {p:<24s} [{_front_value_type(e, fm)}] {what}")
     return "\n".join(out)
 
 
@@ -3181,7 +3280,20 @@ def _front_eol(content, fm):
     return "\r" if first.endswith("\r") else ""
 
 
-def frontmatter_set(content, key, value=_MISSING):
+def _front_existence_flag(name, value):
+    """One host-owned create/update precondition."""
+    if value is _MISSING:
+        return False
+    if type(value) is bool:
+        return value
+    raise OpError(
+        f"`{name}` must be a boolean, but arrived as {_type_name(value)}.\n"
+        f"  Got: {value!r}"
+    )
+
+
+def frontmatter_set(content, key, value=_MISSING, must_absent=_MISSING,
+                    must_exist=_MISSING):
     """Set one key, changing nothing else in the file.
 
     Three cases, in the order they are checked: the key exists and its value
@@ -3191,7 +3303,33 @@ def frontmatter_set(content, key, value=_MISSING):
     fm = _front(content)
     path = _check_key(key)
     text = _yaml_scalar(_check_front_value(value))
+    create_only = _front_existence_flag("must_absent", must_absent)
+    update_only = _front_existence_flag("must_exist", must_exist)
+    if create_only and update_only:
+        raise OpError(
+            "`must_absent` and `must_exist` cannot both be true.\n"
+            "  Choose create-only (`must_absent`) or update-only "
+            "(`must_exist`)."
+        )
     eol = _front_eol(content, fm)
+
+    exists = path in fm.by_path()
+    if create_only and exists:
+        shown = mdfront.format_path(path)
+        raise OpError(
+            f"`{shown}` already exists, but this edit requires an absent "
+            "frontmatter key.\n"
+            "  Use a new path for a create intent, or use update-only if "
+            f"replacing `{shown}` is intended."
+        )
+    if update_only and not exists:
+        shown = mdfront.format_path(path)
+        raise OpError(
+            f"`{shown}` does not exist, but this edit requires an existing "
+            "frontmatter key.\n"
+            "  Copy an exact path from `frontmatter_get`, or use create-only "
+            "if adding a new key is intended."
+        )
 
     if not fm.present:
         if len(path) > 1:
@@ -3327,7 +3465,8 @@ OPS = {
         c, _section_address(a), a.get("position", "after"),
         _item(a, "heading", "title"), _item(a, "body", "text"),
         a.get("children") or a.get("subsections") or a.get("sections")),
-    "section-delete": lambda c, a: section_delete(c, _section_address(a)),
+    "section-delete": lambda c, a: section_delete_confirmed(
+        c, _section_address(a), bool(a.get("subtree"))),
     "section-rename": lambda c, a: section_rename(
         c, _section_address(a), _item(a, "heading", "title", "text")),
     "section-set-level": lambda c, a: section_set_level(
@@ -3338,7 +3477,8 @@ OPS = {
     # section family. `a.get` rather than `_item` because `_item` stringifies,
     # which would swallow the type refusal `_check_key` exists to give.
     "frontmatter-set": lambda c, a: frontmatter_set(
-        c, a.get("key"), a.get("value", _MISSING)),
+        c, a.get("key"), a.get("value", _MISSING),
+        a.get("must_absent", _MISSING), a.get("must_exist", _MISSING)),
     "frontmatter-delete": lambda c, a: frontmatter_delete(c, a.get("key")),
 }
 

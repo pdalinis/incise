@@ -19,7 +19,7 @@ export const STRUCTURAL_READ_SCHEMAS: ToolSchema[] = [
 	},
 	{
 		name: "md_lists",
-		description: "List every bullet or task list in a markdown document: the heading each one sits under, how many items it has, and whether they are checkboxes. Returns the structure, not the document text. Call this before a `list_edit` to get the exact `list` heading and the item text its `match` needs.",
+		description: "List every bullet or task list in a markdown document: the heading each one sits under, how many items it has, and whether they are checkboxes. Returns the structure, not item text. Call this before a `list_edit` to get the exact `list` heading; the safe-small profile provides `list_get` when exact item text is needed.",
 		parameters: { type: "object", properties: { path: PATH }, required: ["path"] },
 	},
 	{
@@ -37,8 +37,20 @@ const MEASURED_NAMES = new Set([
 	"table_get",
 ]);
 
-export async function loadMeasuredSchemas(exec: Exec, binary: string): Promise<ToolSchema[]> {
-	const result = await exec(binary, ["schema"], { timeout: 10_000 });
+const SAFE_SMALL_NAMES = new Set([
+	"md_tables", "table_get", "table_add_row", "table_update_cell",
+	"md_lists", "list_get", "list_add_item", "md_outline",
+	"section_insert", "section_append", "frontmatter_get", "frontmatter_set",
+]);
+
+export async function loadMeasuredSchemas(
+	exec: Exec,
+	binary: string,
+	profile: "measured" | "safe-small" = "measured",
+): Promise<ToolSchema[]> {
+	const expected = profile === "safe-small" ? SAFE_SMALL_NAMES : MEASURED_NAMES;
+	const args = profile === "measured" ? ["schema"] : ["schema", "--profile", profile];
+	const result = await exec(binary, args, { timeout: 10_000 });
 	if (result.code !== 0) throw new Error((result.stderr || result.stdout).trim() || "incise schema failed");
 	let value: unknown;
 	try {
@@ -46,16 +58,16 @@ export async function loadMeasuredSchemas(exec: Exec, binary: string): Promise<T
 	} catch {
 		throw new Error("incise schema did not return valid JSON");
 	}
-	if (!Array.isArray(value) || value.length !== MEASURED_NAMES.size) {
-		throw new Error("incise schema did not return the five measured tool schemas");
+	if (!Array.isArray(value) || value.length !== expected.size) {
+		throw new Error(`incise schema did not return the ${profile} tool schemas`);
 	}
 	const schemas = value as ToolSchema[];
 	if (!schemas.every((schema) => schema && typeof schema.name === "string" &&
-		MEASURED_NAMES.has(schema.name) && typeof schema.description === "string" &&
+		expected.has(schema.name) && typeof schema.description === "string" &&
 		schema.parameters && typeof schema.parameters === "object")) {
 		throw new Error("incise schema returned an unexpected tool schema");
 	}
-	if (new Set(schemas.map((schema) => schema.name)).size !== MEASURED_NAMES.size) {
+	if (new Set(schemas.map((schema) => schema.name)).size !== expected.size) {
 		throw new Error("incise schema returned duplicate tool names");
 	}
 	return schemas;
@@ -68,7 +80,7 @@ export const PROMPT_METADATA: Readonly<Record<string, { snippet: string; guideli
 	},
 	md_lists: {
 		snippet: "Inspect Markdown lists before structured list edits",
-		guidelines: ["Use md_lists before list_edit to copy exact list addresses and item text."],
+		guidelines: ["Use md_lists before list_edit to copy exact list addresses; it does not return item text."],
 	},
 	md_outline: {
 		snippet: "Inspect Markdown section structure before section edits",
@@ -93,5 +105,13 @@ export const PROMPT_METADATA: Readonly<Record<string, { snippet: string; guideli
 	frontmatter_edit: {
 		snippet: "Edit Markdown frontmatter without rewriting it",
 		guidelines: ["Use frontmatter_edit for Markdown frontmatter changes and follow any Incise refusal remedy."],
+	},
+	list_get: {
+		snippet: "Read exact Markdown list items before placement-sensitive edits",
+		guidelines: ["Use list_get and copy an exact item into list_add_item.after instead of guessing."],
+	},
+	frontmatter_get: {
+		snippet: "Inspect flattened frontmatter paths before editing",
+		guidelines: ["Use frontmatter_get and copy the exact nested path into frontmatter_set."],
 	},
 };

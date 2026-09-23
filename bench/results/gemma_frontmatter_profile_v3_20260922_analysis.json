@@ -1,0 +1,17 @@
+{
+  "artifacts": {
+    "graded": "bench/results/gemma_frontmatter_profile_v3_20260922_graded.jsonl",
+    "graded_sha256": "0b431b060d0a18a734469b97b7738168b6ace8812f46f1385d24d02d6a07d252",
+    "raw": "bench/results/gemma_frontmatter_profile_v3_20260922.jsonl",
+    "raw_sha256": "ad7cab5e20ebf19878b0a34bad4f32b385b4e892307447ddbb6fb9f6b3ac33f6"
+  },
+  "audit_errors": [],
+  "correct": 50,
+  "expected": 50,
+  "harmful": 0,
+  "observed": 50,
+  "outcomes": {
+    "correct": 50
+  },
+  "status": "pass"
+}

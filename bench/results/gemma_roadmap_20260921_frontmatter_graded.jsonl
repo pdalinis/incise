@@ -1,0 +1,50 @@
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":1,"outcome":"malformed","detail":"no tool call"}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":6,"outcome":"malformed","detail":"no tool call"}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"clear-title","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":6,"outcome":"malformed","detail":"no tool call"}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-jobs","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-build-target","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":1,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":6,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-dana-role","family":"frontmatter","trial":9,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":0,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":1,"outcome":"malformed","detail":"no tool call"}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":2,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":3,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":4,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":5,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":6,"outcome":"malformed","detail":"no tool call"}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":7,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":8,"outcome":"correct","detail":null}
+{"condition":"frontmatter","task_id":"set-draft-true","family":"frontmatter","trial":9,"outcome":"correct","detail":null}

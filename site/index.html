@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Incise — Semantic Markdown Editing for AI Agents</title>
-  <meta name="description" content="Incise is a safe, semantic Markdown editing CLI for AI agents. Update tables, lists, sections, and YAML frontmatter without rewriting unrelated bytes.">
+  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. The measured Gemma/Pi profile reached 99.2% correct with zero harmful outcomes across 479 usable trials.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/">
   <link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Incise — Semantic Markdown Editing for AI Agents">
-  <meta property="og:description" content="Safe, byte-preserving updates to Markdown tables, lists, sections, and YAML frontmatter.">
+  <meta property="og:description" content="99.2% correct with zero harmful outcomes in the latest Gemma/Pi evaluation. Safe, byte-preserving Markdown tools for agents.">
   <meta property="og:url" content="https://pdalinis.github.io/incise/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png">
   <meta property="og:image:width" content="1774">
@@ -28,7 +28,7 @@
     "description": "Semantic, byte-preserving Markdown editing for AI agents and automation.",
     "url": "https://pdalinis.github.io/incise/",
     "downloadUrl": "https://github.com/pdalinis/incise/releases",
-    "softwareVersion": "0.1.3",
+    "softwareVersion": "0.2.0",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Linux, macOS",
     "license": "https://opensource.org/license/mit",
@@ -41,11 +41,18 @@
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">Deterministic structure. Minimal diffs.</div>
-      <h1>Markdown edits an AI agent can trust.</h1>
-      <p class="lede">Incise lets agents update Markdown tables, lists, sections, and YAML frontmatter by meaning—not fragile line numbers—while preserving unrelated document bytes.</p>
-      <div class="actions"><a class="button" href="/incise/docs/">Get started</a><a class="button secondary" href="https://github.com/pdalinis/incise">View source</a></div>
+      <div class="eyebrow">475/479 correct · zero harmful outcomes</div>
+      <h1>Give local models a safer way to edit Markdown.</h1>
+      <p class="lede">Incise turns model intent into deterministic, structure-aware edits. In the latest full Gemma/Pi evaluation, its recommended profile reached <strong>99.2% correct</strong> while preserving unrelated document bytes.</p>
+      <div class="actions"><a class="button" href="/incise/docs/">Install Incise</a><a class="button secondary" href="/incise/benchmarks/">See the evidence</a></div>
     </section>
+
+    <section class="grid metrics" aria-label="Latest Gemma benchmark results">
+      <article class="card"><div class="metric">99.2%</div><h3>Overall correctness</h3><p>475 correct results across 479 usable full-composition trials.</p></article>
+      <article class="card"><div class="metric">0</div><h3>Harmful outcomes</h3><p>No wrong, destructive, or collateral edits in the current measured profile.</p></article>
+      <article class="card"><div class="metric">200/200</div><h3>Routed tasks correct</h3><p>Every request handled by the guarded, action-specific routing path succeeded.</p></article>
+    </section>
+    <p class="fineprint">Preregistered Gemma 4 26B / Pi evaluation; 480 attempted trials, one persistent generation timeout excluded under the frozen rule. Results are scoped to the recorded model, runtime, prompts, tasks, and profile.</p>
 
     <section>
       <h2>Intent in. Exact edit out.</h2>
@@ -73,8 +80,22 @@
     </section>
 
     <section>
+      <h2>One install. The right profile for the model.</h2>
+      <div class="grid">
+        <article class="card"><h3>Gemma + Pi</h3><pre><code>pi install npm:pi-incise
+INCISE_PROFILE=auto pi</code></pre><p>Auto-detection enables the measured guarded routes for Gemma and keeps the standard tools as fallback.</p></article>
+        <article class="card"><h3>MiniCPM + Pi</h3><pre><code>pi install npm:pi-incise
+INCISE_PROFILE=standard pi</code></pre><p>Use the model-agnostic standard profile generally. A narrow opt-in list pipeline is available for evaluation.</p></article>
+        <article class="card"><h3>Hermes Agent</h3><pre><code>cargo install incise-cli --locked
+hermes plugins doctor --ci incise</code></pre><p>Hermes exposes the standard eight-tool interface behind its native file-safety policy.</p></article>
+      </div>
+      <div class="actions"><a class="button secondary" href="/incise/docs/">Full installation instructions</a></div>
+    </section>
+
+    <section>
       <h2>Measured, not merely claimed</h2>
-      <p>On the recorded small-model benchmark, structured Incise operations improved accuracy over direct patching for tables, lists, and sections. The repository publishes the tasks, raw calls, graders, caveats, and full findings.</p>
+      <p>The current Gemma profile achieved perfect tables, lists, frontmatter, and table reads; sections reached 145/149 with four loud refusals and no harmful edits. Earlier controlled comparisons also moved tables from 60% direct-patch accuracy to 100% with Incise, lists from 63% to 91%, and sections from 19% to 74%.</p>
+      <p>MiniCPM support is intentionally narrower: singleton table-row compatibility passed 18/18 live trials, and a host-routed list pipeline reached 21/21 in its direct arm. The real Pi list profile reached 16/21 with every executed edit correct, so it remains opt-in.</p>
       <div class="actions"><a class="button secondary" href="/incise/benchmarks/">Read the benchmark summary</a></div>
     </section>
   </main>

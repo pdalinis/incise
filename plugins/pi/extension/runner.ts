@@ -60,9 +60,11 @@ export function processError(result: InciseResult): Error {
 		exitCode?: number;
 		kind?: "refusal" | "usage" | "stale" | "process";
 		stderr?: string;
+		repair?: unknown;
 	};
 	error.exitCode = result.code;
 	error.kind = result.code === 1 ? "refusal" : result.code === 2 ? "usage" : result.code === 3 ? "stale" : "process";
 	error.stderr = result.stderr;
+	error.repair = result.payload.repair;
 	return error;
 }

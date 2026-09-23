@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { accessSync, constants, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
@@ -11,6 +12,15 @@ const RESULT_PREFIX = "PI_BENCH_RESULT=";
 function textOf(content) {
 	if (!Array.isArray(content)) return typeof content === "string" ? content : "";
 	return content.filter((part) => part?.type === "text").map((part) => part.text).join("");
+}
+
+function systemPromptOf(messages) {
+	if (!Array.isArray(messages)) return "";
+	return messages
+		.filter((message) => message?.role === "system")
+		.map((message) => textOf(message.content))
+		.filter(Boolean)
+		.join("\n\n");
 }
 
 function packageRootFor(extensionPath) {
@@ -46,20 +56,22 @@ function packageBinary(extensionPath) {
 }
 
 function modelFor(request) {
+	const configured = request.model ?? {};
 	return {
-		id: "gemma4-direct-q8",
-		name: "gemma-4-26B-A4B-it",
+		id: configured.id ?? "gemma4-direct-q8",
+		name: configured.name ?? "gemma-4-26B-A4B-it",
 		api: "openai-completions",
 		provider: "pi-composition-local",
 		baseUrl: request.endpoint.replace(/\/$/, ""),
 		reasoning: false,
 		input: ["text"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-		contextWindow: 65_536,
-		maxTokens: 8_192,
+		contextWindow: configured.contextWindow ?? 65_536,
+		maxTokens: configured.maxTokens ?? 8_192,
 		samplingParams: {
 			seed: request.seed ?? 0,
 			chat_template_kwargs: { enable_thinking: false },
+			...(configured.samplingParams ?? {}),
 		},
 		compat: {
 			maxTokensField: "max_tokens",
@@ -187,7 +199,12 @@ async function run(request, session) {
 	let turnsSeen = 0;
 	let capped = false;
 	let abortPromise;
+	const activeTools = [];
+	const providerRequests = [];
 	const unsubscribe = session.subscribe((event) => {
+		if (request.recordActiveTools && (event.type === "turn_start" || event.type === "tool_execution_start")) {
+			activeTools.push({ event: event.type, tools: session.getActiveToolNames() });
+		}
 		if (event.type !== "turn_end") return;
 		turnsSeen += 1;
 		if (turnsSeen >= request.maxTurns && session.isStreaming && !abortPromise) {
@@ -198,10 +215,38 @@ async function run(request, session) {
 
 	const started = performance.now();
 	let promptError;
+	const originalFetch = globalThis.fetch;
+	if (request.recordProviderRequests) {
+		globalThis.fetch = async (input, init) => {
+			try {
+				if (typeof init?.body === "string") {
+					const payload = JSON.parse(init.body);
+					if (payload && typeof payload === "object" && Array.isArray(payload.messages)) {
+						const systemPrompt = systemPromptOf(payload.messages);
+						providerRequests.push({
+							active_tools: session.getActiveToolNames(),
+							tool_choice: payload.tool_choice ?? null,
+							tools: Array.isArray(payload.tools)
+								? payload.tools.map((tool) => tool?.function?.name ?? null)
+								: [],
+							system_prompt: systemPrompt,
+							system_prompt_sha256: createHash("sha256").update(systemPrompt).digest("hex"),
+							system_prompt_bytes: Buffer.byteLength(systemPrompt),
+						});
+					}
+				}
+			} catch {
+				// Observation must never alter the provider request or its outcome.
+			}
+			return originalFetch(input, init);
+		};
+	}
 	try {
 		await session.prompt(request.prompt);
 	} catch (error) {
 		if (!capped) promptError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+	} finally {
+		globalThis.fetch = originalFetch;
 	}
 	if (abortPromise) await abortPromise;
 	const elapsedSeconds = (performance.now() - started) / 1000;
@@ -255,6 +300,8 @@ async function run(request, session) {
 		final_content: [...session.state.messages].reverse().find((message) => message.role === "assistant")
 			? textOf([...session.state.messages].reverse().find((message) => message.role === "assistant").content)
 			: "",
+		...(request.recordActiveTools ? { active_tools: activeTools } : {}),
+		...(request.recordProviderRequests ? { provider_requests: providerRequests } : {}),
 	};
 }
 

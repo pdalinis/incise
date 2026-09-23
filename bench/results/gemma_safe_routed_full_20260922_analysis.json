@@ -1,0 +1,339 @@
+{
+  "baseline_raw_rows": 480,
+  "expected": 480,
+  "fallback": {
+    "baseline_correct_regressions": [
+      [
+        "add-item-mixed-markers",
+        8,
+        "op_error"
+      ],
+      [
+        "add-item-mixed-markers",
+        9,
+        "collateral:content"
+      ],
+      [
+        "clear-title",
+        0,
+        "op_error"
+      ],
+      [
+        "clear-title",
+        1,
+        "op_error"
+      ],
+      [
+        "get-whole-table",
+        0,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        1,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        2,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        3,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        4,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        5,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        6,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        7,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        8,
+        "malformed"
+      ],
+      [
+        "get-whole-table",
+        9,
+        "malformed"
+      ],
+      [
+        "insert-subsection-last",
+        0,
+        "op_error"
+      ],
+      [
+        "insert-subsection-last",
+        3,
+        "op_error"
+      ],
+      [
+        "insert-subsection-last",
+        5,
+        "op_error"
+      ],
+      [
+        "insert-subsection-last",
+        6,
+        "op_error"
+      ],
+      [
+        "insert-subsection-last",
+        7,
+        "op_error"
+      ],
+      [
+        "insert-subsection-last",
+        9,
+        "op_error"
+      ],
+      [
+        "promote-api",
+        2,
+        "op_error"
+      ],
+      [
+        "promote-api",
+        9,
+        "op_error"
+      ],
+      [
+        "replace-install-preamble",
+        0,
+        "op_error"
+      ],
+      [
+        "replace-install-preamble",
+        4,
+        "op_error"
+      ],
+      [
+        "replace-install-preamble",
+        6,
+        "op_error"
+      ],
+      [
+        "set-build-jobs",
+        0,
+        "op_error"
+      ],
+      [
+        "set-build-target",
+        1,
+        "destructive"
+      ],
+      [
+        "set-dana-role",
+        7,
+        "destructive"
+      ]
+    ],
+    "n": 418,
+    "tool_surface_drift": [
+      [
+        "get-whole-table",
+        0,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        1,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        2,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        3,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        4,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        5,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        6,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        7,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        8,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ],
+      [
+        "get-whole-table",
+        9,
+        [
+          "table_query"
+        ],
+        [
+          "table_query"
+        ]
+      ]
+    ]
+  },
+  "families": {
+    "frontmatter": {
+      "correct": 88,
+      "floor": 74,
+      "n": 110,
+      "outcomes": {
+        "correct": 88,
+        "destructive": 7,
+        "op_error": 11,
+        "wrong": 4
+      },
+      "status": "pass"
+    },
+    "list": {
+      "correct": 94,
+      "floor": 88,
+      "n": 100,
+      "outcomes": {
+        "collateral:content": 1,
+        "correct": 94,
+        "destructive": 1,
+        "op_error": 4
+      },
+      "status": "pass"
+    },
+    "section": {
+      "correct": 105,
+      "floor": 102,
+      "n": 148,
+      "outcomes": {
+        "collateral:content": 8,
+        "collateral:formatting": 1,
+        "correct": 105,
+        "destructive": 1,
+        "op_error": 33
+      },
+      "status": "pass"
+    },
+    "table": {
+      "correct": 60,
+      "floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 43,
+      "floor": 46,
+      "n": 60,
+      "outcomes": {
+        "correct": 43,
+        "malformed": 10,
+        "misreported": 4,
+        "op_error": 3
+      },
+      "status": "fail"
+    }
+  },
+  "observed": 480,
+  "overall": {
+    "baseline_correct": 389,
+    "baseline_harmful": 40,
+    "mcnemar_exact_p": 1.0,
+    "only_baseline": 35,
+    "only_treatment": 36,
+    "outcomes": {
+      "collateral:content": 9,
+      "collateral:formatting": 1,
+      "correct": 390,
+      "destructive": 9,
+      "malformed": 10,
+      "misreported": 4,
+      "op_error": 51,
+      "wrong": 4
+    },
+    "treatment_correct": 390,
+    "treatment_harmful": 23
+  },
+  "paired": 478,
+  "routed": {
+    "correct": 53,
+    "forbidden": 4,
+    "n": 60,
+    "route_errors": []
+  },
+  "status": "fail"
+}

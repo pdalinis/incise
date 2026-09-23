@@ -23,6 +23,7 @@ edits, wraps, truncates or appends to the text it receives.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from typing import Any, Dict, List, Optional
 
@@ -102,9 +103,9 @@ MD_LISTS: Dict[str, Any] = {
     "description": (
         "List every bullet or task list in a markdown document: the heading "
         "each one sits under, how many items it has, and whether they are "
-        "checkboxes. Returns the structure, not the document text. Call this "
-        "before a `list_edit` to get the exact `list` heading and the item text "
-        "its `match` needs."
+        "checkboxes. Returns the structure, not item text. Call this before a "
+        "`list_edit` to get the exact `list` heading; the safe-small profile "
+        "provides `list_get` when exact item text is needed."
     ),
     "parameters": {
         "type": "object",
@@ -149,6 +150,8 @@ READ_SUBCOMMAND: Dict[str, str] = {
     "md_tables": "tables",
     "md_lists": "lists",
     "table_get": "rows",
+    "list_get": "items",
+    "frontmatter_get": "keys",
 }
 
 _CACHE: Optional[List[Dict[str, Any]]] = None
@@ -187,8 +190,19 @@ def edit_tools() -> List[Dict[str, Any]]:
 
     # Not `runner.invoke`: `schema` takes no path and appending `--json` to it
     # would be a second spelling of a thing that is already JSON.
+    profile = os.environ.get("INCISE_PROFILE", "measured")
+    if profile not in ("measured", "safe-small"):
+        return []
+    schema_argv = [exe, "schema"]
+    if profile == "safe-small":
+        schema_argv += ["--profile", profile]
     try:
-        out = subprocess.run([exe, "schema"], capture_output=True, text=True, timeout=10.0)
+        out = subprocess.run(
+            schema_argv,
+            capture_output=True,
+            text=True,
+            timeout=10.0,
+        )
     except (OSError, subprocess.TimeoutExpired):
         return []
     if out.returncode != 0:
@@ -203,6 +217,11 @@ def edit_tools() -> List[Dict[str, Any]]:
 
     _CACHE = [t for t in tools if t["name"] not in NOT_REGISTERED]
     return _CACHE
+
+
+def structural_tools() -> List[Dict[str, Any]]:
+    """Reads added beside the measured profile; safe-small already includes them."""
+    return [] if os.environ.get("INCISE_PROFILE") == "safe-small" else READ_TOOLS
 
 
 def reset_cache() -> None:

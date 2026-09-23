@@ -47,3 +47,31 @@ test("routes table_get as a read", () => {
 	assert.equal(invocation.operation, "rows");
 	assert.equal(invocation.write, false);
 });
+
+test("normalizes safe-small action tools and routes its reads", () => {
+	assert.equal(normalizeEdit("table_add_row", {}).operation, "table-add-row");
+	assert.equal(normalizeEdit("list_add_item", {}).operation, "list-add-item");
+	const inserted = normalizeEdit("section_insert", {
+		parent: { heading: "Reference > API" },
+		new_heading: "Rate limits",
+		body: "Limits.",
+		position: "last-child",
+	});
+	assert.equal(inserted.operation, "section-insert");
+	assert.deepEqual(inserted.args, {
+		section: { path: "Reference > API" },
+		heading: "Rate limits",
+		text: "Limits.",
+		position: "last-child",
+	});
+	assert.equal(prepareInvocation(
+		"list_get",
+		{ path: "doc.md", list: { heading: "Tasks" } },
+		"/work",
+	).operation, "items");
+	assert.equal(prepareInvocation(
+		"frontmatter_get",
+		{ path: "doc.md" },
+		"/work",
+	).operation, "keys");
+});
