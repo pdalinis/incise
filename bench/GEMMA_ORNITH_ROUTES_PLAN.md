@@ -13,8 +13,9 @@ back when a prompt or document target is not exact.
 
 ## Fixed experiment
 
-Run Gemma 4 26B Q4_K_M through Pi 0.85.1 and the current production extension
-for ten trials, seeds 0 through 9, on each affected task:
+Run the historical local `gemma4-direct-q8` endpoint used by the frozen Gemma
+full-v8 evaluation through Pi 0.85.1 and the current production extension for
+ten trials, seeds 0 through 9, on each affected task:
 
 - `check-task-nested`
 - `promote-api`
