@@ -196,7 +196,8 @@ def analyse(args):
         except json.JSONDecodeError:
             supplied = "invalid-json"
         details = result.get("details") or {}
-        if (supplied != {} or details.get("route") != expected["route"]
+        if (supplied != expected.get("supplied", {})
+                or details.get("route") != expected["route"]
                 or details.get("resolvedArguments") != expected["arguments"]):
             errors.append([
                 *key, "resolved call", supplied, details.get("route"),
