@@ -1,0 +1,70 @@
+{
+  "condition": "route-smoke",
+  "correct": 47,
+  "correct_rate": 0.979167,
+  "efficiency": {
+    "mean_completion_tokens": 108.583,
+    "mean_elapsed_s": 6.599,
+    "mean_tool_calls": 1.021
+  },
+  "expected": 48,
+  "families": {
+    "frontmatter": {
+      "correct": 10,
+      "n": 11,
+      "outcomes": {
+        "correct": 10,
+        "malformed": 1
+      },
+      "rate": 0.909091
+    },
+    "list": {
+      "correct": 10,
+      "n": 10,
+      "outcomes": {
+        "correct": 10
+      },
+      "rate": 1.0
+    },
+    "section": {
+      "correct": 15,
+      "n": 15,
+      "outcomes": {
+        "correct": 15
+      },
+      "rate": 1.0
+    },
+    "table": {
+      "correct": 6,
+      "n": 6,
+      "outcomes": {
+        "correct": 6
+      },
+      "rate": 1.0
+    },
+    "table-read": {
+      "correct": 6,
+      "n": 6,
+      "outcomes": {
+        "correct": 6
+      },
+      "rate": 1.0
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "exact_provider_surface": true,
+    "minimum_correct": 0,
+    "zero_harm": true
+  },
+  "harmful": 0,
+  "harmful_trials": [],
+  "multiple_mutations": [],
+  "observed": 48,
+  "outcomes": {
+    "correct": 47,
+    "malformed": 1
+  },
+  "status": "pass",
+  "usable": 48
+}
