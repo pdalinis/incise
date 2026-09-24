@@ -1,0 +1,72 @@
+{
+  "condition": "ornith-standard",
+  "correct": 460,
+  "correct_rate": 0.958333,
+  "efficiency": {
+    "mean_completion_tokens": 150.946,
+    "mean_elapsed_s": 6.183,
+    "mean_tool_calls": 1.125
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 100,
+      "n": 110,
+      "outcomes": {
+        "correct": 100,
+        "malformed": 10
+      },
+      "rate": 0.909091
+    },
+    "list": {
+      "correct": 100,
+      "n": 100,
+      "outcomes": {
+        "correct": 100
+      },
+      "rate": 1.0
+    },
+    "section": {
+      "correct": 150,
+      "n": 150,
+      "outcomes": {
+        "correct": 150
+      },
+      "rate": 1.0
+    },
+    "table": {
+      "correct": 60,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0
+    },
+    "table-read": {
+      "correct": 50,
+      "n": 60,
+      "outcomes": {
+        "correct": 50,
+        "unfiltered": 10
+      },
+      "rate": 0.833333
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "exact_provider_surface": true,
+    "minimum_correct": 0,
+    "zero_harm": true
+  },
+  "harmful": 0,
+  "harmful_trials": [],
+  "multiple_mutations": [],
+  "observed": 480,
+  "outcomes": {
+    "correct": 460,
+    "malformed": 10,
+    "unfiltered": 10
+  },
+  "status": "pass",
+  "usable": 480
+}
