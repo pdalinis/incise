@@ -1,0 +1,88 @@
+{
+  "condition": "forced-safe-routed",
+  "correct": 480,
+  "correct_rate": 1.0,
+  "efficiency": {
+    "mean_completion_tokens": 91.14,
+    "mean_elapsed_s": 10.119,
+    "mean_reasoning_characters": 0.0,
+    "mean_reasoning_tokens": 0.0,
+    "mean_tool_calls": 1.069
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 110,
+      "gemma_floor": 105,
+      "n": 110,
+      "outcomes": {
+        "correct": 110
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "list": {
+      "correct": 100,
+      "gemma_floor": 100,
+      "n": 100,
+      "outcomes": {
+        "correct": 100
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "section": {
+      "correct": 150,
+      "gemma_floor": 140,
+      "n": 150,
+      "outcomes": {
+        "correct": 150
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "family_floors": {
+      "frontmatter": 105,
+      "list": 100,
+      "section": 140,
+      "table": 57,
+      "table-read": 57
+    },
+    "harmful": 0,
+    "minimum_correct": 472,
+    "minimum_usable": 478
+  },
+  "harmful": 0,
+  "harmful_trials": [],
+  "multiple_mutations": [],
+  "observed": 480,
+  "outcomes": {
+    "correct": 480
+  },
+  "reasoning_leaks": [],
+  "status": "pass",
+  "usable": 480
+}
