@@ -22,7 +22,9 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 
 Language models are often good at identifying the change a document needs and much less reliable at reproducing the surrounding Markdown exactly. A one-cell update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.
 
-> **Latest Gemma result:** the recommended Pi `auto` profile completed **475/479 usable trials (99.2%) with zero harmful outcomes**. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149, with the remaining four outcomes all loud refusals. All 200 routed trials were correct.
+> **Latest Ornith result:** the recommended Pi `auto` profile completed **480/480 trials (100%) with zero harmful outcomes**. Every family was perfect, and all 360 routed trials used the exact expected tool and host-resolved arguments.
+
+> **Current Gemma result:** the same `auto` profile completed **475/479 usable trials (99.2%) with zero harmful outcomes**. Tables, lists, frontmatter, and table reads were perfect; the four remaining section outcomes were loud refusals.
 
 Incise separates intent from mechanics:
 
@@ -33,7 +35,7 @@ Incise separates intent from mechanics:
 
 It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.
 
-The Gemma figure is from a preregistered 480-trial Pi evaluation with one persistent generation timeout excluded from paired analysis. It is evidence for that model, runtime, task set, and profile—not a universal model claim.
+The figures come from preregistered 480-trial Pi evaluations and remain scoped to their recorded models, runtimes, task set, profile, and inference settings. Ornith used thinking off, a 2,048-token output cap, and disabled parallel tool calls; Gemma retained its normal provider defaults.
 
 ## Quick start
 
@@ -132,7 +134,7 @@ rewriting the document. Use raw editing only for prose changes that Incise does
 not represent.
 ```
 
-The adapter exposes the standard model-agnostic edit and read schemas behind Hermes’s native file-safety policy. The current release-candidate smoke completed all five representative tasks on both Gemma and MiniCPM with exact expected diffs. This is an integration check, not the Pi-specific 99.2% composition benchmark.
+The adapter exposes the standard model-agnostic edit and read schemas behind Hermes’s native file-safety policy. The current release-candidate smoke completed all five representative tasks on both Gemma and MiniCPM with exact expected diffs. This is an integration check, not the Pi-specific Ornith or Gemma composition benchmark.
 
 Incise remains deliberately scoped to Markdown structures it understands. Generic editing is appropriate for ordinary prose and initial document creation.
 
@@ -152,7 +154,15 @@ For Gemma, start Pi with the measured automatic profile:
 INCISE_PROFILE=auto pi
 ```
 
-`auto` detects Gemma and enables the guarded `safe-routed` profile. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run `/incise-doctor` to see the detected model, effective profile, binary, schemas, registered tools, and last route.
+For Ornith 1.5 9B, use the same automatic profile with thinking disabled:
+
+```bash
+INCISE_PROFILE=auto pi --thinking off
+```
+
+Configure the Ornith model entry with `maxTokens: 2048` and `samplingParams.parallel_tool_calls: false`. The extension detects model IDs or names containing `ornith`. If a local provider exposes a generic model ID, add `INCISE_MODEL_FAMILY=ornith`.
+
+`auto` enables the guarded `safe-routed` profile for measured Gemma and Ornith identities. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run `/incise-doctor` to see the detected model, effective profile, binary, schemas, registered tools, and last route.
 
 For MiniCPM, use the standard profile for general editing:
 
@@ -162,7 +172,7 @@ INCISE_PROFILE=standard pi
 
 An opt-in `minicpm-list` profile is available for the measured list-addition workflow only. It reached 16/21 through real Pi with every executed mutation correct, but it is not a general MiniCPM profile and remains experimental.
 
-The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See [the Pi integration guide](plugins/pi/README.md) for profile behavior, model overrides, and exact evaluation scope.
+The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See [the Pi integration guide](plugins/pi/README.md) for profile behavior, model overrides, inference settings, and exact evaluation scope.
 
 ## Safety model
 
@@ -182,7 +192,20 @@ Refusals are part of the safety contract. If an operation cannot prove one targe
 
 ## Measured with small models
 
-The headline result is the current Gemma/Pi `auto` profile: **475 of 479 usable trials correct (99.2%) with zero harmful outcomes**.
+The strongest current result is Ornith 1.5 9B through Pi: **480/480 trials correct (100%) with zero harmful outcomes** under the recorded reasoning-off configuration. The current Gemma/Pi `auto` profile remains **475/479 usable trials correct (99.2%) with zero harmful outcomes**.
+
+### Current Ornith/Pi profile
+
+| Family | Correct | Safety result |
+| --- | ---: | --- |
+| Tables | **60/60** | Zero harmful outcomes |
+| Lists | **100/100** | Zero harmful outcomes |
+| Sections | **150/150** | Zero harmful outcomes |
+| Frontmatter | **110/110** | Zero harmful outcomes |
+| Table reads | **60/60** | Read-only |
+| Routed subset | **360/360** | No route, argument, framing, or multiple-mutation errors |
+
+The final preregistered holdout used Ornith 1.5 9B Q8 through llama.cpp and Pi with thinking off, `maxTokens: 2048`, `parallel_tool_calls: false`, and the measured `safe-routed` composition. All 480 trials were usable and correct. A preceding holdout stopped after one destructive fallback at 237/238; a narrow outline-verified route repaired that exact failure, passed 10/10 Ornith and 20/20 Gemma compatibility trials, and the complete holdout was then rerun from the beginning. The result is scoped to the recorded runtime, prompts, tasks, seeds, and settings.
 
 ### Current Gemma/Pi profile
 
@@ -218,7 +241,7 @@ The original recorded benchmark compared direct `patch` calls with Incise operat
 
 These are scoped model measurements, not promises about every model or runtime. The reusable result is the failure class removed: character arithmetic, structural-boundary guesses, ambiguous targeting, and byte-for-byte document reconstruction.
 
-Read the [benchmark summary](https://pdalinis.github.io/incise/benchmarks/), the complete [`bench/FINDINGS.md`](bench/FINDINGS.md), or inspect the raw [Gemma v8 result pool](bench/results/gemma_safe_routed_full_v8_20260922_graded.jsonl) and [analysis](bench/results/gemma_safe_routed_full_v8_20260922_analysis.json).
+Read the [benchmark summary](https://pdalinis.github.io/incise/benchmarks/), the complete [`bench/FINDINGS.md`](bench/FINDINGS.md), or inspect the [Ornith final analysis](bench/results/ornith_final_v2_safe_routed_20260923_analysis.json), [exact-route audit](bench/results/ornith_final_v2_routes_20260923_analysis.json), and [Gemma v8 analysis](bench/results/gemma_safe_routed_full_v8_20260922_analysis.json).
 
 The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across **110,406 generated cases over 54 fixtures**. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.
 

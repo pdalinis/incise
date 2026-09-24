@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Install Incise for Pi, Hermes Agent, and the Command Line</title>
-  <meta name="description" content="Install Incise for Pi, Hermes Agent, or the command line. Use the recommended Gemma profile, conservative MiniCPM defaults, and semantic Markdown operations.">
+  <meta name="description" content="Install Incise for Pi, Hermes Agent, or the command line. Use measured Ornith and Gemma profiles, conservative MiniCPM defaults, and semantic Markdown operations.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/docs/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
-  <meta property="og:type" content="website"><meta property="og:title" content="Install Incise for Pi, Hermes Agent, and the CLI"><meta property="og:description" content="Recommended Gemma and MiniCPM profiles, version-matched Hermes setup, and semantic Markdown editing commands."><meta property="og:url" content="https://pdalinis.github.io/incise/docs/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Install Incise for Pi, Hermes Agent, and the CLI"><meta property="og:description" content="Recommended Ornith, Gemma, and MiniCPM profiles, version-matched Hermes setup, and semantic Markdown editing commands."><meta property="og:url" content="https://pdalinis.github.io/incise/docs/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta name="twitter:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
 </head>
@@ -13,7 +13,7 @@
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
     <div class="eyebrow">Documentation</div><h1>Install once. Edit Markdown safely.</h1>
-    <p class="lede">Use Incise from the command line, install the native Pi package, or connect the version-matched Hermes plugin. Gemma gets a measured automatic profile; other models keep the stable standard interface.</p>
+    <p class="lede">Use Incise from the command line, install the native Pi package, or connect the version-matched Hermes plugin. Ornith and Gemma get measured automatic profiles; other models keep the stable standard interface.</p>
 
     <h2>Command-line installation</h2>
     <pre><code>cargo install incise-cli --locked
@@ -24,6 +24,7 @@ incise --version</code></pre>
     <pre><code>pi install npm:pi-incise</code></pre>
     <p>The npm package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64.</p>
     <div class="grid">
+      <article class="card"><h3>Ornith 1.5 9B</h3><pre><code>INCISE_PROFILE=auto pi --thinking off</code></pre><p>Recommended with <code>maxTokens: 2048</code> and <code>samplingParams.parallel_tool_calls: false</code>. Run <code>/incise-doctor</code> after startup.</p></article>
       <article class="card"><h3>Gemma</h3><pre><code>INCISE_PROFILE=auto pi</code></pre><p>Recommended. Auto-detection enables the measured guarded routing profile. Run <code>/incise-doctor</code> after startup.</p></article>
       <article class="card"><h3>MiniCPM</h3><pre><code>INCISE_PROFILE=standard pi</code></pre><p>Recommended for general work. Use <code>minicpm-list</code> only to evaluate the narrow measured list pipeline.</p></article>
       <article class="card"><h3>Other models</h3><pre><code>INCISE_PROFILE=standard pi</code></pre><p>The model-agnostic eight-tool interface remains the compatibility default.</p></article>
@@ -40,7 +41,7 @@ curl --fail --location --silent --show-error \
 hermes plugins enable --no-allow-tool-override incise
 hermes tools enable --platform cli incise
 hermes plugins doctor --ci incise</code></pre>
-    <p>Doctor reports eight default tools and prints the exact Incise binary it validated. Keep the CLI and plugin on the same release. Hermes uses the standard model-agnostic profile; the 99.2% Gemma result is specific to Pi’s <code>auto</code> composition.</p>
+    <p>Doctor reports eight default tools and prints the exact Incise binary it validated. Keep the CLI and plugin on the same release. Hermes uses the standard model-agnostic profile; the 480/480 Ornith and 475/479 Gemma results are specific to Pi’s <code>auto</code> composition.</p>
 
     <h2>The editing loop</h2>
     <ol class="steps"><li>Inspect the relevant document structure.</li><li>Address the target by its content.</li><li>Preview or perform one semantic operation.</li><li>Verify the concise result or follow the remedy in a refusal.</li></ol>
