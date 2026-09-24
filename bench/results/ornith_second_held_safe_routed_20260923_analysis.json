@@ -1,0 +1,110 @@
+{
+  "condition": "forced-safe-routed",
+  "correct": 477,
+  "correct_rate": 0.99375,
+  "efficiency": {
+    "mean_completion_tokens": 99.108,
+    "mean_elapsed_s": 11.023,
+    "mean_reasoning_characters": 0.0,
+    "mean_reasoning_tokens": 0.0,
+    "mean_tool_calls": 1.102
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 109,
+      "gemma_floor": 105,
+      "n": 110,
+      "outcomes": {
+        "correct": 109,
+        "destructive": 1
+      },
+      "rate": 0.990909,
+      "status": "pass"
+    },
+    "list": {
+      "correct": 99,
+      "gemma_floor": 100,
+      "n": 100,
+      "outcomes": {
+        "correct": 99,
+        "op_error": 1
+      },
+      "rate": 0.99,
+      "status": "fail"
+    },
+    "section": {
+      "correct": 149,
+      "gemma_floor": 140,
+      "n": 150,
+      "outcomes": {
+        "correct": 149,
+        "malformed": 1
+      },
+      "rate": 0.993333,
+      "status": "pass"
+    },
+    "table": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "family_floors": {
+      "frontmatter": 105,
+      "list": 100,
+      "section": 140,
+      "table": 57,
+      "table-read": 57
+    },
+    "harmful": 0,
+    "minimum_correct": 472,
+    "minimum_usable": 478
+  },
+  "harmful": 2,
+  "harmful_trials": [
+    [
+      "add-item-ordered-renumber",
+      24
+    ],
+    [
+      "delete-draft",
+      24
+    ]
+  ],
+  "multiple_mutations": [
+    [
+      "add-item-ordered-renumber",
+      25,
+      3,
+      1
+    ]
+  ],
+  "observed": 480,
+  "outcomes": {
+    "correct": 477,
+    "destructive": 1,
+    "malformed": 1,
+    "op_error": 1
+  },
+  "reasoning_leaks": [],
+  "status": "fail",
+  "usable": 480
+}
