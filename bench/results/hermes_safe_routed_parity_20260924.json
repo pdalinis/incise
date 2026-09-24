@@ -1,0 +1,533 @@
+{
+  "status": "pass",
+  "observed_tasks": 48,
+  "routed_tasks": 36,
+  "fallback_tasks": 12,
+  "expected_trial_projection": {
+    "routed": 360,
+    "fallback": 120
+  },
+  "errors": [],
+  "routes": [
+    {
+      "task_id": "add-row-aligned-short",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-row-aligned-repad",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-row-ragged",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-row-alignment-markers",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "delete-row-aligned",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "update-cell-multi-table",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-item-tight-dash",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-item-nested-asterisk",
+      "expected": "list_append_target",
+      "actual": "list_append_target",
+      "kind": "list-append-target",
+      "resolved": {
+        "list": {
+          "heading": "Nested and mixed lists > Asterisk markers, four-space indent",
+          "ordinal": 0
+        },
+        "text": "beta-three",
+        "after": "beta-two"
+      }
+    },
+    {
+      "task_id": "add-item-loose",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "add-item-ordered-renumber",
+      "expected": "list_append_target",
+      "actual": "list_append_target",
+      "kind": "list-append-target",
+      "resolved": {
+        "list": {
+          "heading": "Ordered list numbering > Sequential",
+          "ordinal": 0
+        },
+        "text": "two and a half",
+        "after": "second"
+      }
+    },
+    {
+      "task_id": "add-item-ordered-all-ones",
+      "expected": "list_append_target",
+      "actual": "list_append_target",
+      "kind": "list-append-target",
+      "resolved": {
+        "list": {
+          "heading": "Ordered list numbering > All ones",
+          "ordinal": 0
+        },
+        "text": "fourth",
+        "position": "end"
+      }
+    },
+    {
+      "task_id": "add-item-paren-delimiter",
+      "expected": "list_append_target",
+      "actual": "list_append_target",
+      "kind": "list-append-target",
+      "resolved": {
+        "list": {
+          "heading": "Ordered list numbering > Paren delimiter",
+          "ordinal": 0
+        },
+        "text": "fourth",
+        "position": "end"
+      }
+    },
+    {
+      "task_id": "add-item-mixed-markers",
+      "expected": "list_append_target",
+      "actual": "list_append_target",
+      "kind": "list-append-target",
+      "resolved": {
+        "list": {
+          "heading": "Nested and mixed lists > Mixed markers at the same level",
+          "ordinal": 1
+        },
+        "text": "second star item",
+        "position": "end"
+      }
+    },
+    {
+      "task_id": "remove-item-non-sequential",
+      "expected": "list_remove_target",
+      "actual": "list_remove_target",
+      "kind": "list-remove-target",
+      "resolved": {
+        "list": {
+          "heading": "Ordered list numbering > Non-sequential",
+          "ordinal": 0
+        },
+        "match": "third"
+      }
+    },
+    {
+      "task_id": "check-task-nested",
+      "expected": "list_set_checked_target",
+      "actual": "list_set_checked_target",
+      "kind": "list-set-checked-target",
+      "resolved": {
+        "list": {
+          "heading": "Task lists > Nested",
+          "ordinal": 0
+        },
+        "match": "child pending",
+        "checked": true
+      }
+    },
+    {
+      "task_id": "remove-item-mixed",
+      "expected": "list_remove_target",
+      "actual": "list_remove_target",
+      "kind": "list-remove-target",
+      "resolved": {
+        "list": {
+          "heading": "Task lists > Mixed with plain items",
+          "ordinal": 0
+        },
+        "match": "not a task, just an item"
+      }
+    },
+    {
+      "task_id": "insert-release-at-top",
+      "expected": "section_insert_target",
+      "actual": "section_insert_target",
+      "kind": "section-insert",
+      "resolved": {
+        "section": "Changelog > [1.4.2] - 2026-08-14",
+        "position": "before",
+        "heading": "[1.5.0] - 2026-09-06",
+        "children": [
+          {
+            "heading": "Added",
+            "body": "- `plan --explain` flag."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "insert-subsection-last",
+      "expected": "section_insert_target",
+      "actual": "section_insert_target",
+      "kind": "section-insert",
+      "resolved": {
+        "section": "Deep heading nesting > Install",
+        "position": "last-child",
+        "heading": "FreeBSD",
+        "body": "Use pkg."
+      }
+    },
+    {
+      "task_id": "append-hotfix-note",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "rename-setext",
+      "expected": "section_rename_target",
+      "actual": "section_rename_target",
+      "kind": "section-rename",
+      "resolved": {
+        "section": "Setext H1 Title > Setext H2",
+        "heading": "Setext level two"
+      }
+    },
+    {
+      "task_id": "rename-closed-atx",
+      "expected": "section_rename_target",
+      "actual": "section_rename_target",
+      "kind": "section-rename",
+      "resolved": {
+        "section": "Setext H1 Title > Setext H2 > Closed ATX level 3",
+        "heading": "Closed ATX heading"
+      }
+    },
+    {
+      "task_id": "delete-install-macos",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "promote-api",
+      "expected": "section_set_level_target",
+      "actual": "section_set_level_target",
+      "kind": "section-set-level-target",
+      "resolved": {
+        "section": "Deep heading nesting > Reference > API",
+        "level": 2,
+        "subtree": true
+      }
+    },
+    {
+      "task_id": "replace-install-preamble",
+      "expected": "section_replace_target",
+      "actual": "section_replace_target",
+      "kind": "section-replace-body",
+      "resolved": {
+        "section": "Deep heading nesting > Install",
+        "text": "Choose your platform below.",
+        "overwrite": true
+      }
+    },
+    {
+      "task_id": "notes-second-ordinal",
+      "expected": "section_append_target",
+      "actual": "section_append_target",
+      "kind": "section-append",
+      "resolved": {
+        "section": {
+          "path": "Notes",
+          "ordinal": 1
+        },
+        "text": "Superseded."
+      }
+    },
+    {
+      "task_id": "append-after-fence",
+      "expected": "section_append_target",
+      "actual": "section_append_target",
+      "kind": "section-append",
+      "resolved": {
+        "section": "Code fences > Fenced headings and lists",
+        "text": "None of the above is parsed as markdown."
+      }
+    },
+    {
+      "task_id": "append-atx-line",
+      "expected": "section_append_target",
+      "actual": "section_append_target",
+      "kind": "section-append",
+      "resolved": {
+        "section": "Setext H1 Title > Setext H2 > ATX level 3",
+        "text": "The same is true of the closed form."
+      }
+    },
+    {
+      "task_id": "append-macos-note",
+      "expected": "section_append_target",
+      "actual": "section_append_target",
+      "kind": "section-append",
+      "resolved": {
+        "section": "Deep heading nesting > Install > macOS",
+        "text": "Requires macOS 13 or later."
+      }
+    },
+    {
+      "task_id": "replace-linux-body",
+      "expected": "section_replace_target",
+      "actual": "section_replace_target",
+      "kind": "section-replace-body",
+      "resolved": {
+        "section": "Deep heading nesting > Upgrade > Linux",
+        "text": "See the platform notes.",
+        "overwrite": true
+      }
+    },
+    {
+      "task_id": "insert-nested-ratelimits",
+      "expected": "section_insert_target",
+      "actual": "section_insert_target",
+      "kind": "section-insert",
+      "resolved": {
+        "section": "Deep heading nesting > Reference > API",
+        "position": "last-child",
+        "heading": "Rate limits",
+        "children": [
+          {
+            "heading": "Headers",
+            "body": "Every response carries `X-RateLimit-*`."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "insert-troubleshooting",
+      "expected": "section_insert_target",
+      "actual": "section_insert_target",
+      "kind": "section-insert",
+      "resolved": {
+        "section": "Deep heading nesting",
+        "position": "last-child",
+        "heading": "Troubleshooting",
+        "children": [
+          {
+            "heading": "Logs",
+            "body": "Written to `~/.incise/log`."
+          },
+          {
+            "heading": "Common errors",
+            "body": "See the FAQ."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "set-build-jobs",
+      "expected": "frontmatter_set_integer",
+      "actual": "frontmatter_set_integer",
+      "kind": "frontmatter-typed",
+      "resolved": {
+        "key": "build.jobs",
+        "value": 8,
+        "must_exist": true
+      }
+    },
+    {
+      "task_id": "set-build-target",
+      "expected": "frontmatter_set_string",
+      "actual": "frontmatter_set_string",
+      "kind": "frontmatter-typed",
+      "resolved": {
+        "key": "build.target",
+        "value": "debug",
+        "must_exist": true
+      }
+    },
+    {
+      "task_id": "set-dana-role",
+      "expected": "frontmatter_set_string",
+      "actual": "frontmatter_set_string",
+      "kind": "frontmatter-typed",
+      "resolved": {
+        "key": "authors[1].role",
+        "value": "maintainer",
+        "must_exist": true
+      }
+    },
+    {
+      "task_id": "add-build-cache",
+      "expected": "frontmatter_create_target",
+      "actual": "frontmatter_create_target",
+      "kind": "frontmatter-create",
+      "resolved": {
+        "key": "build.cache",
+        "value": true,
+        "must_absent": true
+      }
+    },
+    {
+      "task_id": "clear-title",
+      "expected": "frontmatter_clear",
+      "actual": "frontmatter_clear",
+      "kind": "frontmatter-typed",
+      "resolved": {
+        "key": "title",
+        "value": null,
+        "must_exist": true
+      }
+    },
+    {
+      "task_id": "delete-draft",
+      "expected": "frontmatter_delete_target",
+      "actual": "frontmatter_delete_target",
+      "kind": "frontmatter-delete",
+      "resolved": {
+        "key": "draft"
+      }
+    },
+    {
+      "task_id": "delete-build",
+      "expected": "frontmatter_delete_target",
+      "actual": "frontmatter_delete_target",
+      "kind": "frontmatter-delete",
+      "resolved": {
+        "key": "build"
+      }
+    },
+    {
+      "task_id": "set-draft-true",
+      "expected": "frontmatter_set_boolean",
+      "actual": "frontmatter_set_boolean",
+      "kind": "frontmatter-typed",
+      "resolved": {
+        "key": "draft",
+        "value": true,
+        "must_exist": true
+      }
+    },
+    {
+      "task_id": "release-bump",
+      "expected": "frontmatter_release_target",
+      "actual": "frontmatter_release_target",
+      "kind": "frontmatter-release",
+      "resolved": {
+        "updates": [
+          {
+            "key": "version",
+            "value": "0.5.0",
+            "must_exist": true
+          },
+          {
+            "key": "released",
+            "value": "2026-09-12",
+            "must_absent": true
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "create-on-absent",
+      "expected": "frontmatter_create_target",
+      "actual": "frontmatter_create_target",
+      "kind": "frontmatter-create",
+      "resolved": {
+        "key": "title",
+        "value": "Absent frontmatter",
+        "must_absent": true
+      }
+    },
+    {
+      "task_id": "fill-empty",
+      "expected": "frontmatter_create_target",
+      "actual": "frontmatter_create_target",
+      "kind": "frontmatter-create",
+      "resolved": {
+        "key": "draft",
+        "value": true,
+        "must_absent": true
+      }
+    },
+    {
+      "task_id": "get-whole-table",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "get-filter-one-column",
+      "expected": "table_query",
+      "actual": "table_query",
+      "kind": "table-query",
+      "resolved": {
+        "table": {
+          "heading": "Sortable table > Packages",
+          "ordinal": 0
+        },
+        "filter": {
+          "Priority": "high"
+        }
+      }
+    },
+    {
+      "task_id": "get-filter-two-columns",
+      "expected": "table_query",
+      "actual": "table_query",
+      "kind": "table-query",
+      "resolved": {
+        "table": {
+          "heading": "Sortable table > Packages",
+          "ordinal": 0
+        },
+        "filter": {
+          "Version": "2.0.0",
+          "Priority": "low"
+        }
+      }
+    },
+    {
+      "task_id": "get-filter-no-match",
+      "expected": "table_query",
+      "actual": "table_query",
+      "kind": "table-query",
+      "resolved": {
+        "table": {
+          "heading": "Sortable table > Packages",
+          "ordinal": 0
+        },
+        "filter": {
+          "Priority": "urgent"
+        }
+      }
+    },
+    {
+      "task_id": "get-ordinal-table",
+      "expected": "standard",
+      "actual": "standard"
+    },
+    {
+      "task_id": "get-escaped-cell",
+      "expected": "table_query",
+      "actual": "table_query",
+      "kind": "table-query",
+      "resolved": {
+        "table": {
+          "heading": "Table cell edge cases > Hazardous cells",
+          "ordinal": 0
+        },
+        "filter": {
+          "Case": "escaped pipe"
+        }
+      }
+    }
+  ]
+}

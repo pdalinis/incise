@@ -195,8 +195,9 @@ def edit_tools() -> List[Dict[str, Any]]:
     # replace the active tool set for that request. Hermes registers tools at
     # plugin load time, before either is available. Keep a shared launch
     # environment safe and useful by treating `auto` as the measured standard
-    # composition here; it must not imply Pi's unmeasured routed behavior.
-    if profile not in ("measured", "standard", "auto", "safe-small"):
+    # composition here. Request-time middleware may narrow `auto` or
+    # `safe-routed` after the turn model and exact user request are known.
+    if profile not in ("measured", "standard", "auto", "safe-routed", "safe-small"):
         return []
     schema_argv = [exe, "schema"]
     if profile == "safe-small":
