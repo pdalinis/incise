@@ -64,9 +64,9 @@ jobs:
       - name: Build release
         run: cargo build --workspace --release
 
-  # Run bench/differential tests on Linux stable only (heavier)
-  bench:
-    name: Differential Tests (bench)
+  # Run the independent Python invariant and differential suites concurrently.
+  bench_invariants:
+    name: Bench invariants
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.draft == false
     env:
@@ -88,8 +88,9 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-bench-invariants-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
+            ${{ runner.os }}-bench-invariants-cargo-
             ${{ runner.os }}-cargo-
 
       - name: Install Python
@@ -102,9 +103,6 @@ jobs:
 
       - name: Run Python invariant suite
         run: python3 bench/test_incise_ops.py
-
-      - name: Run differential test suite
-        run: python3 bench/difftest.py
 
       - name: Check published schemas
         run: python3 bench/schematest.py
@@ -119,9 +117,67 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: bench-failure-logs
+          name: bench-invariants-failure-logs
           path: bench/results/
           retention-days: 7
+
+  bench_differential:
+    name: Differential oracle
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
+    env:
+      RUSTUP_TOOLCHAIN: stable
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-bench-differential-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bench-differential-cargo-
+            ${{ runner.os }}-cargo-
+
+      - name: Install Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Run differential test suite
+        run: python3 bench/difftest.py
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: bench-differential-failure-logs
+          path: bench/results/
+          retention-days: 7
+
+  # Preserve the required check name while making it depend on both suites.
+  bench:
+    name: Differential Tests (bench)
+    runs-on: ubuntu-latest
+    if: always() && (github.event_name == 'push' || github.event.pull_request.draft == false)
+    needs: [bench_invariants, bench_differential]
+    steps:
+      - name: Require both bench suites
+        env:
+          INVARIANTS_RESULT: ${{ needs.bench_invariants.result }}
+          DIFFERENTIAL_RESULT: ${{ needs.bench_differential.result }}
+        run: |
+          test "$INVARIANTS_RESULT" = success
+          test "$DIFFERENTIAL_RESULT" = success
 
   pi-package:
     name: Pi package
