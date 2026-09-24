@@ -126,7 +126,7 @@ function quotedCapture(prompt: string, prefix: RegExp, suffix: RegExp): string |
 }
 
 export function sectionIntent(prompt: string): { kind: "section-rename"; target: string; heading: string } |
-	{ kind: "section-replace-body"; target: string } | undefined {
+	{ kind: "section-replace-body"; target: string; body?: string; directChild?: string } | undefined {
 	const rename = prompt.match(
 		/\brename(?:\s+the)?\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)\s*(?:heading\s+)?to\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)/i,
 	);
@@ -134,6 +134,17 @@ export function sectionIntent(prompt: string): { kind: "section-rename"; target:
 		const target = rename.slice(1, 4).find((value) => value !== undefined)?.trim();
 		const heading = rename.slice(4, 7).find((value) => value !== undefined)?.trim();
 		if (target && heading) return { kind: "section-rename", target, heading };
+	}
+	const qualifiedPreamble = prompt.match(
+		/\breplace\s+the\s+introductory\s+paragraph\s+under\s+(.+?)\s+(?:--|—)\s+the\s+one\s+before\s+the\s+(.+?)\s+subsection\s+(?:--|—)\s+with\s+(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)/i,
+	);
+	if (qualifiedPreamble) {
+		const target = qualifiedPreamble[1].trim();
+		const directChild = qualifiedPreamble[2].trim();
+		const body = qualifiedPreamble.slice(3, 6).find((value) => value !== undefined)?.trim();
+		if (target && directChild && body && target.length <= 240 && directChild.length <= 240) {
+			return { kind: "section-replace-body", target, body, directChild };
+		}
 	}
 
 	const quotedReplace = quotedCapture(
@@ -546,7 +557,11 @@ function looksLikeTableRead(prompt: string): boolean {
 	return /\b(?:find|which|what|show|list|query|look up)\b/i.test(prompt);
 }
 
-function sectionSchema(kind: "section-rename" | "section-replace-body", target: string): ToolSchema {
+function sectionSchema(
+	kind: "section-rename" | "section-replace-body",
+	target: string,
+	hostOwnedBody = false,
+): ToolSchema {
 	if (kind === "section-rename") {
 		return {
 			name: "section_rename_target",
@@ -556,6 +571,13 @@ function sectionSchema(kind: "section-rename" | "section-replace-body", target: 
 				properties: {},
 				additionalProperties: false,
 			},
+		};
+	}
+	if (hostOwnedBody) {
+		return {
+			name: "section_replace_target",
+			description: `Replace only the body of the already resolved section ${JSON.stringify(target)} with the exact text parsed from the request. Its subsections remain unchanged; the host owns every argument.`,
+			parameters: { type: "object", properties: {}, additionalProperties: false },
 		};
 	}
 	return {
@@ -686,7 +708,12 @@ async function routeForPrompt(
 		if (section) {
 			const target = resolveOutlineTarget(entries, section.target);
 			if (!target) return undefined;
-			const schema = sectionSchema(section.kind, target);
+			if (section.kind === "section-replace-body" && section.directChild &&
+				!entries.some((entry) => entry.path === `${target} > ${section.directChild}`)) {
+				return undefined;
+			}
+			const hostOwnedBody = section.kind === "section-replace-body" && section.body !== undefined;
+			const schema = sectionSchema(section.kind, target, hostOwnedBody);
 			return {
 				kind: section.kind,
 				path,
@@ -696,10 +723,14 @@ async function routeForPrompt(
 				write: true,
 				arguments: section.kind === "section-rename"
 					? () => ({ section: target, heading: section.heading })
-					: (params) => ({ section: target, text: params.body, overwrite: true }),
+					: hostOwnedBody
+						? () => ({ section: target, text: section.body, overwrite: true })
+						: (params) => ({ section: target, text: params.body, overwrite: true }),
 				systemPrompt: section.kind === "section-rename"
 					? `Incise resolved the requested section and exact replacement heading. Use ${schema.name} once with no arguments; the host supplies the file, target, and new heading.`
-					: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
+					: hostOwnedBody
+						? `Incise resolved the requested section, verified its named direct child, and parsed the exact replacement body. Use ${schema.name} once with no arguments; the host supplies every argument.`
+						: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
 			};
 		}
 		const setLevel = sectionSetLevelIntent(prompt, entries);

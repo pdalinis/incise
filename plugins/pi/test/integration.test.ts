@@ -252,6 +252,26 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.deepEqual([...active], ["foreign_tool"]);
 	assert.match(await readFile(path, "utf8"), /### Closed ATX heading ###/);
 
+	const preamblePath = join(directory, "preamble.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), preamblePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @preamble.md, replace the introductory paragraph under Install -- the one before the macOS subsection -- with "Choose your platform below."',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_replace_target"]);
+	assert.equal(tools.get("section_replace_target").parameters.required, undefined);
+	const preambleReplaced = await tools.get("section_replace_target").execute(
+		"replace-preamble", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(preambleReplaced.details.resolvedArguments, {
+		section: "Deep heading nesting > Install",
+		text: "Choose your platform below.", overwrite: true,
+	});
+	const preambleText = await readFile(preamblePath, "utf8");
+	assert.match(preambleText, /## Install\n\nChoose your platform below\.\n\n### macOS/);
+	assert.match(preambleText, /#### Authentication\n\nLevel 5\./);
+
 	const insertPath = join(directory, "insert.md");
 	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), insertPath);
 	const insertPrepared = await events.get("before_agent_start")({

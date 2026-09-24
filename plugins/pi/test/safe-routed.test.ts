@@ -156,6 +156,17 @@ test("section routing recognizes only explicit rename and body-replacement reque
 		sectionIntent('Replace the text under Upgrade > Linux with "See the platform notes."'),
 		{ kind: "section-replace-body", target: "Upgrade > Linux" },
 	);
+	assert.deepEqual(
+		sectionIntent('Replace the introductory paragraph under Install -- the one before the macOS subsection -- with "Choose your platform below."'),
+		{
+			kind: "section-replace-body", target: "Install",
+			body: "Choose your platform below.", directChild: "macOS",
+		},
+	);
+	assert.equal(
+		sectionIntent('Replace the introductory paragraph under Install with "Choose your platform below."'),
+		undefined,
+	);
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);
 });
 
