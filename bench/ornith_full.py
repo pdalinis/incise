@@ -117,7 +117,10 @@ def reset_sandbox(path, task=None):
 
 def worker_request(args, task, trial, prompt):
     sandbox = Path(args.sandbox).resolve()
-    model = {**MODEL, "maxTokens": args.max_tokens}
+    sampling = {**MODEL["samplingParams"]}
+    if args.parallel_tool_calls != "default":
+        sampling["parallel_tool_calls"] = args.parallel_tool_calls == "true"
+    model = {**MODEL, "maxTokens": args.max_tokens, "samplingParams": sampling}
     return {
         "mode": "run",
         "cwd": str(sandbox),
@@ -212,6 +215,7 @@ def run_one(args, task, trial):
         "seed": trial,
         "max_turns": 4,
         "max_tokens": args.max_tokens,
+        "parallel_tool_calls": args.parallel_tool_calls,
         "error": error,
         "initial_sha256": pi_bench.sha256_bytes(before.encode()),
         "final_sha256": pi_bench.sha256_bytes(after.encode()),
@@ -259,6 +263,13 @@ def validate_framing(row):
     for key, value in expected.items():
         if first.get(key) != value:
             errors.append(f"{key}: expected {value!r}, got {first.get(key)!r}")
+    parallel = row.get("parallel_tool_calls", "default")
+    expected_parallel = None if parallel == "default" else parallel == "true"
+    if first.get("parallel_tool_calls") != expected_parallel:
+        errors.append(
+            "parallel_tool_calls: expected "
+            f"{expected_parallel!r}, got {first.get('parallel_tool_calls')!r}"
+        )
     if row["condition"] == "auto-standard":
         for request in requests:
             unexpected = sorted(set(request.get("tools") or []) - set(STANDARD_TOOLS))
@@ -438,6 +449,10 @@ def add_runtime(parser):
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--thinking", choices=("on", "off"), default="on")
     parser.add_argument("--max-tokens", type=int, default=8192)
+    parser.add_argument(
+        "--parallel-tool-calls", choices=("default", "true", "false"),
+        default="default",
+    )
 
 
 def main():

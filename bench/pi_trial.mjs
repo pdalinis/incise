@@ -249,6 +249,7 @@ async function run(request, session) {
 							min_p: payload.min_p ?? null,
 							presence_penalty: payload.presence_penalty ?? null,
 							repeat_penalty: payload.repeat_penalty ?? null,
+							parallel_tool_calls: payload.parallel_tool_calls ?? null,
 							chat_template_kwargs: payload.chat_template_kwargs ?? null,
 							tools: Array.isArray(payload.tools)
 								? payload.tools.map((tool) => tool?.function?.name ?? null)
