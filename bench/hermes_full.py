@@ -224,7 +224,10 @@ def invoke_hermes(args, prompt: str, condition: str, seed: int, trace: Path):
     traces = parse_json_lines(trace.read_text(encoding="utf-8") if trace.exists() else "")
     error = terminal.get("error")
     if process.returncode and not error:
-        error = process.stderr.strip() or f"hermes exited {process.returncode}"
+        if "didn't produce a reply" in str(terminal.get("text") or ""):
+            error = "ordinary empty response after Hermes retries"
+        else:
+            error = process.stderr.strip() or f"hermes exited {process.returncode}"
     return {
         "elapsed_s": round(elapsed, 3),
         "events": events,
@@ -258,7 +261,7 @@ def framing_errors(row: dict, expected: dict, condition: str) -> list[str]:
     first_tools = requests[0].get("tools")
     wanted = expected["expected"] if condition != "ornith-standard" else "standard"
     if wanted == "standard":
-        if first_tools != STANDARD_TOOLS:
+        if first_tools != sorted(STANDARD_TOOLS):
             errors.append(f"fallback tools={first_tools!r}")
         if plans and plans[0].get("route") is not None:
             errors.append(f"unexpected plan={plans[0].get('route')!r}")
@@ -363,6 +366,16 @@ def latest_rows(path: Path) -> dict[tuple[str, int], dict]:
     return rows
 
 
+def all_rows(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def retryable(row: dict, graded: dict) -> bool:
+    return graded.get("outcome") == "transport" or row.get("error") == "ordinary empty response after Hermes retries"
+
+
 def run(args) -> None:
     tasks = load_tasks()
     if args.task_id:
@@ -375,23 +388,31 @@ def run(args) -> None:
     raw_path.parent.mkdir(parents=True, exist_ok=True)
     graded_path.parent.mkdir(parents=True, exist_ok=True)
     completed = latest_rows(raw_path)
+    prior_rows = all_rows(raw_path)
+    prior_attempts = Counter((row["task_id"], row["trial"]) for row in prior_rows)
     work = [
         (task, seed)
         for task in tasks.values()
         for seed in range(args.seed_start, args.seed_start + args.trials)
-        if (task["id"], seed) not in completed or completed[(task["id"], seed)].get("error")
+        if (
+            (task["id"], seed) not in completed
+            or (
+                completed[(task["id"], seed)].get("error")
+                and prior_attempts[(task["id"], seed)] < 2
+            )
+        )
     ]
     print(f"{len(work)} Hermes trials, condition={args.condition}", flush=True)
     started = time.time()
     with raw_path.open("a", encoding="utf-8", newline="\n") as raw_handle, \
             graded_path.open("a", encoding="utf-8", newline="\n") as graded_handle:
         for index, (task, seed) in enumerate(work, 1):
-            attempts = 2
-            for attempt in range(1, attempts + 1):
+            first_attempt = prior_attempts[(task["id"], seed)] + 1
+            for attempt in range(first_attempt, 3):
                 row, graded = run_one(args, task, seed, attempt, expected[task["id"]])
                 write_jsonl(raw_handle, row)
                 write_jsonl(graded_handle, graded)
-                if graded["outcome"] != "transport":
+                if not retryable(row, graded):
                     break
             harmful = (
                 graded["outcome"] in HARMFUL
@@ -421,7 +442,12 @@ def analyse(args) -> None:
         key for key in usable
         if graded[key]["outcome"] in HARMFUL or graded[key].get("document_outcome") in HARMFUL
     ]
-    framing = [[*key, *raw[key].get("framing_errors", [])] for key in usable if raw[key].get("framing_errors")]
+    expected_routes = route_expectations(Path(args.routes))
+    framing = []
+    for key in usable:
+        errors = framing_errors(raw[key], expected_routes[key[0]], args.condition)
+        if errors:
+            framing.append([*key, *errors])
     multiple = []
     for key in usable:
         changed = sum(
@@ -522,6 +548,7 @@ def main() -> None:
     report.add_argument("--out", required=True)
     report.add_argument("--graded", required=True)
     report.add_argument("--analysis", required=True)
+    report.add_argument("--routes", default=str(DEFAULT_ROUTES))
     report.set_defaults(func=analyse)
     args = parser.parse_args()
     args.func(args)
