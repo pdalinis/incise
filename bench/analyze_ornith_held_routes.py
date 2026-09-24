@@ -17,6 +17,7 @@ import gemma_list_remove_route_v1 as list_remove  # noqa: E402
 import gemma_roadmap as roadmap  # noqa: E402
 import gemma_section_append_route_v1 as section_append  # noqa: E402
 import gemma_section_insert_route_v2 as section_insert  # noqa: E402
+import analyze_ornith_fallback_routes as fallback_routes  # noqa: E402
 import ornith_full as ornith  # noqa: E402
 import pi_composition as pi_bench  # noqa: E402
 
@@ -111,6 +112,7 @@ def expected_specs():
         "section_append_target", "section-append", {}, section_append.EXPECTED)
     values["add-item-mixed-markers"] = spec(
         "list_append_target", "list-append-target", {}, list_contains.EXPECTED)
+    values.update(fallback_routes.SPECS)
     return values
 
 
