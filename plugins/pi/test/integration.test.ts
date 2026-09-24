@@ -541,6 +541,92 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const nestedAppendPath = join(directory, "nested-append.md");
+	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), nestedAppendPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @nested-append.md, under "Asterisk markers, four-space indent", add "beta-three" immediately after "beta-two".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const nestedAdded = await tools.get("list_append_target").execute(
+		"nested-append", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(nestedAdded.details.resolvedArguments, {
+		list: { heading: "Nested and mixed lists > Asterisk markers, four-space indent", ordinal: 0 },
+		text: "beta-three", after: "beta-two",
+	});
+	assert.match(await readFile(nestedAppendPath, "utf8"), /    \* beta-two\n    \* beta-three/);
+
+	const notesPath = join(directory, "notes.md");
+	await copyFile(resolve(repository, "corpus", "sections", "duplicate-siblings.md"), notesPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @notes.md, add the line "Superseded." to the second of the three Notes sections.',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_append_target"]);
+	const notesAdded = await tools.get("section_append_target").execute(
+		"notes-append", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(notesAdded.details.resolvedArguments, {
+		section: { path: "Notes", ordinal: 1 }, text: "Superseded.",
+	});
+	assert.equal((await readFile(notesPath, "utf8")).match(/Superseded\./g)?.length, 1);
+
+	const releasePath = join(directory, "release.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), releasePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @release.md, update the version to 0.5.0, and set `released` to 2026-09-12.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_release_target"]);
+	const released = await tools.get("frontmatter_release_target").execute(
+		"release", {}, undefined, undefined, context,
+	);
+	assert.equal(released.details.route, "frontmatter-release");
+	assert.deepEqual(released.details.resolvedArguments, { updates: [
+		{ key: "version", value: "0.5.0", must_exist: true },
+		{ key: "released", value: "2026-09-12", must_absent: true },
+	] });
+	const releasedText = await readFile(releasePath, "utf8");
+	assert.match(releasedText, /version: 0\.5\.0/);
+	assert.match(releasedText, /released: 2026-09-12/);
+
+	const deletePath = join(directory, "delete.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), deletePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete.md, drop the whole build configuration from the frontmatter.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_delete_target"]);
+	const deleted = await tools.get("frontmatter_delete_target").execute(
+		"delete", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(deleted.details.resolvedArguments, { key: "build" });
+	assert.doesNotMatch(await readFile(deletePath, "utf8"), /^build:/m);
+
+	for (const [name, fixture, prompt, expected] of [
+		["absent", "absent.md", 'Give this file a frontmatter block with a title of "Absent frontmatter".',
+			{ key: "title", value: "Absent frontmatter", must_absent: true }],
+		["empty", "empty.md", "Mark this file as a draft by adding a draft flag set to true.",
+			{ key: "draft", value: true, must_absent: true }],
+	] as const) {
+		const target = join(directory, `${name}.md`);
+		await copyFile(resolve(repository, "corpus", "frontmatter", fixture), target);
+		await events.get("before_agent_start")({
+			type: "before_agent_start", prompt: `In @${name}.md, ${prompt}`,
+			systemPrompt: "System.", systemPromptOptions: {},
+		}, context);
+		assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_create_target"]);
+		const created = await tools.get("frontmatter_create_target").execute(
+			`create-${name}`, {}, undefined, undefined, context,
+		);
+		assert.deepEqual(created.details.resolvedArguments, expected);
+	}
+
 	await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: 'In @nested-mixed.md, under "Mixed markers at the same level", add an item "second star item" to the list that contains the star item.',

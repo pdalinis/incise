@@ -48,7 +48,8 @@ ROUTED_TOOLS = [
     "section_append_target", "section_set_level_target",
     "frontmatter_clear", "frontmatter_set_string",
     "frontmatter_set_integer", "frontmatter_set_boolean",
-    "frontmatter_create_target", "list_remove_target", "list_append_target",
+    "frontmatter_create_target", "frontmatter_delete_target",
+    "frontmatter_release_target", "list_remove_target", "list_append_target",
     "list_set_checked_target",
     "table_query",
 ]

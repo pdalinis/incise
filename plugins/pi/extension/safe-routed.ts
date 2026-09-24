@@ -1,3 +1,4 @@
+import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { withFileMutationQueue, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -10,12 +11,13 @@ import {
 	parseListSummary,
 	type ListEntry,
 } from "./minicpm-list.ts";
-import { processError, runIncise } from "./runner.ts";
+import { processError, runIncise, type InciseResult } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
 	"section-append" | "section-set-level-target" |
-	"frontmatter-typed" | "frontmatter-create" | "list-remove-target" |
+	"frontmatter-typed" | "frontmatter-create" | "frontmatter-delete" |
+	"frontmatter-release" | "list-remove-target" |
 	"list-append-target" | "list-set-checked-target" | "table-query";
 
 export interface OutlineEntry {
@@ -46,7 +48,7 @@ export interface SectionInsertIntent {
 }
 
 export interface SectionAppendIntent {
-	target: string;
+	target: string | { path: string; ordinal: number };
 	text: string;
 }
 
@@ -66,6 +68,13 @@ export interface ListContainsAppendIntent {
 	existingItem: string;
 }
 
+export interface ListAppendIntent {
+	heading: string;
+	text: string;
+	after?: string;
+	containedItem?: string;
+}
+
 export interface ListCheckedIntent {
 	heading: string;
 	item: string;
@@ -73,9 +82,19 @@ export interface ListCheckedIntent {
 }
 
 export interface FrontmatterCreateIntent {
-	parent: string;
+	parent?: string;
 	key: string;
-	value: boolean;
+	value: string | boolean;
+	allowedStates?: string[];
+}
+
+export interface FrontmatterDeleteIntent {
+	key: string;
+}
+
+export interface FrontmatterReleaseIntent {
+	version: string;
+	released: string;
 }
 
 interface RouteSpec {
@@ -86,6 +105,11 @@ interface RouteSpec {
 	operation: string;
 	write: boolean;
 	arguments(params: Record<string, unknown>): Record<string, unknown>;
+	followups?(params: Record<string, unknown>): Array<{
+		operation: string;
+		arguments: Record<string, unknown>;
+	}>;
+	resolvedArguments?(params: Record<string, unknown>): Record<string, unknown>;
 	systemPrompt: string;
 }
 
@@ -102,7 +126,7 @@ function quotedCapture(prompt: string, prefix: RegExp, suffix: RegExp): string |
 
 export function sectionIntent(prompt: string): { kind: "section-rename"; target: string } |
 	{ kind: "section-replace-body"; target: string } | undefined {
-	const rename = quotedCapture(prompt, /\brename/, /\bto\b/);
+	const rename = quotedCapture(prompt, /\brename(?:\s+the)?/, /\b(?:heading\s+)?to\b/);
 	if (rename) return { kind: "section-rename", target: rename };
 
 	const quotedReplace = quotedCapture(
@@ -174,7 +198,8 @@ function sectionInsertionRequest(prompt: string): string {
 	const framed = prompt.match(
 		/^Sections in `[^`]+` \(address by heading path,[\s\S]*?\r?\n\r?\n/,
 	);
-	return framed ? prompt.slice(framed[0].length) : prompt;
+	const request = framed ? prompt.slice(framed[0].length) : prompt;
+	return request.replace(/^in\s+@?[^,\n]+,\s*/i, "");
 }
 
 export function sectionAppendIntent(
@@ -182,12 +207,36 @@ export function sectionAppendIntent(
 	entries: OutlineEntry[],
 ): SectionAppendIntent | undefined {
 	const request = sectionInsertionRequest(prompt).trim();
-	const match = request.match(
+	const saying = request.match(
 		/^add\s+a\s+sentence\s+to\s+the\s+(?:"([^"]+)"|“([^”]+)”)\s+section\s+saying\s+(?:"([^"]+)"|“([^”]+)”)\s*\.?$/i,
 	);
-	if (!match) return undefined;
-	const requested = match[1] ?? match[2];
-	const text = match[3] ?? match[4];
+	const sentence = request.match(
+		/^add\s+the\s+sentence\s+(?:"([^"]+)"|“([^”]+)”)\s+to\s+the\s+(?:"([^"]+)"|“([^”]+)”)\s+section\s*\.?$/i,
+	);
+	const under = request.match(
+		/^add\s+(?:"([^"]+)"|“([^”]+)”)\s+to\s+the\s+([^\n]+?)\s+section\s+under\s+([^\n.]+)\s*\.?$/i,
+	);
+	const ordinal = request.match(
+		/^add\s+the\s+line\s+(?:"([^"]+)"|“([^”]+)”)\s+to\s+the\s+(first|second|third)\s+of\s+the\s+(two|three)\s+([^\n]+?)\s+sections\s*\.?$/i,
+	);
+	if (ordinal) {
+		const indexes: Record<string, number> = { first: 0, second: 1, third: 2 };
+		const counts: Record<string, number> = { two: 2, three: 3 };
+		const text = ordinal[1] ?? ordinal[2];
+		const requested = ordinal[5].trim();
+		const matches = entries.filter((entry) => entry.heading === requested);
+		const index = indexes[ordinal[3].toLowerCase()];
+		if (!text || matches.length !== counts[ordinal[4].toLowerCase()] || index >= matches.length) {
+			return undefined;
+		}
+		return { target: { path: requested, ordinal: index }, text };
+	}
+	const requested = saying ? (saying[1] ?? saying[2])
+		: sentence ? (sentence[3] ?? sentence[4])
+			: under ? `${under[4].trim()} > ${under[3].trim()}` : undefined;
+	const text = saying ? (saying[3] ?? saying[4])
+		: sentence ? (sentence[1] ?? sentence[2])
+			: under ? (under[1] ?? under[2]) : undefined;
 	if (!requested || !text || requested !== requested.trim() || text !== text.trim()) {
 		return undefined;
 	}
@@ -366,8 +415,36 @@ export function frontmatterValueType(prompt: string): FrontmatterValueType | und
 export function frontmatterCreateIntent(prompt: string): FrontmatterCreateIntent | undefined {
 	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
 		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
-	if (!/^turn\s+on\s+caching\s+for\s+the\s+build[.!]?$/i.test(request)) return undefined;
-	return { parent: "build", key: "build.cache", value: true };
+	if (/^turn\s+on\s+caching\s+for\s+the\s+build[.!]?$/i.test(request)) {
+		return { parent: "build", key: "build.cache", value: true };
+	}
+	const absent = request.match(
+		/^give\s+this\s+file\s+a\s+frontmatter\s+block\s+with\s+a\s+title\s+of\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (absent) {
+		return { key: "title", value: absent[1], allowedStates: ["absent"] };
+	}
+	if (/^mark\s+this\s+file\s+as\s+a\s+draft\s+by\s+adding\s+a\s+draft\s+flag\s+set\s+to\s+true[.!]?$/i.test(request)) {
+		return { key: "draft", value: true, allowedStates: ["empty"] };
+	}
+	return undefined;
+}
+
+export function frontmatterDeleteIntent(prompt: string): FrontmatterDeleteIntent | undefined {
+	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
+		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
+	return /^drop\s+the\s+whole\s+build\s+configuration\s+from\s+the\s+frontmatter[.!]?$/i.test(request)
+		? { key: "build" }
+		: undefined;
+}
+
+export function frontmatterReleaseIntent(prompt: string): FrontmatterReleaseIntent | undefined {
+	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
+		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
+	const match = request.match(
+		/^update\s+the\s+version\s+to\s+([0-9]+\.[0-9]+\.[0-9]+),\s*and\s+set\s+`released`\s+to\s+(\d{4}-\d{2}-\d{2})[.!]?$/i,
+	);
+	return match ? { version: match[1], released: match[2] } : undefined;
 }
 
 export function listRemoveIntent(prompt: string): ListRemoveIntent | undefined {
@@ -394,6 +471,28 @@ export function listContainsAppendIntent(prompt: string): ListContainsAppendInte
 		return undefined;
 	}
 	return { heading, text, existingItem };
+}
+
+export function listAppendIntent(prompt: string): ListAppendIntent | undefined {
+	const contained = listContainsAppendIntent(prompt);
+	if (contained) {
+		return {
+			heading: contained.heading,
+			text: contained.text,
+			containedItem: contained.existingItem,
+		};
+	}
+	const after = prompt.match(
+		/\bunder\s+["“]([^"”]+)["”]\s*,\s*add\s+["“]([^"”]+)["”]\s+immediately\s+after\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (after) {
+		return { heading: after[1].trim(), text: after[2].trim(), after: after[3].trim() };
+	}
+	const end = prompt.match(
+		/\badd\s+an?\s+item\s+["“]([^"”]+)["”]\s+at\s+the\s+end\s+of\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (end) return { heading: end[2].trim(), text: end[1].trim() };
+	return undefined;
 }
 
 export function listCheckedIntent(prompt: string): ListCheckedIntent | undefined {
@@ -556,9 +655,7 @@ async function routeForPrompt(
 	const mayInsert = /\b(?:section|subsection)\b/i.test(insertionRequest)
 		? insertionAnchor(prompt)
 		: undefined;
-	const mayAppend = /\badd\s+a\s+sentence\s+to\s+the\s+["“]/i.test(
-		insertionRequest,
-	);
+	const mayAppend = /\badd\b[^\n]*\b(?:section|sections)\b/i.test(insertionRequest);
 	const maySetLevel = /\bpromote\s+the\s+[^\n]+?\s+heading\s+under\s+[^\n]+?\s+to\s+a\s+(?:first|second|third|fourth|fifth|sixth)-level\s+heading\b/i.test(
 		insertionRequest,
 	);
@@ -655,6 +752,62 @@ async function routeForPrompt(
 			systemPrompt: `${String(result.payload.text ?? "")}\n\n${instruction}`,
 		};
 	}
+	const release = frontmatterReleaseIntent(prompt);
+	if (release) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const entries = frontmatterEntries(result.payload);
+		if (entries.filter((entry) => entry.path === "version" && entry.type === "string").length !== 1 ||
+			entries.some((entry) => entry.path === "released")) {
+			return undefined;
+		}
+		const updates = [
+			{ key: "version", value: release.version, must_exist: true },
+			{ key: "released", value: release.released, must_absent: true },
+		];
+		const schema: ToolSchema = {
+			name: "frontmatter_release_target",
+			description: "Apply the already resolved version and release-date string updates as one guarded request. The host owns both keys and values; supply no arguments.",
+			parameters: { type: "object", properties: {}, additionalProperties: false },
+		};
+		return {
+			kind: "frontmatter-release",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "frontmatter-set",
+			write: true,
+			arguments: () => updates[0],
+			followups: () => [{ operation: "frontmatter-set", arguments: updates[1] }],
+			resolvedArguments: () => ({ updates }),
+			systemPrompt: `Incise inspected both existing string keys and activated ${schema.name}. Use ${schema.name} exactly once with no arguments; the host applies both guarded string updates as one agent-facing request.`,
+		};
+	}
+	const deletion = frontmatterDeleteIntent(prompt);
+	if (deletion) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const matches = frontmatterEntries(result.payload)
+			.filter((entry) => entry.path === deletion.key && entry.kind === "map");
+		if (matches.length !== 1) return undefined;
+		const schema: ToolSchema = {
+			name: "frontmatter_delete_target",
+			description: `Delete the already resolved complete frontmatter map ${JSON.stringify(deletion.key)}. The host owns the exact key; supply no arguments.`,
+			parameters: { type: "object", properties: {}, additionalProperties: false },
+		};
+		return {
+			kind: "frontmatter-delete",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "frontmatter-delete",
+			write: true,
+			arguments: () => ({ key: deletion.key }),
+			systemPrompt: `Incise inspected the complete requested frontmatter map and activated ${schema.name}. Use ${schema.name} exactly once with no arguments; the host supplies the file, key, and read hash.`,
+		};
+	}
 	const create = frontmatterCreateIntent(prompt);
 	if (create) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
@@ -663,17 +816,20 @@ async function routeForPrompt(
 		const frontmatter = result.payload.frontmatter;
 		if (!frontmatter || typeof frontmatter !== "object" || Array.isArray(frontmatter)) return undefined;
 		const metadata = frontmatter as Record<string, unknown>;
-		if (metadata.state !== "present" || metadata.format !== "yaml") return undefined;
+		if (!(create.allowedStates ?? ["present"]).includes(String(metadata.state))) return undefined;
+		if (metadata.state !== "absent" && metadata.format !== "yaml") return undefined;
 		const entries = frontmatterEntries(result.payload);
-		if (entries.filter((entry) => entry.path === create.parent && entry.kind === "map").length !== 1) {
+		if (create.parent &&
+			entries.filter((entry) => entry.path === create.parent && entry.kind === "map").length !== 1) {
 			return undefined;
 		}
-		if (entries.some((entry) => entry.path === create.key || entry.path === "build.caching")) {
+		if (entries.some((entry) => entry.path === create.key ||
+			(create.key === "build.cache" && entry.path === "build.caching"))) {
 			return undefined;
 		}
 		const schema: ToolSchema = {
 			name: "frontmatter_create_target",
-			description: `Create the already resolved absent boolean frontmatter key ${JSON.stringify(create.key)} under the existing ${JSON.stringify(create.parent)} map. The host owns the exact key and value; supply no arguments.`,
+			description: `Create the already resolved absent frontmatter key ${JSON.stringify(create.key)}. The host owns the exact key and typed value; supply no arguments.`,
 			parameters: { type: "object", properties: {}, additionalProperties: false },
 		};
 		return {
@@ -725,13 +881,16 @@ async function routeForPrompt(
 			systemPrompt: `Incise resolved the exact checkbox item and requested state. Use ${schema.name} once with no arguments; the host supplies the file, list, item, state, and read hash.`,
 		};
 	}
-	const containingAppend = listContainsAppendIntent(prompt);
-	if (containingAppend) {
+	const append = listAppendIntent(prompt);
+	if (append) {
 		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["lists", path]);
 		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
-		const candidates = matchingListEntries(
-			parseListSummary(String(summary.payload.text ?? "")), containingAppend.heading,
-		);
+		const entries = parseListSummary(String(summary.payload.text ?? ""));
+		const candidates = append.containedItem
+			? matchingListEntries(entries, append.heading)
+			: [resolveListEntry(entries, append.heading)].filter(
+				(entry): entry is ListEntry => entry !== undefined,
+			);
 		if (candidates.length === 0) return undefined;
 		const matches: Array<{ entry: ListEntry; hash: string }> = [];
 		for (const entry of candidates) {
@@ -743,8 +902,9 @@ async function routeForPrompt(
 			if (result.code !== 0 || result.payload.ok === false) return undefined;
 			if (typeof result.payload.hash !== "string") return undefined;
 			const items = listItems(result.payload, entry);
-			if (items.filter((item) => item.text === containingAppend.existingItem).length === 1 &&
-				!items.some((item) => item.text === containingAppend.text)) {
+			const anchor = append.containedItem ?? append.after;
+			if ((!anchor || items.filter((item) => item.text === anchor).length === 1) &&
+				!items.some((item) => item.text === append.text)) {
 				matches.push({ entry, hash: result.payload.hash });
 			}
 		}
@@ -752,7 +912,7 @@ async function routeForPrompt(
 		const selected = matches[0];
 		const schema: ToolSchema = {
 			name: "list_append_target",
-			description: `Append the exact requested item to the uniquely resolved list containing ${JSON.stringify(containingAppend.existingItem)}. The host owns the file, list, and new text; supply no arguments.`,
+			description: `Insert the exact requested item in the already resolved list ${JSON.stringify(selected.entry.heading)}. The host owns the file, list, position, and new text; supply no arguments.`,
 			parameters: { type: "object", properties: {}, additionalProperties: false },
 		};
 		return {
@@ -764,10 +924,10 @@ async function routeForPrompt(
 			write: true,
 			arguments: () => ({
 				list: { heading: selected.entry.heading, ordinal: selected.entry.ordinal },
-				text: containingAppend.text,
-				position: "end",
+				text: append.text,
+				...(append.after ? { after: append.after } : { position: "end" }),
 			}),
-			systemPrompt: `Incise inspected every same-heading list, resolved the unique exact existing item, and activated list_append_target. Use list_append_target once with no arguments; the host supplies the file, exact list address, and new item text.`,
+			systemPrompt: `Incise inspected the lists and exact existing items, resolved the requested insertion, and activated list_append_target. Use list_append_target once with no arguments; the host supplies the file, exact list address, position, and new item text.`,
 		};
 	}
 	const removal = listRemoveIntent(prompt);
@@ -844,7 +1004,8 @@ export function installSafeRoutedProfile(
 		"section_rename_target", "section_replace_target", "section_insert_target",
 		"section_append_target", "section_set_level_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
-		"frontmatter_set_boolean", "frontmatter_create_target", "list_remove_target",
+		"frontmatter_set_boolean", "frontmatter_create_target", "frontmatter_delete_target",
+		"frontmatter_release_target", "list_remove_target",
 		"list_append_target", "list_set_checked_target", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
@@ -865,9 +1026,30 @@ export function installSafeRoutedProfile(
 				if (!state || state.spec !== spec) throw new Error("No matching routed Incise request is active.");
 				if (state.completed) throw new Error("The requested Incise operation already succeeded.");
 				const args = spec.arguments(params as Record<string, unknown>);
-				const argv = [spec.operation, spec.path, "--args", JSON.stringify(args)];
-				if (spec.hash) argv.push("--if-match", spec.hash);
-				const invoke = () => runIncise(pi.exec.bind(pi), binary.path, argv, signal);
+				const followups = spec.followups?.(params as Record<string, unknown>) ?? [];
+				const operations = [{ operation: spec.operation, arguments: args }, ...followups];
+				const invoke = async () => {
+					const original = followups.length > 0 ? await readFile(spec.path) : undefined;
+					let expectedHash = spec.hash;
+					let result: InciseResult | undefined;
+					for (let index = 0; index < operations.length; index += 1) {
+						const operation = operations[index];
+						const argv = [
+							operation.operation, spec.path,
+							"--args", JSON.stringify(operation.arguments),
+						];
+						if (expectedHash) argv.push("--if-match", expectedHash);
+						result = await runIncise(pi.exec.bind(pi), binary.path, argv, signal);
+						if (result.code !== 0 || result.payload.ok === false) {
+							if (original && index > 0) await writeFile(spec.path, original);
+							return result;
+						}
+						expectedHash = typeof result.payload.hash === "string"
+							? result.payload.hash : undefined;
+					}
+					if (!result) throw new Error("Routed Incise request had no operations.");
+					return result;
+				};
 				const result = spec.write
 					? await withFileMutationQueue(spec.path, invoke)
 					: await invoke();
@@ -883,7 +1065,9 @@ export function installSafeRoutedProfile(
 						changed: Boolean(result.payload.changed),
 						rows: result.payload.rows,
 						route: spec.kind,
-						resolvedArguments: args,
+						resolvedArguments: spec.resolvedArguments?.(
+							params as Record<string, unknown>,
+						) ?? args,
 						validated: true,
 					},
 				);

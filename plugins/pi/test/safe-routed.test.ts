@@ -4,7 +4,10 @@ import test from "node:test";
 import {
 	filterColumns,
 	frontmatterCreateIntent,
+	frontmatterDeleteIntent,
+	frontmatterReleaseIntent,
 	frontmatterValueType,
+	listAppendIntent,
 	listContainsAppendIntent,
 	listCheckedIntent,
 	listRemoveIntent,
@@ -32,6 +35,27 @@ test("frontmatter creation routing recognizes only the measured build-cache requ
 	assert.equal(frontmatterCreateIntent("Turn off caching for the build."), undefined);
 	assert.equal(frontmatterCreateIntent("Do not turn on caching for the build."), undefined);
 	assert.equal(frontmatterCreateIntent("Turn on caching for deployment."), undefined);
+	assert.deepEqual(
+		frontmatterCreateIntent('Give this file a frontmatter block with a title of "Absent frontmatter".'),
+		{ key: "title", value: "Absent frontmatter", allowedStates: ["absent"] },
+	);
+	assert.deepEqual(
+		frontmatterCreateIntent("Mark this file as a draft by adding a draft flag set to true."),
+		{ key: "draft", value: true, allowedStates: ["empty"] },
+	);
+});
+
+test("frontmatter destructive and compound routing requires exact requests", () => {
+	assert.deepEqual(
+		frontmatterDeleteIntent("Drop the whole build configuration from the frontmatter."),
+		{ key: "build" },
+	);
+	assert.deepEqual(
+		frontmatterReleaseIntent("Update the version to 0.5.0, and set `released` to 2026-09-12."),
+		{ version: "0.5.0", released: "2026-09-12" },
+	);
+	assert.equal(frontmatterDeleteIntent("Drop a configuration key."), undefined);
+	assert.equal(frontmatterReleaseIntent("Update the version."), undefined);
 });
 
 test("list removal routing requires exact quoted items and headings", () => {
@@ -78,6 +102,18 @@ test("containing-item list routing requires explicit quoted target and new text"
 	);
 });
 
+test("list append routing recognizes exact end and after forms", () => {
+	assert.deepEqual(
+		listAppendIntent('Under "Asterisk markers, four-space indent", add "beta-three" immediately after "beta-two".'),
+		{ heading: "Asterisk markers, four-space indent", text: "beta-three", after: "beta-two" },
+	);
+	assert.deepEqual(
+		listAppendIntent('Add an item "fourth" at the end of the list under "All ones".'),
+		{ heading: "All ones", text: "fourth" },
+	);
+	assert.equal(listAppendIntent("Add fourth to All ones."), undefined);
+});
+
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
 	const supported = new Map<string, string>([
 		["The build should run with 8 parallel jobs instead of 4.", "integer"],
@@ -101,6 +137,10 @@ test("frontmatter routing recognizes only the five measured existing-key intents
 
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
 	assert.deepEqual(
+		sectionIntent('Rename the "Setext H2" heading to "Setext level two".'),
+		{ kind: "section-rename", target: "Setext H2" },
+	);
+	assert.deepEqual(
 		sectionIntent('Rename "Closed ATX level 3" to "Closed ATX heading".'),
 		{ kind: "section-rename", target: "Closed ATX level 3" },
 	);
@@ -114,8 +154,17 @@ test("section routing recognizes only explicit rename and body-replacement reque
 test("section append routing freezes the exact quoted sentence", () => {
 	const entries = parseOutline([
 		"Sections in `x.md`:",
+		"  Duplicate sibling headings   (body, 3 subsections)",
+		"    Notes   (body)",
+		"    Notes   (body)",
+		"    Notes   (body)",
 		"  Code fences   (body, 1 subsection)",
 		"    Fenced headings and lists   (body)",
+		"  Setext H1 Title   (body, 1 subsection)",
+		"    ATX level 3   (body)",
+		"  Deep heading nesting   (body, 1 subsection)",
+		"    Install   (body, 1 subsection)",
+		"      macOS   (body)",
 	].join("\n"));
 	const framed = (request: string) => [
 		'Sections in `x.md` (address by heading path, e.g. "Code fences > Fenced headings and lists"):',
@@ -130,6 +179,27 @@ test("section append routing freezes the exact quoted sentence", () => {
 	), {
 		target: "Code fences > Fenced headings and lists",
 		text: "None of the above is parsed as markdown.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add the sentence "The same is true of the closed form." to the "ATX level 3" section.'),
+		entries,
+	), {
+		target: "Setext H1 Title > ATX level 3",
+		text: "The same is true of the closed form.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add "Requires macOS 13 or later." to the macOS section under Install.'),
+		entries,
+	), {
+		target: "Deep heading nesting > Install > macOS",
+		text: "Requires macOS 13 or later.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add the line "Superseded." to the second of the three Notes sections.'),
+		entries,
+	), {
+		target: { path: "Notes", ordinal: 1 },
+		text: "Superseded.",
 	});
 	assert.equal(sectionAppendIntent(
 		framed('Add text to the "Fenced headings and lists" section: "Different shape."'),
