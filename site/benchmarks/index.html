@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Incise Benchmarks — Ornith at 480/480 with Zero Harmful Edits</title>
-  <meta name="description" content="Incise's measured Ornith/Pi profile reached 480/480 correct with zero harmful outcomes. Explore Ornith, Gemma, MiniCPM, raw calls, and caveats.">
+  <title>Incise Benchmarks — Ornith and Gemma at 480/480 through Hermes</title>
+  <meta name="description" content="Incise's measured Hermes auto profile reached 480/480 correct with zero harmful outcomes on both Ornith and Gemma. Explore raw calls, paired controls, and caveats.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/benchmarks/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
-  <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 480/480 correct, zero harmful outcomes"><meta property="og:description" content="A preregistered 480-trial Ornith/Pi evaluation with raw calls, graders, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 480/480 on Ornith and Gemma"><meta property="og:description" content="Two preregistered 480-trial Hermes evaluations with raw calls, graders, paired Ornith control, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta name="twitter:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
 </head>
@@ -13,7 +13,21 @@
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
     <div class="eyebrow">Published, reproducible evidence</div><h1>480/480 correct. Zero harmful edits.</h1>
-    <p class="lede">The latest full Ornith/Pi profile completed all 480 trials correctly. Every routed request passed the exact call audit, and every model-visible reasoning field remained empty.</p>
+    <p class="lede">The Hermes <code>auto</code> profile completed all 480 trials correctly on both Ornith and Gemma. Every routed request passed the exact tool-surface and host-resolved-argument audit.</p>
+
+    <table><thead><tr><th>Hermes auto family</th><th>Ornith</th><th>Gemma</th></tr></thead><tbody>
+      <tr><td>Tables</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
+      <tr><td>Lists</td><td><strong>100/100</strong></td><td><strong>100/100</strong></td></tr>
+      <tr><td>Sections</td><td><strong>150/150</strong></td><td><strong>150/150</strong></td></tr>
+      <tr><td>Frontmatter</td><td><strong>110/110</strong></td><td><strong>110/110</strong></td></tr>
+      <tr><td>Table reads</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
+      <tr><td>Routed subset</td><td><strong>360/360</strong></td><td><strong>360/360</strong></td></tr>
+      <tr><td>Standard fallback</td><td><strong>120/120</strong></td><td><strong>120/120</strong></td></tr>
+    </tbody></table>
+
+    <div class="callout"><strong>Paired Ornith gain.</strong> Standard Hermes scored 460/480; <code>auto</code> scored 480/480, with 20 treatment-only wins, no control-only wins, and exact McNemar <code>p = 1.907×10⁻⁶</code>. Both routed runs had zero harmful outcomes, framing errors, multiple mutations, or retries.</div>
+
+    <h2>Pi remains independently measured</h2>
 
     <table><thead><tr><th>Ornith/Pi family</th><th>Correct</th><th>Outcome</th></tr></thead><tbody>
       <tr><td>Tables</td><td><strong>60/60</strong></td><td>Perfect</td></tr>
@@ -28,13 +42,13 @@
 
     <h2>Why the routed profile works</h2>
     <div class="grid">
-      <article class="card"><h3>Inspect before editing</h3><p>Pi reads the current table, list, outline, or flattened frontmatter structure and retains its content hash.</p></article>
+      <article class="card"><h3>Inspect before editing</h3><p>The host reads the current table, list, outline, or flattened frontmatter structure and retains its content hash.</p></article>
       <article class="card"><h3>Route only exact intent</h3><p>Unambiguous requests receive one small action-specific tool. Unsupported wording keeps the standard interface.</p></article>
       <article class="card"><h3>Own dangerous arguments</h3><p>The host supplies resolved targets, exact predicates, typed values, and create/update preconditions, then stops after one successful routed mutation.</p></article>
     </div>
 
-    <h2>Gemma remains a strong measured option</h2>
-    <p>Gemma 4 26B completed 475/479 usable trials (99.2%) with zero harmful outcomes. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149 with four loud refusals. Later Ornith-driven route additions passed 60/60 targeted Gemma compatibility trials.</p>
+    <h2>Gemma remains a strong measured option in Pi</h2>
+    <p>Gemma 4 26B completed 475/479 usable Pi trials (99.2%) with zero harmful outcomes. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149 with four loud refusals. The later Hermes run reached 480/480 on seeds 40–49, but that cross-host comparison is descriptive rather than paired.</p>
 
     <h2>MiniCPM: strong targeted gains, conservative defaults</h2>
     <table><thead><tr><th>Measured path</th><th>Result</th><th>Disposition</th></tr></thead><tbody>
@@ -62,7 +76,7 @@
 
     <h2>Reproducible evidence</h2>
     <p>The complete tasks, prompts, raw calls, graders, preregistered plans, statistical comparisons, caveats, failed treatments, and reversed conclusions are versioned with the source. The Rust core is also compared byte-for-byte with an independent Python oracle across 110,406 generated cases over 54 fixtures.</p>
-    <div class="actions"><a class="button" href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md">Read the full findings</a><a class="button secondary" href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_final_v2_safe_routed_20260923_analysis.json">Ornith final analysis</a><a class="button secondary" href="https://github.com/pdalinis/incise/tree/main/bench/results">Browse raw results</a></div>
+    <div class="actions"><a class="button" href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md">Read the full findings</a><a class="button secondary" href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_hermes_safe_routed_analysis_20260924.json">Hermes Ornith analysis</a><a class="button secondary" href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_hermes_safe_routed_analysis_20260924.json">Hermes Gemma analysis</a><a class="button secondary" href="https://github.com/pdalinis/incise/tree/main/bench/results">Browse raw results</a></div>
   </main>
   <footer><div class="wrap footer-row"><span>Claims stay tied to their recorded population.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>
 </body>

@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Incise — Semantic Markdown Editing for AI Agents</title>
-  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. Ornith reached 480/480 correct and Gemma reached 475/479, both with zero harmful outcomes in measured Pi profiles.">
+  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. Ornith and Gemma each reached 480/480 correct with zero harmful outcomes through Hermes auto.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/">
   <link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Incise — Semantic Markdown Editing for AI Agents">
-  <meta property="og:description" content="Ornith reached 480/480 correct with zero harmful outcomes in the latest Pi evaluation. Safe, byte-preserving Markdown tools for agents.">
+  <meta property="og:description" content="Ornith and Gemma each reached 480/480 correct with zero harmful outcomes through Hermes auto. Safe, byte-preserving Markdown tools for agents.">
   <meta property="og:url" content="https://pdalinis.github.io/incise/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png">
   <meta property="og:image:width" content="1774">
@@ -43,16 +43,16 @@
     <section class="hero">
       <div class="eyebrow">480/480 correct · zero harmful outcomes</div>
       <h1>Give local models a safer way to edit Markdown.</h1>
-      <p class="lede">Incise turns model intent into deterministic, structure-aware edits. In the latest full Ornith/Pi evaluation, its recommended profile reached <strong>100% correct</strong> while preserving unrelated document bytes.</p>
+      <p class="lede">Incise turns model intent into deterministic, structure-aware edits. Its recommended Hermes profile reached <strong>100% correct</strong> across separate 480-trial runs on both Ornith and Gemma while preserving unrelated document bytes.</p>
       <div class="actions"><a class="button" href="/incise/docs/">Install Incise</a><a class="button secondary" href="/incise/benchmarks/">See the evidence</a></div>
     </section>
 
-    <section class="grid metrics" aria-label="Latest Ornith benchmark results">
+    <section class="grid metrics" aria-label="Latest Hermes benchmark results">
       <article class="card"><div class="metric">100%</div><h3>Overall correctness</h3><p>480 correct results across 480 full-composition trials.</p></article>
       <article class="card"><div class="metric">0</div><h3>Harmful outcomes</h3><p>No wrong, destructive, or collateral edits in the current measured profile.</p></article>
       <article class="card"><div class="metric">360/360</div><h3>Routed tasks correct</h3><p>Every request handled by the guarded, action-specific routing path succeeded.</p></article>
     </section>
-    <p class="fineprint">Preregistered Ornith 1.5 9B Q8 / Pi evaluation with thinking off, a 2,048-token output cap, and parallel tool calls disabled. Results are scoped to the recorded model, runtime, prompts, tasks, settings, and profile.</p>
+    <p class="fineprint">Preregistered Hermes Agent 0.21.3 evaluations on Ornith 1.5 9B Q8 and Gemma 4 26B. Each used the frozen 48-task population over ten seeds. Results are scoped to the recorded models, runtime, host, prompts, settings, and profile.</p>
 
     <section>
       <h2>Intent in. Exact edit out.</h2>
@@ -88,15 +88,15 @@ INCISE_PROFILE=auto pi --thinking off</code></pre><p>Configure <code>maxTokens: 
 INCISE_PROFILE=auto pi</code></pre><p>Auto-detection enables the measured guarded routes for Gemma and keeps the standard tools as fallback.</p></article>
         <article class="card"><h3>MiniCPM + Pi</h3><pre><code>pi install npm:pi-incise
 INCISE_PROFILE=standard pi</code></pre><p>Use the model-agnostic standard profile generally. A narrow opt-in list pipeline is available for evaluation.</p></article>
-        <article class="card"><h3>Hermes Agent</h3><pre><code>cargo install incise-cli --locked
-hermes plugins doctor --ci incise</code></pre><p>Hermes exposes the standard eight-tool interface behind its native file-safety policy.</p></article>
+        <article class="card"><h3>Gemma or Ornith + Hermes</h3><pre><code>cargo install incise-cli --locked
+INCISE_PROFILE=auto hermes chat</code></pre><p>Measured automatic routing reached 480/480 on both models while retaining Hermes file safety and standard-tool fallback.</p></article>
       </div>
       <div class="actions"><a class="button secondary" href="/incise/docs/">Full installation instructions</a></div>
     </section>
 
     <section>
       <h2>Measured, not merely claimed</h2>
-      <p>The current Ornith profile achieved 480/480: perfect tables, lists, sections, frontmatter, and table reads, with 360/360 exact routed calls. Gemma remains at 475/479 usable trials with zero harmful edits. Earlier controlled comparisons also moved tables from 60% direct-patch accuracy to 100% with Incise, lists from 63% to 91%, and sections from 19% to 74%.</p>
+      <p>Hermes <code>auto</code> achieved 480/480 on both Ornith and Gemma: perfect tables, lists, sections, frontmatter, and table reads, with 360/360 exact routed calls in each run. Ornith improved from 460/480 on standard Hermes to 480/480 with 20 paired wins and no regressions. Pi remains 480/480 on Ornith and 475/479 usable on Gemma, both with zero harmful outcomes.</p>
       <p>MiniCPM support is intentionally narrower: singleton table-row compatibility passed 18/18 live trials, and a host-routed list pipeline reached 21/21 in its direct arm. The real Pi list profile reached 16/21 with every executed edit correct, so it remains opt-in.</p>
       <div class="actions"><a class="button secondary" href="/incise/benchmarks/">Read the benchmark summary</a></div>
     </section>

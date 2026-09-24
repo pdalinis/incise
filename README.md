@@ -22,9 +22,9 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 
 Language models are often good at identifying the change a document needs and much less reliable at reproducing the surrounding Markdown exactly. A one-cell update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.
 
-> **Latest Ornith result:** the recommended Pi `auto` profile completed **480/480 trials (100%) with zero harmful outcomes**. Every family was perfect, and all 360 routed trials used the exact expected tool and host-resolved arguments.
+> **Hermes routed results:** the recommended Hermes `auto` profile completed **480/480 trials (100%) with zero harmful outcomes** on both Ornith 1.5 9B and Gemma 4 26B. Each run used the expected 360 routed and 120 fallback requests, with exact provider tool surfaces and host-resolved arguments.
 
-> **Current Gemma result:** the same `auto` profile completed **475/479 usable trials (99.2%) with zero harmful outcomes**. Tables, lists, frontmatter, and table reads were perfect; the four remaining section outcomes were loud refusals.
+> **Pi routed results:** Ornith completed **480/480 trials (100%) with zero harmful outcomes**. Gemma completed **475/479 usable trials (99.2%) with zero harmful outcomes**; its four remaining outcomes were loud section refusals.
 
 Incise separates intent from mechanics:
 
@@ -35,7 +35,7 @@ Incise separates intent from mechanics:
 
 It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.
 
-The figures come from preregistered 480-trial Pi evaluations and remain scoped to their recorded models, runtimes, task set, profile, and inference settings. Ornith used thinking off, a 2,048-token output cap, and disabled parallel tool calls; Gemma retained its normal provider defaults.
+The figures come from preregistered full-composition evaluations and remain scoped to their recorded models, runtimes, task set, host integration, seeds, profile, and inference settings. The Hermes runs used Hermes Agent 0.21.3 and seeds 40–49. Ornith used thinking off, a 2,048-token output cap, and disabled parallel tool calls; Gemma retained its recorded provider defaults.
 
 ## Quick start
 
@@ -117,6 +117,14 @@ Incise includes a Hermes adapter under [`plugins/hermes/`](plugins/hermes/).
 
 Install the version-matched plugin bundle, enable its `incise` toolset, and run `hermes plugins doctor --ci incise`. Doctor prints the exact binary it validated. See the [Hermes integration guide](plugins/hermes/README.md) for complete installation and safety details.
 
+For Gemma or Ornith, start Hermes with the measured automatic profile:
+
+```bash
+INCISE_PROFILE=auto hermes chat
+```
+
+`auto` detects model names containing `gemma` or `ornith`. If the provider exposes a generic alias, identify the backend explicitly, for example `INCISE_MODEL_FAMILY=ornith`. Use reasoning off, a 2,048-token output cap, and disabled parallel tool calls for the measured Ornith condition; Hermes does not silently change provider settings. Unknown models and MiniCPM retain the standard eight-tool surface.
+
 For Markdown structures represented by Incise, give the agent an explicit preference for structured editing:
 
 ```markdown
@@ -134,13 +142,11 @@ rewriting the document. Use raw editing only for prose changes that Incise does
 not represent.
 ```
 
-The adapter exposes the standard model-agnostic edit and read schemas behind Hermes’s native file-safety policy. The current release-candidate smoke completed all five representative tasks on both Gemma and MiniCPM with exact expected diffs. This is an integration check, not the Pi-specific Ornith or Gemma composition benchmark.
+Under `auto`, exact supported requests receive one small action-specific tool after host-side structure inspection; unsupported or ambiguous requests retain the standard Incise tools. The adapter preserves Hermes file-safety checks, content hashes, same-file serialization, compound rollback, and a one-successful-mutation latch.
+
+The preregistered Hermes runs completed **480/480 trials on Ornith and 480/480 on Gemma**, both with zero harmful outcomes. Ornith improved from a paired standard-control result of 460/480 to 480/480 (`p = 1.907×10⁻⁶`).
 
 Incise remains deliberately scoped to Markdown structures it understands. Generic editing is appropriate for ordinary prose and initial document creation.
-
----
-
-Hermes currently exposes the standard model-agnostic composition rather than Pi’s request router. A shared `INCISE_PROFILE=auto` setting safely falls back to the standard Hermes toolset, but does not enable `safe-routed`; the Ornith and Gemma routed benchmark figures below remain Pi-specific.
 
 ## Use with Pi
 
@@ -194,7 +200,7 @@ Refusals are part of the safety contract. If an operation cannot prove one targe
 
 ## Measured with small models
 
-The strongest current result is Ornith 1.5 9B through Pi: **480/480 trials correct (100%) with zero harmful outcomes** under the recorded reasoning-off configuration. The current Gemma/Pi `auto` profile remains **475/479 usable trials correct (99.2%) with zero harmful outcomes**.
+The strongest current result is now reproduced through both supported agent hosts. Hermes `auto` completed **480/480 trials correct (100%) with zero harmful outcomes** on both Ornith 1.5 9B and Gemma 4 26B. Pi `auto` completed **480/480** on Ornith and **475/479 usable trials (99.2%)** on Gemma, also with zero harmful outcomes. Results remain scoped to each recorded host, model, runtime, seed range, and inference configuration.
 
 ### Current Ornith/Pi profile
 
@@ -221,6 +227,20 @@ The final preregistered holdout used Ornith 1.5 9B Q8 through llama.cpp and Pi w
 | Routed subset | **200/200** | No route, argument, filter, or multiple-mutation errors |
 
 The preregistered run attempted 480 trials. One `rename-setext` pair hit the fixed generation timeout twice and was excluded under the frozen analysis rule, leaving 479 paired results. The latest incremental route moved correctness from 473/479 to 475/479 and harmful outcomes from one to zero; that incremental difference is descriptive (`p = 0.625`), while the zero-harm and targeted-repair gates passed.
+
+### Current Hermes auto profile
+
+| Family | Ornith | Gemma | Safety result |
+| --- | ---: | ---: | --- |
+| Tables | **60/60** | **60/60** | Zero harmful outcomes |
+| Lists | **100/100** | **100/100** | Zero harmful outcomes |
+| Sections | **150/150** | **150/150** | Zero harmful outcomes |
+| Frontmatter | **110/110** | **110/110** | Zero harmful outcomes |
+| Table reads | **60/60** | **60/60** | Read-only |
+| Routed subset | **360/360** | **360/360** | Exact tools and resolved arguments |
+| Standard fallback | **120/120** | **120/120** | Byte-identical standard surface |
+
+Both preregistered runs used Hermes Agent 0.21.3 and the frozen 48-task population over seeds 40–49. Ornith `auto` improved from a paired standard Hermes control of 460/480 to 480/480: 20 treatment-only wins, no control-only wins, and exact McNemar `p = 1.907×10⁻⁶`. Both treatments had zero framing errors, zero multiple mutations, and no retries. Gemma’s 480/480 is a host-and-seed-specific compatibility result; comparison with the earlier 475/479 Pi run is descriptive, not paired.
 
 ### MiniCPM progress
 

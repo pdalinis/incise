@@ -58,7 +58,7 @@ incise schema
 incise schema --tool table_edit
 ```
 
-A harness can pass the model argument object directly to the corresponding command through `--args`. The repository also ships an eight-tool [Hermes Agent plugin](https://github.com/pdalinis/incise/tree/main/plugins/hermes) with host file-safety integration.
+A harness can pass the model argument object directly to the corresponding command through `--args`. The repository also ships a [Hermes Agent plugin](https://github.com/pdalinis/incise/tree/main/plugins/hermes) with host file-safety integration and measured automatic routing for Gemma and Ornith, plus the published [`pi-incise`](https://www.npmjs.com/package/pi-incise) extension for Pi. Both integrations retain the model-agnostic standard surface for unknown models and unsupported requests.
 
 ## Safety and compatibility
 

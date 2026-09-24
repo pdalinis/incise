@@ -897,6 +897,20 @@ The complete seeds 30 through 39 holdout was then rerun from the beginning. The 
 
 This licenses Ornith detection in Pi `auto` and the explicit `INCISE_MODEL_FAMILY=ornith` override. It does not license silently changing provider settings: users must select thinking off and configure the tested output cap and parallel-call setting. The standard profile remains the default for model-agnostic compatibility. Artifacts: [final analysis](results/ornith_final_v2_safe_routed_20260923_analysis.json), [route audit](results/ornith_final_v2_routes_20260923_analysis.json), [aborted safety holdout](results/ornith_final_held_aborted_safety_20260923_analysis.json), [residual treatment](results/ornith_residual_routes_20260923_analysis.json), and [qualified-preamble treatment](results/ornith_preamble_route_20260923_analysis.json).
 
+# F-hermes-safe-routed — both measured models reach 480/480 through Hermes
+
+The Hermes parity plan was committed at `c2aff65` before route implementation or live treatment sampling. The adapter ports the measured Pi route contract into Hermes request middleware while preserving Hermes file-safety checks, foreign tools, the standard eight-tool fallback, content-hash preconditions, same-file serialization, rollback for compound operations, and a one-successful-mutation latch. A deterministic audit matched all 48 frozen Pi route decisions: 36 routed and 12 fallback tasks.
+
+The first 48-task Ornith smoke scored 47/48 because the model returned an empty post-tool response for the successful compound `release-bump` result. The document was correct and the identical retry was also correct. A preregistered result-framing repair changed the description to name both completed guarded operations; the repeated smoke then passed 48/48. No tool schema, route, executor operation, or model prompt changed.
+
+The paired Ornith standard-control arm scored **460/480 (95.8%)** with zero harmful outcomes: tables 60/60, lists 100/100, sections 150/150, frontmatter 100/110, and table reads 50/60. All ten `set-dana-role` trials were malformed, and all ten `get-filter-no-match` trials returned unfiltered rows. Hermes `auto` then scored **480/480 (100%)** with zero harmful outcomes. The paired comparison has 20 treatment-only wins, zero control-only wins, and exact McNemar `p = 1.907×10⁻⁶`. No family regressed.
+
+The preregistered Gemma compatibility arm also scored **480/480 (100%)** with zero harmful outcomes: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. Both treatment runs contained exactly 360 routed and 120 fallback trials, with exact provider-visible Incise surfaces and canonical host-resolved arguments. Neither run had a framing error, retry, or multiple-mutation outcome. Mean elapsed time was 6.269 seconds for Ornith and 6.241 seconds for Gemma; mean completion tokens were 112.048 and 113.454 respectively.
+
+Every preregistered release gate passes. This licenses recommending `INCISE_PROFILE=auto` in Hermes for detected Gemma and Ornith models, with `INCISE_MODEL_FAMILY` available for generic provider aliases. Unknown and MiniCPM identities continue to receive the standard profile. Ornith still requires the measured reasoning-off, 2,048-token, parallel-calls-disabled provider configuration; the adapter does not silently change those settings. The Gemma comparison to the earlier 475/479 Pi run is descriptive because host and seed range differ.
+
+Artifacts: [Hermes route parity](results/hermes_safe_routed_parity_20260924.json), [Ornith standard analysis](results/ornith_hermes_standard_analysis_20260924.json), [Ornith routed analysis](results/ornith_hermes_safe_routed_analysis_20260924.json), and [Gemma routed analysis](results/gemma_hermes_safe_routed_analysis_20260924.json).
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
