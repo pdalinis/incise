@@ -72,6 +72,7 @@ export interface ListAppendIntent {
 	heading: string;
 	text: string;
 	after?: string;
+	before?: string;
 	containedItem?: string;
 }
 
@@ -124,10 +125,16 @@ function quotedCapture(prompt: string, prefix: RegExp, suffix: RegExp): string |
 	return match?.slice(1).find((value) => value !== undefined)?.trim();
 }
 
-export function sectionIntent(prompt: string): { kind: "section-rename"; target: string } |
+export function sectionIntent(prompt: string): { kind: "section-rename"; target: string; heading: string } |
 	{ kind: "section-replace-body"; target: string } | undefined {
-	const rename = quotedCapture(prompt, /\brename(?:\s+the)?/, /\b(?:heading\s+)?to\b/);
-	if (rename) return { kind: "section-rename", target: rename };
+	const rename = prompt.match(
+		/\brename(?:\s+the)?\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)\s*(?:heading\s+)?to\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)/i,
+	);
+	if (rename) {
+		const target = rename.slice(1, 4).find((value) => value !== undefined)?.trim();
+		const heading = rename.slice(4, 7).find((value) => value !== undefined)?.trim();
+		if (target && heading) return { kind: "section-rename", target, heading };
+	}
 
 	const quotedReplace = quotedCapture(
 		prompt,
@@ -433,9 +440,13 @@ export function frontmatterCreateIntent(prompt: string): FrontmatterCreateIntent
 export function frontmatterDeleteIntent(prompt: string): FrontmatterDeleteIntent | undefined {
 	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
 		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
-	return /^drop\s+the\s+whole\s+build\s+configuration\s+from\s+the\s+frontmatter[.!]?$/i.test(request)
-		? { key: "build" }
-		: undefined;
+	if (/^drop\s+the\s+whole\s+build\s+configuration\s+from\s+the\s+frontmatter[.!]?$/i.test(request)) {
+		return { key: "build" };
+	}
+	if (/^this\s+file\s+is\s+no\s+longer\s+a\s+draft\.\s*take\s+the\s+draft\s+flag\s+out\s+of\s+the\s+frontmatter\s+completely[.!]?$/i.test(request)) {
+		return { key: "draft" };
+	}
+	return undefined;
 }
 
 export function frontmatterReleaseIntent(prompt: string): FrontmatterReleaseIntent | undefined {
@@ -488,6 +499,15 @@ export function listAppendIntent(prompt: string): ListAppendIntent | undefined {
 	if (after) {
 		return { heading: after[1].trim(), text: after[2].trim(), after: after[3].trim() };
 	}
+	const between = prompt.match(
+		/\bin\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*,\s*insert\s+an?\s+item\s+["“]([^"”]+)["”]\s+between\s+["“]([^"”]+)["”]\s+and\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (between) {
+		return {
+			heading: between[1].trim(), text: between[2].trim(),
+			after: between[3].trim(), before: between[4].trim(),
+		};
+	}
 	const end = prompt.match(
 		/\badd\s+an?\s+item\s+["“]([^"”]+)["”]\s+at\s+the\s+end\s+of\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*[.!]?$/i,
 	);
@@ -530,11 +550,10 @@ function sectionSchema(kind: "section-rename" | "section-replace-body", target: 
 	if (kind === "section-rename") {
 		return {
 			name: "section_rename_target",
-			description: `Rename the already resolved section ${JSON.stringify(target)}. Supply only its new heading text.`,
+			description: `Rename the already resolved section ${JSON.stringify(target)} to the exact heading already parsed from the request. The host owns both values; supply no arguments.`,
 			parameters: {
 				type: "object",
-				properties: { new_heading: { type: "string" } },
-				required: ["new_heading"],
+				properties: {},
 				additionalProperties: false,
 			},
 		};
@@ -676,9 +695,11 @@ async function routeForPrompt(
 				operation: section.kind === "section-rename" ? "section-rename" : "section-replace-body",
 				write: true,
 				arguments: section.kind === "section-rename"
-					? (params) => ({ section: target, heading: params.new_heading })
+					? () => ({ section: target, heading: section.heading })
 					: (params) => ({ section: target, text: params.body, overwrite: true }),
-				systemPrompt: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
+				systemPrompt: section.kind === "section-rename"
+					? `Incise resolved the requested section and exact replacement heading. Use ${schema.name} once with no arguments; the host supplies the file, target, and new heading.`
+					: `Incise resolved the requested section to ${JSON.stringify(target)}. Use ${schema.name} once; the host supplies the file and target.`,
 			};
 		}
 		const setLevel = sectionSetLevelIntent(prompt, entries);
@@ -789,12 +810,16 @@ async function routeForPrompt(
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
 		if (result.code !== 0 || result.payload.ok === false) return undefined;
 		if (typeof result.payload.hash !== "string") return undefined;
-		const matches = frontmatterEntries(result.payload)
-			.filter((entry) => entry.path === deletion.key && entry.kind === "map");
+		const matches = frontmatterEntries(result.payload).filter((entry) => {
+			if (entry.path !== deletion.key) return false;
+			return deletion.key === "build"
+				? entry.kind === "map"
+				: deletion.key === "draft" && entry.kind !== "map" && entry.kind !== "seq" && entry.type === "boolean";
+		});
 		if (matches.length !== 1) return undefined;
 		const schema: ToolSchema = {
 			name: "frontmatter_delete_target",
-			description: `Delete the already resolved complete frontmatter map ${JSON.stringify(deletion.key)}. The host owns the exact key; supply no arguments.`,
+			description: `Delete the already resolved frontmatter value ${JSON.stringify(deletion.key)} completely. The host owns the exact key; supply no arguments.`,
 			parameters: { type: "object", properties: {}, additionalProperties: false },
 		};
 		return {
@@ -805,7 +830,7 @@ async function routeForPrompt(
 			operation: "frontmatter-delete",
 			write: true,
 			arguments: () => ({ key: deletion.key }),
-			systemPrompt: `Incise inspected the complete requested frontmatter map and activated ${schema.name}. Use ${schema.name} exactly once with no arguments; the host supplies the file, key, and read hash.`,
+			systemPrompt: `Incise inspected the exact requested frontmatter value and activated ${schema.name}. Use ${schema.name} exactly once with no arguments; the host supplies the file, key, and read hash.`,
 		};
 	}
 	const create = frontmatterCreateIntent(prompt);
@@ -903,7 +928,16 @@ async function routeForPrompt(
 			if (typeof result.payload.hash !== "string") return undefined;
 			const items = listItems(result.payload, entry);
 			const anchor = append.containedItem ?? append.after;
-			if ((!anchor || items.filter((item) => item.text === anchor).length === 1) &&
+			const afterIndex = append.after === undefined
+				? -1
+				: items.findIndex((item) => item.text === append.after);
+			const boundaryValid = append.before === undefined || (
+				afterIndex >= 0 &&
+				items.filter((item) => item.text === append.before).length === 1 &&
+				items[afterIndex + 1]?.text === append.before &&
+				items[afterIndex]?.depth === items[afterIndex + 1]?.depth
+			);
+			if ((!anchor || items.filter((item) => item.text === anchor).length === 1) && boundaryValid &&
 				!items.some((item) => item.text === append.text)) {
 				matches.push({ entry, hash: result.payload.hash });
 			}

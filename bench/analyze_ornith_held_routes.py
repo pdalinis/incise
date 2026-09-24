@@ -18,6 +18,7 @@ import gemma_roadmap as roadmap  # noqa: E402
 import gemma_section_append_route_v1 as section_append  # noqa: E402
 import gemma_section_insert_route_v2 as section_insert  # noqa: E402
 import analyze_ornith_fallback_routes as fallback_routes  # noqa: E402
+import analyze_ornith_residual_routes as residual_routes  # noqa: E402
 import ornith_full as ornith  # noqa: E402
 import pi_composition as pi_bench  # noqa: E402
 
@@ -39,7 +40,7 @@ def expected_specs():
     values = {
         "rename-closed-atx": spec(
             "section_rename_target", "section-rename",
-            {"new_heading": "Closed ATX heading"},
+            {},
             {
                 "section": "Setext H1 Title > Setext H2 > Closed ATX level 3",
                 "heading": "Closed ATX heading",
@@ -113,6 +114,7 @@ def expected_specs():
     values["add-item-mixed-markers"] = spec(
         "list_append_target", "list-append-target", {}, list_contains.EXPECTED)
     values.update(fallback_routes.SPECS)
+    values.update(residual_routes.SPECS)
     return values
 
 

@@ -51,6 +51,10 @@ test("frontmatter destructive and compound routing requires exact requests", () 
 		{ key: "build" },
 	);
 	assert.deepEqual(
+		frontmatterDeleteIntent("This file is no longer a draft. Take the draft flag out of the frontmatter completely."),
+		{ key: "draft" },
+	);
+	assert.deepEqual(
 		frontmatterReleaseIntent("Update the version to 0.5.0, and set `released` to 2026-09-12."),
 		{ version: "0.5.0", released: "2026-09-12" },
 	);
@@ -104,6 +108,10 @@ test("containing-item list routing requires explicit quoted target and new text"
 
 test("list append routing recognizes exact end and after forms", () => {
 	assert.deepEqual(
+		listAppendIntent('In the list under "Sequential", insert an item "two and a half" between "second" and "third".'),
+		{ heading: "Sequential", text: "two and a half", after: "second", before: "third" },
+	);
+	assert.deepEqual(
 		listAppendIntent('Under "Asterisk markers, four-space indent", add "beta-three" immediately after "beta-two".'),
 		{ heading: "Asterisk markers, four-space indent", text: "beta-three", after: "beta-two" },
 	);
@@ -138,11 +146,11 @@ test("frontmatter routing recognizes only the five measured existing-key intents
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
 	assert.deepEqual(
 		sectionIntent('Rename the "Setext H2" heading to "Setext level two".'),
-		{ kind: "section-rename", target: "Setext H2" },
+		{ kind: "section-rename", target: "Setext H2", heading: "Setext level two" },
 	);
 	assert.deepEqual(
 		sectionIntent('Rename "Closed ATX level 3" to "Closed ATX heading".'),
-		{ kind: "section-rename", target: "Closed ATX level 3" },
+		{ kind: "section-rename", target: "Closed ATX level 3", heading: "Closed ATX heading" },
 	);
 	assert.deepEqual(
 		sectionIntent('Replace the text under Upgrade > Linux with "See the platform notes."'),

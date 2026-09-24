@@ -245,7 +245,7 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.deepEqual([...active].sort(), ["foreign_tool", "section_rename_target"]);
 
 	const renamed = await tools.get("section_rename_target").execute(
-		"rename", { new_heading: "Closed ATX heading" }, undefined, undefined, context,
+		"rename", {}, undefined, undefined, context,
 	);
 	assert.match(renamed.content[0].text, /^Applied:/);
 	assert.equal(renamed.details.validated, true);
@@ -558,6 +558,23 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	});
 	assert.match(await readFile(nestedAppendPath, "utf8"), /    \* beta-two\n    \* beta-three/);
 
+	const orderedPath = join(directory, "ordered-between.md");
+	await copyFile(resolve(repository, "corpus", "lists", "ordered-numbering.md"), orderedPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @ordered-between.md, in the list under "Sequential", insert an item "two and a half" between "second" and "third".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const orderedAdded = await tools.get("list_append_target").execute(
+		"ordered-between", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(orderedAdded.details.resolvedArguments, {
+		list: { heading: "Ordered list numbering > Sequential", ordinal: 0 },
+		text: "two and a half", after: "second",
+	});
+	assert.match(await readFile(orderedPath, "utf8"), /2\. second\n3\. two and a half\n4\. third/);
+
 	const notesPath = join(directory, "notes.md");
 	await copyFile(resolve(repository, "corpus", "sections", "duplicate-siblings.md"), notesPath);
 	await events.get("before_agent_start")({
@@ -607,6 +624,20 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	);
 	assert.deepEqual(deleted.details.resolvedArguments, { key: "build" });
 	assert.doesNotMatch(await readFile(deletePath, "utf8"), /^build:/m);
+
+	const draftPath = join(directory, "delete-draft.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), draftPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete-draft.md, this file is no longer a draft. Take the draft flag out of the frontmatter completely.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_delete_target"]);
+	const draftDeleted = await tools.get("frontmatter_delete_target").execute(
+		"delete-draft", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(draftDeleted.details.resolvedArguments, { key: "draft" });
+	assert.doesNotMatch(await readFile(draftPath, "utf8"), /^draft:/m);
 
 	for (const [name, fixture, prompt, expected] of [
 		["absent", "absent.md", 'Give this file a frontmatter block with a title of "Absent frontmatter".',
