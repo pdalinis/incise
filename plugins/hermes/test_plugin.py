@@ -822,6 +822,41 @@ def test_safe_small_profile():
         plugin.schema_cache.reset_cache()
 
 
+def test_auto_profile_falls_back_to_measured():
+    saved_profile = os.environ.get("INCISE_PROFILE")
+    saved_binary = os.environ.get("INCISE_BIN")
+    os.environ["INCISE_BIN"] = os.path.join(ROOT, "target", "debug", "incise")
+    try:
+        os.environ["INCISE_PROFILE"] = "measured"
+        plugin.runner.reset_cache()
+        plugin.schema_cache.reset_cache()
+        measured = plugin.schema_cache.edit_tools()
+        measured_structural = plugin.schema_cache.structural_tools()
+
+        os.environ["INCISE_PROFILE"] = "auto"
+        plugin.schema_cache.reset_cache()
+        automatic = plugin.schema_cache.edit_tools()
+        automatic_structural = plugin.schema_cache.structural_tools()
+
+        check("Hermes auto keeps measured schemas byte-identical", automatic == measured)
+        check("Hermes auto keeps measured structural reads byte-identical",
+              automatic_structural == measured_structural)
+        check("Hermes auto registers the standard eight tools",
+              len(automatic + automatic_structural) == 8,
+              str([schema["name"] for schema in automatic + automatic_structural]))
+    finally:
+        if saved_profile is None:
+            os.environ.pop("INCISE_PROFILE", None)
+        else:
+            os.environ["INCISE_PROFILE"] = saved_profile
+        if saved_binary is None:
+            os.environ.pop("INCISE_BIN", None)
+        else:
+            os.environ["INCISE_BIN"] = saved_binary
+        plugin.runner.reset_cache()
+        plugin.schema_cache.reset_cache()
+
+
 def main():
     print("plugin: translation")
     test_normalize()
@@ -847,6 +882,8 @@ def main():
     test_source_binary_prefers_newest_build()
     print("plugin: safe-small profile")
     test_safe_small_profile()
+    print("plugin: auto fallback profile")
+    test_auto_profile_falls_back_to_measured()
 
     print()
     if FAILURES:

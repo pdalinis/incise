@@ -76,6 +76,8 @@ The plugin toolset is intentionally limited to those eight tools. Ordinary parag
 
 Set `INCISE_PROFILE=safe-small` before starting Hermes only to evaluate the experimental small-model composition. It exposes `md_tables`, `table_get`, `table_add_row`, `table_update_cell`, `md_lists`, `list_get`, `list_add_item`, `md_outline`, `section_insert`, `section_append`, `frontmatter_get`, and `frontmatter_set`. It intentionally omits generic multi-action tools, section deletion/body replacement, table deletion, list removal, and frontmatter deletion. A preregistered MiniCPM5 run found a significant list-addition gain but section and frontmatter regressions, including 0/27 correct frontmatter trials, so this profile is not recommended for general use. Without the environment variable, Hermes registers the measured default composition.
 
+Pi’s `auto` and `safe-routed` request routing is not currently available in Hermes. If a shared launch environment sets `INCISE_PROFILE=auto`, the Hermes adapter safely registers its standard measured toolset; it does not claim or enable Pi’s routed behavior. The published Ornith and Gemma routed benchmarks apply to Pi only. A Hermes routed profile requires its own adapter implementation and live measurement.
+
 ## How it works
 
 At registration, the plugin asks the binary for the five measured schemas: `table_edit`, `list_edit`, `section_edit`, `frontmatter_edit`, and `table_get`. It adds three narrow structural reads—`md_tables`, `md_lists`, and `md_outline`—and registers all eight as the `incise` toolset.

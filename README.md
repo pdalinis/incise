@@ -140,6 +140,8 @@ Incise remains deliberately scoped to Markdown structures it understands. Generi
 
 ---
 
+Hermes currently exposes the standard model-agnostic composition rather than Pi’s request router. A shared `INCISE_PROFILE=auto` setting safely falls back to the standard Hermes toolset, but does not enable `safe-routed`; the Ornith and Gemma routed benchmark figures below remain Pi-specific.
+
 ## Use with Pi
 
 Install the published [`pi-incise` package from npm](https://www.npmjs.com/package/pi-incise):
