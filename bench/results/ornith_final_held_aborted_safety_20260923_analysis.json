@@ -1,0 +1,91 @@
+{
+  "condition": "forced-safe-routed",
+  "correct": 237,
+  "correct_rate": 0.995798,
+  "efficiency": {
+    "mean_completion_tokens": 122.718,
+    "mean_elapsed_s": 13.655,
+    "mean_reasoning_characters": 0.0,
+    "mean_reasoning_tokens": 0.0,
+    "mean_tool_calls": 1.185
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 0,
+      "gemma_floor": 105,
+      "n": 0,
+      "outcomes": {},
+      "rate": 0,
+      "status": "fail"
+    },
+    "list": {
+      "correct": 100,
+      "gemma_floor": 100,
+      "n": 100,
+      "outcomes": {
+        "correct": 100
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "section": {
+      "correct": 77,
+      "gemma_floor": 140,
+      "n": 78,
+      "outcomes": {
+        "correct": 77,
+        "destructive": 1
+      },
+      "rate": 0.987179,
+      "status": "fail"
+    },
+    "table": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 0,
+      "gemma_floor": 57,
+      "n": 0,
+      "outcomes": {},
+      "rate": 0,
+      "status": "fail"
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "family_floors": {
+      "frontmatter": 105,
+      "list": 100,
+      "section": 140,
+      "table": 57,
+      "table-read": 57
+    },
+    "harmful": 0,
+    "minimum_correct": 472,
+    "minimum_usable": 478
+  },
+  "harmful": 1,
+  "harmful_trials": [
+    [
+      "replace-install-preamble",
+      31
+    ]
+  ],
+  "multiple_mutations": [],
+  "observed": 238,
+  "outcomes": {
+    "correct": 237,
+    "destructive": 1
+  },
+  "reasoning_leaks": [],
+  "status": "fail",
+  "usable": 238
+}
