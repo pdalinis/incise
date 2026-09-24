@@ -195,11 +195,15 @@ def request_environment(args, *, condition: str, seed: int, trace: Path) -> dict
         "INCISE_BIN": str(Path(args.binary).resolve()),
         "INCISE_PROFILE": profile,
         "INCISE_MODEL_FAMILY": family,
-        "INCISE_HERMES_MAX_TOKENS": str(args.max_tokens),
-        "INCISE_HERMES_PARALLEL_TOOL_CALLS": "false",
         "INCISE_HERMES_SEED": str(seed),
         "INCISE_HERMES_TRACE": str(trace),
     })
+    if condition == "gemma-auto":
+        env["INCISE_HERMES_MAX_TOKENS"] = str(args.gemma_max_tokens)
+        env.pop("INCISE_HERMES_PARALLEL_TOOL_CALLS", None)
+    else:
+        env["INCISE_HERMES_MAX_TOKENS"] = str(args.max_tokens)
+        env["INCISE_HERMES_PARALLEL_TOOL_CALLS"] = "false"
     return env
 
 
@@ -254,7 +258,7 @@ def framing_errors(row: dict, expected: dict, condition: str) -> list[str]:
     for request in requests:
         if request.get("max_tokens") != row["max_tokens"]:
             errors.append(f"max_tokens={request.get('max_tokens')!r}")
-        if request.get("parallel_tool_calls") is not False:
+        if request.get("parallel_tool_calls") != row["parallel_tool_calls"]:
             errors.append(f"parallel_tool_calls={request.get('parallel_tool_calls')!r}")
         if request.get("seed") != row["seed"]:
             errors.append(f"seed={request.get('seed')!r}")
@@ -322,9 +326,9 @@ def run_one(args, task: dict, seed: int, attempt: int, expected: dict):
         "seed": seed,
         "attempt": attempt,
         "max_turns": 4,
-        "max_tokens": args.max_tokens,
+        "max_tokens": args.gemma_max_tokens if args.condition == "gemma-auto" else args.max_tokens,
         "reasoning": "none",
-        "parallel_tool_calls": False,
+        "parallel_tool_calls": None if args.condition == "gemma-auto" else False,
         "initial_sha256": composition.sha256_bytes(before.encode()),
         "final_sha256": composition.sha256_bytes(after.encode()),
         "final_document": after,
@@ -524,6 +528,7 @@ def add_runtime(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--backend-model", default="ornith-1.5-9b-q8")
     parser.add_argument("--provider", default="custom")
     parser.add_argument("--max-tokens", type=int, default=2048)
+    parser.add_argument("--gemma-max-tokens", type=int, default=8192)
     parser.add_argument("--run-budget", type=int, default=240)
     parser.add_argument("--timeout", type=int, default=300)
 
