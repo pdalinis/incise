@@ -6,6 +6,7 @@ import {
 	frontmatterCreateIntent,
 	frontmatterValueType,
 	listContainsAppendIntent,
+	listCheckedIntent,
 	listRemoveIntent,
 	parseOutline,
 	parseTableSummary,
@@ -15,6 +16,7 @@ import {
 	sectionInsertArguments,
 	sectionInsertIntent,
 	sectionIntent,
+	sectionSetLevelIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
 
@@ -43,6 +45,18 @@ test("list removal routing requires exact quoted items and headings", () => {
 	);
 	assert.equal(listRemoveIntent("Remove the third item from the Non-sequential list."), undefined);
 	assert.equal(listRemoveIntent('Add "third" under "Non-sequential".'), undefined);
+});
+
+test("checkbox routing requires exact quoted item and list text", () => {
+	assert.deepEqual(
+		listCheckedIntent('Mark the "child pending" task as done, in the list under "Nested".'),
+		{ item: "child pending", heading: "Nested", checked: true },
+	);
+	assert.deepEqual(
+		listCheckedIntent('Mark the “child done” task as pending, in the list under “Nested”.'),
+		{ item: "child done", heading: "Nested", checked: false },
+	);
+	assert.equal(listCheckedIntent("Mark child pending as done under Nested."), undefined);
 });
 
 test("containing-item list routing requires explicit quoted target and new text", () => {
@@ -195,6 +209,23 @@ test("section insertion routing freezes structure and exact literal content", ()
 		children: [{ heading: "Headers", body: "Exact." }],
 	});
 	assert.equal(sectionInsertIntent("Add a section somewhere under API.", entries), undefined);
+});
+
+test("section level routing resolves the named parent and complete subtree", () => {
+	const entries = parseOutline([
+		"Sections in `x.md`:",
+		"  Deep heading nesting   (body, 1 subsection)",
+		"    Reference   (no body of its own, 1 subsection)",
+		"      API   (no body of its own, 1 subsection)",
+		"        Endpoints   (body)",
+	].join("\n"));
+	assert.deepEqual(sectionSetLevelIntent(
+		"Promote the API heading under Reference to a second-level heading, moving its subsections with it.",
+		entries,
+	), { target: "Deep heading nesting > Reference > API", level: 2 });
+	assert.equal(sectionSetLevelIntent(
+		"Promote API to level 2.", entries,
+	), undefined);
 });
 
 test("outline parsing resolves a unique suffix but refuses an ambiguous leaf", () => {
