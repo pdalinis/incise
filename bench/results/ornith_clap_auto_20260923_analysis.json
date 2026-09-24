@@ -1,0 +1,30 @@
+{
+  "condition": "auto-standard",
+  "normalized_call_sequences_identical": true,
+  "normalized_rows_identical": 48,
+  "outcomes": {
+    "correct": 36,
+    "destructive": 3,
+    "op_error": 4,
+    "unfiltered": 3,
+    "wrong": 2
+  },
+  "harmful_final_documents": [
+    "remove-item-non-sequential",
+    "insert-release-at-top",
+    "insert-troubleshooting",
+    "set-build-target",
+    "set-dana-role",
+    "clear-title",
+    "delete-build",
+    "release-bump",
+    "create-on-absent"
+  ],
+  "pools": {
+    "a_raw_sha256": "a27f5dbd3180c8ca878fe746e40768755a1928a183b6c2eca2a1c81752ac2ab6",
+    "a_graded_sha256": "acd694afb5d11ed52d45fe18cec88fff483e2a0c255de13778fdbbe76cf8842b",
+    "b_raw_sha256": "81f0e7d61382d9a1cdb70d40b05eac0e8b2649570f8e26b189585475386e8ae2",
+    "b_graded_sha256": "acd694afb5d11ed52d45fe18cec88fff483e2a0c255de13778fdbbe76cf8842b"
+  },
+  "reasoning": "Fixed-seed duplicate runs matched after excluding provider-generated tool-call IDs and elapsed time. The stricter final-document audit supplements, but does not replace, the historical outcome field."
+}

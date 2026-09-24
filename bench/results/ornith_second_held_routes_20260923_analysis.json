@@ -1,0 +1,50 @@
+{
+  "errors": [
+    [
+      "rename-setext",
+      20,
+      "successful calls",
+      0
+    ]
+  ],
+  "expected_routed_tasks": [
+    "add-build-cache",
+    "add-item-mixed-markers",
+    "add-item-nested-asterisk",
+    "add-item-ordered-all-ones",
+    "add-item-paren-delimiter",
+    "append-after-fence",
+    "append-atx-line",
+    "append-macos-note",
+    "check-task-nested",
+    "clear-title",
+    "create-on-absent",
+    "delete-build",
+    "fill-empty",
+    "get-escaped-cell",
+    "get-filter-no-match",
+    "get-filter-one-column",
+    "get-filter-two-columns",
+    "insert-nested-ratelimits",
+    "insert-release-at-top",
+    "insert-subsection-last",
+    "insert-troubleshooting",
+    "notes-second-ordinal",
+    "promote-api",
+    "release-bump",
+    "remove-item-mixed",
+    "remove-item-non-sequential",
+    "rename-closed-atx",
+    "rename-setext",
+    "replace-linux-body",
+    "set-build-jobs",
+    "set-build-target",
+    "set-dana-role",
+    "set-draft-true"
+  ],
+  "fallback": 150,
+  "observed": 480,
+  "routed": 330,
+  "routed_correct": 329,
+  "status": "fail"
+}

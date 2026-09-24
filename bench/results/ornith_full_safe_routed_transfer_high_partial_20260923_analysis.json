@@ -1,0 +1,105 @@
+{
+  "condition": "forced-safe-routed",
+  "correct": 136,
+  "correct_rate": 0.944444,
+  "efficiency": {
+    "mean_completion_tokens": 310.41,
+    "mean_elapsed_s": 30.244,
+    "mean_reasoning_characters": 638.0,
+    "mean_reasoning_tokens": 0.0,
+    "mean_tool_calls": 1.5
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 0,
+      "gemma_floor": 105,
+      "n": 0,
+      "outcomes": {},
+      "rate": 0,
+      "status": "fail"
+    },
+    "list": {
+      "correct": 76,
+      "gemma_floor": 100,
+      "n": 84,
+      "outcomes": {
+        "correct": 76,
+        "destructive": 1,
+        "op_error": 6,
+        "wrong": 1
+      },
+      "rate": 0.904762,
+      "status": "fail"
+    },
+    "section": {
+      "correct": 0,
+      "gemma_floor": 140,
+      "n": 0,
+      "outcomes": {},
+      "rate": 0,
+      "status": "fail"
+    },
+    "table": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 0,
+      "gemma_floor": 57,
+      "n": 0,
+      "outcomes": {},
+      "rate": 0,
+      "status": "fail"
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "family_floors": {
+      "frontmatter": 105,
+      "list": 100,
+      "section": 140,
+      "table": 57,
+      "table-read": 57
+    },
+    "harmful": 0,
+    "minimum_correct": 472,
+    "minimum_usable": 478
+  },
+  "harmful": 4,
+  "harmful_trials": [
+    [
+      "add-item-nested-asterisk",
+      2
+    ],
+    [
+      "add-item-nested-asterisk",
+      3
+    ],
+    [
+      "add-item-ordered-renumber",
+      9
+    ],
+    [
+      "check-task-nested",
+      1
+    ]
+  ],
+  "multiple_mutations": [],
+  "observed": 144,
+  "outcomes": {
+    "correct": 136,
+    "destructive": 1,
+    "op_error": 6,
+    "wrong": 1
+  },
+  "reasoning_leaks": [],
+  "status": "fail",
+  "usable": 144
+}

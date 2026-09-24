@@ -559,9 +559,17 @@ def test_safety_fails_closed():
 class FakeCtx:
     def __init__(self):
         self.tools = []
+        self.hooks = {}
+        self.middleware = {}
 
     def register_tool(self, name, toolset, schema, handler, **kw):
         self.tools.append((name, toolset, schema, handler, kw))
+
+    def register_hook(self, name, callback):
+        self.hooks[name] = callback
+
+    def register_middleware(self, name, callback):
+        self.middleware[name] = callback
 
 
 def test_register():
@@ -822,6 +830,226 @@ def test_safe_small_profile():
         plugin.schema_cache.reset_cache()
 
 
+def test_auto_profile_falls_back_to_measured():
+    saved_profile = os.environ.get("INCISE_PROFILE")
+    saved_binary = os.environ.get("INCISE_BIN")
+    saved_controls = {
+        name: os.environ.get(name)
+        for name in (
+            "INCISE_HERMES_MAX_TOKENS",
+            "INCISE_HERMES_PARALLEL_TOOL_CALLS",
+            "INCISE_HERMES_SEED",
+            "INCISE_HERMES_TRACE",
+        )
+    }
+    os.environ["INCISE_BIN"] = os.path.join(ROOT, "target", "debug", "incise")
+    try:
+        os.environ["INCISE_PROFILE"] = "measured"
+        plugin.runner.reset_cache()
+        plugin.schema_cache.reset_cache()
+        measured = plugin.schema_cache.edit_tools()
+        measured_structural = plugin.schema_cache.structural_tools()
+
+        os.environ["INCISE_PROFILE"] = "auto"
+        plugin.schema_cache.reset_cache()
+        automatic = plugin.schema_cache.edit_tools()
+        automatic_structural = plugin.schema_cache.structural_tools()
+
+        check("Hermes auto keeps measured schemas byte-identical", automatic == measured)
+        check("Hermes auto keeps measured structural reads byte-identical",
+              automatic_structural == measured_structural)
+        check("Hermes auto retains the standard eight base schemas",
+              len(automatic + automatic_structural) == 8,
+              str([schema["name"] for schema in automatic + automatic_structural]))
+
+        ctx = FakeCtx()
+        plugin.register(ctx)
+        names = [tool[0] for tool in ctx.tools]
+        base_names = [schema["name"] for schema in automatic + automatic_structural]
+        check("Hermes auto registers every routed handler",
+              names == base_names + list(plugin.safe_routed.ROUTED_TOOL_NAMES), str(names))
+        check("Hermes auto registers turn planning",
+              set(ctx.hooks) == {"pre_llm_call", "on_session_end"}, str(ctx.hooks))
+        check("Hermes auto registers provider narrowing",
+              set(ctx.middleware) == {"llm_request"}, str(ctx.middleware))
+        check("Hermes routing shares the Incise subprocess cwd",
+              plugin.safe_routed.SafeRoutedAdapter._cwd() == os.getcwd())
+
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": name,
+                "description": schema["description"],
+                "parameters": schema["parameters"],
+            },
+        } for name, _toolset, schema, _handler, _kw in ctx.tools]
+        foreign = {
+            "type": "function",
+            "function": {"name": "terminal", "description": "foreign", "parameters": {}},
+        }
+        request = {"messages": [], "tools": [foreign] + tools, "tool_choice": "auto"}
+
+        fallback = ctx.middleware["llm_request"](
+            request=request, session_id="s", task_id="t", turn_id="before")
+        fallback_names = [tool["function"]["name"]
+                          for tool in fallback["request"]["tools"]]
+        check("auto hides inactive route tools",
+              fallback_names == ["terminal"] + base_names, str(fallback_names))
+
+        path = scratch("corpus/lists/nested-mixed.md")
+        prompt = (
+            f'Lists in `{path}`:\n\n'
+            'Under "Asterisk markers, four-space indent", add "beta-three" '
+            'immediately after "beta-two".'
+        )
+        planned = ctx.hooks["pre_llm_call"](
+            session_id="s", task_id="t", turn_id="routed",
+            user_message=prompt, model="ornith-1.5-9b-q8")
+        check("Ornith auto plans an exact route",
+              isinstance(planned, dict) and "list_append_target" in planned.get("context", ""),
+              repr(planned))
+        trace_path = os.path.join(os.path.dirname(path), "hermes-request-trace.jsonl")
+        os.environ["INCISE_HERMES_MAX_TOKENS"] = "2048"
+        os.environ["INCISE_HERMES_PARALLEL_TOOL_CALLS"] = "false"
+        os.environ["INCISE_HERMES_SEED"] = "40"
+        os.environ["INCISE_HERMES_TRACE"] = trace_path
+        narrowed = ctx.middleware["llm_request"](
+            request=request, session_id="s", task_id="t", turn_id="routed",
+            model="ornith-1.5-9b-q8", provider="custom", api_request_id="request-1")
+        narrowed_names = [tool["function"]["name"]
+                          for tool in narrowed["request"]["tools"]]
+        check("exact routing preserves foreign tools and exposes one Incise tool",
+              narrowed_names == ["terminal", "list_append_target"], str(narrowed_names))
+        check("explicit Hermes benchmark controls reach the provider request",
+              narrowed["request"].get("max_tokens") == 2048
+              and narrowed["request"].get("parallel_tool_calls") is False
+              and narrowed["request"].get("seed") == 40,
+              json.dumps(narrowed["request"]))
+        trace_rows = [json.loads(line) for line in open(trace_path, encoding="utf-8")]
+        trace = next(row for row in trace_rows if row.get("event") == "request")
+        check("Hermes trace records provider-visible routing without messages",
+              trace.get("tools") == ["terminal", "list_append_target"]
+              and trace.get("route") == "list-append-target"
+              and trace.get("max_tokens") == 2048
+              and trace.get("parallel_tool_calls") is False
+              and trace.get("seed") == 40
+              and "messages" not in trace,
+              json.dumps(trace))
+
+        by_name = {name: handler for name, _ts, _schema, handler, _kw in ctx.tools}
+        first = json.loads(by_name["list_append_target"](
+            {}, session_id="s", task_id="t"))
+        check("routed handler applies the validated edit",
+              first.get("route") == "list-append-target"
+              and first.get("resolvedArguments", {}).get("after") == "beta-two",
+              json.dumps(first)[:300])
+        check("routed edit changed only the requested list",
+              "    * beta-three" in open(path, newline="").read())
+        after_success = ctx.middleware["llm_request"](
+            request=request, session_id="s", task_id="t", turn_id="routed")
+        check("successful route removes all Incise tools for the rest of the turn",
+              [tool["function"]["name"] for tool in after_success["request"]["tools"]]
+              == ["terminal"])
+        second = json.loads(by_name["list_append_target"](
+            {}, session_id="s", task_id="t"))
+        check("successful route cannot mutate twice",
+              "already succeeded" in second.get("error", ""), json.dumps(second))
+
+        unknown = ctx.hooks["pre_llm_call"](
+            session_id="s", task_id="t", turn_id="unknown",
+            user_message=prompt, model="some-new-model")
+        check("unknown auto identity stays on standard", unknown is None, repr(unknown))
+        unknown_request = ctx.middleware["llm_request"](
+            request=request, session_id="s", task_id="t", turn_id="unknown")
+        check("unknown auto identity retains the standard surface",
+              [tool["function"]["name"] for tool in unknown_request["request"]["tools"]]
+              == ["terminal"] + base_names)
+
+        stale_path = scratch("corpus/lists/nested-mixed.md")
+        stale_prompt = (
+            f'Lists in `{stale_path}`:\n\n'
+            'Under "Asterisk markers, four-space indent", add "beta-three" '
+            'immediately after "beta-two".'
+        )
+        ctx.hooks["pre_llm_call"](
+            session_id="stale", task_id="stale", turn_id="stale",
+            user_message=stale_prompt, model="ornith-1.5-9b-q8")
+        with open(stale_path, "a", newline="") as handle:
+            handle.write("\nexternal change\n")
+        stale = json.loads(by_name["list_append_target"](
+            {}, session_id="stale", task_id="stale"))
+        stale_text = open(stale_path, newline="").read()
+        check("routed writes retain stale-read protection",
+              stale.get("stale") is True and "beta-three" not in stale_text
+              and stale_text.endswith("external change\n"), json.dumps(stale)[:240])
+
+        release_success_path = scratch("corpus/frontmatter/rich.md")
+        release_success_prompt = (
+            f'Frontmatter in `{release_success_path}`: YAML\n\n'
+            'Update the version to 0.5.0, and set `released` to 2026-09-12.'
+        )
+        ctx.hooks["pre_llm_call"](
+            session_id="compound-success", task_id="compound-success",
+            turn_id="compound-success", user_message=release_success_prompt,
+            model="ornith-1.5-9b-q8")
+        compound_success = json.loads(by_name["frontmatter_release_target"](
+            {}, session_id="compound-success", task_id="compound-success"))
+        compound_description = compound_success.get("description", "")
+        check("compound success reports every completed update",
+              "2 operations" in compound_description
+              and "`version`" in compound_description
+              and "`released`" in compound_description,
+              compound_description)
+
+        release_path = scratch("corpus/frontmatter/rich.md")
+        release_before = open(release_path, "rb").read()
+        release_prompt = (
+            f'Frontmatter in `{release_path}`: YAML\n\n'
+            'Update the version to 0.5.0, and set `released` to 2026-09-12.'
+        )
+        ctx.hooks["pre_llm_call"](
+            session_id="compound", task_id="compound", turn_id="compound",
+            user_message=release_prompt, model="ornith-1.5-9b-q8")
+        real_invoke = plugin.runner.invoke
+        calls = []
+
+        def fail_second(argv, timeout=30.0):
+            calls.append(list(argv))
+            if len(calls) == 2:
+                return plugin.runner.EXIT_REFUSED, {
+                    "ok": False, "error": "simulated second-step refusal"
+                }, ""
+            return real_invoke(argv, timeout)
+
+        plugin.runner.invoke = fail_second
+        try:
+            compound = json.loads(by_name["frontmatter_release_target"](
+                {}, session_id="compound", task_id="compound"))
+        finally:
+            plugin.runner.invoke = real_invoke
+        check("compound route reports a refused follow-up",
+              "simulated second-step refusal" in compound.get("error", ""),
+              json.dumps(compound))
+        check("compound route rolls the first write back byte-for-byte",
+              open(release_path, "rb").read() == release_before)
+    finally:
+        if saved_profile is None:
+            os.environ.pop("INCISE_PROFILE", None)
+        else:
+            os.environ["INCISE_PROFILE"] = saved_profile
+        if saved_binary is None:
+            os.environ.pop("INCISE_BIN", None)
+        else:
+            os.environ["INCISE_BIN"] = saved_binary
+        for name, value in saved_controls.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+        plugin.runner.reset_cache()
+        plugin.schema_cache.reset_cache()
+
+
 def main():
     print("plugin: translation")
     test_normalize()
@@ -847,6 +1075,8 @@ def main():
     test_source_binary_prefers_newest_build()
     print("plugin: safe-small profile")
     test_safe_small_profile()
+    print("plugin: auto fallback profile")
+    test_auto_profile_falls_back_to_measured()
 
     print()
     if FAILURES:

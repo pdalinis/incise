@@ -6,7 +6,7 @@ export type RequestedProfile =
 	| "minicpm-list";
 
 export type EffectiveProfile = Exclude<RequestedProfile, "auto">;
-export type ModelFamily = "gemma" | "minicpm" | "unknown";
+export type ModelFamily = "gemma" | "minicpm" | "ornith" | "unknown";
 
 export interface ModelIdentity {
 	id?: string;
@@ -39,16 +39,17 @@ export function modelFamily(
 ): ModelFamily {
 	if (override !== undefined && override !== "") {
 		const normalized = override.toLowerCase();
-		if (normalized === "gemma" || normalized === "minicpm" || normalized === "unknown") {
+		if (normalized === "gemma" || normalized === "minicpm" || normalized === "ornith" || normalized === "unknown") {
 			return normalized;
 		}
 		throw new Error(
-			`Unknown INCISE_MODEL_FAMILY ${JSON.stringify(override)}. Use gemma, minicpm, or unknown.`,
+			`Unknown INCISE_MODEL_FAMILY ${JSON.stringify(override)}. Use gemma, minicpm, ornith, or unknown.`,
 		);
 	}
 	const identity = `${model?.provider ?? ""} ${model?.id ?? ""} ${model?.name ?? ""}`.toLowerCase();
 	if (/mini[-_ ]?cpm/.test(identity)) return "minicpm";
 	if (/gemma/.test(identity)) return "gemma";
+	if (/ornith/.test(identity)) return "ornith";
 	return "unknown";
 }
 
@@ -73,13 +74,15 @@ export function selectProfile(
 			reason: `explicit INCISE_PROFILE=${requested}`,
 		};
 	}
-	if (family === "gemma") {
+	if (family === "gemma" || family === "ornith") {
 		return {
 			requested,
 			effective: "safe-routed",
 			family,
 			model: label,
-			reason: "auto selected the measured Gemma routing capabilities",
+			reason: family === "gemma"
+				? "auto selected the measured Gemma routing capabilities"
+				: "auto selected the measured Ornith routing capabilities",
 		};
 	}
 	return {

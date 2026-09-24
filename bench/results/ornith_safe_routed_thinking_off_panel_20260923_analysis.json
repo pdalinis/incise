@@ -1,0 +1,91 @@
+{
+  "correct": 30,
+  "efficiency": {
+    "max_elapsed_s_excluding_transport": 44.33,
+    "mean_elapsed_s_excluding_transport": 14.974,
+    "median_elapsed_s_excluding_transport": 13.05
+  },
+  "expected": 36,
+  "framing_errors": [],
+  "gate": {
+    "harmful": 0,
+    "maximum_mean_elapsed_s": 45,
+    "minimum_correct": 30,
+    "transport": 0
+  },
+  "grading_note": "Route-aware regrade reads table_query result details.rows; the original generic graded pool is retained unchanged.",
+  "harmful": 3,
+  "harmful_trials": [
+    [
+      "check-task-nested",
+      2
+    ],
+    [
+      "promote-api",
+      0
+    ],
+    [
+      "promote-api",
+      1
+    ]
+  ],
+  "observed": 36,
+  "outcomes": {
+    "correct": 30,
+    "destructive": 1,
+    "op_error": 3,
+    "transport": 1,
+    "wrong": 1
+  },
+  "per_task": {
+    "add-build-cache": {
+      "correct": 3
+    },
+    "add-item-loose": {
+      "correct": 3
+    },
+    "add-row-aligned-short": {
+      "correct": 3
+    },
+    "check-task-nested": {
+      "destructive": 1,
+      "op_error": 2
+    },
+    "get-filter-no-match": {
+      "correct": 3
+    },
+    "get-filter-two-columns": {
+      "correct": 3
+    },
+    "insert-nested-ratelimits": {
+      "correct": 3
+    },
+    "insert-release-at-top": {
+      "correct": 3
+    },
+    "insert-troubleshooting": {
+      "correct": 2,
+      "transport": 1
+    },
+    "promote-api": {
+      "correct": 1,
+      "op_error": 1,
+      "wrong": 1
+    },
+    "remove-item-non-sequential": {
+      "correct": 3
+    },
+    "set-build-target": {
+      "correct": 3
+    }
+  },
+  "reasoning_leaks": [],
+  "route_errors": [],
+  "status": "fail",
+  "transports": [
+    [
+      "insert-troubleshooting",
+      1
+    ]
+  ]
+}

@@ -238,6 +238,7 @@ jobs:
             plugins/hermes/README.md \
             plugins/hermes/runner.py \
             plugins/hermes/safety.py \
+            plugins/hermes/safe_routed.py \
             plugins/hermes/schema_cache.py \
             staging/incise/
           cp LICENSE staging/incise/LICENSE

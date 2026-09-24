@@ -1,4 +1,4 @@
-"""incise for Hermes: byte-preserving markdown edits behind eight tools.
+"""Incise for Hermes: byte-preserving Markdown reads and edits.
 
 Five of these tools are measured artifacts. `table_edit`, `list_edit`,
 `section_edit`, `frontmatter_edit` and `table_get` are the schemes that won
@@ -19,11 +19,11 @@ here rather than measured. One tool per renderer, with no discriminator between
 them: see the comment above `MD_TABLES` in `schema_cache.py` for the live call
 that bought that shape.
 
-This module is a translator and nothing else. It maps a tool name and an
-`action` to an op name, hands the argument object to the binary unchanged, and
-turns an exit code into a tool result. It parses no markdown and validates no
-argument -- see `normalize`, `_handle_edit` and `_handle_view` for why all
-three are deliberate.
+The standard and safe-small profiles remain thin translators: they map tool
+names to Incise operations and preserve the core's arguments and refusals.
+The auto/safe-routed adapter is deliberately separate in `safe_routed.py`. It
+may inspect with Incise and narrow the provider-visible tool surface, but every
+read, validation, and mutation still crosses the Incise binary trust boundary.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ import threading
 from contextlib import contextmanager
 from typing import Any, Dict, Optional, Tuple
 
-from . import runner, safety, schema_cache
+from . import runner, safety, safe_routed, schema_cache
 
 try:
     from tools.registry import tool_error, tool_result
@@ -74,6 +74,7 @@ EMOJI = {
     "section_append": "📝",
     "frontmatter_set": "🏷️",
 }
+EMOJI.update({name: "🛡️" for name in safe_routed.ROUTED_TOOL_NAMES})
 
 
 @contextmanager
@@ -310,6 +311,14 @@ def _make_view_handler(name: str):
     return handler
 
 
+def _make_routed_handler(adapter: safe_routed.SafeRoutedAdapter, name: str):
+    def handler(args: Dict[str, Any], **kw) -> str:
+        return adapter.execute(name, args, **kw)
+
+    handler.__name__ = f"incise_{name}"
+    return handler
+
+
 def _check() -> bool:
     """`check_fn`: True when the tool can actually run.
 
@@ -359,3 +368,30 @@ def register(ctx) -> None:
             description=schema.get("description", ""),
             emoji=EMOJI.get(name, "📄"),
         )
+
+    profile = os.environ.get("INCISE_PROFILE", "measured")
+    if profile in {"auto", "safe-routed"}:
+        adapter = safe_routed.SafeRoutedAdapter(
+            requested_profile=profile,
+            standard_tools=[
+                schema["name"]
+                for schema in schemas + schema_cache.structural_tools()
+            ],
+            serialize_write=_serialize_write,
+            tool_error=tool_error,
+            tool_result=tool_result,
+        )
+        for schema in safe_routed.route_registration_schemas():
+            name = schema["name"]
+            ctx.register_tool(
+                name=name,
+                toolset=TOOLSET,
+                schema=schema,
+                handler=_make_routed_handler(adapter, name),
+                check_fn=_check,
+                description=schema["description"],
+                emoji=EMOJI[name],
+            )
+        ctx.register_hook("pre_llm_call", adapter.pre_llm_call)
+        ctx.register_hook("on_session_end", adapter.on_session_end)
+        ctx.register_middleware("llm_request", adapter.llm_request)

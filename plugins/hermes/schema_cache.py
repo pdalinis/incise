@@ -191,7 +191,13 @@ def edit_tools() -> List[Dict[str, Any]]:
     # Not `runner.invoke`: `schema` takes no path and appending `--json` to it
     # would be a second spelling of a thing that is already JSON.
     profile = os.environ.get("INCISE_PROFILE", "measured")
-    if profile not in ("measured", "safe-small"):
+    # Pi can resolve `auto` after it sees the turn's model identity and can
+    # replace the active tool set for that request. Hermes registers tools at
+    # plugin load time, before either is available. Keep a shared launch
+    # environment safe and useful by treating `auto` as the measured standard
+    # composition here. Request-time middleware may narrow `auto` or
+    # `safe-routed` after the turn model and exact user request are known.
+    if profile not in ("measured", "standard", "auto", "safe-routed", "safe-small"):
         return []
     schema_argv = [exe, "schema"]
     if profile == "safe-small":

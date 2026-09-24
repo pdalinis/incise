@@ -245,12 +245,32 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.deepEqual([...active].sort(), ["foreign_tool", "section_rename_target"]);
 
 	const renamed = await tools.get("section_rename_target").execute(
-		"rename", { new_heading: "Closed ATX heading" }, undefined, undefined, context,
+		"rename", {}, undefined, undefined, context,
 	);
 	assert.match(renamed.content[0].text, /^Applied:/);
 	assert.equal(renamed.details.validated, true);
 	assert.deepEqual([...active], ["foreign_tool"]);
 	assert.match(await readFile(path, "utf8"), /### Closed ATX heading ###/);
+
+	const preamblePath = join(directory, "preamble.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), preamblePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @preamble.md, replace the introductory paragraph under Install -- the one before the macOS subsection -- with "Choose your platform below."',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_replace_target"]);
+	assert.equal(tools.get("section_replace_target").parameters.required, undefined);
+	const preambleReplaced = await tools.get("section_replace_target").execute(
+		"replace-preamble", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(preambleReplaced.details.resolvedArguments, {
+		section: "Deep heading nesting > Install",
+		text: "Choose your platform below.", overwrite: true,
+	});
+	const preambleText = await readFile(preamblePath, "utf8");
+	assert.match(preambleText, /## Install\n\nChoose your platform below\.\n\n### macOS/);
+	assert.match(preambleText, /#### Authentication\n\nLevel 5\./);
 
 	const insertPath = join(directory, "insert.md");
 	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), insertPath);
@@ -279,6 +299,35 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		body: "Use pkg.",
 	});
 	assert.match(await readFile(insertPath, "utf8"), /### FreeBSD\n\nUse pkg\./);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const promotePath = join(directory, "promote.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), promotePath);
+	const promotePrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: [
+			'Sections in `promote.md` (address by heading path, e.g. "Deep heading nesting > Install"):',
+			"  Deep heading nesting   (body, 1 subsection)",
+			"    Reference   (no body of its own, 1 subsection)",
+			"      API   (no body of its own, 1 subsection)",
+			"",
+			"Promote the API heading under Reference to a second-level heading, moving its subsections with it.",
+		].join("\n"),
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(promotePrepared.systemPrompt, /resolved the requested section level change/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_set_level_target"]);
+	const promoted = await tools.get("section_set_level_target").execute(
+		"promote", {}, undefined, undefined, context,
+	);
+	assert.equal(promoted.details.route, "section-set-level-target");
+	assert.deepEqual(promoted.details.resolvedArguments, {
+		section: "Deep heading nesting > Reference > API",
+		level: 2,
+		subtree: true,
+	});
+	assert.match(await readFile(promotePath, "utf8"), /\n## API\n\n### Endpoints\n\n#### Authentication\n/);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
 	const appendPath = join(directory, "fences.md");
@@ -447,6 +496,34 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(numbering, /## Non-sequential[\s\S]*?1\. first\n7\. seventh\n\n## Nested under unordered/);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const tasksPath = join(directory, "tasks.md");
+	await copyFile(resolve(repository, "corpus", "lists", "tasks.md"), tasksPath);
+	const checkedPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: [
+			"Lists in `tasks.md`:",
+			'  heading "Task lists > Nested"  ordinal 0',
+			"    bullet list, marker \"-\", 3 levels of nesting, 5 items, tight, 5 task checkboxes",
+			"",
+			'Mark the "child pending" task as done, in the list under "Nested".',
+		].join("\n"),
+		systemPrompt: "System.",
+		systemPromptOptions: {},
+	}, context);
+	assert.match(checkedPrepared.systemPrompt, /resolved the exact checkbox item/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_set_checked_target"]);
+	const checkedResult = await tools.get("list_set_checked_target").execute(
+		"check", {}, undefined, undefined, context,
+	);
+	assert.equal(checkedResult.details.route, "list-set-checked-target");
+	assert.deepEqual(checkedResult.details.resolvedArguments, {
+		list: { heading: "Task lists > Nested", ordinal: 0 },
+		match: "child pending",
+		checked: true,
+	});
+	assert.match(await readFile(tasksPath, "utf8"), /  - \[x\] child pending/);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
 	const mixedPath = join(directory, "nested-mixed.md");
 	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), mixedPath);
 	const mixedBefore = await readFile(mixedPath, "utf8");
@@ -483,6 +560,123 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		mixedBefore.replace("* star item\n\n+ plus item", "* star item\n* second star item\n\n+ plus item"),
 	);
 	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const nestedAppendPath = join(directory, "nested-append.md");
+	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), nestedAppendPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @nested-append.md, under "Asterisk markers, four-space indent", add "beta-three" immediately after "beta-two".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const nestedAdded = await tools.get("list_append_target").execute(
+		"nested-append", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(nestedAdded.details.resolvedArguments, {
+		list: { heading: "Nested and mixed lists > Asterisk markers, four-space indent", ordinal: 0 },
+		text: "beta-three", after: "beta-two",
+	});
+	assert.match(await readFile(nestedAppendPath, "utf8"), /    \* beta-two\n    \* beta-three/);
+
+	const orderedPath = join(directory, "ordered-between.md");
+	await copyFile(resolve(repository, "corpus", "lists", "ordered-numbering.md"), orderedPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @ordered-between.md, in the list under "Sequential", insert an item "two and a half" between "second" and "third".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const orderedAdded = await tools.get("list_append_target").execute(
+		"ordered-between", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(orderedAdded.details.resolvedArguments, {
+		list: { heading: "Ordered list numbering > Sequential", ordinal: 0 },
+		text: "two and a half", after: "second",
+	});
+	assert.match(await readFile(orderedPath, "utf8"), /2\. second\n3\. two and a half\n4\. third/);
+
+	const notesPath = join(directory, "notes.md");
+	await copyFile(resolve(repository, "corpus", "sections", "duplicate-siblings.md"), notesPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @notes.md, add the line "Superseded." to the second of the three Notes sections.',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_append_target"]);
+	const notesAdded = await tools.get("section_append_target").execute(
+		"notes-append", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(notesAdded.details.resolvedArguments, {
+		section: { path: "Notes", ordinal: 1 }, text: "Superseded.",
+	});
+	assert.equal((await readFile(notesPath, "utf8")).match(/Superseded\./g)?.length, 1);
+
+	const releasePath = join(directory, "release.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), releasePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @release.md, update the version to 0.5.0, and set `released` to 2026-09-12.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_release_target"]);
+	const released = await tools.get("frontmatter_release_target").execute(
+		"release", {}, undefined, undefined, context,
+	);
+	assert.equal(released.details.route, "frontmatter-release");
+	assert.deepEqual(released.details.resolvedArguments, { updates: [
+		{ key: "version", value: "0.5.0", must_exist: true },
+		{ key: "released", value: "2026-09-12", must_absent: true },
+	] });
+	const releasedText = await readFile(releasePath, "utf8");
+	assert.match(releasedText, /version: 0\.5\.0/);
+	assert.match(releasedText, /released: 2026-09-12/);
+
+	const deletePath = join(directory, "delete.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), deletePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete.md, drop the whole build configuration from the frontmatter.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_delete_target"]);
+	const deleted = await tools.get("frontmatter_delete_target").execute(
+		"delete", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(deleted.details.resolvedArguments, { key: "build" });
+	assert.doesNotMatch(await readFile(deletePath, "utf8"), /^build:/m);
+
+	const draftPath = join(directory, "delete-draft.md");
+	await copyFile(resolve(repository, "corpus", "frontmatter", "rich.md"), draftPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete-draft.md, this file is no longer a draft. Take the draft flag out of the frontmatter completely.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_delete_target"]);
+	const draftDeleted = await tools.get("frontmatter_delete_target").execute(
+		"delete-draft", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(draftDeleted.details.resolvedArguments, { key: "draft" });
+	assert.doesNotMatch(await readFile(draftPath, "utf8"), /^draft:/m);
+
+	for (const [name, fixture, prompt, expected] of [
+		["absent", "absent.md", 'Give this file a frontmatter block with a title of "Absent frontmatter".',
+			{ key: "title", value: "Absent frontmatter", must_absent: true }],
+		["empty", "empty.md", "Mark this file as a draft by adding a draft flag set to true.",
+			{ key: "draft", value: true, must_absent: true }],
+	] as const) {
+		const target = join(directory, `${name}.md`);
+		await copyFile(resolve(repository, "corpus", "frontmatter", fixture), target);
+		await events.get("before_agent_start")({
+			type: "before_agent_start", prompt: `In @${name}.md, ${prompt}`,
+			systemPrompt: "System.", systemPromptOptions: {},
+		}, context);
+		assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_create_target"]);
+		const created = await tools.get("frontmatter_create_target").execute(
+			`create-${name}`, {}, undefined, undefined, context,
+		);
+		assert.deepEqual(created.details.resolvedArguments, expected);
+	}
 
 	await events.get("before_agent_start")({
 		type: "before_agent_start",

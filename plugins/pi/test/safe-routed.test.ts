@@ -4,8 +4,12 @@ import test from "node:test";
 import {
 	filterColumns,
 	frontmatterCreateIntent,
+	frontmatterDeleteIntent,
+	frontmatterReleaseIntent,
 	frontmatterValueType,
+	listAppendIntent,
 	listContainsAppendIntent,
+	listCheckedIntent,
 	listRemoveIntent,
 	parseOutline,
 	parseTableSummary,
@@ -15,6 +19,7 @@ import {
 	sectionInsertArguments,
 	sectionInsertIntent,
 	sectionIntent,
+	sectionSetLevelIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
 
@@ -30,6 +35,31 @@ test("frontmatter creation routing recognizes only the measured build-cache requ
 	assert.equal(frontmatterCreateIntent("Turn off caching for the build."), undefined);
 	assert.equal(frontmatterCreateIntent("Do not turn on caching for the build."), undefined);
 	assert.equal(frontmatterCreateIntent("Turn on caching for deployment."), undefined);
+	assert.deepEqual(
+		frontmatterCreateIntent('Give this file a frontmatter block with a title of "Absent frontmatter".'),
+		{ key: "title", value: "Absent frontmatter", allowedStates: ["absent"] },
+	);
+	assert.deepEqual(
+		frontmatterCreateIntent("Mark this file as a draft by adding a draft flag set to true."),
+		{ key: "draft", value: true, allowedStates: ["empty"] },
+	);
+});
+
+test("frontmatter destructive and compound routing requires exact requests", () => {
+	assert.deepEqual(
+		frontmatterDeleteIntent("Drop the whole build configuration from the frontmatter."),
+		{ key: "build" },
+	);
+	assert.deepEqual(
+		frontmatterDeleteIntent("This file is no longer a draft. Take the draft flag out of the frontmatter completely."),
+		{ key: "draft" },
+	);
+	assert.deepEqual(
+		frontmatterReleaseIntent("Update the version to 0.5.0, and set `released` to 2026-09-12."),
+		{ version: "0.5.0", released: "2026-09-12" },
+	);
+	assert.equal(frontmatterDeleteIntent("Drop a configuration key."), undefined);
+	assert.equal(frontmatterReleaseIntent("Update the version."), undefined);
 });
 
 test("list removal routing requires exact quoted items and headings", () => {
@@ -43,6 +73,18 @@ test("list removal routing requires exact quoted items and headings", () => {
 	);
 	assert.equal(listRemoveIntent("Remove the third item from the Non-sequential list."), undefined);
 	assert.equal(listRemoveIntent('Add "third" under "Non-sequential".'), undefined);
+});
+
+test("checkbox routing requires exact quoted item and list text", () => {
+	assert.deepEqual(
+		listCheckedIntent('Mark the "child pending" task as done, in the list under "Nested".'),
+		{ item: "child pending", heading: "Nested", checked: true },
+	);
+	assert.deepEqual(
+		listCheckedIntent('Mark the “child done” task as pending, in the list under “Nested”.'),
+		{ item: "child done", heading: "Nested", checked: false },
+	);
+	assert.equal(listCheckedIntent("Mark child pending as done under Nested."), undefined);
 });
 
 test("containing-item list routing requires explicit quoted target and new text", () => {
@@ -62,6 +104,22 @@ test("containing-item list routing requires explicit quoted target and new text"
 		listContainsAppendIntent('Under "Mixed markers", remove an item "star item".'),
 		undefined,
 	);
+});
+
+test("list append routing recognizes exact end and after forms", () => {
+	assert.deepEqual(
+		listAppendIntent('In the list under "Sequential", insert an item "two and a half" between "second" and "third".'),
+		{ heading: "Sequential", text: "two and a half", after: "second", before: "third" },
+	);
+	assert.deepEqual(
+		listAppendIntent('Under "Asterisk markers, four-space indent", add "beta-three" immediately after "beta-two".'),
+		{ heading: "Asterisk markers, four-space indent", text: "beta-three", after: "beta-two" },
+	);
+	assert.deepEqual(
+		listAppendIntent('Add an item "fourth" at the end of the list under "All ones".'),
+		{ heading: "All ones", text: "fourth" },
+	);
+	assert.equal(listAppendIntent("Add fourth to All ones."), undefined);
 });
 
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
@@ -87,12 +145,27 @@ test("frontmatter routing recognizes only the five measured existing-key intents
 
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
 	assert.deepEqual(
+		sectionIntent('Rename the "Setext H2" heading to "Setext level two".'),
+		{ kind: "section-rename", target: "Setext H2", heading: "Setext level two" },
+	);
+	assert.deepEqual(
 		sectionIntent('Rename "Closed ATX level 3" to "Closed ATX heading".'),
-		{ kind: "section-rename", target: "Closed ATX level 3" },
+		{ kind: "section-rename", target: "Closed ATX level 3", heading: "Closed ATX heading" },
 	);
 	assert.deepEqual(
 		sectionIntent('Replace the text under Upgrade > Linux with "See the platform notes."'),
 		{ kind: "section-replace-body", target: "Upgrade > Linux" },
+	);
+	assert.deepEqual(
+		sectionIntent('Replace the introductory paragraph under Install -- the one before the macOS subsection -- with "Choose your platform below."'),
+		{
+			kind: "section-replace-body", target: "Install",
+			body: "Choose your platform below.", directChild: "macOS",
+		},
+	);
+	assert.equal(
+		sectionIntent('Replace the introductory paragraph under Install with "Choose your platform below."'),
+		undefined,
 	);
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);
 });
@@ -100,8 +173,17 @@ test("section routing recognizes only explicit rename and body-replacement reque
 test("section append routing freezes the exact quoted sentence", () => {
 	const entries = parseOutline([
 		"Sections in `x.md`:",
+		"  Duplicate sibling headings   (body, 3 subsections)",
+		"    Notes   (body)",
+		"    Notes   (body)",
+		"    Notes   (body)",
 		"  Code fences   (body, 1 subsection)",
 		"    Fenced headings and lists   (body)",
+		"  Setext H1 Title   (body, 1 subsection)",
+		"    ATX level 3   (body)",
+		"  Deep heading nesting   (body, 1 subsection)",
+		"    Install   (body, 1 subsection)",
+		"      macOS   (body)",
 	].join("\n"));
 	const framed = (request: string) => [
 		'Sections in `x.md` (address by heading path, e.g. "Code fences > Fenced headings and lists"):',
@@ -116,6 +198,27 @@ test("section append routing freezes the exact quoted sentence", () => {
 	), {
 		target: "Code fences > Fenced headings and lists",
 		text: "None of the above is parsed as markdown.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add the sentence "The same is true of the closed form." to the "ATX level 3" section.'),
+		entries,
+	), {
+		target: "Setext H1 Title > ATX level 3",
+		text: "The same is true of the closed form.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add "Requires macOS 13 or later." to the macOS section under Install.'),
+		entries,
+	), {
+		target: "Deep heading nesting > Install > macOS",
+		text: "Requires macOS 13 or later.",
+	});
+	assert.deepEqual(sectionAppendIntent(
+		framed('Add the line "Superseded." to the second of the three Notes sections.'),
+		entries,
+	), {
+		target: { path: "Notes", ordinal: 1 },
+		text: "Superseded.",
 	});
 	assert.equal(sectionAppendIntent(
 		framed('Add text to the "Fenced headings and lists" section: "Different shape."'),
@@ -195,6 +298,23 @@ test("section insertion routing freezes structure and exact literal content", ()
 		children: [{ heading: "Headers", body: "Exact." }],
 	});
 	assert.equal(sectionInsertIntent("Add a section somewhere under API.", entries), undefined);
+});
+
+test("section level routing resolves the named parent and complete subtree", () => {
+	const entries = parseOutline([
+		"Sections in `x.md`:",
+		"  Deep heading nesting   (body, 1 subsection)",
+		"    Reference   (no body of its own, 1 subsection)",
+		"      API   (no body of its own, 1 subsection)",
+		"        Endpoints   (body)",
+	].join("\n"));
+	assert.deepEqual(sectionSetLevelIntent(
+		"Promote the API heading under Reference to a second-level heading, moving its subsections with it.",
+		entries,
+	), { target: "Deep heading nesting > Reference > API", level: 2 });
+	assert.equal(sectionSetLevelIntent(
+		"Promote API to level 2.", entries,
+	), undefined);
 });
 
 test("outline parsing resolves a unique suffix but refuses an ambiguous leaf", () => {

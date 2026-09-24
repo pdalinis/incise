@@ -1,0 +1,5 @@
+{"condition":"forced-safe-routed","task_id":"check-task-nested","family":"list","trial":0,"outcome":"malformed","detail":"no tool call","document_outcome":null,"document_detail":null,"framing_errors":[]}
+{"condition":"forced-safe-routed","task_id":"check-task-nested","family":"list","trial":1,"outcome":"malformed","detail":"no tool call","document_outcome":null,"document_detail":null,"framing_errors":[]}
+{"condition":"forced-safe-routed","task_id":"check-task-nested","family":"list","trial":2,"outcome":"malformed","detail":"no tool call","document_outcome":null,"document_detail":null,"framing_errors":[]}
+{"condition":"forced-safe-routed","task_id":"check-task-nested","family":"list","trial":3,"outcome":"malformed","detail":"no tool call","document_outcome":null,"document_detail":null,"framing_errors":[]}
+{"condition":"forced-safe-routed","task_id":"check-task-nested","family":"list","trial":4,"outcome":"malformed","detail":"no tool call","document_outcome":null,"document_detail":null,"framing_errors":[]}

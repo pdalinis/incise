@@ -14,6 +14,14 @@ function textOf(content) {
 	return content.filter((part) => part?.type === "text").map((part) => part.text).join("");
 }
 
+function thinkingOf(content) {
+	if (!Array.isArray(content)) return "";
+	return content
+		.filter((part) => part?.type === "thinking")
+		.map((part) => part.thinking ?? "")
+		.join("");
+}
+
 function systemPromptOf(messages) {
 	if (!Array.isArray(messages)) return "";
 	return messages
@@ -57,25 +65,31 @@ function packageBinary(extensionPath) {
 
 function modelFor(request) {
 	const configured = request.model ?? {};
+	const reasoning = configured.reasoning ?? false;
+	const defaultSampling = reasoning
+		? {}
+		: { chat_template_kwargs: { enable_thinking: false } };
 	return {
 		id: configured.id ?? "gemma4-direct-q8",
 		name: configured.name ?? "gemma-4-26B-A4B-it",
 		api: "openai-completions",
 		provider: "pi-composition-local",
 		baseUrl: request.endpoint.replace(/\/$/, ""),
-		reasoning: false,
+		reasoning,
+		...(configured.thinkingLevelMap ? { thinkingLevelMap: configured.thinkingLevelMap } : {}),
 		input: ["text"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: configured.contextWindow ?? 65_536,
 		maxTokens: configured.maxTokens ?? 8_192,
 		samplingParams: {
 			seed: request.seed ?? 0,
-			chat_template_kwargs: { enable_thinking: false },
+			...defaultSampling,
 			...(configured.samplingParams ?? {}),
 		},
 		compat: {
 			maxTokensField: "max_tokens",
 			supportsUsageInStreaming: true,
+			...(configured.compat ?? {}),
 		},
 	};
 }
@@ -126,7 +140,7 @@ async function createSession(request) {
 		cwd: request.cwd,
 		agentDir: request.agentDir,
 		model,
-		thinkingLevel: "off",
+		thinkingLevel: request.thinkingLevel ?? (requestedModel.reasoning ? "high" : "off"),
 		modelRuntime,
 		resourceLoader,
 		tools: request.tools,
@@ -224,8 +238,19 @@ async function run(request, session) {
 					if (payload && typeof payload === "object" && Array.isArray(payload.messages)) {
 						const systemPrompt = systemPromptOf(payload.messages);
 						providerRequests.push({
+							model: payload.model ?? null,
 							active_tools: session.getActiveToolNames(),
 							tool_choice: payload.tool_choice ?? null,
+							seed: payload.seed ?? null,
+							max_tokens: payload.max_tokens ?? payload.max_completion_tokens ?? null,
+							temperature: payload.temperature ?? null,
+							top_p: payload.top_p ?? null,
+							top_k: payload.top_k ?? null,
+							min_p: payload.min_p ?? null,
+							presence_penalty: payload.presence_penalty ?? null,
+							repeat_penalty: payload.repeat_penalty ?? null,
+							parallel_tool_calls: payload.parallel_tool_calls ?? null,
+							chat_template_kwargs: payload.chat_template_kwargs ?? null,
 							tools: Array.isArray(payload.tools)
 								? payload.tools.map((tool) => tool?.function?.name ?? null)
 								: [],
@@ -256,8 +281,11 @@ async function run(request, session) {
 	const toolCalls = [];
 	const toolResults = [];
 	let completionTokens = 0;
+	let reasoningTokens = 0;
+	let reasoningCharacters = 0;
 	for (const message of session.state.messages) {
 		if (message.role === "assistant") {
+			const thinking = thinkingOf(message.content);
 			const calls = (message.content ?? [])
 				.filter((part) => part.type === "toolCall")
 				.map((part) => ({
@@ -270,11 +298,16 @@ async function run(request, session) {
 				}));
 			toolCalls.push(...calls);
 			completionTokens += message.usage?.output ?? 0;
+			reasoningTokens += message.usage?.reasoning ?? 0;
+			reasoningCharacters += thinking.length;
 			turns.push({
 				content: textOf(message.content),
+				reasoning_content: thinking,
+				reasoning_characters: thinking.length,
 				tool_calls: calls,
 				finish_reason: message.stopReason,
 				completion_tokens: message.usage?.output ?? 0,
+				reasoning_tokens: message.usage?.reasoning ?? 0,
 			});
 		} else if (message.role === "toolResult") {
 			toolResults.push({
@@ -293,6 +326,8 @@ async function run(request, session) {
 		capped,
 		elapsed_s: Math.round(elapsedSeconds * 100) / 100,
 		completion_tokens: completionTokens,
+		reasoning_tokens: reasoningTokens,
+		reasoning_characters: reasoningCharacters,
 		n_turns: turns.length,
 		turns,
 		tool_calls: toolCalls,

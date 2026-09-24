@@ -1,0 +1,25 @@
+{
+  "audit_errors": [],
+  "control": {
+    "correct": 10,
+    "max_elapsed_s": 186.61,
+    "mean_elapsed_s": 28.537
+  },
+  "framing_errors": [],
+  "gate_failures": [],
+  "harmful_trials": [],
+  "pairs": 10,
+  "reasoning_leaks": [],
+  "seed_1_elapsed_s": {
+    "control": 186.61,
+    "treatment": 7.82
+  },
+  "status": "pass",
+  "transports": [],
+  "treatment": {
+    "correct": 10,
+    "max_elapsed_s": 13.24,
+    "mean_elapsed_s": 8.641,
+    "median_elapsed_s": 7.475
+  }
+}

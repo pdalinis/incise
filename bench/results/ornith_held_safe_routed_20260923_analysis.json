@@ -1,0 +1,325 @@
+{
+  "condition": "forced-safe-routed",
+  "correct": 437,
+  "correct_rate": 0.910417,
+  "efficiency": {
+    "mean_completion_tokens": 136.783,
+    "mean_elapsed_s": 14.807,
+    "mean_reasoning_characters": 0.0,
+    "mean_reasoning_tokens": 0.0,
+    "mean_tool_calls": 1.354
+  },
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 84,
+      "gemma_floor": 105,
+      "n": 110,
+      "outcomes": {
+        "collateral:content": 2,
+        "correct": 84,
+        "destructive": 13,
+        "op_error": 9,
+        "wrong": 2
+      },
+      "rate": 0.763636,
+      "status": "fail"
+    },
+    "list": {
+      "correct": 94,
+      "gemma_floor": 100,
+      "n": 100,
+      "outcomes": {
+        "correct": 94,
+        "destructive": 1,
+        "op_error": 5
+      },
+      "rate": 0.94,
+      "status": "fail"
+    },
+    "section": {
+      "correct": 139,
+      "gemma_floor": 140,
+      "n": 150,
+      "outcomes": {
+        "collateral:content": 4,
+        "correct": 139,
+        "destructive": 3,
+        "malformed": 3,
+        "op_error": 1
+      },
+      "rate": 0.926667,
+      "status": "fail"
+    },
+    "table": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    },
+    "table-read": {
+      "correct": 60,
+      "gemma_floor": 57,
+      "n": 60,
+      "outcomes": {
+        "correct": 60
+      },
+      "rate": 1.0,
+      "status": "pass"
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "family_floors": {
+      "frontmatter": 105,
+      "list": 100,
+      "section": 140,
+      "table": 57,
+      "table-read": 57
+    },
+    "harmful": 0,
+    "minimum_correct": 472,
+    "minimum_usable": 478
+  },
+  "harmful": 34,
+  "harmful_trials": [
+    [
+      "add-item-nested-asterisk",
+      18
+    ],
+    [
+      "add-item-ordered-all-ones",
+      16
+    ],
+    [
+      "add-item-paren-delimiter",
+      16
+    ],
+    [
+      "append-atx-line",
+      17
+    ],
+    [
+      "append-atx-line",
+      18
+    ],
+    [
+      "append-macos-note",
+      18
+    ],
+    [
+      "create-on-absent",
+      15
+    ],
+    [
+      "create-on-absent",
+      16
+    ],
+    [
+      "create-on-absent",
+      17
+    ],
+    [
+      "delete-build",
+      10
+    ],
+    [
+      "delete-build",
+      12
+    ],
+    [
+      "delete-build",
+      13
+    ],
+    [
+      "delete-build",
+      14
+    ],
+    [
+      "delete-build",
+      16
+    ],
+    [
+      "delete-build",
+      17
+    ],
+    [
+      "delete-build",
+      19
+    ],
+    [
+      "fill-empty",
+      10
+    ],
+    [
+      "fill-empty",
+      12
+    ],
+    [
+      "fill-empty",
+      14
+    ],
+    [
+      "fill-empty",
+      15
+    ],
+    [
+      "fill-empty",
+      16
+    ],
+    [
+      "notes-second-ordinal",
+      17
+    ],
+    [
+      "notes-second-ordinal",
+      18
+    ],
+    [
+      "release-bump",
+      10
+    ],
+    [
+      "release-bump",
+      11
+    ],
+    [
+      "release-bump",
+      12
+    ],
+    [
+      "release-bump",
+      13
+    ],
+    [
+      "release-bump",
+      15
+    ],
+    [
+      "release-bump",
+      16
+    ],
+    [
+      "release-bump",
+      17
+    ],
+    [
+      "release-bump",
+      18
+    ],
+    [
+      "release-bump",
+      19
+    ],
+    [
+      "rename-setext",
+      12
+    ],
+    [
+      "rename-setext",
+      13
+    ]
+  ],
+  "multiple_mutations": [
+    [
+      "add-item-ordered-renumber",
+      11,
+      3,
+      1
+    ],
+    [
+      "add-item-ordered-renumber",
+      17,
+      3,
+      1
+    ],
+    [
+      "append-atx-line",
+      17,
+      2,
+      1
+    ],
+    [
+      "create-on-absent",
+      15,
+      3,
+      1
+    ],
+    [
+      "create-on-absent",
+      16,
+      3,
+      1
+    ],
+    [
+      "create-on-absent",
+      17,
+      2,
+      1
+    ],
+    [
+      "create-on-absent",
+      19,
+      2,
+      1
+    ],
+    [
+      "delete-build",
+      14,
+      2,
+      1
+    ],
+    [
+      "delete-build",
+      16,
+      2,
+      1
+    ],
+    [
+      "rename-setext",
+      11,
+      3,
+      1
+    ],
+    [
+      "rename-setext",
+      13,
+      3,
+      1
+    ],
+    [
+      "rename-setext",
+      14,
+      3,
+      1
+    ],
+    [
+      "rename-setext",
+      17,
+      3,
+      1
+    ],
+    [
+      "rename-setext",
+      19,
+      3,
+      1
+    ]
+  ],
+  "observed": 480,
+  "outcomes": {
+    "collateral:content": 6,
+    "correct": 437,
+    "destructive": 17,
+    "malformed": 3,
+    "op_error": 15,
+    "wrong": 2
+  },
+  "reasoning_leaks": [],
+  "status": "fail",
+  "usable": 480
+}

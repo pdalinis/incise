@@ -1,0 +1,14 @@
+{
+  "control_correct": 27,
+  "correct": 30,
+  "harmful_trials": [],
+  "max_elapsed_s": 191.43,
+  "mean_elapsed_s": 13.94,
+  "observed": 30,
+  "outcomes": {
+    "correct": 30
+  },
+  "paired_gain": 3,
+  "route_errors": [],
+  "status": "fail"
+}

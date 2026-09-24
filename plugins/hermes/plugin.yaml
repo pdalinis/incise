@@ -6,9 +6,12 @@ requires_hermes: ">=0.21.3"
 license: MIT
 homepage: https://github.com/pdalinis/incise
 tags: [markdown, editing, tools]
-description: "Byte-preserving markdown edits for tables, lists, sections and YAML frontmatter. Five measured tools plus three structural reads by default, with an opt-in safe-small profile."
+description: "Byte-preserving markdown edits for tables, lists, sections and YAML frontmatter, with standard, guarded routed, and experimental safe-small profiles."
 author: Peter Dalinis
 kind: standalone
+provides_hooks:
+  - pre_llm_call
+  - on_session_end
 provides_tools:
   - table_edit
   - list_edit
@@ -26,3 +29,19 @@ provides_tools:
   - section_append
   - frontmatter_get
   - frontmatter_set
+  - section_rename_target
+  - section_replace_target
+  - section_insert_target
+  - section_append_target
+  - section_set_level_target
+  - frontmatter_clear
+  - frontmatter_set_string
+  - frontmatter_set_integer
+  - frontmatter_set_boolean
+  - frontmatter_create_target
+  - frontmatter_delete_target
+  - frontmatter_release_target
+  - list_remove_target
+  - list_append_target
+  - list_set_checked_target
+  - table_query
