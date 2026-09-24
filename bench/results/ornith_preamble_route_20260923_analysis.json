@@ -1,0 +1,12 @@
+{
+  "correct": 10,
+  "harmful_trials": [],
+  "max_elapsed_s": 12.08,
+  "mean_elapsed_s": 5.099,
+  "observed": 10,
+  "outcomes": {
+    "correct": 10
+  },
+  "route_errors": [],
+  "status": "pass"
+}
