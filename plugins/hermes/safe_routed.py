@@ -1219,10 +1219,11 @@ class SafeRoutedAdapter:
         args = spec.arguments(params if isinstance(params, dict) else {})
         operations = [{"operation": spec.operation, "arguments": args}] + spec.followups(params)
 
-        def invoke() -> Tuple[int, Dict[str, Any]]:
+        def invoke() -> Tuple[int, Dict[str, Any], List[str]]:
             original = Path(spec.path).read_bytes() if len(operations) > 1 else None
             expected_hash = spec.hash
             result: Tuple[int, Dict[str, Any]] = (runner.EXIT_USAGE, {"ok": False, "error": "Routed Incise request had no operations."})
+            descriptions: List[str] = []
             for index, operation in enumerate(operations):
                 argv: List[Any] = [
                     operation["operation"], spec.path,
@@ -1236,14 +1237,16 @@ class SafeRoutedAdapter:
                     if original is not None and index > 0:
                         Path(spec.path).write_bytes(original)
                     break
+                if isinstance(payload.get("description"), str) and payload["description"].strip():
+                    descriptions.append(payload["description"].strip())
                 expected_hash = payload.get("hash") if isinstance(payload.get("hash"), str) else None
-            return result
+            return result[0], result[1], descriptions
 
         if spec.write:
             with self.serialize_write(spec.path):
-                code, payload = invoke()
+                code, payload, descriptions = invoke()
         else:
-            code, payload = invoke()
+            code, payload, descriptions = invoke()
         if code != runner.EXIT_OK or payload.get("ok") is False:
             message = payload.get("error") or f"incise exited {code} with nothing to say."
             extra: Dict[str, Any] = {}
@@ -1268,5 +1271,16 @@ class SafeRoutedAdapter:
         if "rows" in payload:
             details["rows"] = payload["rows"]
         if spec.write:
-            return self.tool_result(description=str(payload.get("description", "")), **details)
+            description = str(payload.get("description", ""))
+            if len(operations) > 1:
+                summaries = []
+                for item in descriptions:
+                    summary = re.sub(r"^Applied:\s*", "", item).rstrip(".")
+                    summaries.append(summary)
+                description = (
+                    f"Applied compound request ({len(operations)} operations): "
+                    + "; ".join(summaries)
+                    + "."
+                )
+            return self.tool_result(description=description, **details)
         return self.tool_result(text=str(payload.get("text", "")), **details)

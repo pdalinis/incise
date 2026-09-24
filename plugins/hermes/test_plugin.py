@@ -983,6 +983,24 @@ def test_auto_profile_falls_back_to_measured():
               stale.get("stale") is True and "beta-three" not in stale_text
               and stale_text.endswith("external change\n"), json.dumps(stale)[:240])
 
+        release_success_path = scratch("corpus/frontmatter/rich.md")
+        release_success_prompt = (
+            f'Frontmatter in `{release_success_path}`: YAML\n\n'
+            'Update the version to 0.5.0, and set `released` to 2026-09-12.'
+        )
+        ctx.hooks["pre_llm_call"](
+            session_id="compound-success", task_id="compound-success",
+            turn_id="compound-success", user_message=release_success_prompt,
+            model="ornith-1.5-9b-q8")
+        compound_success = json.loads(by_name["frontmatter_release_target"](
+            {}, session_id="compound-success", task_id="compound-success"))
+        compound_description = compound_success.get("description", "")
+        check("compound success reports every completed update",
+              "2 operations" in compound_description
+              and "`version`" in compound_description
+              and "`released`" in compound_description,
+              compound_description)
+
         release_path = scratch("corpus/frontmatter/rich.md")
         release_before = open(release_path, "rb").read()
         release_prompt = (
