@@ -1,0 +1,18 @@
+{"task_id": "add-row-aligned-short", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "compose_5", "trial": 1, "outcome": "op_error", "detail": "row delta 2, expected 1; after: call 5: a `where` selector is required to identify the row."}
+{"task_id": "add-row-aligned-short", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "compose_5", "trial": 1, "outcome": "wrong", "detail": "row delta 2, expected 1"}
+{"task_id": "add-row-aligned-repad", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "compose_5", "trial": 1, "outcome": "op_error", "detail": "row delta 2, expected 1; after: call 4: 2 rows match {'Component': 'sprocket', 'Status': 'active', 'Owner': 'rowan'}; the selector must identify exactly one."}
+{"task_id": "add-row-ragged", "scheme": "compose_5", "trial": 2, "outcome": "wrong", "detail": "row delta 4, expected 1"}
+{"task_id": "add-row-alignment-markers", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "compose_5", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "compose_5", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "compose_5", "trial": 1, "outcome": "op_error", "detail": "missing row ['stage-1', 'us-west-2', 't3.l']; have [('stage-1', 'us-west-2', 't3.m')]; after: call 2: ambiguous: 3 tables under \"Multiple tables per section > Environments\". Pass an ordinal. |   Candidates: ordinal 0 (\"Production hosts\") columns Host | Region | Size; ordinal 1 (\"Staging hosts\") columns Host | Region | Size; ordinal 2 (\"Scratch hosts\") columns Host | Region | Size"}
+{"task_id": "update-cell-multi-table", "scheme": "compose_5", "trial": 2, "outcome": "correct", "detail": null}

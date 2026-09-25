@@ -1,0 +1,30 @@
+{"task_id": "add-item-tight-dash", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "safe_small", "trial": 1, "outcome": "op_error", "detail": "call 4: no table under heading \"Nested and mixed lists > Dash markers, two-space indent\". |   Near matches: none |   Headings with tables: "}
+{"task_id": "add-item-tight-dash", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "safe_small", "trial": 1, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "add-item-nested-asterisk", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "safe_small", "trial": 0, "outcome": "op_error", "detail": "call 4: ambiguous: 2 lists under \"Nested and mixed lists > Loose vs tight\". Pass an ordinal. |   Candidates: ordinal 0 (bullet, marker \"-\", 2 items); ordinal 1 (bullet, marker \"-\", 3 items)"}
+{"task_id": "add-item-loose", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "safe_small", "trial": 0, "outcome": "op_error", "detail": "call 4: no list item matching \"{\"text\": \"third\"}\". |   Near matches: third |   Items: first; second; third; fourth"}
+{"task_id": "add-item-ordered-renumber", "scheme": "safe_small", "trial": 1, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. two and a half', '5. fourth']"}
+{"task_id": "add-item-ordered-renumber", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. two and a half', '5. fourth']"}
+{"task_id": "add-item-ordered-all-ones", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "remove-item-non-sequential", "scheme": "safe_small", "trial": 0, "outcome": "wrong", "detail": "item still present 'third'"}
+{"task_id": "remove-item-non-sequential", "scheme": "safe_small", "trial": 1, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "remove-item-non-sequential", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "item still present 'third'"}
+{"task_id": "check-task-nested", "scheme": "safe_small", "trial": 0, "outcome": "wrong", "detail": "missing line '  - [x] child pending'; got ['- [ ] parent task', '  - [x] child done', '  - [ ] child pending', '    - [ ] grandchild', '- [x] sibling done', '- [ ] child pending', '- [x] child pending']"}
+{"task_id": "check-task-nested", "scheme": "safe_small", "trial": 1, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "check-task-nested", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "missing line '  - [x] child pending'; got ['- [ ] parent task', '  - [x] child done', '  - [ ] child pending', '    - [ ] grandchild', '- [x] sibling done', '- [x] child pending']"}
+{"task_id": "remove-item-mixed", "scheme": "safe_small", "trial": 0, "outcome": "wrong", "detail": "item still present 'not a task, just an item'"}
+{"task_id": "remove-item-mixed", "scheme": "safe_small", "trial": 1, "outcome": "wrong", "detail": "item still present 'not a task, just an item'"}
+{"task_id": "remove-item-mixed", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "item still present 'not a task, just an item'"}

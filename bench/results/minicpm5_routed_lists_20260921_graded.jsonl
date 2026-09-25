@@ -1,0 +1,21 @@
+{"task_id": "add-item-loose", "scheme": "minicpm_routed", "trial": 0, "outcome": "collateral:content", "detail": "content before the target list changed"}
+{"task_id": "add-item-loose", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-loose", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-mixed-markers", "scheme": "minicpm_routed", "trial": 1, "outcome": "op_error", "detail": "ambiguous: 3 lists under \"Nested and mixed lists > Mixed markers at the same level\". Pass an ordinal. |   Candidates: ordinal 0 (bullet, marker \"-\", 1 items); ordinal 1 (bullet, marker \"*\", 1 items); ordinal 2 (bullet, marker \"+\", 1 items)"}
+{"task_id": "add-item-mixed-markers", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-nested-asterisk", "scheme": "minicpm_routed", "trial": 0, "outcome": "wrong", "detail": "missing line '    * beta-three'; got ['* alpha', '* beta', '    * beta-one', '    * beta-two', '* gamma', '* beta-three']"}
+{"task_id": "add-item-nested-asterisk", "scheme": "minicpm_routed", "trial": 1, "outcome": "wrong", "detail": "missing line '    * beta-three'; got ['* alpha', '* beta', '    * beta-one', '    * beta-two', '* gamma', '* beta-three']"}
+{"task_id": "add-item-nested-asterisk", "scheme": "minicpm_routed", "trial": 2, "outcome": "wrong", "detail": "missing line '    * beta-three'; got ['* alpha', '* beta', '    * beta-one', '    * beta-two', '* gamma', '* beta-three']"}
+{"task_id": "add-item-ordered-all-ones", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-all-ones", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-ordered-renumber", "scheme": "minicpm_routed", "trial": 0, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. fourth', '5. two and a half']"}
+{"task_id": "add-item-ordered-renumber", "scheme": "minicpm_routed", "trial": 1, "outcome": "op_error", "detail": "call 2: no list item matching \"[1]\". |   Near matches: none |   Items: first; second; third; fourth"}
+{"task_id": "add-item-ordered-renumber", "scheme": "minicpm_routed", "trial": 2, "outcome": "wrong", "detail": "missing line '3. two and a half'; got ['1. first', '2. second', '3. third', '4. fourth', '5. two and a half']"}
+{"task_id": "add-item-paren-delimiter", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-paren-delimiter", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-item-tight-dash", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}

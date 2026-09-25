@@ -1,0 +1,18 @@
+{"task_id": "add-row-aligned-short", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "safe_small", "trial": 2, "outcome": "destructive", "detail": "existing row lost: ('gadget', 'retired', 'rowan')"}
+{"task_id": "add-row-ragged", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "row delta 2, expected 1"}
+{"task_id": "add-row-alignment-markers", "scheme": "safe_small", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "safe_small", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "delete-row-aligned", "scheme": "safe_small", "trial": 0, "outcome": "op_error", "detail": "row delta 0, expected -1; after: call 3: a `where` selector is required to identify the row."}
+{"task_id": "delete-row-aligned", "scheme": "safe_small", "trial": 1, "outcome": "op_error", "detail": "call 4: no table under heading \"\". |   Near matches: none |   Headings with tables: Aligned table > Components"}
+{"task_id": "delete-row-aligned", "scheme": "safe_small", "trial": 2, "outcome": "wrong", "detail": "row delta 0, expected -1"}
+{"task_id": "update-cell-multi-table", "scheme": "safe_small", "trial": 0, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "update-cell-multi-table", "scheme": "safe_small", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "safe_small", "trial": 2, "outcome": "op_error", "detail": "call 4: ambiguous: 3 tables under \"Multiple tables per section > Environments\". Pass an ordinal. |   Candidates: ordinal 0 (\"Production hosts\") columns Host | Region | Size; ordinal 1 (\"Staging hosts\") columns Host | Region | Size; ordinal 2 (\"Scratch hosts\") columns Host | Region | Size"}
