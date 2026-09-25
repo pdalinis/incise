@@ -41,7 +41,7 @@ curl --fail --location --silent --show-error \
 hermes plugins enable --no-allow-tool-override incise
 hermes tools enable --platform cli incise
 hermes plugins doctor --ci incise</code></pre>
-    <p>Keep the CLI and plugin on the same release. Doctor prints the exact Incise binary it validated and reports eight handlers for <code>standard</code> or twenty-four for <code>auto</code>; request middleware narrows the latter to exactly one routed Incise tool or the standard eight before inference.</p>
+    <p>Keep the CLI and plugin on the same release. Doctor prints the exact Incise binary it validated and reports eight handlers for <code>standard</code> or twenty-eight for <code>auto</code>; request middleware narrows the latter to exactly one routed Incise tool or the standard eight before inference.</p>
     <div class="grid">
       <article class="card"><h3>Gemma</h3><pre><code>INCISE_PROFILE=auto hermes chat</code></pre><p>Recommended. If the provider uses a generic model alias, add <code>INCISE_MODEL_FAMILY=gemma</code>.</p></article>
       <article class="card"><h3>Ornith 1.5 9B</h3><pre><code>INCISE_PROFILE=auto hermes chat --reasoning none</code></pre><p>Also configure a 2,048-token output cap and disable parallel tool calls. For a generic alias, add <code>INCISE_MODEL_FAMILY=ornith</code>.</p></article>
