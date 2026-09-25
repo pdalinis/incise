@@ -1,0 +1,47 @@
+{
+  "affected_correct": 17,
+  "discordant": {
+    "mcnemar_exact_p": 0.0625,
+    "previous_only": 0,
+    "treatment_only": 5
+  },
+  "framing_errors": [],
+  "gains": [
+    [
+      "append-hotfix-note",
+      0
+    ],
+    [
+      "delete-install-macos",
+      0
+    ],
+    [
+      "delete-row-aligned",
+      0
+    ],
+    [
+      "get-ordinal-table",
+      0
+    ],
+    [
+      "update-cell-multi-table",
+      0
+    ]
+  ],
+  "gate_failures": [],
+  "harmful": [],
+  "multiple_mutations": [],
+  "outcomes": {
+    "correct": 48
+  },
+  "pairs": 48,
+  "previous_correct": 43,
+  "reasoning_leaks": [],
+  "regressions": [],
+  "route_audit": {
+    "checked": 17,
+    "errors": []
+  },
+  "status": "pass",
+  "treatment_correct": 48
+}
