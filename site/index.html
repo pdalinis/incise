@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Incise — Semantic Markdown Editing for AI Agents</title>
-  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. Ornith and Gemma each reached 480/480 correct with zero harmful outcomes through Hermes auto.">
+  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. MiniCPM and Ornith reached 480/480 through Pi; Ornith and Gemma reached 480/480 through Hermes.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/">
   <link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Incise — Semantic Markdown Editing for AI Agents">
-  <meta property="og:description" content="Ornith and Gemma each reached 480/480 correct with zero harmful outcomes through Hermes auto. Safe, byte-preserving Markdown tools for agents.">
+  <meta property="og:description" content="MiniCPM and Ornith reached 480/480 through Pi; Ornith and Gemma reached 480/480 through Hermes. Safe, byte-preserving Markdown tools for agents.">
   <meta property="og:url" content="https://pdalinis.github.io/incise/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png">
   <meta property="og:image:width" content="1774">
@@ -43,7 +43,7 @@
     <section class="hero">
       <div class="eyebrow">480/480 correct · zero harmful outcomes</div>
       <h1>Give local models a safer way to edit Markdown.</h1>
-      <p class="lede">Incise turns model intent into deterministic, structure-aware edits. Its recommended Hermes profile reached <strong>100% correct</strong> across separate 480-trial runs on both Ornith and Gemma while preserving unrelated document bytes.</p>
+      <p class="lede">Incise turns model intent into deterministic, structure-aware edits. MiniCPM5 2B and Ornith each reached <strong>480/480 correct</strong> through Pi, while Ornith and Gemma separately reached 480/480 through Hermes.</p>
       <div class="actions"><a class="button" href="/incise/docs/">Install Incise</a><a class="button secondary" href="/incise/benchmarks/">See the evidence</a></div>
     </section>
 
@@ -86,8 +86,8 @@
 INCISE_PROFILE=auto pi --thinking off</code></pre><p>Configure <code>maxTokens: 2048</code> and <code>parallel_tool_calls: false</code>. Auto-detection enables the 480/480 measured profile.</p></article>
         <article class="card"><h3>Gemma + Pi</h3><pre><code>pi install npm:pi-incise
 INCISE_PROFILE=auto pi</code></pre><p>Auto-detection enables the measured guarded routes for Gemma and keeps the standard tools as fallback.</p></article>
-        <article class="card"><h3>MiniCPM + Pi</h3><pre><code>pi install npm:pi-incise
-INCISE_PROFILE=standard pi</code></pre><p>Use the model-agnostic standard profile generally. A narrow opt-in list pipeline is available for evaluation.</p></article>
+        <article class="card"><h3>MiniCPM5 2B + Pi</h3><pre><code>pi install npm:pi-incise
+INCISE_PROFILE=auto pi --thinking off</code></pre><p>Auto-detection enables the measured Q8_0 profile, which completed 480/480 trials with zero harmful outcomes.</p></article>
         <article class="card"><h3>Gemma or Ornith + Hermes</h3><pre><code>cargo install incise-cli --locked
 INCISE_PROFILE=auto hermes chat</code></pre><p>Measured automatic routing reached 480/480 on both models while retaining Hermes file safety and standard-tool fallback.</p></article>
       </div>
@@ -96,8 +96,8 @@ INCISE_PROFILE=auto hermes chat</code></pre><p>Measured automatic routing reache
 
     <section>
       <h2>Measured, not merely claimed</h2>
-      <p>Hermes <code>auto</code> achieved 480/480 on both Ornith and Gemma: perfect tables, lists, sections, frontmatter, and table reads, with 360/360 exact routed calls in each run. Ornith improved from 460/480 on standard Hermes to 480/480 with 20 paired wins and no regressions. Pi remains 480/480 on Ornith and 475/479 usable on Gemma, both with zero harmful outcomes.</p>
-      <p>MiniCPM support is intentionally narrower: singleton table-row compatibility passed 18/18 live trials, and a host-routed list pipeline reached 21/21 in its direct arm. The real Pi list profile reached 16/21 with every executed edit correct, so it remains opt-in.</p>
+      <p>Pi <code>auto</code> achieved 480/480 on MiniCPM5 2B and Ornith, with perfect tables, lists, sections, frontmatter, and table reads. MiniCPM passed 470/470 exact routed-call audits plus 10/10 standard fallbacks, with zero harmful outcomes, framing errors, reasoning leaks, or multiple mutations.</p>
+      <p>Hermes <code>auto</code> separately achieved 480/480 on both Ornith and Gemma. MiniCPM remains on Hermes’s standard surface until the adapter receives the five new parity routes and passes its own live gate.</p>
       <div class="actions"><a class="button secondary" href="/incise/benchmarks/">Read the benchmark summary</a></div>
     </section>
   </main>

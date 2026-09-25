@@ -74,7 +74,7 @@ export function selectProfile(
 			reason: `explicit INCISE_PROFILE=${requested}`,
 		};
 	}
-	if (family === "gemma" || family === "ornith") {
+	if (family === "gemma" || family === "minicpm" || family === "ornith") {
 		return {
 			requested,
 			effective: "safe-routed",
@@ -82,7 +82,9 @@ export function selectProfile(
 			model: label,
 			reason: family === "gemma"
 				? "auto selected the measured Gemma routing capabilities"
-				: "auto selected the measured Ornith routing capabilities",
+				: family === "minicpm"
+					? "auto selected the measured MiniCPM routing capabilities"
+					: "auto selected the measured Ornith routing capabilities",
 		};
 	}
 	return {
@@ -90,8 +92,6 @@ export function selectProfile(
 		effective: "standard",
 		family,
 		model: label,
-		reason: family === "minicpm"
-			? "auto kept the standard profile because no general MiniCPM profile has passed evaluation"
-			: "auto kept the model-agnostic standard profile for an unknown model family",
+		reason: "auto kept the model-agnostic standard profile for an unknown model family",
 	};
 }

@@ -919,6 +919,32 @@ Provider framing was exact on all 96 trials, all 36 intended routed tasks and 12
 
 Disposition: the smoke gate fails, so the 480-pair run does not start and MiniCPM remains mapped to `standard` in `auto`. The gain is large enough to justify a new targeted, separately preregistered treatment: host-own exact quoted section replacement bodies, cover the two exact list-at-end phrasings, host-resolve named table-row additions, and remove model-owned frontmatter key/value selection for the already recognized exact intents. The current raw, graded, and analysis artifacts use `bench/results/minicpm5_v03_smoke_*_20260925`; prior MiniCPM and Gemma claims remain current for their exact pools.
 
+# F-minicpm-v03-v2 — every targeted repair passes, while unsupported fallbacks become the safety boundary
+
+The v2 transfer was preregistered at `6731331` and the shared route implementation was frozen at `0b1aadf`. It reran the complete MiniCPM seed-0 population after adding strict host-owned table-row, list-ending, quoted-section-body, and typed-frontmatter arguments. All **12/12 affected tasks were correct**, all four formerly harmful target tasks became correct, and the affected-route audit found zero surface or argument errors. Provider framing was exact, no reasoning leaked, and no trial changed the file twice.
+
+Composition correctness moved only **41/48 to 43/48**. There were four treatment-only wins and two v1-only wins (`delete-row-aligned` and `get-ordinal-table`), so exact paired McNemar `p = 0.6875`. More importantly, four treatment trials were harmful under the frozen taxonomy. Three changed files incorrectly: `update-cell-multi-table` appended a pipe row outside its table, `append-hotfix-note` created unrelated frontmatter, and `delete-install-macos` replaced the root section body with copied outline text. `delete-row-aligned` made no edit but returned the wrong result. `get-ordinal-table` remained a loud refusal after omitting the required ordinal.
+
+Disposition: v2 fails its 45/48, no-regression, and zero-harm gates. Per the preregistration, Gemma and Ornith retention did not run, the shared implementation is not adopted, MiniCPM remains `standard` in `auto`, and no 480-pair campaign starts. The result changes the next scope: a v3 treatment must host-resolve all five remaining failures—exact row deletion, exact multi-table cell update, exact hotfix append, guarded macOS subtree deletion, and the staging-table ordinal read—before any cross-model retention arm. Artifacts use `bench/results/minicpm5_v03_safe_routed_v2_20260925*`; the v1, Gemma, and Ornith claims remain current for their exact pools.
+
+# F-minicpm-v03-v3 — strict completion routes reach 48/48 without taxing retained models
+
+Recorded under issue #32. The plan was frozen at `2f5b614`, the treatment at `57a021f`, and the route-aware grading correction at `04cefdb`. V3 added only five host-resolved paths: exact row deletion, labelled-table cell update, exact release-body append, confirmed section-subtree deletion, and labelled ordinal table read. Every mutation inspected current structure first, carried the read hash, exposed an empty argument schema, and retained the one-successful-mutation latch.
+
+On all 48 frozen tasks at seed 0, MiniCPM moved from the immutable v2 result of 43/48 to **48/48 correct**. The five gains were `delete-row-aligned`, `update-cell-multi-table`, `append-hotfix-note`, `delete-install-macos`, and `get-ordinal-table`; there were zero regressions, zero harmful outcomes, zero framing errors, zero multiple changed mutations, and no visible reasoning leakage. All 17 routed tasks passed exact tool, surface, and canonical-argument audits. The paired exact McNemar result is p=0.0625 (0 control-only, 5 treatment-only); the engineering gate, not significance, was the preregistered decision rule.
+
+The first analysis reported 47/48 because the inherited grader whitelist knew only the four older routed table-read task IDs. The raw `get-ordinal-table` trace actually called `table_query {}`, returned exactly `stage-1 | us-west-2 | t3.m`, and answered those values correctly. The original misgraded pool and failed analysis remain intact. A separate deterministic regrade, with no resampling, produced the 48/48 result and the grader now requires one successful canonical call for every affected route.
+
+Retention then passed exactly as preregistered: Gemma was **51/51** and Ornith was **51/51** across the 17 affected tasks at seeds 0–2. Both arms had zero harm, framing errors, multiple mutations, reasoning leakage, or route-audit errors. Across the MiniCPM gate and both retention arms, the candidate was **150/150 correct**.
+
+Decision: the shared Pi routes are eligible to merge, and the 480-trial MiniCPM composition gate may now be preregistered. This result does not enable MiniCPM under `auto`, claim Hermes parity for these five routes, or substitute for that larger composition run.
+
+The licensed composition gate then passed **480/480 correct** across seeds 0–9: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. There were zero harmful outcomes, framing errors, multiple mutations, or reasoning leaks. The exact surface audit was 470/470 routed trials plus 10/10 standard fallbacks.
+
+The first composition analysis failed only because the preregistration confused the 17 v2+v3 affected tasks with the full set of 47 routes already present in the shared Gemma/Ornith profile. The immutable trace itself reported 470 exact routed trials with zero errors. A post-run count erratum corrected the mechanically verifiable expectation from 170 routed plus 310 fallback to 470 routed plus 10 fallback; the original failed analysis remains, the corrected analysis is separately named, and no call was resampled.
+
+Decision applied: MiniCPM may select `safe-routed` under Pi `auto`. Hermes remains out of scope until its adapter reaches deterministic route parity and passes a live integration gate.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table

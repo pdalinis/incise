@@ -1,0 +1,19 @@
+{
+  "correct": 51,
+  "expected": 51,
+  "framing_errors": [],
+  "gate_failures": [],
+  "harmful": [],
+  "model": "gemma",
+  "multiple_mutations": [],
+  "outcomes": {
+    "correct": 51
+  },
+  "reasoning_leaks": [],
+  "route_audit": {
+    "checked": 51,
+    "errors": []
+  },
+  "status": "pass",
+  "usable": 51
+}

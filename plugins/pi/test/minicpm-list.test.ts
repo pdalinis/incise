@@ -51,7 +51,7 @@ test("parses and validates exact heading and ordinal pairs", () => {
 	const entries = parseListSummary(summary);
 	assert.deepEqual(entries, [
 		{ heading: "Tasks", ordinal: 0 },
-		{ heading: "Tasks", ordinal: 1 },
+		{ heading: "Tasks", ordinal: 1, loose: true },
 	]);
 	assert.deepEqual(selectEntry(entries, { heading: "Tasks", ordinal: 1 }), entries[1]);
 	assert.throws(() => selectEntry(entries, { heading: "Tasks", ordinal: 2 }));

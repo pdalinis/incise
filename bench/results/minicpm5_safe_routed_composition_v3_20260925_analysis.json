@@ -1,0 +1,47 @@
+{
+  "correct": 480,
+  "expected": 480,
+  "families": {
+    "frontmatter": {
+      "correct": 110,
+      "expected": 110,
+      "usable": 110
+    },
+    "list": {
+      "correct": 100,
+      "expected": 100,
+      "usable": 100
+    },
+    "section": {
+      "correct": 150,
+      "expected": 150,
+      "usable": 150
+    },
+    "table": {
+      "correct": 60,
+      "expected": 60,
+      "usable": 60
+    },
+    "table-read": {
+      "correct": 60,
+      "expected": 60,
+      "usable": 60
+    }
+  },
+  "framing_errors": [],
+  "gate_failures": [
+    "route or fallback audit error"
+  ],
+  "harmful": [],
+  "multiple_mutations": [],
+  "outcomes": {
+    "correct": 480
+  },
+  "reasoning_leaks": [],
+  "route_audit": {
+    "checked": 470,
+    "errors": []
+  },
+  "status": "fail",
+  "usable": 480
+}

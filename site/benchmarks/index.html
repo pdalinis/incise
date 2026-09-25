@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Incise Benchmarks — Ornith and Gemma at 480/480 through Hermes</title>
-  <meta name="description" content="Incise's measured Hermes auto profile reached 480/480 correct with zero harmful outcomes on both Ornith and Gemma. Explore raw calls, paired controls, and caveats.">
+  <title>Incise Benchmarks — 480/480 on MiniCPM, Ornith, and Gemma</title>
+  <meta name="description" content="Incise reached 480/480 on MiniCPM and Ornith through Pi, and on Ornith and Gemma through Hermes. Explore raw calls, audits, and caveats.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/benchmarks/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
-  <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 480/480 on Ornith and Gemma"><meta property="og:description" content="Two preregistered 480-trial Hermes evaluations with raw calls, graders, paired Ornith control, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 480/480 on MiniCPM, Ornith, and Gemma"><meta property="og:description" content="Preregistered 480-trial Pi and Hermes evaluations with raw calls, exact route audits, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta name="twitter:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
 </head>
@@ -50,14 +50,14 @@
     <h2>Gemma remains a strong measured option in Pi</h2>
     <p>Gemma 4 26B completed 475/479 usable Pi trials (99.2%) with zero harmful outcomes. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149 with four loud refusals. The later Hermes run reached 480/480 on seeds 40–49, but that cross-host comparison is descriptive rather than paired.</p>
 
-    <h2>MiniCPM: strong targeted gains, conservative defaults</h2>
+    <h2>MiniCPM: the complete Pi profile reaches 480/480</h2>
     <table><thead><tr><th>Measured path</th><th>Result</th><th>Disposition</th></tr></thead><tbody>
       <tr><td>Singleton-object table rows</td><td><strong>18/18</strong>, including 9/9 normalized calls</td><td>Shipped compatibility</td></tr>
       <tr><td>Host-routed list pipeline, direct arm</td><td><strong>13/21 → 21/21</strong>, <code>p = 0.0078</code></td><td>Validates the architecture</td></tr>
       <tr><td>MiniCPM list profile through Pi</td><td><strong>16/21</strong>; all 16 executed edits correct</td><td>Opt-in evaluation profile</td></tr>
-      <tr><td>General small-model profile</td><td>Failed family and safety gates</td><td>Not enabled by default</td></tr>
+      <tr><td>Current Pi safe-routed profile</td><td><strong>480/480</strong>; zero harmful outcomes</td><td>Enabled by <code>auto</code></td></tr>
     </tbody></table>
-    <p>MiniCPM’s remaining Pi failures were model no-calls rather than corrupted documents. Incise keeps the general profile disabled until it passes the same zero-data-loss and no-regression standards as Gemma.</p>
+    <p>The final composition covered seeds 0–9: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. All 470 routed trials and 10 standard fallbacks passed exact surface audits. The result used MiniCPM5 2B Q8_0 through llama.cpp with thinking off, a 65,536-token context, 8,192 output tokens, temperature 0.7, and top-p 0.95.</p>
 
     <h2>Structured operations versus direct patching</h2>
     <p>The original controlled benchmark used identical tasks, seeds, model, and grader:</p>

@@ -1,0 +1,78 @@
+{
+  "affected_correct": 12,
+  "discordant": {
+    "mcnemar_exact_p": 0.6875,
+    "previous_only": 2,
+    "treatment_only": 4
+  },
+  "framing_errors": [],
+  "gains": [
+    [
+      "add-item-loose",
+      0
+    ],
+    [
+      "add-item-tight-dash",
+      0
+    ],
+    [
+      "add-row-aligned-repad",
+      0
+    ],
+    [
+      "replace-linux-body",
+      0
+    ]
+  ],
+  "gate_failures": [
+    "correctness below 45/48",
+    "v1-correct task regressed",
+    "harmful outcome"
+  ],
+  "harmful": [
+    [
+      "append-hotfix-note",
+      0
+    ],
+    [
+      "delete-install-macos",
+      0
+    ],
+    [
+      "delete-row-aligned",
+      0
+    ],
+    [
+      "update-cell-multi-table",
+      0
+    ]
+  ],
+  "multiple_mutations": [],
+  "outcomes": {
+    "collateral:content": 1,
+    "correct": 43,
+    "destructive": 1,
+    "op_error": 1,
+    "wrong": 2
+  },
+  "pairs": 48,
+  "previous_correct": 41,
+  "previously_harmful_correct": 4,
+  "reasoning_leaks": [],
+  "regressions": [
+    [
+      "delete-row-aligned",
+      0
+    ],
+    [
+      "get-ordinal-table",
+      0
+    ]
+  ],
+  "route_audit": {
+    "checked": 12,
+    "errors": []
+  },
+  "status": "fail",
+  "treatment_correct": 43
+}
