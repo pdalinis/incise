@@ -1089,12 +1089,14 @@ def test_auto_profile_falls_back_to_measured():
         minicpm = ctx.hooks["pre_llm_call"](
             session_id="minicpm", task_id="minicpm", turn_id="minicpm",
             user_message=add_row_prompt, model="MiniCPM5-2B-Q8_0")
-        check("MiniCPM stays standard before the live Hermes gate", minicpm is None, repr(minicpm))
+        check("MiniCPM auto selects its measured route",
+              minicpm is not None and "table_add_row_target" in minicpm.get("context", ""),
+              repr(minicpm))
         minicpm_request = ctx.middleware["llm_request"](
             request=request, session_id="minicpm", task_id="minicpm", turn_id="minicpm")
-        check("pre-gate MiniCPM retains the standard surface",
+        check("MiniCPM auto narrows to the measured route",
               [tool["function"]["name"] for tool in minicpm_request["request"]["tools"]]
-              == ["terminal"] + base_names)
+              == ["terminal", "table_add_row_target"])
 
         stale_path = scratch("corpus/lists/nested-mixed.md")
         stale_prompt = (

@@ -1504,7 +1504,9 @@ class SafeRoutedAdapter:
             return True
         if self.requested_profile != "auto":
             return False
-        return model_family(model, os.environ.get("INCISE_MODEL_FAMILY")) in ("gemma", "ornith")
+        return model_family(model, os.environ.get("INCISE_MODEL_FAMILY")) in (
+            "gemma", "minicpm", "ornith",
+        )
 
     @staticmethod
     def _cwd() -> str:

@@ -42,6 +42,7 @@ PROFILES = {
     "ornith-auto": ("auto", "ornith"),
     "gemma-auto": ("auto", "gemma"),
     "minicpm-safe-routed": ("safe-routed", "minicpm"),
+    "minicpm-auto": ("auto", "minicpm"),
     "gemma-minicpm-retention": ("auto", "gemma"),
     "ornith-minicpm-retention": ("auto", "ornith"),
 }
@@ -494,6 +495,7 @@ def analyse(args) -> None:
     expected_n = args.trials * len(expected_task_ids)
     strict = args.condition in {
         "minicpm-safe-routed",
+        "minicpm-auto",
         "gemma-minicpm-retention",
         "ornith-minicpm-retention",
     }
