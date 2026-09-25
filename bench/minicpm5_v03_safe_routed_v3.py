@@ -93,6 +93,9 @@ def configure(args):
     composition.MODEL = config["definition"]
     composition.PROFILES = PROFILES
     composition.ALL_TOOLS = ALL_TOOLS
+    composition.ROUTED_TABLE_TASKS = composition.ROUTED_TABLE_TASKS | {
+        "get-ordinal-table",
+    }
     composition.validate_framing = validate_framing
     args.thinking = config["thinking"]
     args.max_tokens = config["max_tokens"]
@@ -172,7 +175,7 @@ def route_audit(keys, raw, graded, affected_only=False):
                for call in calls):
             errors.append([*key, "unexpected tool call"])
         successes = v2.successful_results(row, expected["tool"])
-        if graded[key]["outcome"] == "correct" and len(successes) != 1:
+        if len(successes) != 1:
             errors.append([*key, "successful calls", len(successes)])
         if len(successes) > 1:
             errors.append([*key, "multiple successful calls", len(successes)])
@@ -296,6 +299,41 @@ def analyse_retention(args):
     print(json.dumps(report, indent=2, sort_keys=True))
 
 
+def regrade(args):
+    """Regrade an immutable raw pool after fixing route-aware grading."""
+    composition.ROUTED_TABLE_TASKS = composition.ROUTED_TABLE_TASKS | {
+        "get-ordinal-table",
+    }
+    tasks = composition.load_tasks()
+    raw = latest(args.out)
+    destination = Path(args.graded)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("x", encoding="utf-8", newline="\n") as handle:
+        for key in sorted(raw):
+            row = raw[key]
+            task = tasks[row["task_id"]]
+            before = composition.read_text(ROOT / task["fixture"])
+            after = row["final_document"]
+            outcome, detail = composition.grade_row(task, row, before, after)
+            document_outcome = None
+            document_detail = None
+            if after != before:
+                document_outcome, document_detail = pi_bench.check_result(
+                    task, before, after, None,
+                )
+            graded = {
+                "condition": row["condition"], "task_id": row["task_id"],
+                "family": row["family"], "trial": row["trial"],
+                "outcome": outcome, "detail": detail,
+                "document_outcome": document_outcome,
+                "document_detail": document_detail,
+                "evaluation_model": row.get("evaluation_model"),
+                "framing_errors": row.get("framing_errors", []),
+            }
+            handle.write(json.dumps(graded, separators=(",", ":")) + "\n")
+    print(f"regraded {len(raw)} existing raw rows into {destination}")
+
+
 def preflight(args):
     configure(args)
     subprocess.run([args.binary, "--version"], check=True)
@@ -353,6 +391,11 @@ def main():
     retain.add_argument("--graded", required=True)
     retain.add_argument("--analysis", required=True)
     retain.set_defaults(func=analyse_retention)
+
+    correction = sub.add_parser("regrade")
+    correction.add_argument("--out", required=True)
+    correction.add_argument("--graded", required=True)
+    correction.set_defaults(func=regrade)
 
     args = parser.parse_args()
     args.func(args)
