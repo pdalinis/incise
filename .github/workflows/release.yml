@@ -335,7 +335,7 @@ jobs:
           done
 
   publish-npm:
-    name: Publish Pi packages to next
+    name: Publish Pi packages
     needs: [validate, package]
     runs-on: ubuntu-latest
     permissions:
@@ -374,13 +374,21 @@ jobs:
         shell: bash
         run: |
           version="${GITHUB_REF_NAME#v}"
+          if [[ "$version" == *-* ]]; then
+            dist_tag="next"
+          else
+            dist_tag="latest"
+          fi
+          echo "Publishing $version with npm dist-tag $dist_tag"
           publish_if_missing() {
             name="$1"
             archive="$2"
             if npm view "$name@$version" version >/dev/null 2>&1; then
               echo "$name@$version is already published"
             else
-              npm publish "$archive" --access public --tag next --provenance
+              # Trusted publishing authenticates npm publish, but not a later
+              # npm dist-tag mutation. Assign the final tag at publish time.
+              npm publish "$archive" --access public --tag "$dist_tag" --provenance
             fi
           }
           publish_if_missing "@pdalinis/pi-incise-darwin-arm64" "dist/npm/pdalinis-pi-incise-darwin-arm64-$version.tgz"
