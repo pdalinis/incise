@@ -945,6 +945,14 @@ The first composition analysis failed only because the preregistration confused 
 
 Decision applied: MiniCPM may select `safe-routed` under Pi `auto`. Hermes remains out of scope until its adapter reaches deterministic route parity and passes a live integration gate.
 
+# F-minicpm-hermes — route parity transfers the full MiniCPM result
+
+The preregistered Hermes parity port reproduced the final Pi route plan exactly: 47 routed tasks and one unchanged standard fallback, with no route, kind, or resolved-argument mismatches. A seed-0 MiniCPM smoke passed 48/48 before adoption. Gemma and Ornith then retained 51/51 each across the 17 affected tasks and seeds 0–2, with zero harmful outcomes or framing errors.
+
+The full MiniCPM5 2B Q8_0 composition through Hermes Agent 0.21.3 passed **480/480 correct**: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. All 470 routed trials and 10 standard fallbacks had exact provider surfaces; there were zero harmful outcomes, framing errors, or multiple mutations, and mean tool calls were 1.0. Thinking was disabled and the run used the recorded 8,192-token output cap over seeds 0–9.
+
+After that gate passed, MiniCPM was enabled under Hermes `auto`. The post-adoption seed-0 smoke passed 48/48 with the same zero-harm and exact-framing result. MiniCPM is therefore adopted for Hermes `auto`; unknown models still retain the model-agnostic standard surface. Artifacts use the `minicpm5_hermes_*_20260925` prefix, with `gemma_hermes_minicpm_retention_20260925` and `ornith_hermes_minicpm_retention_20260925` recording the cross-model checks.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table

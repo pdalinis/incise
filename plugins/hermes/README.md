@@ -1,6 +1,6 @@
 # Incise for Hermes
 
-This plugin gives Hermes Agent a model-agnostic eight-tool Markdown interface plus guarded request routing for measured Gemma and Ornith models. Models can inspect and edit tables, lists, sections, and YAML frontmatter without reconstructing the surrounding document.
+This plugin gives Hermes Agent a model-agnostic eight-tool Markdown interface plus guarded request routing for measured Gemma, MiniCPM, and Ornith models. Models can inspect and edit tables, lists, sections, and YAML frontmatter without reconstructing the surrounding document.
 
 The adapter keeps Markdown semantics in the `incise` binary. Hermes owns tool registration, model-request narrowing, filesystem policy, same-file serialization, rollback, and the one-successful-mutation turn guard.
 
@@ -33,17 +33,7 @@ curl --fail --location --silent --show-error \
   | tar -xz -C "$HOME/.hermes/plugins"
 ```
 
-The archive creates `$HOME/.hermes/plugins/incise`. The installed directory must be named `incise`.
-
-For development or a source-based installation, clone the matching tag and link the plugin directory instead:
-
-```bash
-release="v$(incise --version | awk '{print $2}')"
-git clone --branch "$release" --depth 1 \
-  https://github.com/pdalinis/incise.git incise-source
-mkdir -p "$HOME/.hermes/plugins"
-ln -s "$PWD/incise-source/plugins/hermes" "$HOME/.hermes/plugins/incise"
-```
+The archive creates `$HOME/.hermes/plugins/incise`; that directory must be named `incise`.
 
 **3. Enable the plugin and its CLI toolset.**
 
@@ -52,25 +42,15 @@ hermes plugins enable --no-allow-tool-override incise
 hermes tools enable --platform cli incise
 ```
 
-Incise does not replace built-in tools, so tool-override permission is unnecessary.
-
-**4. Select a profile.**
-
-For measured Gemma and Ornith models, use the recommended automatic profile:
+**4. Select the measured automatic profile.**
 
 ```bash
 INCISE_PROFILE=auto hermes chat
 ```
 
-`auto` recognizes model IDs or names containing `gemma` or `ornith`. If a provider uses a generic alias, identify the backend explicitly:
+`auto` recognizes model IDs or names containing `gemma`, `minicpm`, or `ornith`. For a generic provider alias, set `INCISE_MODEL_FAMILY=gemma`, `INCISE_MODEL_FAMILY=minicpm`, or `INCISE_MODEL_FAMILY=ornith`. Unknown models retain the standard eight-tool surface. The measured MiniCPM condition used thinking off, an 8,192-token output cap, temperature 0.7, top-p 0.95, and disabled parallel tool calls; Ornith used thinking off, a 2,048-token cap, and disabled parallel calls. The plugin does not silently alter provider sampling settings.
 
-```bash
-INCISE_PROFILE=auto INCISE_MODEL_FAMILY=ornith hermes chat --reasoning none
-```
-
-Use `INCISE_MODEL_FAMILY=gemma` for a generic Gemma alias. Unknown models and MiniCPM safely retain the standard eight-tool surface under `auto`. For the measured Ornith condition, also configure a 2,048-token output cap and disable parallel tool calls in the provider; the plugin does not silently alter normal inference settings.
-
-Use `INCISE_PROFILE=standard` to force the model-agnostic eight-tool composition, or `INCISE_PROFILE=safe-routed` to force guarded routing regardless of detected identity. `safe-routed` is intended for controlled evaluation when the caller already knows the model family; `auto` is the normal recommendation.
+Use `INCISE_PROFILE=standard` to force the model-agnostic composition, or `INCISE_PROFILE=safe-routed` for controlled evaluation regardless of detected identity.
 
 **5. Verify the installation.**
 
@@ -80,9 +60,7 @@ hermes tools list --platform cli
 hermes plugins doctor --ci incise
 ```
 
-The output should show `incise` enabled. Doctor registers eight tools for `standard`, twelve for `safe-small`, or twenty-four for `auto`/`safe-routed`; the latter includes sixteen route handlers that middleware narrows before each provider request. Doctor may warn that manifest-declared tools from inactive profiles are absent.
-
-Verification prints the exact binary path and resolution source before the doctor report. Confirm that path belongs to the same release or source checkout as the plugin. For a source-linked plugin, build with `cargo build -p incise-cli --locked` or `cargo build --release -p incise-cli --locked`; Incise chooses the newest executable checkout build, with release winning only an exact timestamp tie.
+Doctor should show `incise` enabled and print the exact binary it validated. It registers eight tools for `standard`, twelve for `safe-small`, or twenty-four for `auto`/`safe-routed`; middleware narrows the latter before each provider request.
 
 ## Tools exposed
 
@@ -90,11 +68,11 @@ Verification prints the exact binary path and resolution source before the docto
 
 **Standard semantic edits.** `table_edit`, `list_edit`, `section_edit`, and `frontmatter_edit` expose the measured model-agnostic schemas. They address content by heading, cell value, item text, key, and ordinal rather than by line number.
 
-**Guarded routing.** With `INCISE_PROFILE=auto`, detected Gemma and Ornith requests are inspected before inference. Exact supported requests receive one of sixteen action-specific route tools; the provider sees only that one Incise tool. Unsupported or ambiguous requests receive the byte-identical standard eight-tool surface. Foreign Hermes tools remain available in both cases. After a routed mutation succeeds, Incise mutation tools are removed from later provider calls in that turn.
+**Guarded routing.** With `INCISE_PROFILE=auto`, detected Gemma, MiniCPM, and Ornith requests are inspected before inference. Exact supported requests receive one of sixteen action-specific route tools; the provider sees only that one Incise tool. Unsupported or ambiguous requests receive the byte-identical standard eight-tool surface. Foreign Hermes tools remain available in both cases. After a routed mutation succeeds, Incise mutation tools are removed from later provider calls in that turn.
 
 The plugin registers the union needed by the selected profile, but registration is not the provider-visible surface. `auto` registers the eight standard handlers and sixteen route handlers, then its request hook narrows them dynamically. Ordinary paragraph edits and initial file creation still belong to general file tools.
 
-Set `INCISE_PROFILE=safe-small` only to evaluate the experimental MiniCPM composition. It exposes `md_tables`, `table_get`, `table_add_row`, `table_update_cell`, `md_lists`, `list_get`, `list_add_item`, `md_outline`, `section_insert`, `section_append`, `frontmatter_get`, and `frontmatter_set`. It intentionally omits generic multi-action tools and destructive section/frontmatter operations. A preregistered MiniCPM5 run found a significant list-addition gain but section and frontmatter regressions, so this profile is not recommended for general use.
+Set `INCISE_PROFILE=safe-small` only to reproduce the earlier experimental narrow composition. The adopted MiniCPM path is `auto`, which uses guarded host-resolved routes and the standard fallback rather than exposing `safe-small` broadly.
 
 ## How it works
 
@@ -137,29 +115,29 @@ Incise refusals are safety behavior. Follow the remedy in the returned error ins
 
 ## Validation
 
-The adapter passes standalone and installed-host tests for registration, provider narrowing, schema identity, foreign-tool preservation, refusals, path safety, same-file locking, stale hashes, rollback, compound result framing, every route handler, and the one-success latch. Hermes Plugin Doctor loads the plugin and its two hooks under the real host. A deterministic parity audit matched all 48 frozen Pi route decisions, including exact route tool names and host-resolved arguments.
+The adapter passes standalone and installed-host tests for registration, provider narrowing, schema identity, foreign-tool preservation, refusals, path safety, same-file locking, stale hashes, rollback, compound result framing, every route handler, and the one-success latch. Hermes Plugin Doctor loads the plugin and its two hooks under the real host. The final deterministic parity audit matched all 48 frozen Pi decisions: 47 routes and one standard fallback, including exact tool names and host-resolved arguments.
 
-Two preregistered full-composition runs drove Hermes Agent 0.21.3 through its real stream-JSON loop. Ornith 1.5 9B Q8 completed **480/480 correct** and Gemma 4 26B completed **480/480 correct**. Each run contained 360 routed and 120 fallback trials, with zero harmful outcomes, zero framing errors, zero multiple mutations, and no retries. Every family was perfect: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60.
+Three preregistered full-composition runs drove Hermes Agent 0.21.3 through its real stream-JSON loop. MiniCPM5 2B Q8_0, Ornith 1.5 9B Q8, and Gemma 4 26B each completed **480/480 correct** with zero harmful outcomes, framing errors, or multiple mutations. Every family was perfect: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60.
 
-The paired Ornith standard control scored 460/480. `auto` produced 20 treatment-only wins and no control-only wins (exact McNemar `p = 1.907×10⁻⁶`), repairing ten nested-frontmatter and ten filtered-read failures. Ornith used reasoning off, `max_tokens: 2048`, and `parallel_tool_calls: false`; Gemma retained its recorded provider defaults. Results are scoped to the recorded models, runtime, 48 tasks, seeds 40–49, and settings.
+MiniCPM used 470 routed trials and 10 standard fallbacks over seeds 0–9. Before adoption it passed a 48/48 route smoke, while Gemma and Ornith each retained 51/51 across the 17 changed tasks; the post-adoption `auto` smoke passed 48/48. MiniCPM used thinking off and an 8,192-token output cap.
 
-The earlier Gemma 5/5 and MiniCPM 5/5 standard-profile smoke remains valid for its narrow integration scope. MiniCPM has not cleared the full routed release gates and therefore stays on standard under `auto`.
+The earlier Ornith and Gemma runs each used 360 routed and 120 fallback trials over seeds 40–49. Ornith improved from a paired standard control of 460/480 to 480/480, with 20 treatment-only wins and no control-only wins (exact McNemar `p = 1.907×10⁻⁶`). Results remain scoped to the recorded models, runtime, tasks, seeds, and settings.
 
 ## Troubleshooting
 
-**The plugin is not listed.** Confirm that `~/.hermes/plugins/incise` exists and contains `plugin.yaml`. The installed directory and every configuration reference must use `incise`, not the retired `fastmd` name.
+**The plugin is not listed.** Confirm that `~/.hermes/plugins/incise` exists and contains `plugin.yaml`. The installed directory and every configuration reference must use `incise`.
 
-**The plugin is enabled but its tools are missing.** Run `hermes tools enable --platform cli incise`, then inspect `hermes tools list --platform cli`. Restart an already-running Hermes session after configuration changes.
+**The plugin is enabled but its tools are missing.** Run `hermes tools enable --platform cli incise`, inspect `hermes tools list --platform cli`, and restart an already-running session.
 
-**`auto` shows the standard tools for Gemma or Ornith.** Hermes may expose a generic provider alias. Set `INCISE_MODEL_FAMILY=gemma` or `INCISE_MODEL_FAMILY=ornith` in the environment that launches Hermes. Unknown identities intentionally fall back to standard.
+**`auto` shows the standard tools for Gemma, MiniCPM, or Ornith.** Hermes may expose a generic provider alias. Set `INCISE_MODEL_FAMILY=gemma`, `INCISE_MODEL_FAMILY=minicpm`, or `INCISE_MODEL_FAMILY=ornith` in the environment that launches Hermes. Unknown identities intentionally fall back to standard.
 
-**Doctor selected the wrong binary.** Read the `incise plugin: binary ...` line printed before the report. Resolution is `INCISE_BIN` first; for a source-linked checkout, the newest executable release/debug build comes next; an `incise` found on `PATH` is the final fallback. Rebuild the checkout or update the environment that launches Hermes, then restart it.
+**Doctor selected the wrong binary.** Read the `incise plugin: binary ...` line printed before the report. Resolution is `INCISE_BIN` first; for a source-linked checkout, the newest executable release/debug build comes next; an `incise` found on `PATH` is the final fallback.
 
-**Doctor warns about conditionally absent tools.** The manifest declares the union across profiles. Doctor may warn that inactive names were not registered. The expected registration count is eight for `standard`, twelve for `safe-small`, and twenty-four for `auto` or `safe-routed`. Provider requests under routing still receive exactly one Incise route tool or the standard eight, not all twenty-four.
+**Doctor warns about conditionally absent tools.** The manifest declares the union across profiles. Expected registration is eight for `standard`, twelve for `safe-small`, and twenty-four for `auto` or `safe-routed`; provider requests still receive exactly one route tool or the standard eight.
 
-**Tools refuse every path.** The plugin intentionally fails closed when Hermes file-safety guards cannot load. Run `hermes plugins doctor --ci incise` under the same environment that launches Hermes and confirm the installed Hermes version is at least 0.21.3.
+**Tools refuse every path.** The plugin fails closed when Hermes file-safety guards cannot load. Run `hermes plugins doctor --ci incise` under the same environment and confirm Hermes is at least 0.21.3.
 
-**After upgrading.** Reinstall the CLI with `cargo install incise-cli --locked --force`, then extract the matching `incise-hermes-vX.Y.Z.tar.gz` over the plugin directory and restart Hermes. For a source-linked installation, check out the matching Incise tag and rebuild. Run doctor again after either upgrade path.
+**After upgrading.** Reinstall the CLI with `cargo install incise-cli --locked --force`, extract the matching `incise-hermes-vX.Y.Z.tar.gz` over the plugin directory, restart Hermes, and run doctor again.
 
 ## Development and tests
 
