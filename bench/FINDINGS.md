@@ -911,6 +911,14 @@ Every preregistered release gate passes. This licenses recommending `INCISE_PROF
 
 Artifacts: [Hermes route parity](results/hermes_safe_routed_parity_20260924.json), [Ornith standard analysis](results/ornith_hermes_standard_analysis_20260924.json), [Ornith routed analysis](results/ornith_hermes_safe_routed_analysis_20260924.json), and [Gemma routed analysis](results/gemma_hermes_safe_routed_analysis_20260924.json).
 
+# F-minicpm-v03-smoke — routing transfers strongly, but four safety outcomes stop the full run
+
+The preregistered MiniCPM5 v0.3 Pi smoke was frozen at `9f99b35` and ran the complete 48-task population once per condition, rather than a five-task convenience panel. The explicit `standard` control scored **17/48 correct** with 14 harmful outcomes. The unchanged production `safe-routed` treatment scored **41/48 correct** with four harmful outcomes: 24 treatment-only wins, zero control-only wins, and exact paired McNemar `p = 1.1920928955078125e-07`. No family regressed. Family correctness moved from tables 4/6 to 4/6, lists 0/10 to 8/10, sections 2/15 to 12/15, frontmatter 8/11 to 11/11, and table reads 3/6 to 6/6. Mean completion fell from 180.5 to 76.1 tokens and mean elapsed time from 6.40 to 3.78 seconds.
+
+Provider framing was exact on all 96 trials, all 36 intended routed tasks and 12 fallbacks exposed the expected initial surface, and no reasoning markup leaked. The treatment nevertheless failed three preregistered gates. `add-item-loose` fell back to the standard tools and performed two successful section appends; `add-row-aligned-repad` also fell back and appended a pipe row outside the table; `replace-linux-body` used the routed tool but MiniCPM supplied a hallucinated body because that route still leaves the literal body model-owned. `add-item-tight-dash` made no edit but graded wrong. A correct `set-dana-role` trial also made one successful no-op call to the wrong existing leaf before the correct changed call, violating the canonical routed-call audit without harming the final document.
+
+Disposition: the smoke gate fails, so the 480-pair run does not start and MiniCPM remains mapped to `standard` in `auto`. The gain is large enough to justify a new targeted, separately preregistered treatment: host-own exact quoted section replacement bodies, cover the two exact list-at-end phrasings, host-resolve named table-row additions, and remove model-owned frontmatter key/value selection for the already recognized exact intents. The current raw, graded, and analysis artifacts use `bench/results/minicpm5_v03_smoke_*_20260925`; prior MiniCPM and Gemma claims remain current for their exact pools.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
