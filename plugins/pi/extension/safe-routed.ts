@@ -18,7 +18,8 @@ export type SafeRouteKind = "section-rename" | "section-replace-body" | "section
 	"section-append" | "section-set-level-target" |
 	"frontmatter-typed" | "frontmatter-create" | "frontmatter-delete" |
 	"frontmatter-release" | "list-remove-target" |
-	"list-append-target" | "list-set-checked-target" | "table-query";
+	"list-append-target" | "list-set-checked-target" |
+	"table-add-row-target" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -31,12 +32,13 @@ export interface TableEntry {
 	columns: string[];
 }
 
-type FrontmatterValueType = "string" | "integer" | "boolean" | "null";
+export type FrontmatterValueType = "string" | "integer" | "boolean" | "null";
 
 interface FrontmatterEntry {
 	path: string;
 	kind: string;
 	type: string;
+	value: string;
 }
 
 export interface SectionInsertIntent {
@@ -74,12 +76,26 @@ export interface ListAppendIntent {
 	after?: string;
 	before?: string;
 	containedItem?: string;
+	loose?: boolean;
 }
 
 export interface ListCheckedIntent {
 	heading: string;
 	item: string;
 	checked: boolean;
+}
+
+export interface TableAddRowIntent {
+	heading: string;
+	values: string[] | Record<string, string>;
+}
+
+export interface FrontmatterTypedIntent {
+	valueType: FrontmatterValueType;
+	value: string | number | boolean | null;
+	key?: string;
+	currentValue?: string;
+	author?: string;
 }
 
 export interface FrontmatterCreateIntent {
@@ -119,14 +135,9 @@ interface RoutedState {
 	completed: boolean;
 }
 
-function quotedCapture(prompt: string, prefix: RegExp, suffix: RegExp): string | undefined {
-	const source = `${prefix.source}\\s*(?:"([^"]+)"|“([^”]+)”|\`([^\`]+)\`)\\s*${suffix.source}`;
-	const match = prompt.match(new RegExp(source, "i"));
-	return match?.slice(1).find((value) => value !== undefined)?.trim();
-}
-
 export function sectionIntent(prompt: string): { kind: "section-rename"; target: string; heading: string } |
 	{ kind: "section-replace-body"; target: string; body?: string; directChild?: string } | undefined {
+	if (/\b(?:do\s+not|don't|must\s+not)\s+replace\b/i.test(prompt)) return undefined;
 	const rename = prompt.match(
 		/\brename(?:\s+the)?\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)\s*(?:heading\s+)?to\s*(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)/i,
 	);
@@ -147,16 +158,17 @@ export function sectionIntent(prompt: string): { kind: "section-rename"; target:
 		}
 	}
 
-	const quotedReplace = quotedCapture(
-		prompt,
-		/\breplace\s+(?:the\s+)?(?:text|body|content)\s+under/,
-		/\bwith\b/,
+	const replacement = prompt.match(
+		/\breplace\s+(?:the\s+)?(?:text|body|content)\s+under\s+([^\n]+?)\s+with\s+(?:"([^"]+)"|“([^”]+)”|`([^`]+)`)/i,
 	);
-	if (quotedReplace) return { kind: "section-replace-body", target: quotedReplace };
-	const bare = prompt.match(
-		/\breplace\s+(?:the\s+)?(?:text|body|content)\s+under\s+([^\n]+?)\s+with\s+(?:"|“|`)/i,
-	)?.[1]?.trim();
-	if (bare && bare.length <= 240) return { kind: "section-replace-body", target: bare };
+	if (replacement) {
+		const target = replacement[1].trim();
+		const body = replacement.slice(2, 5)
+			.find((value) => value !== undefined)?.trim();
+		if (target && body && target.length <= 240 && body.length <= 4_000) {
+			return { kind: "section-replace-body", target, body };
+		}
+	}
 	return undefined;
 }
 
@@ -374,6 +386,66 @@ export function requestedTable(entries: TableEntry[], prompt: string): TableEntr
 	return matches.length === 1 ? matches[0] : undefined;
 }
 
+export function tableAddRowIntent(prompt: string): TableAddRowIntent | undefined {
+	if (/\b(?:do\s+not|don't|must\s+not)\s+(?:add|insert)\b/i.test(prompt)) {
+		return undefined;
+	}
+	const named = prompt.match(
+		/\badd\s+a\s+row\s+(?:to|at\s+the\s+end\s+of)\s+the\s+([^\n]+?)\s+table\s+for\s+a\s+component\s+named\s+["“]([^"”]+)["”]\s+with\s+status\s+["“]([^"”]+)["”]\s+and\s+owner\s+["“]([^"”]+)["”]\s*\.?(?:\s+put\s+it\s+at\s+the\s+end\s+of\s+the\s+table\s*\.?)?$/i,
+	);
+	if (named) {
+		return {
+			heading: named[1].trim(),
+			values: {
+				Component: named[2].trim(),
+				Status: named[3].trim(),
+				Owner: named[4].trim(),
+			},
+		};
+	}
+	const ordered = prompt.match(
+		/\badd\s+a\s+row\s+with\s+the\s+values\s+([^\n]+?)\s+to\s+the\s+table\s+under\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (!ordered) return undefined;
+	const values = ordered[1].split(/\s*,\s*|\s+and\s+/i)
+		.map((value) => value.trim()).filter(Boolean);
+	if (values.length < 2 || values.some((value) => !/^[^\s,"“”]+$/.test(value))) {
+		return undefined;
+	}
+	return { heading: ordered[2].trim(), values };
+}
+
+function resolveTableEntry(entries: TableEntry[], requested: string): TableEntry | undefined {
+	const parts = requested.split(">").map((part) => part.trim()).filter(Boolean);
+	if (parts.length === 0) return undefined;
+	const matches = entries.filter((entry) => {
+		const candidate = entry.heading.split(" > ");
+		return candidate.length >= parts.length && parts.every((part, index) =>
+			candidate[candidate.length - parts.length + index].toLowerCase() === part.toLowerCase());
+	});
+	return matches.length === 1 ? matches[0] : undefined;
+}
+
+function tableAddRowValues(
+	table: TableEntry,
+	intent: TableAddRowIntent,
+): string[] | Record<string, string> | undefined {
+	if (Array.isArray(intent.values)) {
+		return intent.values.length === table.columns.length ? [...intent.values] : undefined;
+	}
+	const entries = Object.entries(intent.values);
+	if (entries.length !== table.columns.length) return undefined;
+	const resolved: Record<string, string> = {};
+	for (const [requested, value] of entries) {
+		const columns = table.columns.filter(
+			(column) => column.toLowerCase() === requested.toLowerCase(),
+		);
+		if (columns.length !== 1) return undefined;
+		resolved[columns[0]] = value;
+	}
+	return Object.keys(resolved).length === table.columns.length ? resolved : undefined;
+}
+
 function capturedValue(match: RegExpMatchArray | null): string | undefined {
 	if (!match) return undefined;
 	const quoted = match[1] ?? match[2] ?? match[3];
@@ -411,23 +483,52 @@ export function filterColumns(columns: string[], prompt: string): string[] {
 	return Object.keys(tablePredicates(columns, prompt) ?? {});
 }
 
-export function frontmatterValueType(prompt: string): FrontmatterValueType | undefined {
-	if (/\bbuild\b[^\n]*\bparallel\s+jobs\b[^\n]*\binstead\s+of\b/i.test(prompt)) {
-		return "integer";
+export function frontmatterTypedIntent(prompt: string): FrontmatterTypedIntent | undefined {
+	const request = (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
+		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
+	if (/\b(?:do\s+not|don't|must\s+not)\s+(?:set|switch|update|blank|mark)\b/i.test(request)) {
+		return undefined;
 	}
-	if (/\bswitch\s+the\s+build\s+from\s+(?:a\s+)?\S+\s+build\s+to\s+(?:a\s+)?\S+\s+one\b/i.test(prompt)) {
-		return "string";
+	const jobs = request.match(
+		/^the\s+build\s+should\s+run\s+with\s+(\d+)\s+parallel\s+jobs\s+instead\s+of\s+(\d+)\s*[.!]?$/i,
+	);
+	if (jobs) {
+		return {
+			valueType: "integer", key: "build.jobs", value: Number(jobs[1]),
+			currentValue: jobs[2],
+		};
 	}
-	if (/\btaken\s+over\s+as\b[^\n.]*\.\s*update\s+(?:her|his|their)\s+entry\s+in\s+the\s+authors\s+list\b/i.test(prompt)) {
-		return "string";
+	const target = request.match(
+		/^switch\s+the\s+build\s+from\s+(?:a\s+)?([^\s]+)\s+build\s+to\s+(?:a\s+)?([^\s]+)\s+one\s*[.!]?$/i,
+	);
+	if (target) {
+		return {
+			valueType: "string", key: "build.target", value: target[2],
+			currentValue: target[1],
+		};
 	}
-	if (/\bblank\s+out\b[^\n,]*,\s*but\s+leave\s+the\s+key\s+itself\s+in\s+the\s+frontmatter\b/i.test(prompt)) {
-		return "null";
+	const author = request.match(
+		/^([^\n.]+?)\s+has\s+taken\s+over\s+as\s+a\s+([^\n.]+?)\.\s*update\s+(?:her|his|their)\s+entry\s+in\s+the\s+authors\s+list\s+to\s+say\s+so\s*[.!]?$/i,
+	);
+	if (author) {
+		return {
+			valueType: "string", author: author[1].trim(), value: author[2].trim(),
+		};
 	}
-	if (/\bgone\s+back\s+to\s+being\s+a\s+draft\b[^\n.]*\.\s*say\s+so\s+in\s+the\s+frontmatter\b/i.test(prompt)) {
-		return "boolean";
+	const clear = request.match(
+		/^blank\s+out\s+the\s+([A-Za-z_][A-Za-z0-9_.-]*),\s*but\s+leave\s+the\s+key\s+itself\s+in\s+the\s+frontmatter\s*[.!]?$/i,
+	);
+	if (clear) return { valueType: "null", key: clear[1], value: null };
+	if (/^this\s+file\s+has\s+gone\s+back\s+to\s+being\s+a\s+draft\.\s*say\s+so\s+in\s+the\s+frontmatter\s*[.!]?$/i.test(request)) {
+		return {
+			valueType: "boolean", key: "draft", value: true, currentValue: "false",
+		};
 	}
 	return undefined;
+}
+
+export function frontmatterValueType(prompt: string): FrontmatterValueType | undefined {
+	return frontmatterTypedIntent(prompt)?.valueType;
 }
 
 export function frontmatterCreateIntent(prompt: string): FrontmatterCreateIntent | undefined {
@@ -496,6 +597,9 @@ export function listContainsAppendIntent(prompt: string): ListContainsAppendInte
 }
 
 export function listAppendIntent(prompt: string): ListAppendIntent | undefined {
+	if (/\b(?:do\s+not|don't|must\s+not)\s+(?:add|insert)\b/i.test(prompt)) {
+		return undefined;
+	}
 	const contained = listContainsAppendIntent(prompt);
 	if (contained) {
 		return {
@@ -520,9 +624,21 @@ export function listAppendIntent(prompt: string): ListAppendIntent | undefined {
 		};
 	}
 	const end = prompt.match(
-		/\badd\s+an?\s+item\s+["“]([^"”]+)["”]\s+at\s+the\s+end\s+of\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+		/\badd\s+an?\s+item\s+["“]([^"”]+)["”]\s+at\s+the\s+end\s+of\s+the\s+list\s+under\s+["“]([^"”]+)["”](?:\s+whose\s+items\s+have\s+blank\s+lines\s+between\s+them)?\s*[.!]?$/i,
 	);
-	if (end) return { heading: end[2].trim(), text: end[1].trim() };
+	if (end) {
+		return {
+			heading: end[2].trim(), text: end[1].trim(),
+			...(/\bwhose\s+items\s+have\s+blank\s+lines\s+between\s+them\b/i.test(end[0])
+				? { loose: true } : {}),
+		};
+	}
+	const leadingEnd = prompt.match(
+		/\bat\s+the\s+end\s+of\s+the\s+list\s+under\s+["“]([^"”]+)["”]\s*,\s*add\s+an?\s+item\s+that\s+says\s+["“]([^"”]+)["”]\s*[.!]?$/i,
+	);
+	if (leadingEnd) {
+		return { heading: leadingEnd[1].trim(), text: leadingEnd[2].trim() };
+	}
 	return undefined;
 }
 
@@ -641,22 +757,27 @@ function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSc
 	};
 }
 
-function frontmatterSchema(valueType: FrontmatterValueType, keys: string[]): ToolSchema {
-	const clear = valueType === "null";
-	const name = clear ? "frontmatter_clear" : `frontmatter_set_${valueType}`;
-	const properties: Record<string, unknown> = {
-		key: { type: "string", enum: keys },
-	};
-	if (!clear) properties.value = { type: valueType };
+function tableAddRowSchema(table: TableEntry): ToolSchema {
 	return {
-		name,
-		description: clear
-			? "Blank one existing scalar frontmatter key while retaining the key. Copy its exact path from the flattened values."
-			: `Set one existing scalar frontmatter key to a ${valueType}. Copy its exact path from the flattened values.`,
+		name: "table_add_row_target",
+		description: `Add the exact requested row to the already resolved table ${JSON.stringify(table.heading)}. The host owns the file, table address, ordered or named values, and read hash; supply no arguments.`,
 		parameters: {
 			type: "object",
-			properties,
-			required: clear ? ["key"] : ["key", "value"],
+			properties: {},
+			additionalProperties: false,
+		},
+	};
+}
+
+function frontmatterSchema(valueType: FrontmatterValueType, key: string): ToolSchema {
+	const clear = valueType === "null";
+	const name = clear ? "frontmatter_clear" : `frontmatter_set_${valueType}`;
+	return {
+		name,
+		description: `Apply the already resolved ${clear ? "clear" : valueType} update to ${JSON.stringify(key)}. The host owns the exact key and typed value; supply no arguments.`,
+		parameters: {
+			type: "object",
+			properties: {},
 			additionalProperties: false,
 		},
 	};
@@ -672,14 +793,34 @@ function frontmatterEntries(payload: Record<string, unknown>): FrontmatterEntry[
 		const entry = raw as Partial<FrontmatterEntry>;
 		if (typeof entry.path !== "string" || typeof entry.kind !== "string") return [];
 		if (typeof entry.type !== "string") return [];
-		return [{ path: entry.path, kind: entry.kind, type: entry.type }];
+		if (typeof entry.value !== "string") return [];
+		return [{ path: entry.path, kind: entry.kind, type: entry.type, value: entry.value }];
 	});
 }
 
-function scalarFrontmatterPaths(payload: Record<string, unknown>): string[] {
-	return frontmatterEntries(payload)
-		.filter((entry) => !["map", "seq"].includes(entry.kind))
-		.map((entry) => entry.path);
+export function resolveFrontmatterTypedIntent(
+	intent: FrontmatterTypedIntent,
+	payload: Record<string, unknown>,
+): { key: string; value: string | number | boolean | null; must_exist: true } | undefined {
+	const entries = frontmatterEntries(payload);
+	let key = intent.key;
+	if (intent.author) {
+		const names = entries.filter((entry) =>
+			entry.type === "string" && entry.path.endsWith(".name") && entry.value === intent.author);
+		if (names.length !== 1) return undefined;
+		key = `${names[0].path.slice(0, -".name".length)}.role`;
+	}
+	if (!key) return undefined;
+	const expectedType = intent.valueType === "null" ? "string" : intent.valueType;
+	const matches = entries.filter((entry) =>
+		entry.path === key && !["map", "seq"].includes(entry.kind) && entry.type === expectedType);
+	if (matches.length !== 1) return undefined;
+	if (intent.currentValue !== undefined && matches[0].value !== intent.currentValue) {
+		return undefined;
+	}
+	const rendered = intent.value === null ? "" : String(intent.value);
+	if (matches[0].value === rendered) return undefined;
+	return { key, value: intent.value, must_exist: true };
 }
 
 async function routeForPrompt(
@@ -779,16 +920,15 @@ async function routeForPrompt(
 			systemPrompt: `Incise resolved the complete section insertion, including all literal headings and bodies. Use ${schema.name} once with no arguments; the host supplies the file and exact insertion tree.`,
 		};
 	}
-	const frontmatterType = frontmatterValueType(prompt);
-	if (frontmatterType) {
+	const frontmatter = frontmatterTypedIntent(prompt);
+	if (frontmatter) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["keys", path]);
 		if (result.code !== 0 || result.payload.ok === false) return undefined;
 		if (typeof result.payload.hash !== "string") return undefined;
-		const keys = scalarFrontmatterPaths(result.payload);
-		if (keys.length === 0) return undefined;
-		const schema = frontmatterSchema(frontmatterType, keys);
-		const clear = frontmatterType === "null";
-		const instruction = `Incise inspected the frontmatter and activated ${schema.name}. This custom tool is available even if the base tool summary says none. Call ${schema.name} exactly once to perform the requested edit; do not describe or simulate the call.`;
+		const resolved = resolveFrontmatterTypedIntent(frontmatter, result.payload);
+		if (!resolved) return undefined;
+		const schema = frontmatterSchema(frontmatter.valueType, resolved.key);
+		const instruction = `Incise inspected the frontmatter, resolved the exact key and typed value, and activated ${schema.name}. This custom tool is available even if the base tool summary says none. Call ${schema.name} exactly once with no arguments; the host supplies the complete guarded update.`;
 		return {
 			kind: "frontmatter-typed",
 			path,
@@ -796,11 +936,7 @@ async function routeForPrompt(
 			schema,
 			operation: "frontmatter-set",
 			write: true,
-			arguments: (params) => ({
-				key: params.key,
-				value: clear ? null : params.value,
-				must_exist: true,
-			}),
+			arguments: () => resolved,
 			systemPrompt: `${String(result.payload.text ?? "")}\n\n${instruction}`,
 		};
 	}
@@ -942,8 +1078,9 @@ async function routeForPrompt(
 		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["lists", path]);
 		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
 		const entries = parseListSummary(String(summary.payload.text ?? ""));
-		const candidates = append.containedItem
+		const candidates = append.containedItem || append.loose
 			? matchingListEntries(entries, append.heading)
+				.filter((entry) => !append.loose || entry.loose === true)
 			: [resolveListEntry(entries, append.heading)].filter(
 				(entry): entry is ListEntry => entry !== undefined,
 			);
@@ -1031,6 +1168,32 @@ async function routeForPrompt(
 			systemPrompt: `${String(result.payload.text ?? "")}\n\nIncise resolved the exact quoted list item. Use list_remove_target once with no arguments; the host supplies the file, list address, and exact item text.`,
 		};
 	}
+	const addRow = tableAddRowIntent(prompt);
+	if (addRow) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		if (typeof result.payload.hash !== "string") return undefined;
+		const table = resolveTableEntry(
+			parseTableSummary(String(result.payload.text ?? "")), addRow.heading,
+		);
+		if (!table) return undefined;
+		const values = tableAddRowValues(table, addRow);
+		if (!values) return undefined;
+		const schema = tableAddRowSchema(table);
+		return {
+			kind: "table-add-row-target",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "table-add-row",
+			write: true,
+			arguments: () => ({
+				table: { heading: table.heading, ordinal: table.ordinal },
+				values,
+			}),
+			systemPrompt: `Incise inspected the tables, resolved the exact target and requested row, and activated ${schema.name}. Use ${schema.name} once with no arguments; the host supplies the file, table, values, and read hash.`,
+		};
+	}
 	if (!looksLikeTableRead(prompt)) return undefined;
 	const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
 	if (result.code !== 0 || result.payload.ok === false) return undefined;
@@ -1071,7 +1234,8 @@ export function installSafeRoutedProfile(
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
 		"frontmatter_set_boolean", "frontmatter_create_target", "frontmatter_delete_target",
 		"frontmatter_release_target", "list_remove_target",
-		"list_append_target", "list_set_checked_target", "table_query",
+		"list_append_target", "list_set_checked_target",
+		"table_add_row_target", "table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;

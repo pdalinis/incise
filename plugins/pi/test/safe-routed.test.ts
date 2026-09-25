@@ -6,6 +6,7 @@ import {
 	frontmatterCreateIntent,
 	frontmatterDeleteIntent,
 	frontmatterReleaseIntent,
+	frontmatterTypedIntent,
 	frontmatterValueType,
 	listAppendIntent,
 	listContainsAppendIntent,
@@ -14,12 +15,14 @@ import {
 	parseOutline,
 	parseTableSummary,
 	requestedTable,
+	resolveFrontmatterTypedIntent,
 	resolveOutlineTarget,
 	sectionAppendIntent,
 	sectionInsertArguments,
 	sectionInsertIntent,
 	sectionIntent,
 	sectionSetLevelIntent,
+	tableAddRowIntent,
 	tablePredicates,
 } from "../extension/safe-routed.ts";
 
@@ -119,7 +122,48 @@ test("list append routing recognizes exact end and after forms", () => {
 		listAppendIntent('Add an item "fourth" at the end of the list under "All ones".'),
 		{ heading: "All ones", text: "fourth" },
 	);
+	assert.deepEqual(
+		listAppendIntent('At the end of the list under "Dash markers, two-space indent", add an item that says "fourth".'),
+		{ heading: "Dash markers, two-space indent", text: "fourth" },
+	);
+	assert.deepEqual(
+		listAppendIntent('Add an item "loose four" at the end of the list under "Loose vs tight" whose items have blank lines between them.'),
+		{ heading: "Loose vs tight", text: "loose four", loose: true },
+	);
+	assert.equal(
+		listAppendIntent('Do not add an item "fourth" at the end of the list under "All ones".'),
+		undefined,
+	);
 	assert.equal(listAppendIntent("Add fourth to All ones."), undefined);
+});
+
+test("table row routing accepts only explicit complete row shapes", () => {
+	assert.deepEqual(
+		tableAddRowIntent('Add a row to the Components table for a component named "sprocket" with status "active" and owner "rowan". Put it at the end of the table.'),
+		{
+			heading: "Components",
+			values: { Component: "sprocket", Status: "active", Owner: "rowan" },
+		},
+	);
+	assert.deepEqual(
+		tableAddRowIntent('Add a row at the end of the Components table for a component named "hyperwidget-assembly" with status "active" and owner "dana".'),
+		{
+			heading: "Components",
+			values: { Component: "hyperwidget-assembly", Status: "active", Owner: "dana" },
+		},
+	);
+	assert.deepEqual(
+		tableAddRowIntent('Add a row with the values i, j, k and l to the table under "All four forms".'),
+		{ heading: "All four forms", values: ["i", "j", "k", "l"] },
+	);
+	assert.equal(
+		tableAddRowIntent('Do not add a row with the values i, j, k and l to the table under "All four forms".'),
+		undefined,
+	);
+	assert.equal(
+		tableAddRowIntent('Add a row to the Components table for "sprocket".'),
+		undefined,
+	);
 });
 
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
@@ -133,6 +177,27 @@ test("frontmatter routing recognizes only the five measured existing-key intents
 	for (const [prompt, expected] of supported) {
 		assert.equal(frontmatterValueType(prompt), expected, prompt);
 	}
+	assert.deepEqual(
+		frontmatterTypedIntent("The build should run with 8 parallel jobs instead of 4."),
+		{
+			valueType: "integer", key: "build.jobs", value: 8, currentValue: "4",
+		},
+	);
+	assert.deepEqual(
+		frontmatterTypedIntent("Switch the build from a release build to a debug one."),
+		{
+			valueType: "string", key: "build.target", value: "debug",
+			currentValue: "release",
+		},
+	);
+	assert.deepEqual(
+		frontmatterTypedIntent("Dana has taken over as a maintainer. Update her entry in the authors list to say so."),
+		{ valueType: "string", author: "Dana", value: "maintainer" },
+	);
+	assert.equal(
+		frontmatterTypedIntent("Do not switch the build from a release build to a debug one."),
+		undefined,
+	);
 	for (const prompt of [
 		"Turn on caching for the build.",
 		"This file is no longer a draft. Take the draft flag out of the frontmatter completely.",
@@ -141,6 +206,48 @@ test("frontmatter routing recognizes only the five measured existing-key intents
 		"Give this file a frontmatter block with a title of Absent frontmatter.",
 		"Mark this file as a draft by adding a draft flag set to true.",
 	]) assert.equal(frontmatterValueType(prompt), undefined, prompt);
+});
+
+test("frontmatter typed intents resolve one existing canonical leaf", () => {
+	const payload = {
+		frontmatter: {
+			keys: [
+				{ path: "build.target", kind: "scalar", type: "string", value: "release" },
+				{ path: "build.jobs", kind: "scalar", type: "integer", value: "4" },
+				{ path: "authors[0].name", kind: "scalar", type: "string", value: "Peter" },
+				{ path: "authors[0].role", kind: "scalar", type: "string", value: "maintainer" },
+				{ path: "authors[1].name", kind: "scalar", type: "string", value: "Dana" },
+				{ path: "authors[1].role", kind: "scalar", type: "string", value: "contributor" },
+				{ path: "title", kind: "scalar", type: "string", value: '"Rich frontmatter"' },
+				{ path: "draft", kind: "scalar", type: "boolean", value: "false" },
+			],
+		},
+	};
+	for (const [prompt, expected] of [
+		["The build should run with 8 parallel jobs instead of 4.",
+			{ key: "build.jobs", value: 8, must_exist: true }],
+		["Switch the build from a release build to a debug one.",
+			{ key: "build.target", value: "debug", must_exist: true }],
+		["Dana has taken over as a maintainer. Update her entry in the authors list to say so.",
+			{ key: "authors[1].role", value: "maintainer", must_exist: true }],
+		["Blank out the title, but leave the key itself in the frontmatter.",
+			{ key: "title", value: null, must_exist: true }],
+		["This file has gone back to being a draft. Say so in the frontmatter.",
+			{ key: "draft", value: true, must_exist: true }],
+	] as const) {
+		const intent = frontmatterTypedIntent(prompt);
+		assert(intent);
+		assert.deepEqual(resolveFrontmatterTypedIntent(intent, payload), expected);
+	}
+	const duplicateDana = structuredClone(payload);
+	duplicateDana.frontmatter.keys.push(
+		{ path: "authors[2].name", kind: "scalar", type: "string", value: "Dana" },
+	);
+	const author = frontmatterTypedIntent(
+		"Dana has taken over as a maintainer. Update her entry in the authors list to say so.",
+	);
+	assert(author);
+	assert.equal(resolveFrontmatterTypedIntent(author, duplicateDana), undefined);
 });
 
 test("section routing recognizes only explicit rename and body-replacement requests", () => {
@@ -154,7 +261,10 @@ test("section routing recognizes only explicit rename and body-replacement reque
 	);
 	assert.deepEqual(
 		sectionIntent('Replace the text under Upgrade > Linux with "See the platform notes."'),
-		{ kind: "section-replace-body", target: "Upgrade > Linux" },
+		{
+			kind: "section-replace-body", target: "Upgrade > Linux",
+			body: "See the platform notes.",
+		},
 	);
 	assert.deepEqual(
 		sectionIntent('Replace the introductory paragraph under Install -- the one before the macOS subsection -- with "Choose your platform below."'),
@@ -165,6 +275,10 @@ test("section routing recognizes only explicit rename and body-replacement reque
 	);
 	assert.equal(
 		sectionIntent('Replace the introductory paragraph under Install with "Choose your platform below."'),
+		undefined,
+	);
+	assert.equal(
+		sectionIntent('Do not replace the text under Upgrade > Linux with "See the platform notes."'),
 		undefined,
 	);
 	assert.equal(sectionIntent("Add a new section under Upgrade."), undefined);

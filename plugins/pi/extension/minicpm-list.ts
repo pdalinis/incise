@@ -13,6 +13,7 @@ export type ListRoute = "append" | "after" | "between";
 export interface ListEntry {
 	heading: string;
 	ordinal: number;
+	loose?: boolean;
 }
 
 export interface ListItem {
@@ -64,9 +65,15 @@ export function routeListRequest(prompt: string): ListRoute {
 
 export function parseListSummary(text: string): ListEntry[] {
 	const entries: ListEntry[] = [];
-	const pattern = /^  heading "(.*)"  ordinal ([0-9]+)$/gm;
-	for (const match of text.matchAll(pattern)) {
-		entries.push({ heading: match[1], ordinal: Number(match[2]) });
+	const lines = text.split(/\r?\n/);
+	for (let index = 0; index < lines.length; index += 1) {
+		const match = lines[index].match(/^  heading "(.*)"  ordinal ([0-9]+)$/);
+		if (!match) continue;
+		entries.push({
+			heading: match[1],
+			ordinal: Number(match[2]),
+			...(/\bloose\b/i.test(lines[index + 1] ?? "") ? { loose: true } : {}),
+		});
 	}
 	return entries;
 }

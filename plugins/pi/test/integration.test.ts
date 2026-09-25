@@ -272,6 +272,25 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.match(preambleText, /## Install\n\nChoose your platform below\.\n\n### macOS/);
 	assert.match(preambleText, /#### Authentication\n\nLevel 5\./);
 
+	const linuxPath = join(directory, "linux.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), linuxPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @linux.md, replace the text under Upgrade > Linux with "See the platform notes."',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_replace_target"]);
+	assert.equal(tools.get("section_replace_target").parameters.required, undefined);
+	const linuxReplaced = await tools.get("section_replace_target").execute(
+		"replace-linux", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(linuxReplaced.details.resolvedArguments, {
+		section: "Deep heading nesting > Upgrade > Linux",
+		text: "See the platform notes.", overwrite: true,
+	});
+	assert.match(await readFile(linuxPath, "utf8"), /### Linux\n\nSee the platform notes\./);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
 	const insertPath = join(directory, "insert.md");
 	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), insertPath);
 	const insertPrepared = await events.get("before_agent_start")({
@@ -395,6 +414,46 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	assert.equal(queried.details.route, "table-query");
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const addRowPath = join(directory, "add-row.md");
+	await copyFile(resolve(repository, "corpus", "tables", "aligned.md"), addRowPath);
+	const addRowPrepared = await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @add-row.md, add a row at the end of the Components table for a component named "hyperwidget-assembly" with status "active" and owner "dana".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.match(addRowPrepared.systemPrompt, /activated table_add_row_target/);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_add_row_target"]);
+	assert.equal(tools.get("table_add_row_target").parameters.required, undefined);
+	const rowAdded = await tools.get("table_add_row_target").execute(
+		"add-row", {}, undefined, undefined, context,
+	);
+	assert.equal(rowAdded.details.route, "table-add-row-target");
+	assert.deepEqual(rowAdded.details.resolvedArguments, {
+		table: { heading: "Aligned table > Components", ordinal: 0 },
+		values: {
+			Component: "hyperwidget-assembly", Status: "active", Owner: "dana",
+		},
+	});
+	assert.match(await readFile(addRowPath, "utf8"), /hyperwidget-assembly\s+\| active\s+\| dana/);
+	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const staleRowPath = join(directory, "stale-row.md");
+	await copyFile(resolve(repository, "corpus", "tables", "aligned.md"), staleRowPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @stale-row.md, add a row to the Components table for a component named "sprocket" with status "active" and owner "rowan". Put it at the end of the table.',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	const staleText = `${await readFile(staleRowPath, "utf8")}<!-- external -->\n`;
+	await writeFile(staleRowPath, staleText, "utf8");
+	await assert.rejects(
+		() => tools.get("table_add_row_target").execute(
+			"stale-row", {}, undefined, undefined, context,
+		),
+		/has changed since it was read/,
+	);
+	assert.equal(await readFile(staleRowPath, "utf8"), staleText);
+
 	const componentsPath = join(directory, "components.md");
 	await copyFile(resolve(repository, "corpus", "tables", "ragged.md"), componentsPath);
 	await events.get("before_agent_start")({
@@ -432,11 +491,11 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		systemPromptOptions: {},
 	}, context);
 	assert.match(frontmatterPrepared.systemPrompt, /activated frontmatter_set_integer/);
-	assert.match(frontmatterPrepared.systemPrompt, /build\.jobs/);
+	assert.match(frontmatterPrepared.systemPrompt, /resolved the exact key and typed value/);
 	assert.deepEqual([...active].sort(), ["foreign_tool", "frontmatter_set_integer"]);
-	assert.deepEqual(tools.get("frontmatter_set_integer").parameters.required, ["key", "value"]);
+	assert.equal(tools.get("frontmatter_set_integer").parameters.required, undefined);
 	const frontmatterChanged = await tools.get("frontmatter_set_integer").execute(
-		"frontmatter", { key: "build.jobs", value: 8 }, undefined, undefined, context,
+		"frontmatter", {}, undefined, undefined, context,
 	);
 	assert.equal(frontmatterChanged.details.route, "frontmatter-typed");
 	assert.deepEqual(frontmatterChanged.details.resolvedArguments, {
@@ -594,6 +653,40 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 		text: "two and a half", after: "second",
 	});
 	assert.match(await readFile(orderedPath, "utf8"), /2\. second\n3\. two and a half\n4\. third/);
+
+	const tightPath = join(directory, "tight-end.md");
+	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), tightPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @tight-end.md, at the end of the list under "Dash markers, two-space indent", add an item that says "fourth".',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const tightAdded = await tools.get("list_append_target").execute(
+		"tight-end", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(tightAdded.details.resolvedArguments, {
+		list: { heading: "Nested and mixed lists > Dash markers, two-space indent", ordinal: 0 },
+		text: "fourth", position: "end",
+	});
+	assert.match(await readFile(tightPath, "utf8"), /- third\n- fourth/);
+
+	const loosePath = join(directory, "loose-end.md");
+	await copyFile(resolve(repository, "corpus", "lists", "nested-mixed.md"), loosePath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @loose-end.md, add an item "loose four" at the end of the list under "Loose vs tight" whose items have blank lines between them.',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "list_append_target"]);
+	const looseAdded = await tools.get("list_append_target").execute(
+		"loose-end", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(looseAdded.details.resolvedArguments, {
+		list: { heading: "Nested and mixed lists > Loose vs tight", ordinal: 1 },
+		text: "loose four", position: "end",
+	});
+	assert.match(await readFile(loosePath, "utf8"), /- loose three\n\n- loose four/);
 
 	const notesPath = join(directory, "notes.md");
 	await copyFile(resolve(repository, "corpus", "sections", "duplicate-siblings.md"), notesPath);
