@@ -1,0 +1,12 @@
+{"task_id": "insert-nested-ratelimits", "trial": 0, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "trial": 1, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-nested-ratelimits", "trial": 2, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "trial": 0, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "trial": 1, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-release-at-top", "trial": 2, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "trial": 0, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "trial": 1, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-subsection-last", "trial": 2, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "trial": 0, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "trial": 1, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}
+{"task_id": "insert-troubleshooting", "trial": 2, "scheme": "minicpm_section_required_slots", "outcome": "correct", "detail": null}

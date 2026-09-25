@@ -1,0 +1,313 @@
+{
+  "artifacts": [
+    {
+      "path": "bench/results/minicpm5_roadmap_frontmatter_compose_5_20260921.jsonl",
+      "sha256": "aca1bb15c30b8606612f56e5ec3f0f96d4e9ef5c2115a81d0d6931db486fa5f8"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_frontmatter_compose_5_20260921_graded.jsonl",
+      "sha256": "0367a06c507cf39bf6986eca398d0b90712d475e05355a23671f6779ca08ce0e"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_frontmatter_safe_small_20260921.jsonl",
+      "sha256": "781f0d3d31a3878e4dc61502049bff5a18d20ac2f6d201ff1407eabecc9f7b38"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_frontmatter_safe_small_20260921_graded.jsonl",
+      "sha256": "c2088653b155e5679bb29dbd86ce3d9558f199edbbc984a0730b85a7bfac5615"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_lists_compose_5_20260921.jsonl",
+      "sha256": "22a4eb80b6886420aa9f0b906986f21c6b48170cd37059e9f1b3f2db7c59b19e"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_lists_compose_5_20260921_graded.jsonl",
+      "sha256": "4b7dfaa3b657a509a4577deb2fb814bbc0e8ca01c42772b3371045c12d006fcf"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_lists_safe_small_20260921.jsonl",
+      "sha256": "dcac153549e9fe1a7587ed42a8cdaab1bf168c4e62d92723a242cee904b55f37"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_lists_safe_small_20260921_graded.jsonl",
+      "sha256": "0cba1552391875b317ce8651270a4f6e50baa0674a7352c4a05ec050b8ab5080"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_sections_compose_5_20260921.jsonl",
+      "sha256": "e0084905a2496346d5e0213ceb7fd82deb42bb1c53866f68bf9b2193801b7a75"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_sections_compose_5_20260921_graded.jsonl",
+      "sha256": "cbb560273cd83315742f8eb7669b169a473c23a7e92174356790a21ddcace9b1"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_sections_safe_small_20260921.jsonl",
+      "sha256": "53d39333c42ddc7398022b7a86788475f6c9122ab8268e51de6aada7a7016c26"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_sections_safe_small_20260921_graded.jsonl",
+      "sha256": "612a248465a9aa242b48dbc04b915d478fae99d7ab4e1e4f9e83de9305e12151"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921.jsonl",
+      "sha256": "7b52533335769df793e8c78b9cfa9af1cc1476fb44de63767fa545d8a485dc3c"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921_graded.jsonl",
+      "sha256": "2bfdb1a21b8a685e5f0f049304b106d667f32bb85316af87bf4cad2d4ce956c7"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921_v2.jsonl",
+      "sha256": "43357577e2343afd4647021f61bb103ef62bf374bd088167e4c0f178982b9f55"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921_v2_graded.jsonl",
+      "sha256": "6c36338749bc7a73d16a5c166accde7c448edfcb3de02ef81152a1acb22623a2"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921_v3.jsonl",
+      "sha256": "57a17ed57257c9c5ad2f340c0988a6bb4c10b255bee9db3955b8335ec43efee1"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_table_20260921_v3_graded.jsonl",
+      "sha256": "532a3c51ab88bdb7de08ee544d527b9c950aa1a74fcbb5af72b87726d9cfc4c6"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_tables_compose_5_20260921.jsonl",
+      "sha256": "97af815a43a994d1e4345be8ce58fa30b68c2e2a21007d63245f9fde2163f10e"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_tables_compose_5_20260921_graded.jsonl",
+      "sha256": "37c4e446a0fe39a78015b7d8b9c49df93e0636e475226a464608307dfd2fb8ac"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_tables_safe_small_20260921.jsonl",
+      "sha256": "c56268f7f19b2c5c1ebf7fbb5ad025f34b9cdbdb711a9054e63407b6422bae9c"
+    },
+    {
+      "path": "bench/results/minicpm5_roadmap_tables_safe_small_20260921_graded.jsonl",
+      "sha256": "b81b32688f10cd4f8969a837850dac69cfc0e2395ae5368636a3e03cff60a188"
+    }
+  ],
+  "families": {
+    "frontmatter": {
+      "control": {
+        "correct": 14,
+        "data_loss": 5,
+        "mean_completion_tokens": 225.37,
+        "mean_elapsed_s": 6.97,
+        "mean_tool_calls": 3.3,
+        "multi_mutation_trials": 16,
+        "outcomes": {
+          "collateral:content": 1,
+          "correct": 14,
+          "destructive": 5,
+          "op_error": 4,
+          "wrong": 3
+        },
+        "read_trials": 7,
+        "silent_corruption": 9,
+        "trials": 27
+      },
+      "paired": {
+        "control_only_correct": 14,
+        "discordant": 14,
+        "exact_mcnemar_p": 0.0001220703125,
+        "treatment_only_correct": 0
+      },
+      "treatment": {
+        "correct": 0,
+        "data_loss": 0,
+        "mean_completion_tokens": 272.81,
+        "mean_elapsed_s": 8.67,
+        "mean_tool_calls": 4.19,
+        "multi_mutation_trials": 17,
+        "outcomes": {
+          "collateral:content": 2,
+          "op_error": 23,
+          "wrong": 2
+        },
+        "read_trials": 27,
+        "silent_corruption": 4,
+        "trials": 27
+      }
+    },
+    "lists": {
+      "control": {
+        "correct": 8,
+        "data_loss": 0,
+        "mean_completion_tokens": 243.24,
+        "mean_elapsed_s": 8.35,
+        "mean_tool_calls": 3.1,
+        "multi_mutation_trials": 17,
+        "outcomes": {
+          "collateral:content": 6,
+          "correct": 8,
+          "op_error": 5,
+          "wrong": 2
+        },
+        "read_trials": 7,
+        "silent_corruption": 8,
+        "trials": 21
+      },
+      "paired": {
+        "control_only_correct": 1,
+        "discordant": 9,
+        "exact_mcnemar_p": 0.0390625,
+        "treatment_only_correct": 8
+      },
+      "treatment": {
+        "correct": 15,
+        "data_loss": 0,
+        "mean_completion_tokens": 177.29,
+        "mean_elapsed_s": 6.01,
+        "mean_tool_calls": 2.86,
+        "multi_mutation_trials": 2,
+        "outcomes": {
+          "correct": 15,
+          "op_error": 3,
+          "wrong": 3
+        },
+        "read_trials": 21,
+        "silent_corruption": 3,
+        "trials": 21
+      }
+    },
+    "sections": {
+      "control": {
+        "correct": 8,
+        "data_loss": 1,
+        "mean_completion_tokens": 279.89,
+        "mean_elapsed_s": 8.66,
+        "mean_tool_calls": 3.52,
+        "multi_mutation_trials": 22,
+        "outcomes": {
+          "collateral:content": 1,
+          "collateral:formatting": 4,
+          "correct": 8,
+          "destructive": 1,
+          "op_error": 11,
+          "wrong": 2
+        },
+        "read_trials": 16,
+        "silent_corruption": 8,
+        "trials": 27
+      },
+      "paired": {
+        "control_only_correct": 5,
+        "discordant": 6,
+        "exact_mcnemar_p": 0.21875,
+        "treatment_only_correct": 1
+      },
+      "treatment": {
+        "correct": 4,
+        "data_loss": 0,
+        "mean_completion_tokens": 224.26,
+        "mean_elapsed_s": 7.67,
+        "mean_tool_calls": 3.85,
+        "multi_mutation_trials": 16,
+        "outcomes": {
+          "collateral:formatting": 2,
+          "correct": 4,
+          "op_error": 19,
+          "wrong": 2
+        },
+        "read_trials": 27,
+        "silent_corruption": 4,
+        "trials": 27
+      }
+    },
+    "tables": {
+      "control": {
+        "correct": 10,
+        "data_loss": 0,
+        "mean_completion_tokens": 232.27,
+        "mean_elapsed_s": 7.25,
+        "mean_tool_calls": 2.67,
+        "multi_mutation_trials": 6,
+        "outcomes": {
+          "correct": 10,
+          "op_error": 3,
+          "wrong": 2
+        },
+        "read_trials": 8,
+        "silent_corruption": 2,
+        "trials": 15
+      },
+      "paired": {
+        "control_only_correct": 3,
+        "discordant": 7,
+        "exact_mcnemar_p": 1.0,
+        "treatment_only_correct": 4
+      },
+      "treatment": {
+        "correct": 11,
+        "data_loss": 1,
+        "mean_completion_tokens": 203.47,
+        "mean_elapsed_s": 6.34,
+        "mean_tool_calls": 3.67,
+        "multi_mutation_trials": 2,
+        "outcomes": {
+          "correct": 11,
+          "destructive": 1,
+          "op_error": 1,
+          "wrong": 2
+        },
+        "read_trials": 15,
+        "silent_corruption": 3,
+        "trials": 15
+      }
+    }
+  },
+  "generated_at": "2026-09-21T21:15:02.179847+00:00",
+  "inputs": {
+    "executor": {
+      "path": "target/debug/incise",
+      "sha256": "4f211e67bffeecd548ad39f520177d8c55c58f645bc8259b26b2b765b1bb73b9"
+    },
+    "safe_small_schema_sha256": "87e8c178590249af2779528ad9f95fe73bd80ea8bc9cac474560d61bb47944a9",
+    "tasks": {
+      "frontmatter": "f1279fd405ed2fab140a6948881f7db9243a87dcd201d7e10efb86958f4c8989",
+      "lists": "37732f805659a06a16a9fbe636a54aa5cd0046d37feaaf4f45f3efc3bc5c6f1f",
+      "sections": "e2c0a0ef1f45f8e3299670dad9d5cbcc9ee0d78ffbc49e87dff213fde220d7b2",
+      "tables": "2ff4a06e819c3de5404b5873c029e9e208ba1ba0e94a28863dcc677c8d18a318"
+    }
+  },
+  "invalid_pools": {
+    "minicpm5_roadmap_table_20260921.jsonl": "localhost was unavailable inside the initial sandbox",
+    "minicpm5_roadmap_table_20260921_v2.jsonl": "relative --binary path resolved from Arm C's temporary cwd"
+  },
+  "model": "minicpm5-2b-q8",
+  "pooled": {
+    "control_correct": 40,
+    "control_only_correct": 23,
+    "control_outcomes": {
+      "collateral:content": 8,
+      "collateral:formatting": 4,
+      "correct": 40,
+      "destructive": 6,
+      "op_error": 23,
+      "wrong": 9
+    },
+    "exact_mcnemar_p": 0.13249816396273673,
+    "treatment_correct": 30,
+    "treatment_only_correct": 13,
+    "treatment_outcomes": {
+      "collateral:content": 2,
+      "collateral:formatting": 2,
+      "correct": 30,
+      "destructive": 1,
+      "op_error": 46,
+      "wrong": 9
+    }
+  },
+  "preregistration_commit": "8b25162",
+  "primary_pairs": 90,
+  "singleton_confirmation": {
+    "correct": 18,
+    "singleton_object_calls": 9,
+    "singleton_object_calls_correct": 9,
+    "trials": 18
+  },
+  "trials_per_primary_task": 3
+}

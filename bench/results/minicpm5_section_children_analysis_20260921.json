@@ -1,0 +1,41 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_routed_sections_20260921.jsonl": "a23f7256b74b1de1de0da04985d0b2ae460684210f57eb723ac7f551b7a4af38",
+    "bench/results/minicpm5_routed_sections_20260921_graded.jsonl": "aabf2d28fad3849a4751630f7f5b5de489c0445aa1598397f105341d8470e081",
+    "bench/results/minicpm5_section_children_20260921.jsonl": "963631f4c491ea98ef35a4d21f52800ddccbb9af88b72bc59c3a5c1d9ea02016",
+    "bench/results/minicpm5_section_children_20260921_graded.jsonl": "93a452081ad79712ea8d995ddd1bdeea7366143c31f65c66288eff3ac635ca5f"
+  },
+  "control_outcomes": {
+    "op_error": 7,
+    "wrong": 5
+  },
+  "gate": {
+    "at_least_four_correct": false,
+    "no_treatment_destructive_or_collateral": true,
+    "passed": false,
+    "refusals_left_fixture_unchanged": true,
+    "single_subsection_no_new_unsafe": true
+  },
+  "generated_at": "2026-09-21T22:13:05.266200+00:00",
+  "harness_sha256": "fedaee23e077422fdc88bccf3a56b8227d17f0fc663f38074abfd43757f2790d",
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 0,
+    "control_only": 0,
+    "exact_mcnemar_p": 1.0,
+    "treatment": 0,
+    "treatment_only": 0
+  },
+  "pairs": 12,
+  "preregistration_commit": "789aa42",
+  "schema_sha256": "db16683389041b3be209c05f518ea72ef4dff700788288f2e75db71b491519c1",
+  "transitions": {
+    "op_error->op_error": 1,
+    "op_error->wrong": 6,
+    "wrong->wrong": 5
+  },
+  "treatment_outcomes": {
+    "op_error": 1,
+    "wrong": 11
+  }
+}

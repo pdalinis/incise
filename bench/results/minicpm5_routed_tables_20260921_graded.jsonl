@@ -1,0 +1,15 @@
+{"task_id": "add-row-aligned-repad", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-repad", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-aligned-short", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-alignment-markers", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-row-ragged", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "update-cell-multi-table", "scheme": "minicpm_routed", "trial": 1, "outcome": "op_error", "detail": "no row where Host=\"stage-1\". |   Near matches: web-1 |   Values in Host: web-1, web-2"}
+{"task_id": "update-cell-multi-table", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}

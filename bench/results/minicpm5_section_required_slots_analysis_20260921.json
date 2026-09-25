@@ -1,0 +1,60 @@
+{
+  "artifacts": {
+    "bench/results/minicpm5_section_required_slots_20260921.jsonl": "3a228eb0a374498aa048a806b55916f1f7f0bf308c1e46ce92517299557ff4d9",
+    "bench/results/minicpm5_section_required_slots_20260921_graded.jsonl": "f2c09d9c1884d7899317455c3599394fc05d6179fe1f06561a972005181f440a",
+    "bench/results/minicpm5_section_slots_20260921.jsonl": "475f4b618d131cd0a9c22ffad7e0214befe105b7cb1230bc3e7c60baf7e49e87",
+    "bench/results/minicpm5_section_slots_20260921_graded.jsonl": "53e5870291259d0fbe41bf65d61ec75221b70b547af6e3e36d17e8374d85223e"
+  },
+  "control_outcomes": {
+    "correct": 6,
+    "wrong": 6
+  },
+  "efficiency": {
+    "control_mean_completion_tokens": 54.5,
+    "control_mean_elapsed_s": 1.58,
+    "treatment_mean_completion_tokens": 72.5,
+    "treatment_mean_elapsed_s": 2.16
+  },
+  "gate": {
+    "at_least_ten_correct": true,
+    "every_task_correct_in_two_seeds": true,
+    "no_control_correct_regressed": true,
+    "no_treatment_destructive_or_collateral": true,
+    "passed": true,
+    "refusals_left_fixture_unchanged": true
+  },
+  "generated_at": "2026-09-21T23:49:15.608258+00:00",
+  "harness_sha256": "b08bec1519482c7646c5dac84bf86a9d8f89d6b6bf8a4f0b7fbb18ea7db2af65",
+  "model": "minicpm5-2b-q8",
+  "paired_correct": {
+    "control": 6,
+    "control_only": 0,
+    "exact_mcnemar_p": 0.03125,
+    "treatment": 12,
+    "treatment_only": 6
+  },
+  "pairs": 12,
+  "preregistration_commit": "a0333b1",
+  "schema_sha256": "ce1b838982d4281bd8e872853a8018632877bc53ca8606094e394a2122d288a1",
+  "transitions": {
+    "correct->correct": 6,
+    "wrong->correct": 6
+  },
+  "treatment_by_task": {
+    "insert-nested-ratelimits": {
+      "correct": 3
+    },
+    "insert-release-at-top": {
+      "correct": 3
+    },
+    "insert-subsection-last": {
+      "correct": 3
+    },
+    "insert-troubleshooting": {
+      "correct": 3
+    }
+  },
+  "treatment_outcomes": {
+    "correct": 12
+  }
+}

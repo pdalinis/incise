@@ -1,0 +1,27 @@
+{"task_id": "add-build-cache", "scheme": "minicpm_routed", "trial": 0, "outcome": "destructive", "detail": "existing line lost: '  target: release        # inline comment, must survive a sibling edit'"}
+{"task_id": "add-build-cache", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "add-build-cache", "scheme": "minicpm_routed", "trial": 2, "outcome": "destructive", "detail": "existing line lost: '  target: release        # inline comment, must survive a sibling edit'"}
+{"task_id": "clear-title", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "clear-title", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "minicpm_routed", "trial": 0, "outcome": "malformed", "detail": "no tool call"}
+{"task_id": "create-on-absent", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "create-on-absent", "scheme": "minicpm_routed", "trial": 2, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "fill-empty", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "fill-empty", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "release-bump", "scheme": "minicpm_routed", "trial": 0, "outcome": "wrong", "detail": "missing key 'released'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "release-bump", "scheme": "minicpm_routed", "trial": 1, "outcome": "wrong", "detail": "missing key 'released'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "release-bump", "scheme": "minicpm_routed", "trial": 2, "outcome": "wrong", "detail": "missing key 'released'; have ['authors', 'authors[0]', 'authors[0].name', 'authors[0].role', 'authors[1]', 'authors[1].name', 'authors[1].role', 'build', 'build.features', 'build.features[0]', 'build.features[1]', 'build.jobs', 'build.target', 'draft', 'empty_value', 'folded', 'key with spaces', 'multiline', 'nested', 'nested.deeply', 'nested.deeply.buried', 'quoted_key', 'tags', 'tags[0]', 'tags[1]', 'tags[2]', 'title', 'version']"}
+{"task_id": "set-build-jobs", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-build-jobs", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-build-target", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "minicpm_routed", "trial": 0, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-dana-role", "scheme": "minicpm_routed", "trial": 2, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "minicpm_routed", "trial": 0, "outcome": "wrong", "detail": "op applied but changed nothing"}
+{"task_id": "set-draft-true", "scheme": "minicpm_routed", "trial": 1, "outcome": "correct", "detail": null}
+{"task_id": "set-draft-true", "scheme": "minicpm_routed", "trial": 2, "outcome": "wrong", "detail": "op applied but changed nothing"}

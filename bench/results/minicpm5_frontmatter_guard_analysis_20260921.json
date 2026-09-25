@@ -1,0 +1,44 @@
+{
+  "control_outcomes": {
+    "correct": 18,
+    "destructive": 2,
+    "malformed": 1,
+    "wrong": 6
+  },
+  "gate": {
+    "control_grades_match_recorded": true,
+    "destructive_calls_became_loud_refusals": true,
+    "no_treatment_destructive_or_collateral": true,
+    "passed": true,
+    "previously_correct_results_byte_identical": true
+  },
+  "generated_at": "2026-09-21T22:02:31.039558+00:00",
+  "implementation": {
+    "bench/incise_ops.py": "37b3dc33714729e0592808a5613115514e5a9d411a04c435ccd5c2d657837061",
+    "bench/replay_minicpm5_frontmatter_guard.py": "f286e6e6e2703fb88e2bc02359a4a44013f35776126cee597630aba8b69fa5f5",
+    "crates/incise-core/src/error.rs": "ffd2771398738d6f2c3e89231c23f21e5c2d6b046c0373fe850518d1996cddaf",
+    "crates/incise-core/src/ops/dispatch.rs": "3901c6e13d2f3e8482ca238a71e99d757f35bfbb90ccc39d8d0d14efc34b4869",
+    "crates/incise-core/src/ops/frontmatter.rs": "8908673ef83069ee4ac7377408b79662b441aab2307546d274a0968b18042971"
+  },
+  "pairs": 27,
+  "preregistration_commit": "657daa4",
+  "source": {
+    "graded": "bench/results/minicpm5_routed_frontmatter_20260921_graded.jsonl",
+    "graded_sha256": "c315555949f37f47b608d1d1a9aad3854626289b6cfce8f344a038bf4a6c89d1",
+    "raw": "bench/results/minicpm5_routed_frontmatter_20260921.jsonl",
+    "raw_sha256": "e51d8e184fe9b540295cb55b087298eabf4d50eeae019f02f9520e29ad136330",
+    "tasks_sha256": "f1279fd405ed2fab140a6948881f7db9243a87dcd201d7e10efb86958f4c8989"
+  },
+  "transitions": {
+    "correct->correct": 18,
+    "destructive->op_error": 2,
+    "malformed->malformed": 1,
+    "wrong->wrong": 6
+  },
+  "treatment_outcomes": {
+    "correct": 18,
+    "malformed": 1,
+    "op_error": 2,
+    "wrong": 6
+  }
+}
