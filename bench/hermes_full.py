@@ -34,19 +34,48 @@ STANDARD_TOOLS = [
 HARMFUL = {"wrong", "destructive", "collateral:content", "collateral:formatting"}
 ROUTED_TABLE_TASKS = {
     "get-filter-one-column", "get-filter-two-columns",
-    "get-filter-no-match", "get-escaped-cell",
+    "get-filter-no-match", "get-escaped-cell", "get-ordinal-table",
 }
 PROFILES = {
     "route-smoke": ("auto", "ornith"),
     "ornith-standard": ("auto", "unknown"),
     "ornith-auto": ("auto", "ornith"),
     "gemma-auto": ("auto", "gemma"),
+    "minicpm-safe-routed": ("safe-routed", "minicpm"),
+    "gemma-minicpm-retention": ("auto", "gemma"),
+    "ornith-minicpm-retention": ("auto", "ornith"),
 }
 MARKER = ".incise-hermes-full-sandbox"
 HOME_MARKER = ".incise-hermes-benchmark-home"
 DEFAULT_SANDBOX = Path("/private/tmp/incise-hermes-full-20260924")
 DEFAULT_HERMES_HOME = Path("/private/tmp/incise-hermes-home-20260924")
-DEFAULT_ROUTES = BENCH / "results" / "hermes_safe_routed_parity_20260924.json"
+DEFAULT_ROUTES = BENCH / "results" / "minicpm5_hermes_route_parity_20260925.json"
+DEFAULT_PARITY_PI_RAW = BENCH / "results" / "minicpm5_safe_routed_composition_v3_20260925.jsonl"
+DEFAULT_BASELINE_PI_RAW = BENCH / "results" / "ornith_final_v2_safe_routed_20260923.jsonl"
+
+
+def is_standard_condition(condition: str) -> bool:
+    return condition == "ornith-standard"
+
+
+def is_gemma_condition(condition: str) -> bool:
+    return PROFILES[condition][1] == "gemma"
+
+
+def is_minicpm_condition(condition: str) -> bool:
+    return PROFILES[condition][1] == "minicpm"
+
+
+def max_tokens_for(args, condition: str) -> int:
+    if is_gemma_condition(condition):
+        return args.gemma_max_tokens
+    if is_minicpm_condition(condition):
+        return args.minicpm_max_tokens
+    return args.max_tokens
+
+
+def parallel_tool_calls_for(condition: str):
+    return None if is_gemma_condition(condition) else False
 
 
 def read_text(path: Path) -> str:
@@ -198,11 +227,10 @@ def request_environment(args, *, condition: str, seed: int, trace: Path) -> dict
         "INCISE_HERMES_SEED": str(seed),
         "INCISE_HERMES_TRACE": str(trace),
     })
-    if condition == "gemma-auto":
-        env["INCISE_HERMES_MAX_TOKENS"] = str(args.gemma_max_tokens)
+    env["INCISE_HERMES_MAX_TOKENS"] = str(max_tokens_for(args, condition))
+    if parallel_tool_calls_for(condition) is None:
         env.pop("INCISE_HERMES_PARALLEL_TOOL_CALLS", None)
     else:
-        env["INCISE_HERMES_MAX_TOKENS"] = str(args.max_tokens)
         env["INCISE_HERMES_PARALLEL_TOOL_CALLS"] = "false"
     return env
 
@@ -263,7 +291,7 @@ def framing_errors(row: dict, expected: dict, condition: str) -> list[str]:
         if request.get("seed") != row["seed"]:
             errors.append(f"seed={request.get('seed')!r}")
     first_tools = requests[0].get("tools")
-    wanted = expected["expected"] if condition != "ornith-standard" else "standard"
+    wanted = "standard" if is_standard_condition(condition) else expected["expected"]
     if wanted == "standard":
         if first_tools != sorted(STANDARD_TOOLS):
             errors.append(f"fallback tools={first_tools!r}")
@@ -277,6 +305,8 @@ def framing_errors(row: dict, expected: dict, condition: str) -> list[str]:
         calls = [call for call in row.get("tool_calls", []) if call.get("function", {}).get("name") == wanted]
         if len(calls) != 1:
             errors.append(f"expected one {wanted} call, got {len(calls)}")
+        elif json.loads(calls[0]["function"]["arguments"]) != {}:
+            errors.append(f"model-supplied arguments were not empty: {calls[0]['function']['arguments']}")
         successful = [
             result for result in row.get("tool_results", [])
             if result.get("name") == wanted and not result.get("is_error")
@@ -326,9 +356,9 @@ def run_one(args, task: dict, seed: int, attempt: int, expected: dict):
         "seed": seed,
         "attempt": attempt,
         "max_turns": 4,
-        "max_tokens": args.gemma_max_tokens if args.condition == "gemma-auto" else args.max_tokens,
+        "max_tokens": max_tokens_for(args, args.condition),
         "reasoning": "none",
-        "parallel_tool_calls": None if args.condition == "gemma-auto" else False,
+        "parallel_tool_calls": parallel_tool_calls_for(args.condition),
         "initial_sha256": composition.sha256_bytes(before.encode()),
         "final_sha256": composition.sha256_bytes(after.encode()),
         "final_document": after,
@@ -428,7 +458,7 @@ def run(args) -> None:
                 f"{row['elapsed_s']:6.1f}s {graded['outcome']:18s} eta {eta:.0f}m",
                 flush=True,
             )
-            if harmful and args.condition in ("route-smoke", "ornith-auto", "gemma-auto"):
+            if harmful and not is_standard_condition(args.condition):
                 raise SystemExit(f"harmful treatment result; stopped at {task['id']} seed {seed}")
 
 
@@ -460,9 +490,15 @@ def analyse(args) -> None:
         )
         if changed > len(composition.ideal_calls(load_tasks()[key[0]])):
             multiple.append([*key, changed])
-    expected_n = args.trials * 48
-    treatment = args.condition in ("route-smoke", "ornith-auto", "gemma-auto")
-    minimum = 475 if args.trials == 10 and treatment else 0
+    expected_task_ids = set(args.task_id or load_tasks())
+    expected_n = args.trials * len(expected_task_ids)
+    strict = args.condition in {
+        "minicpm-safe-routed",
+        "gemma-minicpm-retention",
+        "ornith-minicpm-retention",
+    }
+    treatment = not is_standard_condition(args.condition)
+    minimum = expected_n if strict else (475 if args.trials == 10 and treatment else 0)
     gate = len(usable) == expected_n and correct >= minimum and not harmful and not framing and not multiple
     families = {}
     for family in ("table", "list", "section", "frontmatter", "table-read"):
@@ -506,8 +542,15 @@ def preflight(args) -> None:
     if "0.21.3" not in version:
         raise SystemExit(f"expected Hermes 0.21.3, got {version!r}")
     parity_check = sandbox / "hermes-safe-routed-parity-preflight.json"
+    parity_command = [
+        sys.executable, str(BENCH / "hermes_safe_routed_parity.py"),
+        "--pi-raw", str(Path(args.parity_pi_raw)),
+        "--out", str(parity_check),
+    ]
+    if args.baseline_pi_raw:
+        parity_command.extend(["--baseline-pi-raw", str(Path(args.baseline_pi_raw))])
     subprocess.run(
-        [sys.executable, str(BENCH / "hermes_safe_routed_parity.py"), "--out", str(parity_check)],
+        parity_command,
         check=True,
         env={**os.environ, "INCISE_BIN": str(Path(args.binary).resolve())},
     )
@@ -524,11 +567,14 @@ def add_runtime(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--source-hermes-home", default="~/.hermes")
     parser.add_argument("--sandbox", default=str(DEFAULT_SANDBOX))
     parser.add_argument("--routes", default=str(DEFAULT_ROUTES))
+    parser.add_argument("--parity-pi-raw", default=str(DEFAULT_PARITY_PI_RAW))
+    parser.add_argument("--baseline-pi-raw", default=str(DEFAULT_BASELINE_PI_RAW))
     parser.add_argument("--model-alias", default="claude-opus-5.5")
     parser.add_argument("--backend-model", default="ornith-1.5-9b-q8")
     parser.add_argument("--provider", default="custom")
     parser.add_argument("--max-tokens", type=int, default=2048)
     parser.add_argument("--gemma-max-tokens", type=int, default=8192)
+    parser.add_argument("--minicpm-max-tokens", type=int, default=8192)
     parser.add_argument("--run-budget", type=int, default=240)
     parser.add_argument("--timeout", type=int, default=300)
 
@@ -550,6 +596,7 @@ def main() -> None:
     report = subparsers.add_parser("analyse")
     report.add_argument("--condition", choices=sorted(PROFILES), required=True)
     report.add_argument("--trials", type=int, required=True)
+    report.add_argument("--task-id", action="append")
     report.add_argument("--out", required=True)
     report.add_argument("--graded", required=True)
     report.add_argument("--analysis", required=True)

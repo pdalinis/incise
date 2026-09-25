@@ -955,6 +955,127 @@ def test_auto_profile_falls_back_to_measured():
         check("successful route cannot mutate twice",
               "already succeeded" in second.get("error", ""), json.dumps(second))
 
+        add_row_path = scratch("corpus/tables/aligned.md")
+        add_row_prompt = (
+            f'In @{add_row_path}, add a row at the end of the Components table '
+            'for a component named "hyperwidget-assembly" with status "active" '
+            'and owner "dana".'
+        )
+        add_row_plan = ctx.hooks["pre_llm_call"](
+            session_id="add-row", task_id="add-row", turn_id="add-row",
+            user_message=add_row_prompt, model="ornith-1.5-9b-q8")
+        add_row_request = ctx.middleware["llm_request"](
+            request=request, session_id="add-row", task_id="add-row", turn_id="add-row")
+        check("new table route narrows the provider surface",
+              [tool["function"]["name"] for tool in add_row_request["request"]["tools"]]
+              == ["terminal", "table_add_row_target"]
+              and "table_add_row_target" in add_row_plan.get("context", ""),
+              json.dumps(add_row_request["request"]))
+        add_row = json.loads(by_name["table_add_row_target"](
+            {}, session_id="add-row", task_id="add-row"))
+        check("Hermes applies the host-resolved table row",
+              add_row.get("resolvedArguments") == {
+                  "table": {"heading": "Aligned table > Components", "ordinal": 0},
+                  "values": {
+                      "Component": "hyperwidget-assembly",
+                      "Status": "active",
+                      "Owner": "dana",
+                  },
+              } and "hyperwidget-assembly" in open(add_row_path, newline="").read(),
+              json.dumps(add_row)[:400])
+
+        stale_row_path = scratch("corpus/tables/aligned.md")
+        stale_row_prompt = (
+            f'In @{stale_row_path}, add a row to the Components table for a component '
+            'named "sprocket" with status "active" and owner "rowan". '
+            'Put it at the end of the table.'
+        )
+        ctx.hooks["pre_llm_call"](
+            session_id="stale-row", task_id="stale-row", turn_id="stale-row",
+            user_message=stale_row_prompt, model="ornith-1.5-9b-q8")
+        with open(stale_row_path, "a", newline="") as handle:
+            handle.write("\nexternal row change\n")
+        stale_row = json.loads(by_name["table_add_row_target"](
+            {}, session_id="stale-row", task_id="stale-row"))
+        stale_row_text = open(stale_row_path, newline="").read()
+        check("new table routes retain stale-read protection",
+              stale_row.get("stale") is True and "sprocket" not in stale_row_text
+              and stale_row_text.endswith("external row change\n"),
+              json.dumps(stale_row)[:300])
+
+        delete_row_path = scratch("corpus/tables/aligned.md")
+        ctx.hooks["pre_llm_call"](
+            session_id="delete-row", task_id="delete-row", turn_id="delete-row",
+            user_message=f"In @{delete_row_path}, remove the gadget row from the Components table.",
+            model="ornith-1.5-9b-q8")
+        delete_row = json.loads(by_name["table_delete_row_target"](
+            {}, session_id="delete-row", task_id="delete-row"))
+        check("Hermes deletes only the exact resolved row",
+              delete_row.get("resolvedArguments") == {
+                  "table": {"heading": "Aligned table > Components", "ordinal": 0},
+                  "where": {"Component": "gadget"},
+              } and "gadget" not in open(delete_row_path, newline="").read(),
+              json.dumps(delete_row)[:400])
+
+        update_path = scratch("corpus/tables/multiple-per-section.md")
+        ctx.hooks["pre_llm_call"](
+            session_id="update-cell", task_id="update-cell", turn_id="update-cell",
+            user_message=(f"In @{update_path}, the staging host stage-1 has been resized. "
+                          "Change its Size to t3.l."),
+            model="ornith-1.5-9b-q8")
+        update_cell = json.loads(by_name["table_update_cell_target"](
+            {}, session_id="update-cell", task_id="update-cell"))
+        updated_text = open(update_path, newline="").read()
+        check("Hermes updates only the labelled table cell",
+              update_cell.get("resolvedArguments") == {
+                  "table": {
+                      "heading": "Multiple tables per section > Environments",
+                      "ordinal": 1,
+                  },
+                  "where": {"Host": "stage-1"},
+                  "column": "Size",
+                  "value": "t3.l",
+              } and "stage-1 | us-west-2 | t3.l" in updated_text
+              and "web-1 | us-east-1 | m5.l" in updated_text,
+              json.dumps(update_cell)[:500])
+
+        ordinal_path = scratch("corpus/tables/multiple-per-section.md")
+        ctx.hooks["pre_llm_call"](
+            session_id="ordinal", task_id="ordinal", turn_id="ordinal",
+            user_message=(
+                f"In @{ordinal_path}, the Environments heading has three tables: "
+                "production hosts first, then staging hosts, then scratch hosts. "
+                "What host is in the staging table, and what region and size is it?"
+            ),
+            model="ornith-1.5-9b-q8")
+        ordinal = json.loads(by_name["table_query"](
+            {}, session_id="ordinal", task_id="ordinal"))
+        check("Hermes resolves the labelled ordinal table read",
+              ordinal.get("resolvedArguments") == {
+                  "table": {
+                      "heading": "Multiple tables per section > Environments",
+                      "ordinal": 1,
+                  },
+              } and "stage-1 | us-west-2 | t3.m" in ordinal.get("text", ""),
+              json.dumps(ordinal)[:500])
+
+        delete_section_path = scratch("corpus/sections/deep-nesting.md")
+        ctx.hooks["pre_llm_call"](
+            session_id="delete-section", task_id="delete-section", turn_id="delete-section",
+            user_message=(f"In @{delete_section_path}, delete the macOS section under Install, "
+                          "including everything in it."),
+            model="ornith-1.5-9b-q8")
+        delete_section = json.loads(by_name["section_delete_target"](
+            {}, session_id="delete-section", task_id="delete-section"))
+        delete_section_text = open(delete_section_path, newline="").read()
+        check("Hermes confirms and deletes only the resolved section subtree",
+              delete_section.get("resolvedArguments") == {
+                  "section": "Deep heading nesting > Install > macOS",
+                  "subtree": True,
+              } and "### macOS\n\nRequires macOS 13" not in delete_section_text
+              and "## Upgrade\n\n### macOS" in delete_section_text,
+              json.dumps(delete_section)[:400])
+
         unknown = ctx.hooks["pre_llm_call"](
             session_id="s", task_id="t", turn_id="unknown",
             user_message=prompt, model="some-new-model")
@@ -963,6 +1084,16 @@ def test_auto_profile_falls_back_to_measured():
             request=request, session_id="s", task_id="t", turn_id="unknown")
         check("unknown auto identity retains the standard surface",
               [tool["function"]["name"] for tool in unknown_request["request"]["tools"]]
+              == ["terminal"] + base_names)
+
+        minicpm = ctx.hooks["pre_llm_call"](
+            session_id="minicpm", task_id="minicpm", turn_id="minicpm",
+            user_message=add_row_prompt, model="MiniCPM5-2B-Q8_0")
+        check("MiniCPM stays standard before the live Hermes gate", minicpm is None, repr(minicpm))
+        minicpm_request = ctx.middleware["llm_request"](
+            request=request, session_id="minicpm", task_id="minicpm", turn_id="minicpm")
+        check("pre-gate MiniCPM retains the standard surface",
+              [tool["function"]["name"] for tool in minicpm_request["request"]["tools"]]
               == ["terminal"] + base_names)
 
         stale_path = scratch("corpus/lists/nested-mixed.md")
