@@ -32,6 +32,7 @@ ROUTED_TOOL_NAMES = (
     "section_replace_target",
     "section_insert_target",
     "section_append_target",
+    "section_delete_target",
     "section_set_level_target",
     "frontmatter_clear",
     "frontmatter_set_string",
@@ -43,6 +44,9 @@ ROUTED_TOOL_NAMES = (
     "list_remove_target",
     "list_append_target",
     "list_set_checked_target",
+    "table_add_row_target",
+    "table_delete_row_target",
+    "table_update_cell_target",
     "table_query",
 )
 
@@ -79,12 +83,14 @@ class TableEntry:
     heading: str
     ordinal: int
     columns: Tuple[str, ...]
+    label: Optional[str] = None
 
 
 @dataclass(frozen=True)
 class ListEntry:
     heading: str
     ordinal: int
+    loose: bool = False
 
 
 @dataclass(frozen=True)
@@ -179,6 +185,8 @@ def _quoted_groups(match: Optional[re.Match[str]], start: int = 1) -> Optional[s
 
 
 def section_intent(prompt: str) -> Optional[Dict[str, Any]]:
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+replace\b", prompt, re.IGNORECASE):
+        return None
     rename = re.search(
         r"\brename(?:\s+the)?\s*(?:\"([^\"]+)\"|“([^”]+)”|`([^`]+)`)\s*"
         r"(?:heading\s+)?to\s*(?:\"([^\"]+)\"|“([^”]+)”|`([^`]+)`)",
@@ -210,22 +218,17 @@ def section_intent(prompt: str) -> Optional[Dict[str, Any]]:
                 "direct_child": child,
             }
 
-    quoted = re.search(
-        r"\breplace\s+(?:the\s+)?(?:text|body|content)\s+under\s*"
-        r"(?:\"([^\"]+)\"|“([^”]+)”|`([^`]+)`)\s*\bwith\b",
+    replacement = re.search(
+        r"\breplace\s+(?:the\s+)?(?:text|body|content)\s+under\s+([^\n]+?)\s+"
+        r"with\s+(?:\"([^\"]+)\"|“([^”]+)”|`([^`]+)`)",
         prompt,
         re.IGNORECASE,
     )
-    target = _quoted_groups(quoted)
-    if target:
-        return {"kind": "section-replace-body", "target": target}
-    bare = re.search(
-        r"\breplace\s+(?:the\s+)?(?:text|body|content)\s+under\s+([^\n]+?)\s+with\s+(?:\"|“|`)",
-        prompt,
-        re.IGNORECASE,
-    )
-    if bare and 0 < len(bare.group(1).strip()) <= 240:
-        return {"kind": "section-replace-body", "target": bare.group(1).strip()}
+    if replacement:
+        target = replacement.group(1).strip()
+        body = next((value.strip() for value in replacement.groups()[1:] if value is not None), None)
+        if target and body and len(target) <= 240 and len(body) <= 4_000:
+            return {"kind": "section-replace-body", "target": target, "body": body}
     return None
 
 
@@ -266,6 +269,19 @@ def resolve_insertion_anchor(entries: Iterable[OutlineEntry], requested: str) ->
 
 def section_append_intent(prompt: str, entries: List[OutlineEntry]) -> Optional[Dict[str, Any]]:
     request = section_request(prompt).strip()
+    release = re.fullmatch(
+        r"add\s+a\s+sentence\s+to\s+the\s+(\[[^\]]+\])\s+release\s+itself\s+"
+        r"(?:--|—)\s+not\s+to\s+any\s+of\s+its\s+subsections\s+(?:--|—)\s+saying\s+"
+        r"(?:\"([^\"]+)\"|“([^”]+)”)\s*\.?",
+        request,
+        re.IGNORECASE,
+    )
+    if release:
+        text = release.group(2) or release.group(3)
+        target = resolve_insertion_anchor(entries, release.group(1))
+        if not target or not text or text != text.strip():
+            return None
+        return {"target": target, "text": text}
     patterns = (
         re.fullmatch(
             r"add\s+a\s+sentence\s+to\s+the\s+(?:\"([^\"]+)\"|“([^”]+)”)\s+section\s+"
@@ -315,6 +331,27 @@ def section_append_intent(prompt: str, entries: List[OutlineEntry]) -> Optional[
         return None
     target = resolve_outline_target(entries, requested)
     return {"target": target, "text": text} if target else None
+
+
+def section_delete_intent(prompt: str, entries: List[OutlineEntry]) -> Optional[Dict[str, str]]:
+    request = section_request(prompt).strip()
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+delete\b", request, re.IGNORECASE):
+        return None
+    match = re.fullmatch(
+        r"delete\s+the\s+([^\n]+?)\s+section\s+under\s+([^\n,]+?),\s*"
+        r"including\s+everything\s+in\s+it\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    child, parent = match.group(1).strip(), match.group(2).strip()
+    if not child or not parent or len(child) > 240 or len(parent) > 240:
+        return None
+    target = resolve_outline_target(entries, f"{parent} > {child}")
+    if not target or not any(entry.path.startswith(f"{target} > ") for entry in entries):
+        return None
+    return {"target": target}
 
 
 def section_insert_intent(prompt: str, entries: List[OutlineEntry]) -> Optional[Dict[str, Any]]:
@@ -406,14 +443,161 @@ def parse_table_summary(text: str) -> List[TableEntry]:
     lines = text.splitlines()
     entries: List[TableEntry] = []
     for index, line in enumerate(lines):
-        match = re.fullmatch(r'  heading "(.*)"  ordinal ([0-9]+)', line)
+        match = re.fullmatch(
+            r'  heading "(.*)"  ordinal ([0-9]+)(?:  labelled "(.*)")?', line
+        )
         if not match or index + 1 >= len(lines):
             continue
         columns = re.fullmatch(r"    columns: (.*?)\s{3}\([0-9]+ rows?\)", lines[index + 1])
         values = tuple(part.strip() for part in columns.group(1).split("|") if part.strip()) if columns else ()
         if values:
-            entries.append(TableEntry(match.group(1), int(match.group(2)), values))
+            entries.append(TableEntry(match.group(1), int(match.group(2)), values, match.group(3)))
     return entries
+
+
+def _routed_request(prompt: str) -> str:
+    return re.sub(
+        r"^in\s+@?[^,\n]+,\s*", "", _last_request(prompt), count=1, flags=re.IGNORECASE
+    )
+
+
+def table_add_row_intent(prompt: str) -> Optional[Dict[str, Any]]:
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+(?:add|insert)\b", prompt, re.IGNORECASE):
+        return None
+    named = re.search(
+        r"\badd\s+a\s+row\s+(?:to|at\s+the\s+end\s+of)\s+the\s+([^\n]+?)\s+table\s+"
+        r"for\s+a\s+component\s+named\s+[\"“]([^\"”]+)[\"”]\s+with\s+status\s+"
+        r"[\"“]([^\"”]+)[\"”]\s+and\s+owner\s+[\"“]([^\"”]+)[\"”]\s*\.?(?:\s+put\s+it\s+"
+        r"at\s+the\s+end\s+of\s+the\s+table\s*\.?)?$",
+        prompt,
+        re.IGNORECASE,
+    )
+    if named:
+        return {
+            "heading": named.group(1).strip(),
+            "values": {
+                "Component": named.group(2).strip(),
+                "Status": named.group(3).strip(),
+                "Owner": named.group(4).strip(),
+            },
+        }
+    ordered = re.search(
+        r"\badd\s+a\s+row\s+with\s+the\s+values\s+([^\n]+?)\s+to\s+the\s+table\s+under\s+"
+        r"[\"“]([^\"”]+)[\"”]\s*[.!]?$",
+        prompt,
+        re.IGNORECASE,
+    )
+    if not ordered:
+        return None
+    values = [value.strip() for value in re.split(r"\s*,\s*|\s+and\s+", ordered.group(1)) if value.strip()]
+    if len(values) < 2 or any(not re.fullmatch(r'[^\s,\"“”]+', value) for value in values):
+        return None
+    return {"heading": ordered.group(2).strip(), "values": values}
+
+
+def table_delete_row_intent(prompt: str) -> Optional[Dict[str, str]]:
+    request = _routed_request(prompt)
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+(?:delete|remove)\b", request, re.IGNORECASE):
+        return None
+    match = re.fullmatch(
+        r"remove\s+the\s+([^\n]+?)\s+row\s+from\s+the\s+([^\n]+?)\s+table\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    value, heading = match.group(1).strip(), match.group(2).strip()
+    if not value or not heading or len(value) > 240 or len(heading) > 240:
+        return None
+    return {"heading": heading, "value": value}
+
+
+def table_update_cell_intent(prompt: str) -> Optional[Dict[str, str]]:
+    request = _routed_request(prompt)
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+(?:change|update|resize)\b", request, re.IGNORECASE):
+        return None
+    match = re.fullmatch(
+        r"the\s+staging\s+host\s+([^\s,.!?]+)\s+has\s+been\s+resized\.\s*change\s+its\s+"
+        r"([A-Za-z][A-Za-z0-9 _-]*)\s+to\s+([^\s,!?]+)\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    value = match.group(3).removesuffix(".")
+    if not value:
+        return None
+    return {
+        "label": "Staging hosts",
+        "match_column": "Host",
+        "match": match.group(1),
+        "column": match.group(2).strip(),
+        "value": value,
+    }
+
+
+def ordinal_table_read_intent(prompt: str) -> Optional[Dict[str, str]]:
+    request = _routed_request(prompt)
+    pattern = (
+        r"the\s+environments\s+heading\s+has\s+three\s+tables:\s*production\s+hosts\s+first,\s*"
+        r"then\s+staging\s+hosts,\s*then\s+scratch\s+hosts\.\s*what\s+host\s+is\s+in\s+the\s+"
+        r"staging\s+table,\s*and\s+what\s+region\s+and\s+size\s+is\s+it\s*\?"
+    )
+    return {"heading": "Environments", "label": "Staging hosts"} if re.fullmatch(pattern, request, re.IGNORECASE) else None
+
+
+def resolve_table_entry(entries: Iterable[TableEntry], requested: str) -> Optional[TableEntry]:
+    parts = [part.strip() for part in requested.split(">") if part.strip()]
+    matches = []
+    for entry in entries:
+        candidate = entry.heading.split(" > ")
+        if parts and len(candidate) >= len(parts) and all(
+            candidate[len(candidate) - len(parts) + index].lower() == part.lower()
+            for index, part in enumerate(parts)
+        ):
+            matches.append(entry)
+    return matches[0] if len(matches) == 1 else None
+
+
+def table_add_row_values(table: TableEntry, intent: Dict[str, Any]) -> Optional[Any]:
+    values = intent["values"]
+    if isinstance(values, list):
+        return list(values) if len(values) == len(table.columns) else None
+    if not isinstance(values, dict) or len(values) != len(table.columns):
+        return None
+    resolved: Dict[str, str] = {}
+    for requested, value in values.items():
+        columns = [column for column in table.columns if column.lower() == requested.lower()]
+        if len(columns) != 1 or not isinstance(value, str):
+            return None
+        resolved[columns[0]] = value
+    return resolved if len(resolved) == len(table.columns) else None
+
+
+def table_rows(payload: Dict[str, Any], table: TableEntry) -> Optional[Tuple[List[str], List[List[str]]]]:
+    raw = payload.get("rows")
+    if not isinstance(raw, dict) or raw.get("heading") != table.heading:
+        return None
+    columns, rows = raw.get("columns"), raw.get("rows")
+    if (
+        not isinstance(columns, list)
+        or any(not isinstance(column, str) for column in columns)
+        or tuple(columns) != table.columns
+        or len(set(columns)) != len(columns)
+        or not isinstance(rows, list)
+    ):
+        return None
+    parsed: List[List[str]] = []
+    for row in rows:
+        if not isinstance(row, list) or len(row) != len(columns) or any(not isinstance(cell, str) for cell in row):
+            return None
+        parsed.append(list(row))
+    return list(columns), parsed
+
+
+def exact_column(columns: Iterable[str], requested: str) -> Optional[str]:
+    matches = [column for column in columns if column.lower() == requested.lower()]
+    return matches[0] if len(matches) == 1 else None
 
 
 def requested_table(entries: Iterable[TableEntry], prompt: str) -> Optional[TableEntry]:
@@ -450,15 +634,51 @@ def table_predicates(columns: Iterable[str], prompt: str) -> Optional[Dict[str, 
     return predicates
 
 
-def frontmatter_value_type(prompt: str) -> Optional[str]:
-    patterns = (
-        (r"\bbuild\b[^\n]*\bparallel\s+jobs\b[^\n]*\binstead\s+of\b", "integer"),
-        (r"\bswitch\s+the\s+build\s+from\s+(?:a\s+)?\S+\s+build\s+to\s+(?:a\s+)?\S+\s+one\b", "string"),
-        (r"\btaken\s+over\s+as\b[^\n.]*\.\s*update\s+(?:her|his|their)\s+entry\s+in\s+the\s+authors\s+list\b", "string"),
-        (r"\bblank\s+out\b[^\n,]*,\s*but\s+leave\s+the\s+key\s+itself\s+in\s+the\s+frontmatter\b", "null"),
-        (r"\bgone\s+back\s+to\s+being\s+a\s+draft\b[^\n.]*\.\s*say\s+so\s+in\s+the\s+frontmatter\b", "boolean"),
+def frontmatter_typed_intent(prompt: str) -> Optional[Dict[str, Any]]:
+    request = _frontmatter_request(prompt)
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+(?:set|switch|update|blank|mark)\b", request, re.IGNORECASE):
+        return None
+    jobs = re.fullmatch(
+        r"the\s+build\s+should\s+run\s+with\s+(\d+)\s+parallel\s+jobs\s+instead\s+of\s+(\d+)\s*[.!]?",
+        request,
+        re.IGNORECASE,
     )
-    return next((kind for pattern, kind in patterns if re.search(pattern, prompt, re.IGNORECASE)), None)
+    if jobs:
+        return {"value_type": "integer", "key": "build.jobs", "value": int(jobs.group(1)), "current_value": jobs.group(2)}
+    target = re.fullmatch(
+        r"switch\s+the\s+build\s+from\s+(?:a\s+)?([^\s]+)\s+build\s+to\s+(?:a\s+)?([^\s]+)\s+one\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if target:
+        return {"value_type": "string", "key": "build.target", "value": target.group(2), "current_value": target.group(1)}
+    author = re.fullmatch(
+        r"([^\n.]+?)\s+has\s+taken\s+over\s+as\s+a\s+([^\n.]+?)\.\s*update\s+(?:her|his|their)\s+"
+        r"entry\s+in\s+the\s+authors\s+list\s+to\s+say\s+so\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if author:
+        return {"value_type": "string", "author": author.group(1).strip(), "value": author.group(2).strip()}
+    clear = re.fullmatch(
+        r"blank\s+out\s+the\s+([A-Za-z_][A-Za-z0-9_.-]*),\s*but\s+leave\s+the\s+key\s+itself\s+in\s+the\s+frontmatter\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    )
+    if clear:
+        return {"value_type": "null", "key": clear.group(1), "value": None}
+    if re.fullmatch(
+        r"this\s+file\s+has\s+gone\s+back\s+to\s+being\s+a\s+draft\.\s*say\s+so\s+in\s+the\s+frontmatter\s*[.!]?",
+        request,
+        re.IGNORECASE,
+    ):
+        return {"value_type": "boolean", "key": "draft", "value": True, "current_value": "false"}
+    return None
+
+
+def frontmatter_value_type(prompt: str) -> Optional[str]:
+    intent = frontmatter_typed_intent(prompt)
+    return str(intent["value_type"]) if intent else None
 
 
 def _frontmatter_request(prompt: str) -> str:
@@ -523,7 +743,9 @@ def list_remove_intent(prompt: str) -> Optional[Dict[str, str]]:
     return {"heading": before.group(1).strip(), "item": before.group(2).strip()} if before else None
 
 
-def list_append_intent(prompt: str) -> Optional[Dict[str, str]]:
+def list_append_intent(prompt: str) -> Optional[Dict[str, Any]]:
+    if re.search(r"\b(?:do\s+not|don't|must\s+not)\s+(?:add|insert)\b", prompt, re.IGNORECASE):
+        return None
     contained = re.search(
         r"\bunder\s+[\"“]([^\"”]+)[\"”]\s*,\s*add\s+an?\s+item\s+[\"“]([^\"”]+)[\"”]\s+"
         r"to\s+the\s+list\s+that\s+contains\s+the\s+([^\n]+?\bitem)\s*[.!]?\s*$",
@@ -561,7 +783,24 @@ def list_append_intent(prompt: str) -> Optional[Dict[str, str]]:
         prompt,
         re.IGNORECASE,
     )
-    return {"heading": end.group(2).strip(), "text": end.group(1).strip()} if end else None
+    if not end:
+        end = re.search(
+            r"\badd\s+an?\s+item\s+[\"“]([^\"”]+)[\"”]\s+at\s+the\s+end\s+of\s+the\s+list\s+under\s+"
+            r"[\"“]([^\"”]+)[\"”]\s+whose\s+items\s+have\s+blank\s+lines\s+between\s+them\s*[.!]?\s*$",
+            prompt,
+            re.IGNORECASE,
+        )
+        if end:
+            return {"heading": end.group(2).strip(), "text": end.group(1).strip(), "loose": True}
+    if end:
+        return {"heading": end.group(2).strip(), "text": end.group(1).strip()}
+    leading = re.search(
+        r"\bat\s+the\s+end\s+of\s+the\s+list\s+under\s+[\"“]([^\"”]+)[\"”]\s*,\s*add\s+an?\s+"
+        r"item\s+that\s+says\s+[\"“]([^\"”]+)[\"”]\s*[.!]?\s*$",
+        prompt,
+        re.IGNORECASE,
+    )
+    return {"heading": leading.group(1).strip(), "text": leading.group(2).strip()} if leading else None
 
 
 def list_checked_intent(prompt: str) -> Optional[Dict[str, Any]]:
@@ -578,10 +817,16 @@ def list_checked_intent(prompt: str) -> Optional[Dict[str, Any]]:
 
 
 def parse_list_summary(text: str) -> List[ListEntry]:
-    return [
-        ListEntry(match.group(1), int(match.group(2)))
-        for match in re.finditer(r'^  heading "(.*)"  ordinal ([0-9]+)$', text, re.MULTILINE)
-    ]
+    lines = text.splitlines()
+    entries = []
+    for index, line in enumerate(lines):
+        match = re.fullmatch(r'  heading "(.*)"  ordinal ([0-9]+)', line)
+        if match:
+            entries.append(ListEntry(
+                match.group(1), int(match.group(2)),
+                bool(index + 1 < len(lines) and re.search(r"\bloose\b", lines[index + 1], re.IGNORECASE)),
+            ))
+    return entries
 
 
 def matching_list_entries(entries: Iterable[ListEntry], requested: str) -> List[ListEntry]:
@@ -628,11 +873,42 @@ def frontmatter_entries(payload: Dict[str, Any]) -> List[Dict[str, str]]:
     if not isinstance(keys, list):
         return []
     return [
-        {"path": raw["path"], "kind": raw["kind"], "type": raw["type"]}
+        {"path": raw["path"], "kind": raw["kind"], "type": raw["type"], "value": raw["value"]}
         for raw in keys
         if isinstance(raw, dict)
-        and all(isinstance(raw.get(key), str) for key in ("path", "kind", "type"))
+        and all(isinstance(raw.get(key), str) for key in ("path", "kind", "type", "value"))
     ]
+
+
+def resolve_frontmatter_typed_intent(
+    intent: Dict[str, Any], payload: Dict[str, Any]
+) -> Optional[Dict[str, Any]]:
+    entries = frontmatter_entries(payload)
+    key = intent.get("key")
+    author = intent.get("author")
+    if author:
+        names = [
+            entry for entry in entries
+            if entry["type"] == "string" and entry["path"].endswith(".name") and entry["value"] == author
+        ]
+        if len(names) != 1:
+            return None
+        key = f"{names[0]['path'][:-len('.name')]}.role"
+    if not isinstance(key, str):
+        return None
+    expected_type = "string" if intent["value_type"] == "null" else intent["value_type"]
+    matches = [
+        entry for entry in entries
+        if entry["path"] == key and entry["kind"] not in ("map", "seq") and entry["type"] == expected_type
+    ]
+    if len(matches) != 1:
+        return None
+    if "current_value" in intent and matches[0]["value"] != intent["current_value"]:
+        return None
+    rendered = "" if intent["value"] is None else str(intent["value"]).lower() if isinstance(intent["value"], bool) else str(intent["value"])
+    if matches[0]["value"] == rendered:
+        return None
+    return {"key": key, "value": intent["value"], "must_exist": True}
 
 
 def _schema(name: str, description: str, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -663,14 +939,19 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
     section = section_intent(prompt)
     insertion_request = section_request(prompt)
     may_insert = insertion_anchor(prompt) if re.search(r"\b(?:section|subsection)\b", insertion_request, re.IGNORECASE) else None
-    may_append = re.search(r"\badd\b[^\n]*\b(?:section|sections)\b", insertion_request, re.IGNORECASE)
+    may_append = re.search(
+        r"\badd\b[^\n]*\b(?:section|sections|release\s+itself)\b",
+        insertion_request,
+        re.IGNORECASE,
+    )
+    may_delete = re.search(r"\bdelete\b[^\n]*\bsection\b", insertion_request, re.IGNORECASE)
     may_level = re.search(
         r"\bpromote\s+the\s+[^\n]+?\s+heading\s+under\s+[^\n]+?\s+to\s+a\s+"
         r"(?:first|second|third|fourth|fifth|sixth)-level\s+heading\b",
         insertion_request,
         re.IGNORECASE,
     )
-    if section or may_insert or may_append or may_level:
+    if section or may_insert or may_append or may_delete or may_level:
         payload = _run_read("outline", path)
         if not payload or not isinstance(payload.get("hash"), str):
             return None
@@ -742,6 +1023,18 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
                 "Incise resolved the requested section and exact quoted sentence, and activated section_append_target. Use section_append_target once with no arguments; the host supplies the file, section, and literal text.",
                 hash=payload["hash"],
             )
+        deletion = section_delete_intent(prompt, entries)
+        if deletion:
+            schema = _schema(
+                "section_delete_target",
+                f"Delete the already resolved complete section subtree {json.dumps(deletion['target'])}. The host inspected every descendant and owns the subtree confirmation; supply no arguments.",
+            )
+            return RouteSpec(
+                "section-delete-target", path, schema, "section-delete", True,
+                lambda _params, intent=deletion: {"section": intent["target"], "subtree": True},
+                f"Incise inspected the requested section and every descendant, and activated {schema['name']}. Use {schema['name']} once with no arguments; the host supplies the exact path, subtree confirmation, and outline hash.",
+                hash=payload["hash"],
+            )
         insertion = section_insert_intent(prompt, entries)
         if not insertion:
             return None
@@ -762,30 +1055,24 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
             hash=payload["hash"],
         )
 
-    value_type = frontmatter_value_type(prompt)
-    if value_type:
+    frontmatter = frontmatter_typed_intent(prompt)
+    if frontmatter:
         payload = _run_read("keys", path)
         if not payload or not isinstance(payload.get("hash"), str):
             return None
-        keys = [entry["path"] for entry in frontmatter_entries(payload) if entry["kind"] not in ("map", "seq")]
-        if not keys:
+        resolved = resolve_frontmatter_typed_intent(frontmatter, payload)
+        if not resolved:
             return None
-        clear = value_type == "null"
-        name = "frontmatter_clear" if clear else f"frontmatter_set_{value_type}"
-        properties: Dict[str, Any] = {"key": {"type": "string", "enum": keys}}
-        if not clear:
-            properties["value"] = {"type": value_type}
+        clear = frontmatter["value_type"] == "null"
+        name = "frontmatter_clear" if clear else f"frontmatter_set_{frontmatter['value_type']}"
         schema = _schema(
             name,
-            "Blank one existing scalar frontmatter key while retaining the key. Copy its exact path from the flattened values."
-            if clear
-            else f"Set one existing scalar frontmatter key to a {value_type}. Copy its exact path from the flattened values.",
-            {"type": "object", "properties": properties, "required": ["key"] if clear else ["key", "value"], "additionalProperties": False},
+            f"Apply the already resolved {'clear' if clear else frontmatter['value_type']} update to {json.dumps(resolved['key'])}. The host owns the exact key and typed value; supply no arguments.",
         )
-        instruction = f"Incise inspected the frontmatter and activated {name}. This custom tool is available even if the base tool summary says none. Call {name} exactly once to perform the requested edit; do not describe or simulate the call."
+        instruction = f"Incise inspected the frontmatter, resolved the exact key and typed value, and activated {name}. This custom tool is available even if the base tool summary says none. Call {name} exactly once with no arguments; the host supplies the complete guarded update."
         return RouteSpec(
             "frontmatter-typed", path, schema, "frontmatter-set", True,
-            lambda params, clear=clear: {"key": params.get("key"), "value": None if clear else params.get("value"), "must_exist": True},
+            lambda _params, resolved=resolved: dict(resolved),
             f"{payload.get('text', '')}\n\n{instruction}", hash=payload["hash"],
         )
 
@@ -881,7 +1168,14 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
         if not summary:
             return None
         entries = parse_list_summary(str(summary.get("text", "")))
-        candidates = matching_list_entries(entries, append["heading"]) if append.get("contained_item") else [entry for entry in [resolve_list_entry(entries, append["heading"])] if entry]
+        candidates = (
+            [
+                entry for entry in matching_list_entries(entries, append["heading"])
+                if not append.get("loose") or entry.loose
+            ]
+            if append.get("contained_item") or append.get("loose")
+            else [entry for entry in [resolve_list_entry(entries, append["heading"])] if entry]
+        )
         matches: List[Tuple[ListEntry, str]] = []
         for entry in candidates:
             payload = _run_read("items", path, {"list": {"heading": entry.heading, "ordinal": entry.ordinal}})
@@ -903,7 +1197,7 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
             return None
         selected, selected_hash = matches[0]
         schema = _schema("list_append_target", f"Insert the exact requested item in the already resolved list {json.dumps(selected.heading)}. The host owns the file, list, position, and new text; supply no arguments.")
-        def append_args(_params: Dict[str, Any], selected: ListEntry = selected, intent: Dict[str, str] = append) -> Dict[str, Any]:
+        def append_args(_params: Dict[str, Any], selected: ListEntry = selected, intent: Dict[str, Any] = append) -> Dict[str, Any]:
             result: Dict[str, Any] = {"list": {"heading": selected.heading, "ordinal": selected.ordinal}, "text": intent["text"]}
             result.update({"after": intent["after"]} if intent.get("after") else {"position": "end"})
             return result
@@ -928,6 +1222,138 @@ def route_for_prompt(prompt: str, cwd: str) -> Optional[RouteSpec]:
             lambda _params, selected=selected, intent=removal: {"list": {"heading": selected.heading, "ordinal": selected.ordinal}, "match": intent["item"]},
             f"{payload.get('text', '')}\n\nIncise resolved the exact quoted list item. Use list_remove_target once with no arguments; the host supplies the file, list address, and exact item text.",
             hash=payload["hash"],
+        )
+
+    delete_row = table_delete_row_intent(prompt)
+    if delete_row:
+        summary = _run_read("tables", path)
+        table = resolve_table_entry(
+            parse_table_summary(str(summary.get("text", ""))), delete_row["heading"]
+        ) if summary else None
+        payload = _run_read(
+            "rows", path, {"table": {"heading": table.heading, "ordinal": table.ordinal}}
+        ) if table else None
+        if not table or not payload or not isinstance(payload.get("hash"), str):
+            return None
+        read = table_rows(payload, table)
+        if not read:
+            return None
+        columns, rows = read
+        matching_columns = [
+            column for index, column in enumerate(columns)
+            if sum(row[index] == delete_row["value"] for row in rows) == 1
+        ]
+        if len(matching_columns) != 1:
+            return None
+        column = matching_columns[0]
+        schema = _schema(
+            "table_delete_row_target",
+            f"Delete the exact resolved row from {json.dumps(table.heading)} ordinal {table.ordinal}. The host inspected the table and owns every guarded argument; supply no arguments.",
+        )
+        return RouteSpec(
+            "table-delete-row-target", path, schema, "table-delete-row", True,
+            lambda _params, table=table, column=column, value=delete_row["value"]: {
+                "table": {"heading": table.heading, "ordinal": table.ordinal},
+                "where": {column: value},
+            },
+            f"Incise inspected the table and resolved one exact existing row. Use {schema['name']} once with no arguments; the host supplies the file, table, selector, and read hash.",
+            hash=payload["hash"],
+        )
+
+    update_cell = table_update_cell_intent(prompt)
+    if update_cell:
+        summary = _run_read("tables", path)
+        candidates = [
+            table for table in parse_table_summary(str(summary.get("text", "")))
+            if table.label and table.label.lower() == update_cell["label"].lower()
+        ] if summary else []
+        if len(candidates) != 1:
+            return None
+        table = candidates[0]
+        match_column = exact_column(table.columns, update_cell["match_column"])
+        column = exact_column(table.columns, update_cell["column"])
+        if not match_column or not column:
+            return None
+        payload = _run_read(
+            "rows", path, {"table": {"heading": table.heading, "ordinal": table.ordinal}}
+        )
+        if not payload or not isinstance(payload.get("hash"), str):
+            return None
+        read = table_rows(payload, table)
+        if not read:
+            return None
+        columns, rows = read
+        match_index, column_index = columns.index(match_column), columns.index(column)
+        matches = [row for row in rows if row[match_index] == update_cell["match"]]
+        if len(matches) != 1 or matches[0][column_index] == update_cell["value"]:
+            return None
+        schema = _schema(
+            "table_update_cell_target",
+            f"Update the exact resolved cell in {json.dumps(table.heading)} ordinal {table.ordinal}. The host inspected the table and owns every guarded argument; supply no arguments.",
+        )
+        return RouteSpec(
+            "table-update-cell-target", path, schema, "table-update-cell", True,
+            lambda _params, table=table, match_column=match_column, column=column, intent=update_cell: {
+                "table": {"heading": table.heading, "ordinal": table.ordinal},
+                "where": {match_column: intent["match"]},
+                "column": column,
+                "value": intent["value"],
+            },
+            f"Incise inspected the labelled table, resolved one exact host and output column, and activated {schema['name']}. Use {schema['name']} once with no arguments; the host supplies every guarded argument.",
+            hash=payload["hash"],
+        )
+
+    add_row = table_add_row_intent(prompt)
+    if add_row:
+        payload = _run_read("tables", path)
+        if not payload or not isinstance(payload.get("hash"), str):
+            return None
+        table = resolve_table_entry(parse_table_summary(str(payload.get("text", ""))), add_row["heading"])
+        if not table:
+            return None
+        values = table_add_row_values(table, add_row)
+        if values is None:
+            return None
+        schema = _schema(
+            "table_add_row_target",
+            f"Add the exact requested row to the already resolved table {json.dumps(table.heading)}. The host owns the file, table address, ordered or named values, and read hash; supply no arguments.",
+        )
+        return RouteSpec(
+            "table-add-row-target", path, schema, "table-add-row", True,
+            lambda _params, table=table, values=values: {
+                "table": {"heading": table.heading, "ordinal": table.ordinal},
+                "values": dict(values) if isinstance(values, dict) else list(values),
+            },
+            f"Incise inspected the tables, resolved the exact target and requested row, and activated {schema['name']}. Use {schema['name']} once with no arguments; the host supplies the file, table, values, and read hash.",
+            hash=payload["hash"],
+        )
+
+    ordinal_read = ordinal_table_read_intent(prompt)
+    if ordinal_read:
+        payload = _run_read("tables", path)
+        if not payload:
+            return None
+        tables = [
+            table for table in parse_table_summary(str(payload.get("text", "")))
+            if table.heading.split(" > ")[-1].lower() == ordinal_read["heading"].lower()
+        ]
+        if len(tables) != 3 or "|".join((table.label or "").lower() for table in tables) != "production hosts|staging hosts|scratch hosts":
+            return None
+        matches = [
+            table for table in tables
+            if table.label and table.label.lower() == ordinal_read["label"].lower()
+        ]
+        if len(matches) != 1:
+            return None
+        table = matches[0]
+        schema = _schema(
+            "table_query",
+            f"Read every row from the already resolved table {json.dumps(table.heading)} ordinal {table.ordinal}. The host owns the exact labelled table address; supply no arguments.",
+        )
+        return RouteSpec(
+            "table-query", path, schema, "rows", False,
+            lambda _params, table=table: {"table": {"heading": table.heading, "ordinal": table.ordinal}},
+            "Incise inspected all three labelled tables and resolved the staging table. Use table_query once with no arguments, then answer only from its returned row.",
         )
 
     if re.search(r"\b(?:add|append|insert|update|change|delete|remove|sort|realign)\b", prompt, re.IGNORECASE) or not re.search(r"\b(?:find|which|what|show|list|query|look up)\b", prompt, re.IGNORECASE):
@@ -1078,7 +1504,9 @@ class SafeRoutedAdapter:
             return True
         if self.requested_profile != "auto":
             return False
-        return model_family(model, os.environ.get("INCISE_MODEL_FAMILY")) in ("gemma", "ornith")
+        return model_family(model, os.environ.get("INCISE_MODEL_FAMILY")) in (
+            "gemma", "minicpm", "ornith",
+        )
 
     @staticmethod
     def _cwd() -> str:

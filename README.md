@@ -22,7 +22,7 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 
 Language models are often good at identifying the change a document needs and much less reliable at reproducing the surrounding Markdown exactly. A one-cell update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.
 
-> **Hermes routed results:** the recommended Hermes `auto` profile completed **480/480 trials (100%) with zero harmful outcomes** on both Ornith 1.5 9B and Gemma 4 26B. Each run used the expected 360 routed and 120 fallback requests, with exact provider tool surfaces and host-resolved arguments.
+> **Hermes routed results:** the recommended Hermes `auto` profile completed **480/480 trials (100%) with zero harmful outcomes** on MiniCPM5 2B, Ornith 1.5 9B, and Gemma 4 26B. MiniCPM used 470 routed and 10 fallback trials; Ornith and Gemma each used the earlier measured 360 routed and 120 fallback composition.
 
 > **Pi routed results:** MiniCPM5 2B and Ornith each completed **480/480 trials (100%) with zero harmful outcomes**. Gemma completed **475/479 usable trials (99.2%) with zero harmful outcomes**; its four remaining outcomes were loud section refusals.
 
@@ -35,7 +35,7 @@ Incise separates intent from mechanics:
 
 It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.
 
-The figures come from preregistered full-composition evaluations and remain scoped to their recorded models, runtimes, task set, host integration, seeds, profile, and inference settings. The Hermes runs used Hermes Agent 0.21.3 and seeds 40–49. Ornith used thinking off, a 2,048-token output cap, and disabled parallel tool calls; Gemma retained its recorded provider defaults.
+The figures come from preregistered full-composition evaluations and remain scoped to their recorded models, runtimes, task set, host integration, seeds, profile, and inference settings. The MiniCPM Hermes run used Hermes Agent 0.21.3, seeds 0–9, thinking off, and an 8,192-token output cap; the earlier Ornith and Gemma Hermes runs used seeds 40–49.
 
 ## Quick start
 
@@ -117,34 +117,17 @@ Incise includes a Hermes adapter under [`plugins/hermes/`](plugins/hermes/).
 
 Install the version-matched plugin bundle, enable its `incise` toolset, and run `hermes plugins doctor --ci incise`. Doctor prints the exact binary it validated. See the [Hermes integration guide](plugins/hermes/README.md) for complete installation and safety details.
 
-For Gemma or Ornith, start Hermes with the measured automatic profile:
+For measured Gemma, MiniCPM, or Ornith models, start Hermes with the automatic profile:
 
 ```bash
 INCISE_PROFILE=auto hermes chat
 ```
 
-`auto` detects model names containing `gemma` or `ornith`. If the provider exposes a generic alias, identify the backend explicitly, for example `INCISE_MODEL_FAMILY=ornith`. Use reasoning off, a 2,048-token output cap, and disabled parallel tool calls for the measured Ornith condition; Hermes does not silently change provider settings. Unknown models and MiniCPM retain the standard eight-tool surface.
-
-For Markdown structures represented by Incise, give the agent an explicit preference for structured editing:
-
-```markdown
-## Editing Markdown
-
-For Markdown tables, lists, sections, and frontmatter, prefer Incise tools over
-generic patch, write, or shell tools.
-
-Inspect structure first with `md_tables`, `md_lists`, or `md_outline`. Use
-`table_get` when current table rows are needed. Make changes with `table_edit`,
-`list_edit`, `section_edit`, or `frontmatter_edit`.
-
-If Incise refuses an operation, follow the remedy in its response rather than
-rewriting the document. Use raw editing only for prose changes that Incise does
-not represent.
-```
+`auto` detects model names containing `gemma`, `minicpm`, or `ornith`. If the provider exposes a generic alias, identify the backend explicitly with `INCISE_MODEL_FAMILY=gemma|minicpm|ornith`. The measured MiniCPM condition used thinking off, an 8,192-token output cap, temperature 0.7, top-p 0.95, and disabled parallel tool calls. The measured Ornith condition used thinking off, a 2,048-token cap, and disabled parallel calls. Hermes does not silently change provider sampling settings. Unknown models retain the standard eight-tool surface.
 
 Under `auto`, exact supported requests receive one small action-specific tool after host-side structure inspection; unsupported or ambiguous requests retain the standard Incise tools. The adapter preserves Hermes file-safety checks, content hashes, same-file serialization, compound rollback, and a one-successful-mutation latch.
 
-The preregistered Hermes runs completed **480/480 trials on Ornith and 480/480 on Gemma**, both with zero harmful outcomes. Ornith improved from a paired standard-control result of 460/480 to 480/480 (`p = 1.907×10⁻⁶`).
+The preregistered Hermes compositions completed **480/480 trials on MiniCPM, 480/480 on Ornith, and 480/480 on Gemma**, all with zero harmful outcomes. MiniCPM additionally passed a 48/48 pre-adoption smoke, 51/51 retention arms on each existing routed model, and a 48/48 post-adoption `auto` smoke.
 
 Incise remains deliberately scoped to Markdown structures it understands. Generic editing is appropriate for ordinary prose and initial document creation.
 
@@ -192,15 +175,13 @@ Incise is designed around five guarantees:
 * **Safe writes:** the CLI supports dry runs, atomic replacement, no-op detection, and content-hash preconditions.
 * **Token-frugal results:** successful writes describe the change instead of returning the whole document.
 
-The standard interface remains model-agnostic. Measured routed profiles are additive integration behavior: they narrow the active tool surface, validate current structure, retain content hashes, and stop after one successful routed mutation.
-
-MiniCPM routing is enabled only in Pi, where the complete candidate passed 480/480 trials with zero harmful outcomes. Hermes still keeps MiniCPM on the standard surface under `auto` until its adapter receives the same routes and passes its own parity and live gates.
+The standard interface remains model-agnostic. Measured routed profiles are additive integration behavior: they narrow the active tool surface, validate current structure, retain content hashes, and stop after one successful routed mutation. MiniCPM routing is enabled in both Pi and Hermes after separate 480/480 compositions with zero harmful outcomes; Gemma and Ornith remain independently measured. Unknown model families keep the standard interface.
 
 Refusals are part of the safety contract. If an operation cannot prove one target or preserve the requested structure, it reports the conflicting matches or missing requirement and writes nothing.
 
 ## Measured with small models
 
-Pi now has two preregistered 480/480 profiles with zero harmful outcomes: MiniCPM5 2B and Ornith 1.5 9B. Gemma completed 475/479 usable Pi trials (99.2%) with zero harmful outcomes, and every one of the 17 MiniCPM v3 affected tasks retained across three Gemma seeds (51/51). Hermes `auto` separately completed 480/480 on Ornith and 480/480 on Gemma; MiniCPM Hermes parity remains future work. Results remain scoped to each recorded host, model, runtime, seed range, profile, and inference configuration.
+Pi has two preregistered 480/480 profiles with zero harmful outcomes: MiniCPM5 2B and Ornith 1.5 9B. Gemma completed 475/479 usable Pi trials (99.2%) with zero harmful outcomes. Hermes `auto` separately completed **480/480 on MiniCPM, 480/480 on Ornith, and 480/480 on Gemma**. The Hermes MiniCPM port matched 47 routed tasks and one standard fallback, retained 51/51 on both Gemma and Ornith across the 17 affected tasks, and passed a final 48/48 `auto` smoke. Results remain scoped to each recorded host, model, runtime, seed range, profile, and inference configuration.
 
 ### Current Ornith/Pi profile
 
@@ -241,6 +222,20 @@ The preregistered run attempted 480 trials. One `rename-setext` pair hit the fix
 | Standard fallback | **120/120** | **120/120** | Byte-identical standard surface |
 
 Both preregistered runs used Hermes Agent 0.21.3 and the frozen 48-task population over seeds 40–49. Ornith `auto` improved from a paired standard Hermes control of 460/480 to 480/480: 20 treatment-only wins, no control-only wins, and exact McNemar `p = 1.907×10⁻⁶`. Both treatments had zero framing errors, zero multiple mutations, and no retries. Gemma’s 480/480 is a host-and-seed-specific compatibility result; comparison with the earlier 475/479 Pi run is descriptive, not paired.
+
+### Current MiniCPM/Hermes profile
+
+| Family | Correct | Safety result |
+| --- | ---: | --- |
+| Tables | **60/60** | Zero harmful outcomes |
+| Lists | **100/100** | Zero harmful outcomes |
+| Sections | **150/150** | Zero harmful outcomes |
+| Frontmatter | **110/110** | Zero harmful outcomes |
+| Table reads | **60/60** | Read-only |
+| Routed trials | **470/470** | Exact tools and resolved arguments |
+| Standard fallback | **10/10** | Unchanged eight-tool surface |
+
+The preregistered Hermes Agent 0.21.3 composition used MiniCPM5 2B Q8_0 with thinking off, seeds 0–9, and an 8,192-token output cap. All 480 trials were usable and correct, with zero harmful outcomes, framing errors, or multiple changed mutations. Mean tool calls were 1.0. A post-adoption `auto` smoke then passed 48/48.
 
 ### Current MiniCPM/Pi profile
 

@@ -1,0 +1,68 @@
+{
+  "condition": "gemma-minicpm-retention",
+  "correct": 51,
+  "correct_rate": 1.0,
+  "efficiency": {
+    "mean_completion_tokens": 101.98,
+    "mean_elapsed_s": 5.815,
+    "mean_tool_calls": 1.0
+  },
+  "expected": 51,
+  "families": {
+    "frontmatter": {
+      "correct": 15,
+      "n": 15,
+      "outcomes": {
+        "correct": 15
+      },
+      "rate": 1.0
+    },
+    "list": {
+      "correct": 6,
+      "n": 6,
+      "outcomes": {
+        "correct": 6
+      },
+      "rate": 1.0
+    },
+    "section": {
+      "correct": 9,
+      "n": 9,
+      "outcomes": {
+        "correct": 9
+      },
+      "rate": 1.0
+    },
+    "table": {
+      "correct": 18,
+      "n": 18,
+      "outcomes": {
+        "correct": 18
+      },
+      "rate": 1.0
+    },
+    "table-read": {
+      "correct": 3,
+      "n": 3,
+      "outcomes": {
+        "correct": 3
+      },
+      "rate": 1.0
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "exact_provider_surface": true,
+    "minimum_correct": 51,
+    "zero_harm": true
+  },
+  "harmful": 0,
+  "harmful_trials": [],
+  "multiple_mutations": [],
+  "observed": 51,
+  "outcomes": {
+    "correct": 51
+  },
+  "status": "pass",
+  "usable": 51
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Incise Benchmarks — 480/480 on MiniCPM, Ornith, and Gemma</title>
-  <meta name="description" content="Incise reached 480/480 on MiniCPM and Ornith through Pi, and on Ornith and Gemma through Hermes. Explore raw calls, audits, and caveats.">
+  <meta name="description" content="Incise reached 480/480 on MiniCPM, Ornith, and Gemma through measured Pi or Hermes profiles. Explore raw calls, audits, and caveats.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/benchmarks/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website"><meta property="og:title" content="Incise benchmarks: 480/480 on MiniCPM, Ornith, and Gemma"><meta property="og:description" content="Preregistered 480-trial Pi and Hermes evaluations with raw calls, exact route audits, and scoped claims."><meta property="og:url" content="https://pdalinis.github.io/incise/benchmarks/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
@@ -13,16 +13,16 @@
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
     <div class="eyebrow">Published, reproducible evidence</div><h1>480/480 correct. Zero harmful edits.</h1>
-    <p class="lede">The Hermes <code>auto</code> profile completed all 480 trials correctly on both Ornith and Gemma. Every routed request passed the exact tool-surface and host-resolved-argument audit.</p>
+    <p class="lede">The Hermes <code>auto</code> profile completed all 480 trials correctly on MiniCPM, Ornith, and Gemma. Every routed request passed the exact tool-surface and host-resolved-argument audit.</p>
 
-    <table><thead><tr><th>Hermes auto family</th><th>Ornith</th><th>Gemma</th></tr></thead><tbody>
-      <tr><td>Tables</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
-      <tr><td>Lists</td><td><strong>100/100</strong></td><td><strong>100/100</strong></td></tr>
-      <tr><td>Sections</td><td><strong>150/150</strong></td><td><strong>150/150</strong></td></tr>
-      <tr><td>Frontmatter</td><td><strong>110/110</strong></td><td><strong>110/110</strong></td></tr>
-      <tr><td>Table reads</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
-      <tr><td>Routed subset</td><td><strong>360/360</strong></td><td><strong>360/360</strong></td></tr>
-      <tr><td>Standard fallback</td><td><strong>120/120</strong></td><td><strong>120/120</strong></td></tr>
+    <table><thead><tr><th>Hermes auto family</th><th>MiniCPM</th><th>Ornith</th><th>Gemma</th></tr></thead><tbody>
+      <tr><td>Tables</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
+      <tr><td>Lists</td><td><strong>100/100</strong></td><td><strong>100/100</strong></td><td><strong>100/100</strong></td></tr>
+      <tr><td>Sections</td><td><strong>150/150</strong></td><td><strong>150/150</strong></td><td><strong>150/150</strong></td></tr>
+      <tr><td>Frontmatter</td><td><strong>110/110</strong></td><td><strong>110/110</strong></td><td><strong>110/110</strong></td></tr>
+      <tr><td>Table reads</td><td><strong>60/60</strong></td><td><strong>60/60</strong></td><td><strong>60/60</strong></td></tr>
+      <tr><td>Routed subset</td><td><strong>470/470</strong></td><td><strong>360/360</strong></td><td><strong>360/360</strong></td></tr>
+      <tr><td>Standard fallback</td><td><strong>10/10</strong></td><td><strong>120/120</strong></td><td><strong>120/120</strong></td></tr>
     </tbody></table>
 
     <div class="callout"><strong>Paired Ornith gain.</strong> Standard Hermes scored 460/480; <code>auto</code> scored 480/480, with 20 treatment-only wins, no control-only wins, and exact McNemar <code>p = 1.907×10⁻⁶</code>. Both routed runs had zero harmful outcomes, framing errors, multiple mutations, or retries.</div>
@@ -58,6 +58,7 @@
       <tr><td>Current Pi safe-routed profile</td><td><strong>480/480</strong>; zero harmful outcomes</td><td>Enabled by <code>auto</code></td></tr>
     </tbody></table>
     <p>The final composition covered seeds 0–9: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. All 470 routed trials and 10 standard fallbacks passed exact surface audits. The result used MiniCPM5 2B Q8_0 through llama.cpp with thinking off, a 65,536-token context, 8,192 output tokens, temperature 0.7, and top-p 0.95.</p>
+    <p>The separate Hermes Agent 0.21.3 composition reproduced the same 480/480 family totals, 470 routed trials, and 10 standard fallbacks. Gemma and Ornith each retained 51/51 across the 17 changed tasks, and the post-adoption MiniCPM <code>auto</code> smoke passed 48/48.</p>
 
     <h2>Structured operations versus direct patching</h2>
     <p>The original controlled benchmark used identical tasks, seeds, model, and grader:</p>

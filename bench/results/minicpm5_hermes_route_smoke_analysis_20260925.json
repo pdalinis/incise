@@ -1,0 +1,68 @@
+{
+  "condition": "minicpm-safe-routed",
+  "correct": 48,
+  "correct_rate": 1.0,
+  "efficiency": {
+    "mean_completion_tokens": 107.479,
+    "mean_elapsed_s": 6.21,
+    "mean_tool_calls": 1.0
+  },
+  "expected": 48,
+  "families": {
+    "frontmatter": {
+      "correct": 11,
+      "n": 11,
+      "outcomes": {
+        "correct": 11
+      },
+      "rate": 1.0
+    },
+    "list": {
+      "correct": 10,
+      "n": 10,
+      "outcomes": {
+        "correct": 10
+      },
+      "rate": 1.0
+    },
+    "section": {
+      "correct": 15,
+      "n": 15,
+      "outcomes": {
+        "correct": 15
+      },
+      "rate": 1.0
+    },
+    "table": {
+      "correct": 6,
+      "n": 6,
+      "outcomes": {
+        "correct": 6
+      },
+      "rate": 1.0
+    },
+    "table-read": {
+      "correct": 6,
+      "n": 6,
+      "outcomes": {
+        "correct": 6
+      },
+      "rate": 1.0
+    }
+  },
+  "framing_errors": [],
+  "gate": {
+    "exact_provider_surface": true,
+    "minimum_correct": 48,
+    "zero_harm": true
+  },
+  "harmful": 0,
+  "harmful_trials": [],
+  "multiple_mutations": [],
+  "observed": 48,
+  "outcomes": {
+    "correct": 48
+  },
+  "status": "pass",
+  "usable": 48
+}

@@ -68,11 +68,15 @@ def main() -> int:
         default=BENCH / "results" / "hermes_safe_routed_parity_20260924.json",
         type=Path,
     )
+    parser.add_argument("--baseline-pi-raw", type=Path)
     args = parser.parse_args()
 
     plugin = load_hermes_plugin()
     expected = expected_rows(args.pi_raw)
+    baseline = expected_rows(args.baseline_pi_raw) if args.baseline_pi_raw else None
     errors = []
+    baseline_errors = []
+    expanded_tasks = []
     observed = []
     routed = fallback = 0
     tasks = pi_composition.load_tasks()
@@ -90,6 +94,25 @@ def main() -> int:
             )
             spec = plugin.safe_routed.route_for_prompt(prompt, str(sandbox))
             wanted = routed_expectation(expected[task["id"]])
+            previous = routed_expectation(baseline[task["id"]]) if baseline else None
+            if previous is None and wanted is not None:
+                expanded_tasks.append(task["id"])
+            elif previous is not None and wanted is not None:
+                for field in ("name", "kind", "resolved"):
+                    if previous[field] != wanted[field]:
+                        baseline_errors.append({
+                            "task_id": task["id"],
+                            "field": field,
+                            "baseline": previous[field],
+                            "current": wanted[field],
+                        })
+            elif previous is not None and wanted is None:
+                baseline_errors.append({
+                    "task_id": task["id"],
+                    "field": "route",
+                    "baseline": previous["name"],
+                    "current": "standard",
+                })
             item = {
                 "task_id": task["id"],
                 "expected": wanted["name"] if wanted else "standard",
@@ -127,12 +150,15 @@ def main() -> int:
             observed.append(item)
 
     analysis = {
-        "status": "pass" if not errors and routed == 36 and fallback == 12 else "fail",
+        "status": "pass" if not errors and not baseline_errors and len(observed) == 48 and routed + fallback == 48 else "fail",
         "observed_tasks": len(observed),
         "routed_tasks": routed,
         "fallback_tasks": fallback,
         "expected_trial_projection": {"routed": routed * 10, "fallback": fallback * 10},
         "errors": errors,
+        "baseline_reference": str(args.baseline_pi_raw) if args.baseline_pi_raw else None,
+        "baseline_errors": baseline_errors,
+        "expanded_tasks": expanded_tasks,
         "routes": observed,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)

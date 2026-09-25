@@ -13,7 +13,7 @@
   <header><nav class="wrap"><a class="brand" href="/incise/">Incise</a><div class="nav-links"><a href="/incise/docs/">Docs</a><a href="/incise/benchmarks/">Benchmarks</a><a href="https://github.com/pdalinis/incise">GitHub</a></div></nav></header>
   <main class="wrap">
     <div class="eyebrow">Documentation</div><h1>Install once. Edit Markdown safely.</h1>
-    <p class="lede">Use Incise from the command line, install the native Pi package, or connect the version-matched Hermes plugin. Pi provides measured automatic profiles for MiniCPM, Ornith, and Gemma; unknown models keep the stable standard interface.</p>
+    <p class="lede">Use Incise from the command line, install the native Pi package, or connect the version-matched Hermes plugin. Pi and Hermes provide measured automatic profiles for MiniCPM, Ornith, and Gemma; unknown models keep the stable standard interface.</p>
 
     <h2>Command-line installation</h2>
     <pre><code>cargo install incise-cli --locked
@@ -45,9 +45,9 @@ hermes plugins doctor --ci incise</code></pre>
     <div class="grid">
       <article class="card"><h3>Gemma</h3><pre><code>INCISE_PROFILE=auto hermes chat</code></pre><p>Recommended. If the provider uses a generic model alias, add <code>INCISE_MODEL_FAMILY=gemma</code>.</p></article>
       <article class="card"><h3>Ornith 1.5 9B</h3><pre><code>INCISE_PROFILE=auto hermes chat --reasoning none</code></pre><p>Also configure a 2,048-token output cap and disable parallel tool calls. For a generic alias, add <code>INCISE_MODEL_FAMILY=ornith</code>.</p></article>
-      <article class="card"><h3>Other models</h3><pre><code>INCISE_PROFILE=standard hermes chat</code></pre><p>Unknown models and MiniCPM retain the stable model-agnostic interface under <code>auto</code> as well.</p></article>
+      <article class="card"><h3>MiniCPM5 2B</h3><pre><code>INCISE_PROFILE=auto hermes chat --reasoning none</code></pre><p>Recommended with an 8,192-token output cap and disabled parallel tool calls. Set <code>INCISE_MODEL_FAMILY=minicpm</code> for generic aliases.</p></article>
     </div>
-    <p>The preregistered Hermes profile completed 480/480 trials on both Ornith and Gemma with zero harmful outcomes.</p>
+    <p>The preregistered Hermes profiles completed 480/480 trials on MiniCPM, Ornith, and Gemma with zero harmful outcomes.</p>
 
     <h2>The editing loop</h2>
     <ol class="steps"><li>Inspect the relevant document structure.</li><li>Address the target by its content.</li><li>Preview or perform one semantic operation.</li><li>Verify the concise result or follow the remedy in a refusal.</li></ol>
