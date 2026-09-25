@@ -919,6 +919,14 @@ Provider framing was exact on all 96 trials, all 36 intended routed tasks and 12
 
 Disposition: the smoke gate fails, so the 480-pair run does not start and MiniCPM remains mapped to `standard` in `auto`. The gain is large enough to justify a new targeted, separately preregistered treatment: host-own exact quoted section replacement bodies, cover the two exact list-at-end phrasings, host-resolve named table-row additions, and remove model-owned frontmatter key/value selection for the already recognized exact intents. The current raw, graded, and analysis artifacts use `bench/results/minicpm5_v03_smoke_*_20260925`; prior MiniCPM and Gemma claims remain current for their exact pools.
 
+# F-minicpm-v03-v2 — every targeted repair passes, while unsupported fallbacks become the safety boundary
+
+The v2 transfer was preregistered at `6731331` and the shared route implementation was frozen at `0b1aadf`. It reran the complete MiniCPM seed-0 population after adding strict host-owned table-row, list-ending, quoted-section-body, and typed-frontmatter arguments. All **12/12 affected tasks were correct**, all four formerly harmful target tasks became correct, and the affected-route audit found zero surface or argument errors. Provider framing was exact, no reasoning leaked, and no trial changed the file twice.
+
+Composition correctness moved only **41/48 to 43/48**. There were four treatment-only wins and two v1-only wins (`delete-row-aligned` and `get-ordinal-table`), so exact paired McNemar `p = 0.6875`. More importantly, four treatment trials were harmful under the frozen taxonomy. Three changed files incorrectly: `update-cell-multi-table` appended a pipe row outside its table, `append-hotfix-note` created unrelated frontmatter, and `delete-install-macos` replaced the root section body with copied outline text. `delete-row-aligned` made no edit but returned the wrong result. `get-ordinal-table` remained a loud refusal after omitting the required ordinal.
+
+Disposition: v2 fails its 45/48, no-regression, and zero-harm gates. Per the preregistration, Gemma and Ornith retention did not run, the shared implementation is not adopted, MiniCPM remains `standard` in `auto`, and no 480-pair campaign starts. The result changes the next scope: a v3 treatment must host-resolve all five remaining failures—exact row deletion, exact multi-table cell update, exact hotfix append, guarded macOS subtree deletion, and the staging-table ordinal read—before any cross-model retention arm. Artifacts use `bench/results/minicpm5_v03_safe_routed_v2_20260925*`; the v1, Gemma, and Ornith claims remain current for their exact pools.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table
