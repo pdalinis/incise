@@ -60,7 +60,7 @@ hermes tools list --platform cli
 hermes plugins doctor --ci incise
 ```
 
-Doctor should show `incise` enabled and print the exact binary it validated. It registers eight tools for `standard`, twelve for `safe-small`, or twenty-four for `auto`/`safe-routed`; middleware narrows the latter before each provider request.
+Doctor should show `incise` enabled and print the exact binary it validated. It registers eight tools for `standard`, twelve for `safe-small`, or twenty-eight for `auto`/`safe-routed`; middleware narrows the latter before each provider request.
 
 ## Tools exposed
 
@@ -68,9 +68,9 @@ Doctor should show `incise` enabled and print the exact binary it validated. It 
 
 **Standard semantic edits.** `table_edit`, `list_edit`, `section_edit`, and `frontmatter_edit` expose the measured model-agnostic schemas. They address content by heading, cell value, item text, key, and ordinal rather than by line number.
 
-**Guarded routing.** With `INCISE_PROFILE=auto`, detected Gemma, MiniCPM, and Ornith requests are inspected before inference. Exact supported requests receive one of sixteen action-specific route tools; the provider sees only that one Incise tool. Unsupported or ambiguous requests receive the byte-identical standard eight-tool surface. Foreign Hermes tools remain available in both cases. After a routed mutation succeeds, Incise mutation tools are removed from later provider calls in that turn.
+**Guarded routing.** With `INCISE_PROFILE=auto`, detected Gemma, MiniCPM, and Ornith requests are inspected before inference. Exact supported requests receive one of twenty action-specific route tools; the provider sees only that one Incise tool. Unsupported or ambiguous requests receive the byte-identical standard eight-tool surface. Foreign Hermes tools remain available in both cases. After a routed mutation succeeds, Incise mutation tools are removed from later provider calls in that turn.
 
-The plugin registers the union needed by the selected profile, but registration is not the provider-visible surface. `auto` registers the eight standard handlers and sixteen route handlers, then its request hook narrows them dynamically. Ordinary paragraph edits and initial file creation still belong to general file tools.
+The plugin registers the union needed by the selected profile, but registration is not the provider-visible surface. `auto` registers the eight standard handlers and twenty route handlers, then its request hook narrows them dynamically. Ordinary paragraph edits and initial file creation still belong to general file tools.
 
 Set `INCISE_PROFILE=safe-small` only to reproduce the earlier experimental narrow composition. The adopted MiniCPM path is `auto`, which uses guarded host-resolved routes and the standard fallback rather than exposing `safe-small` broadly.
 
@@ -133,7 +133,7 @@ The earlier Ornith and Gemma runs each used 360 routed and 120 fallback trials o
 
 **Doctor selected the wrong binary.** Read the `incise plugin: binary ...` line printed before the report. Resolution is `INCISE_BIN` first; for a source-linked checkout, the newest executable release/debug build comes next; an `incise` found on `PATH` is the final fallback.
 
-**Doctor warns about conditionally absent tools.** The manifest declares the union across profiles. Expected registration is eight for `standard`, twelve for `safe-small`, and twenty-four for `auto` or `safe-routed`; provider requests still receive exactly one route tool or the standard eight.
+**Doctor warns about conditionally absent tools.** The manifest declares the union across profiles. Expected registration is eight for `standard`, twelve for `safe-small`, and twenty-eight for `auto` or `safe-routed`; provider requests still receive exactly one route tool or the standard eight.
 
 **Tools refuse every path.** The plugin fails closed when Hermes file-safety guards cannot load. Run `hermes plugins doctor --ci incise` under the same environment and confirm Hermes is at least 0.21.3.
 

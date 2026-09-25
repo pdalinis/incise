@@ -12,10 +12,12 @@ const expected = [
 	["linux-x64-gnu", "@pdalinis/pi-incise-linux-x64-gnu", "linux", "x64", "glibc"],
 ] as const;
 
-test("native package metadata matches the resolver and main package version", () => {
+test("native package metadata matches the retained npm release version", () => {
 	const main = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
-	const cargo = readFileSync(resolve(root, "..", "..", "Cargo.toml"), "utf8");
-	assert.equal(cargo.match(/^version = "([^"]+)"$/m)?.[1], main.version);
+	const scope = JSON.parse(
+		readFileSync(resolve(root, "..", "..", ".github", "release-scope.json"), "utf8"),
+	);
+	assert.equal(main.version, scope.npmVersion);
 	for (const [directory, name, os, cpu, libc] of expected) {
 		const manifest = JSON.parse(readFileSync(resolve(root, "native", directory, "package.json"), "utf8"));
 		assert.equal(manifest.name, name);
