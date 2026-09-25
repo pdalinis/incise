@@ -27,8 +27,8 @@ test("auto enables only capabilities backed by a passing model-family evaluation
 	assert.equal(ornith.effective, "safe-routed");
 	assert.match(ornith.reason, /measured Ornith/);
 	const minicpm = selectProfile("auto", { id: "openbmb/MiniCPM5-2B" });
-	assert.equal(minicpm.effective, "standard");
-	assert.match(minicpm.reason, /no general MiniCPM profile has passed/);
+	assert.equal(minicpm.effective, "safe-routed");
+	assert.match(minicpm.reason, /measured MiniCPM/);
 	assert.equal(selectProfile("auto", { id: "some-future-model" }).effective, "standard");
 	assert.equal(selectProfile("safe-routed", { id: "some-future-model" }).effective, "safe-routed");
 });

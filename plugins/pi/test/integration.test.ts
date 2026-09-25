@@ -924,7 +924,7 @@ test("auto profile selects once from the active model and reports the decision",
 		prompt: 'In @sections.md, rename "Closed ATX level 3" to "Closed ATX heading".',
 		systemPrompt: "System.",
 		systemPromptOptions: {},
-	}, { cwd: directory, model: { id: "gemma4-direct-q8" } } as any);
+	}, { cwd: directory, model: { id: "openbmb/MiniCPM5-2B" } } as any);
 	assert.deepEqual([...active], ["section_rename_target"]);
 
 	let notice = "";
@@ -933,7 +933,7 @@ test("auto profile selects once from the active model and reports the decision",
 	} as any);
 	assert.match(notice, /profile requested: auto/);
 	assert.match(notice, /profile effective: safe-routed/);
-	assert.match(notice, /model family: gemma/);
+	assert.match(notice, /model family: minicpm/);
 	assert.match(notice, /last route: section-rename/);
 
 	await events.get("before_agent_start")({
@@ -941,10 +941,10 @@ test("auto profile selects once from the active model and reports the decision",
 		prompt: "Summarize @sections.md.",
 		systemPrompt: "System.",
 		systemPromptOptions: {},
-	}, { cwd: directory, model: { id: "openbmb/MiniCPM5-2B" } } as any);
+	}, { cwd: directory, model: { id: "gemma4-direct-q8" } } as any);
 	assert(active.has("section_edit"));
 	await commands.get("incise-doctor").handler("", {
 		ui: { notify(text: string) { notice = text; } },
 	} as any);
-	assert.match(notice, /model: gemma4-direct-q8/);
+	assert.match(notice, /model: openbmb\/MiniCPM5-2B/);
 });

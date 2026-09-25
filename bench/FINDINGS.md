@@ -939,6 +939,12 @@ Retention then passed exactly as preregistered: Gemma was **51/51** and Ornith w
 
 Decision: the shared Pi routes are eligible to merge, and the 480-trial MiniCPM composition gate may now be preregistered. This result does not enable MiniCPM under `auto`, claim Hermes parity for these five routes, or substitute for that larger composition run.
 
+The licensed composition gate then passed **480/480 correct** across seeds 0–9: tables 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. There were zero harmful outcomes, framing errors, multiple mutations, or reasoning leaks. The exact surface audit was 470/470 routed trials plus 10/10 standard fallbacks.
+
+The first composition analysis failed only because the preregistration confused the 17 v2+v3 affected tasks with the full set of 47 routes already present in the shared Gemma/Ornith profile. The immutable trace itself reported 470 exact routed trials with zero errors. A post-run count erratum corrected the mechanically verifiable expectation from 170 routed plus 310 fallback to 470 routed plus 10 fallback; the original failed analysis remains, the corrected analysis is separately named, and no call was resampled.
+
+Decision applied: MiniCPM may select `safe-routed` under Pi `auto`. Hermes remains out of scope until its adapter reaches deterministic route parity and passes a live integration gate.
+
 # Lists — the second op family
 
 That signal was acted on. The list family exists to ask two questions the table

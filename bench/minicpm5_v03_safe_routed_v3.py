@@ -154,6 +154,7 @@ def route_audit(keys, raw, graded, affected_only=False):
     specs = v3_specs()
     errors = []
     checked = 0
+    fallback_checked = 0
     for key in keys:
         if affected_only and key[0] not in AFFECTED:
             continue
@@ -161,6 +162,7 @@ def route_audit(keys, raw, graded, affected_only=False):
         expected = specs.get(key[0])
         first = (row.get("provider_requests") or [{}])[0]
         if expected is None:
+            fallback_checked += 1
             if (first.get("tools") != STANDARD_TOOLS
                     or first.get("active_tools") != STANDARD_TOOLS):
                 errors.append([*key, "fallback surface"])
@@ -192,7 +194,10 @@ def route_audit(keys, raw, graded, affected_only=False):
                     or details.get("resolvedArguments") != expected["resolved"]
                     or bool(details.get("changed")) != expected_changed):
                 errors.append([*key, "resolved call", supplied, details, expected])
-    return {"checked": checked, "errors": errors}
+    return {
+        "checked": checked, "fallback_checked": fallback_checked,
+        "errors": errors,
+    }
 
 
 def harmful_keys(keys, graded):
@@ -338,7 +343,8 @@ def analyse_composition(args):
         failures.append("multiple changed mutations")
     if leaks:
         failures.append("reasoning leak")
-    if audit["checked"] != 170 or audit["errors"]:
+    if (audit["checked"] != 470 or audit["fallback_checked"] != 10
+            or audit["errors"]):
         failures.append("route or fallback audit error")
     report = {
         "status": "pass" if not failures else "fail",

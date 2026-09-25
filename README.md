@@ -24,7 +24,7 @@ Language models are often good at identifying the change a document needs and mu
 
 > **Hermes routed results:** the recommended Hermes `auto` profile completed **480/480 trials (100%) with zero harmful outcomes** on both Ornith 1.5 9B and Gemma 4 26B. Each run used the expected 360 routed and 120 fallback requests, with exact provider tool surfaces and host-resolved arguments.
 
-> **Pi routed results:** Ornith completed **480/480 trials (100%) with zero harmful outcomes**. Gemma completed **475/479 usable trials (99.2%) with zero harmful outcomes**; its four remaining outcomes were loud section refusals.
+> **Pi routed results:** MiniCPM5 2B and Ornith each completed **480/480 trials (100%) with zero harmful outcomes**. Gemma completed **475/479 usable trials (99.2%) with zero harmful outcomes**; its four remaining outcomes were loud section refusals.
 
 Incise separates intent from mechanics:
 
@@ -170,15 +170,15 @@ INCISE_PROFILE=auto pi --thinking off
 
 Configure the Ornith model entry with `maxTokens: 2048` and `samplingParams.parallel_tool_calls: false`. The extension detects model IDs or names containing `ornith`. If a local provider exposes a generic model ID, add `INCISE_MODEL_FAMILY=ornith`.
 
-`auto` enables the guarded `safe-routed` profile for measured Gemma and Ornith identities. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run `/incise-doctor` to see the detected model, effective profile, binary, schemas, registered tools, and last route.
-
-For MiniCPM, use the standard profile for general editing:
+For MiniCPM5 2B, use the measured automatic profile with thinking disabled:
 
 ```bash
-INCISE_PROFILE=standard pi
+INCISE_PROFILE=auto pi --thinking off
 ```
 
-An opt-in `minicpm-list` profile is available for the measured list-addition workflow only. It reached 16/21 through real Pi with every executed mutation correct, but it is not a general MiniCPM profile and remains experimental.
+The measured MiniCPM run used the official Q8_0 checkpoint through llama.cpp, a 65,536-token context, `maxTokens: 8192`, temperature 0.7, and top-p 0.95. If the endpoint exposes a generic model ID, add `INCISE_MODEL_FAMILY=minicpm`.
+
+`auto` enables guarded `safe-routed` behavior for measured Gemma, MiniCPM, and Ornith identities. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Unknown models keep the model-agnostic standard interface. Run `/incise-doctor` to see the detected model, effective profile, binary, schemas, registered tools, and last route.
 
 The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See [the Pi integration guide](plugins/pi/README.md) for profile behavior, model overrides, inference settings, and exact evaluation scope.
 
@@ -192,15 +192,15 @@ Incise is designed around five guarantees:
 * **Safe writes:** the CLI supports dry runs, atomic replacement, no-op detection, and content-hash preconditions.
 * **Token-frugal results:** successful writes describe the change instead of returning the whole document.
 
-The standard interface remains model-agnostic. Model-specific profiles are additive integration behavior: they narrow the active tool surface, validate current structure, retain content hashes, and stop after one successful routed mutation.
+The standard interface remains model-agnostic. Measured routed profiles are additive integration behavior: they narrow the active tool surface, validate current structure, retain content hashes, and stop after one successful routed mutation.
 
-MiniCPM support is intentionally conservative. Core singleton-row compatibility passed 18/18 live table trials, including all 9 singleton-object-array calls. The opt-in list pipeline also shows strong targeted results, but broader MiniCPM profiles have not cleared the project’s zero-data-loss and no-regression gates. Incise therefore does not silently enable a general MiniCPM profile.
+MiniCPM routing is enabled only in Pi, where the complete candidate passed 480/480 trials with zero harmful outcomes. Hermes still keeps MiniCPM on the standard surface under `auto` until its adapter receives the same routes and passes its own parity and live gates.
 
 Refusals are part of the safety contract. If an operation cannot prove one target or preserve the requested structure, it reports the conflicting matches or missing requirement and writes nothing.
 
 ## Measured with small models
 
-The strongest current result is now reproduced through both supported agent hosts. Hermes `auto` completed **480/480 trials correct (100%) with zero harmful outcomes** on both Ornith 1.5 9B and Gemma 4 26B. Pi `auto` completed **480/480** on Ornith and **475/479 usable trials (99.2%)** on Gemma, also with zero harmful outcomes. Results remain scoped to each recorded host, model, runtime, seed range, and inference configuration.
+Pi now has two preregistered 480/480 profiles with zero harmful outcomes: MiniCPM5 2B and Ornith 1.5 9B. Gemma completed 475/479 usable Pi trials (99.2%) with zero harmful outcomes, and every one of the 17 MiniCPM v3 affected tasks retained across three Gemma seeds (51/51). Hermes `auto` separately completed 480/480 on Ornith and 480/480 on Gemma; MiniCPM Hermes parity remains future work. Results remain scoped to each recorded host, model, runtime, seed range, profile, and inference configuration.
 
 ### Current Ornith/Pi profile
 
@@ -242,14 +242,21 @@ The preregistered run attempted 480 trials. One `rename-setext` pair hit the fix
 
 Both preregistered runs used Hermes Agent 0.21.3 and the frozen 48-task population over seeds 40–49. Ornith `auto` improved from a paired standard Hermes control of 460/480 to 480/480: 20 treatment-only wins, no control-only wins, and exact McNemar `p = 1.907×10⁻⁶`. Both treatments had zero framing errors, zero multiple mutations, and no retries. Gemma’s 480/480 is a host-and-seed-specific compatibility result; comparison with the earlier 475/479 Pi run is descriptive, not paired.
 
-### MiniCPM progress
+### Current MiniCPM/Pi profile
 
-MiniCPM is promising, but the supported surface is deliberately narrower:
+| Family | Correct | Safety result |
+| --- | ---: | --- |
+| Tables | **60/60** | Zero harmful outcomes |
+| Lists | **100/100** | Zero harmful outcomes |
+| Sections | **150/150** | Zero harmful outcomes |
+| Frontmatter | **110/110** | Zero harmful outcomes |
+| Table reads | **60/60** | Read-only |
+| Routed trials | **470/470** | Exact tool surfaces and resolved arguments |
+| Standard fallback | **10/10** | Unchanged eight-tool surface |
 
-* Singleton-object table rows passed **18/18** live trials, including **9/9** compatibility normalizations, with no corruption or data loss.
-* An adapter-independent, host-routed list pipeline improved supported additions from **13/21 to 21/21** (`p = 0.0078`) with no regressions or harmful outcomes.
-* The same opt-in pipeline reached **16/21** through real Pi. All 16 executed mutations were correct; five failures were no-call prose responses.
-* Broader MiniCPM compositions remain experimental because they have not passed the project’s family and zero-data-loss gates.
+The preregistered composition used MiniCPM5 2B Q8_0 through llama.cpp and Pi with thinking off, a 65,536-token context, `maxTokens: 8192`, temperature 0.7, and top-p 0.95. All 480 trials across seeds 0–9 were usable and correct. There were zero harmful outcomes, provider-framing errors, visible reasoning leaks, or multiple changed mutations.
+
+This result followed two stopped iterations. The current-profile smoke moved from 17/48 standard to 41/48 routed but retained four harmful outcomes. V2 reached 43/48 while making every targeted repair correct. V3 host-resolved the five remaining unambiguous tasks, passed 48/48 at seed 0, retained 51/51 on Gemma and 51/51 on Ornith, then passed the full 480-trial composition. The original grader-count failures and corrected analyses are both preserved.
 
 ### Structured operations versus direct patching
 
