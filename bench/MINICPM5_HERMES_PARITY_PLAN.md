@@ -84,3 +84,11 @@ New append-only artifacts use these prefixes:
 - `minicpm5_hermes_auto_smoke_20260925`
 
 Historical pools and analyses are never overwritten. A Hermes result is reported separately from the existing Pi result even when the frozen tasks and expected edits are identical.
+
+## Pre-implementation scope correction
+
+Before implementation, a counterfactual audit compared the unchanged Hermes adapter against the final MiniCPM Pi pool. It found 17 task-level mismatches, not five. This correction is based only on recorded calls and deterministic route planning; no Hermes treatment was sampled.
+
+The five v3 paths remain missing, but parity also requires the earlier MiniCPM v2 behavior: four table-row additions, two exact list-ending requests, the hotfix release append, a host-owned quoted replacement body, and five host-owned typed frontmatter updates. The corrected implementation scope is therefore the complete 17-task v2+v3 set.
+
+The deterministic gate remains 47 routed tasks and one fallback with exact tool, kind, and resolved arguments. Cross-model retention is corrected from five tasks to all 17 affected tasks, or 51 trials per retained model at seeds 0 through 2. Every later adoption gate is interpreted using this corrected scope.
