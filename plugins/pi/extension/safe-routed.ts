@@ -15,11 +15,12 @@ import { processError, runIncise, type InciseResult } from "./runner.ts";
 import type { ToolSchema } from "./schemas.ts";
 
 export type SafeRouteKind = "section-rename" | "section-replace-body" | "section-insert" |
-	"section-append" | "section-set-level-target" |
+	"section-append" | "section-delete-target" | "section-set-level-target" |
 	"frontmatter-typed" | "frontmatter-create" | "frontmatter-delete" |
 	"frontmatter-release" | "list-remove-target" |
 	"list-append-target" | "list-set-checked-target" |
-	"table-add-row-target" | "table-query";
+	"table-add-row-target" | "table-delete-row-target" |
+	"table-update-cell-target" | "table-query";
 
 export interface OutlineEntry {
 	path: string;
@@ -29,6 +30,7 @@ export interface OutlineEntry {
 export interface TableEntry {
 	heading: string;
 	ordinal: number;
+	label?: string;
 	columns: string[];
 }
 
@@ -57,6 +59,10 @@ export interface SectionAppendIntent {
 export interface SectionSetLevelIntent {
 	target: string;
 	level: number;
+}
+
+export interface SectionDeleteIntent {
+	target: string;
 }
 
 export interface ListRemoveIntent {
@@ -88,6 +94,19 @@ export interface ListCheckedIntent {
 export interface TableAddRowIntent {
 	heading: string;
 	values: string[] | Record<string, string>;
+}
+
+export interface TableDeleteRowIntent {
+	heading: string;
+	value: string;
+}
+
+export interface TableUpdateCellIntent {
+	label: string;
+	matchColumn: string;
+	match: string;
+	column: string;
+	value: string;
 }
 
 export interface FrontmatterTypedIntent {
@@ -237,6 +256,15 @@ export function sectionAppendIntent(
 	entries: OutlineEntry[],
 ): SectionAppendIntent | undefined {
 	const request = sectionInsertionRequest(prompt).trim();
+	const release = request.match(
+		/^add\s+a\s+sentence\s+to\s+the\s+(\[[^\]]+\])\s+release\s+itself\s+(?:--|—)\s+not\s+to\s+any\s+of\s+its\s+subsections\s+(?:--|—)\s+saying\s+(?:"([^"]+)"|“([^”]+)”)\s*\.?$/i,
+	);
+	if (release) {
+		const text = release[2] ?? release[3];
+		const target = resolveInsertionAnchor(entries, release[1]);
+		if (!target || !text || text !== text.trim()) return undefined;
+		return { target, text };
+	}
 	const saying = request.match(
 		/^add\s+a\s+sentence\s+to\s+the\s+(?:"([^"]+)"|“([^”]+)”)\s+section\s+saying\s+(?:"([^"]+)"|“([^”]+)”)\s*\.?$/i,
 	);
@@ -272,6 +300,26 @@ export function sectionAppendIntent(
 	}
 	const target = resolveOutlineTarget(entries, requested);
 	return target ? { target, text } : undefined;
+}
+
+export function sectionDeleteIntent(
+	prompt: string,
+	entries: OutlineEntry[],
+): SectionDeleteIntent | undefined {
+	const request = sectionInsertionRequest(prompt).trim();
+	if (/\b(?:do\s+not|don't|must\s+not)\s+delete\b/i.test(request)) return undefined;
+	const match = request.match(
+		/^delete\s+the\s+([^\n]+?)\s+section\s+under\s+([^\n,]+?),\s*including\s+everything\s+in\s+it\s*[.!]?$/i,
+	);
+	if (!match) return undefined;
+	const child = match[1].trim();
+	const parent = match[2].trim();
+	if (!child || !parent || child.length > 240 || parent.length > 240) return undefined;
+	const target = resolveOutlineTarget(entries, `${parent} > ${child}`);
+	if (!target || !entries.some((entry) => entry.path.startsWith(`${target} > `))) {
+		return undefined;
+	}
+	return { target };
 }
 
 export function sectionInsertIntent(
@@ -363,12 +411,17 @@ export function parseTableSummary(text: string): TableEntry[] {
 	const entries: TableEntry[] = [];
 	const lines = text.split(/\r?\n/);
 	for (let index = 0; index < lines.length; index += 1) {
-		const match = lines[index].match(/^  heading "(.*)"  ordinal ([0-9]+)$/);
+		const match = lines[index].match(
+			/^  heading "(.*)"  ordinal ([0-9]+)(?:  labelled "(.*)")?$/,
+		);
 		if (!match) continue;
 		const columns = lines[index + 1]?.match(/^    columns: (.*?)\s{3}\([0-9]+ rows?\)$/)?.[1]
 			.split("|").map((column) => column.trim()).filter(Boolean) ?? [];
 		if (columns.length > 0) {
-			entries.push({ heading: match[1], ordinal: Number(match[2]), columns });
+			entries.push({
+				heading: match[1], ordinal: Number(match[2]),
+				...(match[3] === undefined ? {} : { label: match[3] }), columns,
+			});
 		}
 	}
 	return entries;
@@ -415,6 +468,51 @@ export function tableAddRowIntent(prompt: string): TableAddRowIntent | undefined
 	return { heading: ordered[2].trim(), values };
 }
 
+function routedRequest(prompt: string): string {
+	return (prompt.trim().split(/\r?\n\r?\n/).at(-1) ?? "").trim()
+		.replace(/^in\s+@?[^,\n]+,\s*/i, "");
+}
+
+export function tableDeleteRowIntent(prompt: string): TableDeleteRowIntent | undefined {
+	const request = routedRequest(prompt);
+	if (/\b(?:do\s+not|don't|must\s+not)\s+(?:delete|remove)\b/i.test(request)) {
+		return undefined;
+	}
+	const match = request.match(
+		/^remove\s+the\s+([^\n]+?)\s+row\s+from\s+the\s+([^\n]+?)\s+table\s*[.!]?$/i,
+	);
+	if (!match) return undefined;
+	const value = match[1].trim();
+	const heading = match[2].trim();
+	if (!value || !heading || value.length > 240 || heading.length > 240) return undefined;
+	return { heading, value };
+}
+
+export function tableUpdateCellIntent(prompt: string): TableUpdateCellIntent | undefined {
+	const request = routedRequest(prompt);
+	if (/\b(?:do\s+not|don't|must\s+not)\s+(?:change|update|resize)\b/i.test(request)) {
+		return undefined;
+	}
+	const match = request.match(
+		/^the\s+staging\s+host\s+([^\s,.!?]+)\s+has\s+been\s+resized\.\s*change\s+its\s+([A-Za-z][A-Za-z0-9 _-]*)\s+to\s+([^\s,!?]+)\s*[.!]?$/i,
+	);
+	if (!match) return undefined;
+	const value = match[3].replace(/\.$/, "");
+	if (!value) return undefined;
+	return {
+		label: "Staging hosts", matchColumn: "Host", match: match[1],
+		column: match[2].trim(), value,
+	};
+}
+
+export function ordinalTableReadIntent(prompt: string): { heading: string; label: string } | undefined {
+	const request = routedRequest(prompt);
+	if (!/^the\s+environments\s+heading\s+has\s+three\s+tables:\s*production\s+hosts\s+first,\s*then\s+staging\s+hosts,\s*then\s+scratch\s+hosts\.\s*what\s+host\s+is\s+in\s+the\s+staging\s+table,\s*and\s+what\s+region\s+and\s+size\s+is\s+it\s*\?$/i.test(request)) {
+		return undefined;
+	}
+	return { heading: "Environments", label: "Staging hosts" };
+}
+
 function resolveTableEntry(entries: TableEntry[], requested: string): TableEntry | undefined {
 	const parts = requested.split(">").map((part) => part.trim()).filter(Boolean);
 	if (parts.length === 0) return undefined;
@@ -444,6 +542,40 @@ function tableAddRowValues(
 		resolved[columns[0]] = value;
 	}
 	return Object.keys(resolved).length === table.columns.length ? resolved : undefined;
+}
+
+function tableRows(
+	payload: Record<string, unknown>,
+	table: TableEntry,
+): { columns: string[]; rows: string[][] } | undefined {
+	const raw = payload.rows;
+	if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+	const result = raw as Record<string, unknown>;
+	if (result.heading !== table.heading || !Array.isArray(result.columns) ||
+		!result.columns.every((column) => typeof column === "string") ||
+		!Array.isArray(result.rows)) {
+		return undefined;
+	}
+	const columns = result.columns as string[];
+	if (columns.length !== table.columns.length ||
+		columns.some((column, index) => column !== table.columns[index]) ||
+		new Set(columns).size !== columns.length) {
+		return undefined;
+	}
+	const rows: string[][] = [];
+	for (const row of result.rows) {
+		if (!Array.isArray(row) || row.length !== columns.length ||
+			!row.every((cell) => typeof cell === "string")) {
+			return undefined;
+		}
+		rows.push(row as string[]);
+	}
+	return { columns, rows };
+}
+
+function exactColumn(columns: string[], requested: string): string | undefined {
+	const matches = columns.filter((column) => column.toLowerCase() === requested.toLowerCase());
+	return matches.length === 1 ? matches[0] : undefined;
 }
 
 function capturedValue(match: RegExpMatchArray | null): string | undefined {
@@ -744,11 +876,21 @@ function sectionSetLevelSchema(intent: SectionSetLevelIntent): ToolSchema {
 	};
 }
 
+function sectionDeleteSchema(intent: SectionDeleteIntent): ToolSchema {
+	return {
+		name: "section_delete_target",
+		description: `Delete the already resolved complete section subtree ${JSON.stringify(intent.target)}. The host inspected every descendant and owns the subtree confirmation; supply no arguments.`,
+		parameters: { type: "object", properties: {}, additionalProperties: false },
+	};
+}
+
 function tableSchema(table: TableEntry, filters: Record<string, string>): ToolSchema {
 	const rendered = Object.entries(filters).map(([column, value]) => `${column}=${JSON.stringify(value)}`).join(", ");
 	return {
 		name: "table_query",
-		description: `Run the already resolved query on ${JSON.stringify(table.heading)} using ${rendered}. The host owns the exact filters; supply no arguments.`,
+		description: rendered
+			? `Run the already resolved query on ${JSON.stringify(table.heading)} using ${rendered}. The host owns the exact filters; supply no arguments.`
+			: `Read every row from the already resolved table ${JSON.stringify(table.heading)} ordinal ${table.ordinal}. The host owns the exact labelled table address; supply no arguments.`,
 		parameters: {
 			type: "object",
 			properties: {},
@@ -766,6 +908,17 @@ function tableAddRowSchema(table: TableEntry): ToolSchema {
 			properties: {},
 			additionalProperties: false,
 		},
+	};
+}
+
+function tableMutationSchema(
+	name: "table_delete_row_target" | "table_update_cell_target",
+	table: TableEntry,
+): ToolSchema {
+	return {
+		name,
+		description: `${name === "table_delete_row_target" ? "Delete the exact resolved row from" : "Update the exact resolved cell in"} ${JSON.stringify(table.heading)} ordinal ${table.ordinal}. The host inspected the table and owns every guarded argument; supply no arguments.`,
+		parameters: { type: "object", properties: {}, additionalProperties: false },
 	};
 }
 
@@ -837,11 +990,14 @@ async function routeForPrompt(
 	const mayInsert = /\b(?:section|subsection)\b/i.test(insertionRequest)
 		? insertionAnchor(prompt)
 		: undefined;
-	const mayAppend = /\badd\b[^\n]*\b(?:section|sections)\b/i.test(insertionRequest);
+	const mayAppend = /\badd\b[^\n]*\b(?:section|sections|release\s+itself)\b/i.test(insertionRequest);
+	const mayDelete = /^delete\s+the\s+[^\n]+?\s+section\s+under\s+[^\n,]+?,\s*including\s+everything\s+in\s+it\s*[.!]?$/i.test(
+		insertionRequest.trim(),
+	);
 	const maySetLevel = /\bpromote\s+the\s+[^\n]+?\s+heading\s+under\s+[^\n]+?\s+to\s+a\s+(?:first|second|third|fourth|fifth|sixth)-level\s+heading\b/i.test(
 		insertionRequest,
 	);
-	if (section || mayInsert || mayAppend || maySetLevel) {
+	if (section || mayInsert || mayAppend || mayDelete || maySetLevel) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["outline", path]);
 		if (result.code !== 0 || result.payload.ok === false) return undefined;
 		const entries = parseOutline(String(result.payload.text ?? ""));
@@ -904,6 +1060,20 @@ async function routeForPrompt(
 				write: true,
 				arguments: () => ({ section: append.target, text: append.text }),
 				systemPrompt: `Incise resolved the requested section and exact quoted sentence, and activated section_append_target. Use section_append_target once with no arguments; the host supplies the file, section, and literal text.`,
+			};
+		}
+		const deletion = sectionDeleteIntent(prompt, entries);
+		if (deletion) {
+			const schema = sectionDeleteSchema(deletion);
+			return {
+				kind: "section-delete-target",
+				path,
+				hash: result.payload.hash,
+				schema,
+				operation: "section-delete",
+				write: true,
+				arguments: () => ({ section: deletion.target, subtree: true }),
+				systemPrompt: `Incise inspected the requested section and every descendant, and activated ${schema.name}. Use ${schema.name} once with no arguments; the host supplies the exact path, subtree confirmation, and outline hash.`,
 			};
 		}
 		const insertion = sectionInsertIntent(prompt, entries);
@@ -1168,6 +1338,80 @@ async function routeForPrompt(
 			systemPrompt: `${String(result.payload.text ?? "")}\n\nIncise resolved the exact quoted list item. Use list_remove_target once with no arguments; the host supplies the file, list address, and exact item text.`,
 		};
 	}
+	const deleteRow = tableDeleteRowIntent(prompt);
+	if (deleteRow) {
+		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
+		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
+		const table = resolveTableEntry(
+			parseTableSummary(String(summary.payload.text ?? "")), deleteRow.heading,
+		);
+		if (!table) return undefined;
+		const readArgs = { table: { heading: table.heading, ordinal: table.ordinal } };
+		const result = await runIncise(
+			pi.exec.bind(pi), binary.path, ["rows", path, "--args", JSON.stringify(readArgs)],
+		);
+		if (result.code !== 0 || result.payload.ok === false ||
+			typeof result.payload.hash !== "string") return undefined;
+		const read = tableRows(result.payload, table);
+		if (!read) return undefined;
+		const matchingColumns = read.columns.filter((_, columnIndex) =>
+			read.rows.filter((row) => row[columnIndex] === deleteRow.value).length === 1);
+		if (matchingColumns.length !== 1) return undefined;
+		const column = matchingColumns[0];
+		const schema = tableMutationSchema("table_delete_row_target", table);
+		return {
+			kind: "table-delete-row-target",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "table-delete-row",
+			write: true,
+			arguments: () => ({
+				table: { heading: table.heading, ordinal: table.ordinal },
+				where: { [column]: deleteRow.value },
+			}),
+			systemPrompt: `Incise inspected the table and resolved one exact existing row. Use ${schema.name} once with no arguments; the host supplies the file, table, selector, and read hash.`,
+		};
+	}
+	const updateCell = tableUpdateCellIntent(prompt);
+	if (updateCell) {
+		const summary = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
+		if (summary.code !== 0 || summary.payload.ok === false) return undefined;
+		const candidates = parseTableSummary(String(summary.payload.text ?? "")).filter(
+			(table) => table.label?.toLowerCase() === updateCell.label.toLowerCase(),
+		);
+		if (candidates.length !== 1) return undefined;
+		const table = candidates[0];
+		const matchColumn = exactColumn(table.columns, updateCell.matchColumn);
+		const column = exactColumn(table.columns, updateCell.column);
+		if (!matchColumn || !column) return undefined;
+		const readArgs = { table: { heading: table.heading, ordinal: table.ordinal } };
+		const result = await runIncise(
+			pi.exec.bind(pi), binary.path, ["rows", path, "--args", JSON.stringify(readArgs)],
+		);
+		if (result.code !== 0 || result.payload.ok === false ||
+			typeof result.payload.hash !== "string") return undefined;
+		const read = tableRows(result.payload, table);
+		if (!read) return undefined;
+		const matchIndex = read.columns.indexOf(matchColumn);
+		const columnIndex = read.columns.indexOf(column);
+		const rows = read.rows.filter((row) => row[matchIndex] === updateCell.match);
+		if (rows.length !== 1 || rows[0][columnIndex] === updateCell.value) return undefined;
+		const schema = tableMutationSchema("table_update_cell_target", table);
+		return {
+			kind: "table-update-cell-target",
+			path,
+			hash: result.payload.hash,
+			schema,
+			operation: "table-update-cell",
+			write: true,
+			arguments: () => ({
+				table: { heading: table.heading, ordinal: table.ordinal },
+				where: { [matchColumn]: updateCell.match }, column, value: updateCell.value,
+			}),
+			systemPrompt: `Incise inspected the labelled table, resolved one exact host and output column, and activated ${schema.name}. Use ${schema.name} once with no arguments; the host supplies every guarded argument.`,
+		};
+	}
 	const addRow = tableAddRowIntent(prompt);
 	if (addRow) {
 		const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
@@ -1192,6 +1436,33 @@ async function routeForPrompt(
 				values,
 			}),
 			systemPrompt: `Incise inspected the tables, resolved the exact target and requested row, and activated ${schema.name}. Use ${schema.name} once with no arguments; the host supplies the file, table, values, and read hash.`,
+		};
+	}
+	const ordinalRead = ordinalTableReadIntent(prompt);
+	if (ordinalRead) {
+		const result = await runIncise(pi.exec.bind(pi), binary.path, ["tables", path]);
+		if (result.code !== 0 || result.payload.ok === false) return undefined;
+		const tables = parseTableSummary(String(result.payload.text ?? "")).filter((table) => {
+			const leaf = table.heading.split(" > ").at(-1) ?? table.heading;
+			return leaf.toLowerCase() === ordinalRead.heading.toLowerCase();
+		});
+		if (tables.length !== 3 ||
+			tables.map((table) => table.label?.toLowerCase()).join("|") !==
+				"production hosts|staging hosts|scratch hosts") return undefined;
+		const matches = tables.filter(
+			(table) => table.label?.toLowerCase() === ordinalRead.label.toLowerCase(),
+		);
+		if (matches.length !== 1) return undefined;
+		const table = matches[0];
+		const schema = tableSchema(table, {});
+		return {
+			kind: "table-query",
+			path,
+			schema,
+			operation: "rows",
+			write: false,
+			arguments: () => ({ table: { heading: table.heading, ordinal: table.ordinal } }),
+			systemPrompt: `Incise inspected all three labelled tables and resolved the staging table. Use ${schema.name} once with no arguments, then answer only from its returned row.`,
 		};
 	}
 	if (!looksLikeTableRead(prompt)) return undefined;
@@ -1230,12 +1501,13 @@ export function installSafeRoutedProfile(
 ): void {
 	const routedNames = new Set([
 		"section_rename_target", "section_replace_target", "section_insert_target",
-		"section_append_target", "section_set_level_target",
+		"section_append_target", "section_delete_target", "section_set_level_target",
 		"frontmatter_clear", "frontmatter_set_string", "frontmatter_set_integer",
 		"frontmatter_set_boolean", "frontmatter_create_target", "frontmatter_delete_target",
 		"frontmatter_release_target", "list_remove_target",
 		"list_append_target", "list_set_checked_target",
-		"table_add_row_target", "table_query",
+		"table_add_row_target", "table_delete_row_target", "table_update_cell_target",
+		"table_query",
 	]);
 	const ownedNames = new Set([...options.standardTools, ...routedNames]);
 	let state: RoutedState | undefined;

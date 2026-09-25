@@ -12,18 +12,22 @@ import {
 	listContainsAppendIntent,
 	listCheckedIntent,
 	listRemoveIntent,
+	ordinalTableReadIntent,
 	parseOutline,
 	parseTableSummary,
 	requestedTable,
 	resolveFrontmatterTypedIntent,
 	resolveOutlineTarget,
 	sectionAppendIntent,
+	sectionDeleteIntent,
 	sectionInsertArguments,
 	sectionInsertIntent,
 	sectionIntent,
 	sectionSetLevelIntent,
 	tableAddRowIntent,
+	tableDeleteRowIntent,
 	tablePredicates,
+	tableUpdateCellIntent,
 } from "../extension/safe-routed.ts";
 
 test("frontmatter creation routing recognizes only the measured build-cache request", () => {
@@ -164,6 +168,42 @@ test("table row routing accepts only explicit complete row shapes", () => {
 		tableAddRowIntent('Add a row to the Components table for "sprocket".'),
 		undefined,
 	);
+});
+
+test("table mutation routing recognizes only the two measured exact requests", () => {
+	assert.deepEqual(
+		tableDeleteRowIntent("In @aligned.md, remove the gadget row from the Components table."),
+		{ heading: "Components", value: "gadget" },
+	);
+	assert.equal(
+		tableDeleteRowIntent("In @aligned.md, do not remove the gadget row from the Components table."),
+		undefined,
+	);
+	assert.equal(tableDeleteRowIntent("Remove a row from Components."), undefined);
+	assert.deepEqual(
+		tableUpdateCellIntent("In @tables.md, the staging host stage-1 has been resized. Change its Size to t3.l."),
+		{
+			label: "Staging hosts", matchColumn: "Host", match: "stage-1",
+			column: "Size", value: "t3.l",
+		},
+	);
+	assert.equal(
+		tableUpdateCellIntent("The production host web-1 has been resized. Change its Size to m5.xl."),
+		undefined,
+	);
+	assert.equal(
+		tableUpdateCellIntent("Do not change the staging host stage-1 Size to t3.l."),
+		undefined,
+	);
+});
+
+test("ordinal table routing requires the complete labelled staging request", () => {
+	assert.deepEqual(ordinalTableReadIntent(
+		"In @tables.md, the Environments heading has three tables: production hosts first, then staging hosts, then scratch hosts. What host is in the staging table, and what region and size is it?",
+	), { heading: "Environments", label: "Staging hosts" });
+	assert.equal(ordinalTableReadIntent(
+		"What host is in the staging table?",
+	), undefined);
 });
 
 test("frontmatter routing recognizes only the five measured existing-key intents", () => {
@@ -334,6 +374,30 @@ test("section append routing freezes the exact quoted sentence", () => {
 		target: { path: "Notes", ordinal: 1 },
 		text: "Superseded.",
 	});
+	const releases = parseOutline([
+		"Sections in `x.md`:",
+		"  Changelog   (body, 2 subsections)",
+		"    [1.4.2] - 2026-08-14   (no body of its own, 2 subsections)",
+		"      Fixed   (body)",
+		"      Changed   (body)",
+		"    [1.4.1] - 2026-07-30   (body)",
+	].join("\n"));
+	assert.deepEqual(sectionAppendIntent(
+		'Add a sentence to the [1.4.2] release itself -- not to any of its subsections -- saying "This release is a hotfix."',
+		releases,
+	), {
+		target: "Changelog > [1.4.2] - 2026-08-14",
+		text: "This release is a hotfix.",
+	});
+	assert.equal(sectionAppendIntent(
+		'Add a sentence to the [1.4] release itself -- not to any of its subsections -- saying "Ambiguous."',
+		parseOutline([
+			"Sections in `x.md`:",
+			"  Changelog   (body, 2 subsections)",
+			"    [1.4] - first   (body)",
+			"    [1.4] - second   (body)",
+		].join("\n")),
+	), undefined);
 	assert.equal(sectionAppendIntent(
 		framed('Add text to the "Fenced headings and lists" section: "Different shape."'),
 		entries,
@@ -345,6 +409,30 @@ test("section append routing freezes the exact quoted sentence", () => {
 	assert.equal(sectionAppendIntent(
 		framed('Add a sentence to the "Fenced headings and lists" section saying " leading space"'),
 		entries,
+	), undefined);
+});
+
+test("section deletion requires an exact parent and an existing subtree", () => {
+	const entries = parseOutline([
+		"Sections in `x.md`:",
+		"  Root   (body, 2 subsections)",
+		"    Install   (body, 1 subsection)",
+		"      macOS   (body, 1 subsection)",
+		"        Apple Silicon   (body)",
+		"    Upgrade   (body, 1 subsection)",
+		"      macOS   (body)",
+	].join("\n"));
+	assert.deepEqual(sectionDeleteIntent(
+		"Delete the macOS section under Install, including everything in it.", entries,
+	), { target: "Root > Install > macOS" });
+	assert.equal(sectionDeleteIntent(
+		"Delete the macOS section, including everything in it.", entries,
+	), undefined);
+	assert.equal(sectionDeleteIntent(
+		"Do not delete the macOS section under Install, including everything in it.", entries,
+	), undefined);
+	assert.equal(sectionDeleteIntent(
+		"Delete the macOS section under Upgrade, including everything in it.", entries,
 	), undefined);
 });
 
@@ -464,6 +552,22 @@ test("table routing resolves one named table and separates filters from requeste
 		filterColumns(table?.columns ?? [], "Which packages in the Packages table are priority urgent?"),
 		["Priority"],
 	);
+});
+
+test("table summaries retain optional labels without changing unlabelled entries", () => {
+	assert.deepEqual(parseTableSummary([
+		"Tables in `x.md`:",
+		'  heading "Root > Environments"  ordinal 0  labelled "Production hosts"',
+		"    columns: Host | Region | Size   (2 rows)",
+		'  heading "Root > Networks"  ordinal 0',
+		"    columns: CIDR | Purpose   (1 rows)",
+	].join("\n")), [
+		{
+			heading: "Root > Environments", ordinal: 0, label: "Production hosts",
+			columns: ["Host", "Region", "Size"],
+		},
+		{ heading: "Root > Networks", ordinal: 0, columns: ["CIDR", "Purpose"] },
+	]);
 });
 
 test("table predicates exclude projected columns and retain exact requested values", () => {

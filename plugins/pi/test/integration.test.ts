@@ -385,6 +385,51 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	);
 	assert.deepEqual([...active], ["foreign_tool"]);
 
+	const hotfixPath = join(directory, "changelog.md");
+	await copyFile(resolve(repository, "corpus", "documents", "changelog.md"), hotfixPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: 'In @changelog.md, add a sentence to the [1.4.2] release itself -- not to any of its subsections -- saying "This release is a hotfix."',
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_append_target"]);
+	const hotfix = await tools.get("section_append_target").execute(
+		"hotfix", {}, undefined, undefined, context,
+	);
+	assert.deepEqual(hotfix.details.resolvedArguments, {
+		section: "Changelog > [1.4.2] - 2026-08-14",
+		text: "This release is a hotfix.",
+	});
+	assert.match(
+		await readFile(hotfixPath, "utf8"),
+		/## \[1\.4\.2\] - 2026-08-14\n\nThis release is a hotfix\.\n\n### Fixed/,
+	);
+
+	const deleteSectionPath = join(directory, "delete-section.md");
+	await copyFile(resolve(repository, "corpus", "sections", "deep-nesting.md"), deleteSectionPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete-section.md, delete the macOS section under Install, including everything in it.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "section_delete_target"]);
+	const sectionDeleted = await tools.get("section_delete_target").execute(
+		"delete-section", {}, undefined, undefined, context,
+	);
+	assert.equal(sectionDeleted.details.route, "section-delete-target");
+	assert.deepEqual(sectionDeleted.details.resolvedArguments, {
+		section: "Deep heading nesting > Install > macOS", subtree: true,
+	});
+	const deletedSectionText = await readFile(deleteSectionPath, "utf8");
+	assert.doesNotMatch(deletedSectionText, /### macOS\n\nRequires macOS 13/);
+	assert.match(deletedSectionText, /## Upgrade\n\n### macOS/);
+	await assert.rejects(
+		() => tools.get("section_delete_target").execute(
+			"delete-section-again", {}, undefined, undefined, context,
+		),
+		/already succeeded/,
+	);
+
 	await events.get("before_agent_start")({
 		type: "before_agent_start",
 		prompt: "Summarize @sections.md without changing it.",
@@ -436,6 +481,62 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 	});
 	assert.match(await readFile(addRowPath, "utf8"), /hyperwidget-assembly\s+\| active\s+\| dana/);
 	assert.deepEqual([...active], ["foreign_tool"]);
+
+	const deleteRowPath = join(directory, "delete-row.md");
+	await copyFile(resolve(repository, "corpus", "tables", "aligned.md"), deleteRowPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @delete-row.md, remove the gadget row from the Components table.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_delete_row_target"]);
+	const rowDeleted = await tools.get("table_delete_row_target").execute(
+		"delete-row", {}, undefined, undefined, context,
+	);
+	assert.equal(rowDeleted.details.route, "table-delete-row-target");
+	assert.deepEqual(rowDeleted.details.resolvedArguments, {
+		table: { heading: "Aligned table > Components", ordinal: 0 },
+		where: { Component: "gadget" },
+	});
+	assert.doesNotMatch(await readFile(deleteRowPath, "utf8"), /gadget/);
+
+	const updateCellPath = join(directory, "update-cell.md");
+	await copyFile(resolve(repository, "corpus", "tables", "multiple-per-section.md"), updateCellPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @update-cell.md, the staging host stage-1 has been resized. Change its Size to t3.l.",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_update_cell_target"]);
+	const cellUpdated = await tools.get("table_update_cell_target").execute(
+		"update-cell", {}, undefined, undefined, context,
+	);
+	assert.equal(cellUpdated.details.route, "table-update-cell-target");
+	assert.deepEqual(cellUpdated.details.resolvedArguments, {
+		table: { heading: "Multiple tables per section > Environments", ordinal: 1 },
+		where: { Host: "stage-1" }, column: "Size", value: "t3.l",
+	});
+	const updatedCellText = await readFile(updateCellPath, "utf8");
+	assert.match(updatedCellText, /stage-1 \| us-west-2 \| t3\.l/);
+	assert.match(updatedCellText, /web-1 \| us-east-1 \| m5\.l/);
+
+	const ordinalPath = join(directory, "ordinal.md");
+	await copyFile(resolve(repository, "corpus", "tables", "multiple-per-section.md"), ordinalPath);
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: "In @ordinal.md, the Environments heading has three tables: production hosts first, then staging hosts, then scratch hosts. What host is in the staging table, and what region and size is it?",
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, context);
+	assert.deepEqual([...active].sort(), ["foreign_tool", "table_query"]);
+	const ordinalRows = await tools.get("table_query").execute(
+		"ordinal", {}, undefined, undefined, context,
+	);
+	assert.equal(ordinalRows.details.route, "table-query");
+	assert.deepEqual(ordinalRows.details.resolvedArguments, {
+		table: { heading: "Multiple tables per section > Environments", ordinal: 1 },
+	});
+	assert.match(ordinalRows.content[0].text, /stage-1 \| us-west-2 \| t3\.m/);
+	assert.equal(ordinalRows.details.changed, false);
 
 	const staleRowPath = join(directory, "stale-row.md");
 	await copyFile(resolve(repository, "corpus", "tables", "aligned.md"), staleRowPath);
