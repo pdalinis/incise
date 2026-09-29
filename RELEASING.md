@@ -36,20 +36,22 @@ The first npm release is a bootstrap: the five packages must exist before npm tr
 
 5. Push the release commit and wait for CI to pass on the default branch.
 
+6. For a model-facing behavior change, run the required live composition benchmark before creating a stable tag. For a documentation- or metadata-only release, verify that the packaged extension and schema match the prior stable package.
+
 ## Tag and publish
 
-For this release:
+For each release, substitute its version for `X.Y.Z`:
 
 ```bash
-git tag -a v0.3.1 -m "Incise 0.3.1"
-git push origin v0.3.1
+git tag -a vX.Y.Z -m "Incise X.Y.Z"
+git push origin vX.Y.Z
 ```
 
 The release workflow validates the pinned Rust toolchain, runs the Rust, documentation, Python, differential, schema, replay, Hermes, and Pi package checks, and verifies the crate and npm package contents.
 
 It then builds four CLI archives and four native npm packages—Linux x86-64 and ARM64, plus macOS x86-64 and ARM64—and a standalone version-matched Hermes plugin archive. Publication does not start unless every archive succeeds.
 
-Crate publication is ordered: `incise-core` is published first, then `incise-cli` retries while the registry index catches up. Npm publication is also ordered: the four exact-version native packages are published first under `next`, then `pi-incise` is published last. Every publish step skips an exact version that already exists, making a partial release rerunnable.
+Crate publication is ordered: `incise-core` is published first, then `incise-cli` retries while the registry index catches up. Npm publication is also ordered: the four exact-version native packages are published first, then `pi-incise` is published last. Stable versions receive `latest` and prerelease versions receive `next` at publication time. Every publish step skips an exact version that already exists, making a partial release rerunnable.
 
 For the initial npm bootstrap, let the tagged workflow produce its artifacts. Download the four `pi-incise-npm-*` native artifacts and the `pi-incise-npm-main` artifact, then publish their `.tgz` files with the local authenticated account in native-first, main-last order using `npm publish <file> --access public --tag next`. Configure all five packages’ trusted publisher settings for this repository and `.github/workflows/release.yml`, then rerun the failed release jobs.
 
@@ -57,9 +59,9 @@ After the crates, npm packages, and all archives succeed, the workflow creates a
 
 ## After release
 
-- Install from crates.io with `cargo install incise-cli --version 0.3.1 --locked` and run a smoke edit on a disposable Markdown file.
+- Install from crates.io with `cargo install incise-cli --version X.Y.Z --locked` and run a smoke edit on a disposable Markdown file.
 - Download one GitHub archive and verify it against `SHA256SUMS`.
 - Confirm the crates.io and docs.rs pages link back to the repository.
 - Download and extract the version-matched Hermes plugin archive, then confirm that `hermes plugins doctor --ci incise` reports all eight tools.
-- Install the Pi candidate with `pi install npm:pi-incise@next`, run `/incise-doctor`, and smoke-test a read and write on each supported platform family.
-- For a model-facing behavior change, run the live composition benchmark before promotion. For a documentation- or metadata-only release, verify that the published extension and schema match the prior stable package. Then promote the exact version with `npm dist-tag add pi-incise@0.3.1 latest`; keep the native packages pinned by exact version.
+- Install the Pi package with `pi install npm:pi-incise` for a stable release or `pi install npm:pi-incise@next` for a prerelease, run `/incise-doctor`, and smoke-test a read and write on each supported platform family.
+- Confirm `npm view pi-incise dist-tags` points `latest` to the stable release or `next` to the prerelease, matching the tag form; verify the four native packages expose the same dist-tag.
