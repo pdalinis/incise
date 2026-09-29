@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
 import test from "node:test";
 
-import { normalizeEdit, prepareInvocation, stripPiPathPrefix } from "../extension/normalize.ts";
+import {
+	expandHomePath,
+	normalizeEdit,
+	prepareInvocation,
+	stripPiPathPrefix,
+} from "../extension/normalize.ts";
 
 test("normalizes edit operation names", () => {
 	assert.equal(normalizeEdit("table_edit", { action: "add-row" }).operation, "table-add-row");
@@ -36,6 +43,16 @@ test("resolves Pi paths against cwd and removes one leading at sign", () => {
 	assert.equal(invocation.args.path, "/work/docs/api.md");
 	assert.equal(invocation.operation, "tables");
 	assert.equal(invocation.write, false);
+});
+
+test("expands only the current user's home shorthand", () => {
+	assert.equal(expandHomePath("~", "/Users/peter"), "/Users/peter");
+	assert.equal(expandHomePath("~/Documents/notes.md", "/Users/peter"), "/Users/peter/Documents/notes.md");
+	assert.equal(expandHomePath("~other/notes.md", "/Users/peter"), "~other/notes.md");
+	assert.equal(
+		prepareInvocation("md_tables", { path: "~/Documents/notes.md" }, "/work").path,
+		resolve(homedir(), "Documents/notes.md"),
+	);
 });
 
 test("routes table_get as a read", () => {
