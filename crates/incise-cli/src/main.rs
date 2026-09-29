@@ -423,11 +423,37 @@ fn format_of(m: &ArgMatches) -> Format {
 /// `incise:` prefix stays, for the same reason -- these are the CLI's words.
 fn path_of(m: &ArgMatches) -> Result<PathBuf, &'static str> {
     match m.get_one::<String>("file") {
-        Some(p) => Ok(PathBuf::from(p)),
+        Some(p) => Ok(expand_home_path(p)),
         None => Err("no file to edit was given.\n  \
              `path` is the markdown file itself, not a heading path inside it.\n  \
              Send it, e.g. \"docs/api.md\"."),
     }
+}
+
+/// Expand the current user's conventional home spelling before touching disk.
+///
+/// Tool hosts pass argv directly rather than through a shell, so `~/notes.md`
+/// would otherwise name a literal `~` directory. Restrict expansion to the
+/// current user: `~someone/notes.md` is platform-specific and remains literal.
+fn expand_home_path(path: &str) -> PathBuf {
+    let rest = if path == "~" {
+        Some("")
+    } else {
+        path.strip_prefix("~/")
+    };
+    let Some(rest) = rest else {
+        return PathBuf::from(path);
+    };
+
+    #[cfg(windows)]
+    let home = std::env::var_os("USERPROFILE");
+    #[cfg(not(windows))]
+    let home = std::env::var_os("HOME");
+
+    home.filter(|value| !value.is_empty())
+        .map(PathBuf::from)
+        .map(|home| home.join(rest))
+        .unwrap_or_else(|| PathBuf::from(path))
 }
 
 fn edit(op: &str, m: &ArgMatches) -> i32 {

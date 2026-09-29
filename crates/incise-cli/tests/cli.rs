@@ -176,6 +176,29 @@ fn the_edit_is_a_splice_and_the_rest_of_the_file_is_byte_identical() {
 }
 
 #[test]
+fn a_home_relative_path_is_expanded_without_a_shell() {
+    let s = Scratch::of("tables/aligned.md");
+    let name = s.file.file_name().unwrap().to_string_lossy();
+    let path = format!("~/{name}");
+    let run = Run::of(
+        Command::new(BIN)
+            .args(["tables", &path, "--json"])
+            .env("HOME", &s.dir)
+            .env("USERPROFILE", &s.dir)
+            .output()
+            .unwrap(),
+    );
+
+    assert_eq!(run.code, 0, "stderr: {}", run.err);
+    assert!(run.err.is_empty());
+    assert!(
+        run.out.contains(&s.file.display().to_string()),
+        "{}",
+        run.out
+    );
+}
+
+#[test]
 fn a_no_op_says_so_and_leaves_the_file_alone() {
     let s = Scratch::of("tables/aligned.md");
     let run = s.run(&["table-realign", "@", "--table", "Components"]);

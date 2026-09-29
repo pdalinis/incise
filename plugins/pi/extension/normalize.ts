@@ -1,3 +1,4 @@
+import { homedir } from "node:os";
 import { resolve } from "node:path";
 
 export type ToolArguments = Record<string, unknown>;
@@ -93,12 +94,18 @@ export function stripPiPathPrefix(path: string): string {
 	return path.startsWith("@") ? path.slice(1) : path;
 }
 
+export function expandHomePath(path: string, home: string = homedir()): string {
+	if (path === "~") return home;
+	if (path.startsWith("~/")) return resolve(home, path.slice(2));
+	return path;
+}
+
 export function resolveToolPath(args: ToolArguments, cwd: string): { path: string; args: ToolArguments } {
 	const raw = args.path ?? args.file;
 	if (typeof raw !== "string" || !raw) {
 		throw new Error("incise needs `path`: the markdown file to read or edit.");
 	}
-	const path = resolve(cwd, stripPiPathPrefix(raw));
+	const path = resolve(cwd, expandHomePath(stripPiPathPrefix(raw)));
 	return { path, args: { ...args, path } };
 }
 

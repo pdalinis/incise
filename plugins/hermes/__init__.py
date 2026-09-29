@@ -182,7 +182,11 @@ def normalize(name: str, args: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
 
 def _path_of(args: Dict[str, Any]) -> Optional[str]:
     path = args.get("path") or args.get("file")
-    return path if isinstance(path, str) and path.strip() else None
+    if not isinstance(path, str) or not path.strip():
+        return None
+    if path == "~" or path.startswith("~/"):
+        return os.path.expanduser(path)
+    return path
 
 
 def _handle_edit(name: str, args: Dict[str, Any]) -> str:

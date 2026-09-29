@@ -178,6 +178,16 @@ def test_normalize():
     check("table args passed through unchanged", out == src, json.dumps(out))
 
 
+def test_home_paths_are_expanded_before_invocation():
+    home = os.path.expanduser("~")
+    check("bare home shorthand expands", plugin._path_of({"path": "~"}) == home)
+    check("home-relative paths expand",
+          plugin._path_of({"path": "~/Documents/notes.md"})
+          == os.path.join(home, "Documents/notes.md"))
+    check("named-user shorthand stays literal",
+          plugin._path_of({"path": "~other/notes.md"}) == "~other/notes.md")
+
+
 # --- the edit path ----------------------------------------------------------
 
 def test_edit_applies():
@@ -1186,6 +1196,7 @@ def test_auto_profile_falls_back_to_measured():
 def main():
     print("plugin: translation")
     test_normalize()
+    test_home_paths_are_expanded_before_invocation()
     print("plugin: edits")
     test_edit_applies()
     test_frontmatter_edit_applies()
