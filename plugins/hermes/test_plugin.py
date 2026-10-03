@@ -125,11 +125,6 @@ def test_normalize():
     op, args = plugin.normalize("table_edit", {"action": "add-row", "table": "T"})
     check("table_edit -> table-add-row", op == "table-add-row", op)
 
-    op, args = plugin.normalize(
-        "table_edit", {"action": "delete-table", "table": "T", "confirm": True})
-    check("delete-table -> table-delete", op == "table-delete", op)
-    check("table confirmation passes through", args.get("confirm") is True, json.dumps(args))
-
     op, args = plugin.normalize("list_edit", {"action": "set-checked"})
     check("list_edit -> list-set-checked", op == "list-set-checked", op)
 
@@ -168,7 +163,7 @@ def test_normalize():
     check("file path untouched", args["path"] == "doc.md", args["path"])
 
     # A missing action reaches the core, which answers with the list of the
-    # sixteen real names. Rejecting it here would replace a measured refusal
+    # fifteen published names. Rejecting it here would replace a measured refusal
     # with an unmeasured one.
     op, _ = plugin.normalize("table_edit", {})
     check("missing action passes through", op == "table-None", op)
@@ -470,7 +465,7 @@ def test_read_tools_have_nothing_to_absorb():
     """
     editable = {"action", "view", "values", "where", "column", "value", "position",
                 "list", "section", "text", "body", "match", "checked", "after",
-                "level", "subtree", "new_heading", "overwrite", "confirm", "key"}
+                "level", "subtree", "new_heading", "overwrite", "key"}
     reads = list(plugin.schema_cache.structural_tools()) + [
         t for t in plugin.schema_cache.edit_tools()
         if t["name"] in plugin.schema_cache.READ_SUBCOMMAND

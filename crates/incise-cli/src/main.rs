@@ -16,8 +16,8 @@
 //!   would answer the same call with a different sentence. Section 5.3 makes the
 //!   sentence the product, so "a refusal, just a different one" is a regression.
 //!   An unknown op name is handed to `apply_op` too, for the same reason -- the
-//!   core names the fifteen that exist, where clap would say "unrecognized
-//!   subcommand".
+//!   core names the fifteen published model operations, where clap would say
+//!   "unrecognized subcommand".
 //! * **A missing file is answered here, not by clap.** It is the one fault the
 //!   core can never see: with no path there is nothing to read and no call to
 //!   make. clap's answer to it names `<FILE>` and prints a `Usage:` line, in
@@ -848,7 +848,7 @@ mod tests {
     #[test]
     fn an_unknown_op_reaches_the_core_rather_than_clap() {
         // The refusal a typo produces is the core's sentence, which names all
-        // fifteen. Section 1.2 measured recovery from it.
+        // fifteen published operations. Section 1.2 measured recovery from it.
         let e = incise_core::apply_op("", "table-add-rows", None).unwrap_err();
         assert!(e
             .message()

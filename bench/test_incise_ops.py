@@ -2397,16 +2397,18 @@ def test_action_check():
     # quietly: `OPS` had an op no tool ever offered a model. That op was
     # `table-realign`, and F-realign's gate shipped it -- 60/60 both ways on the
     # six existing table tasks, 0/29 -> 30/30 on the three ragged ones -- so the
-    # assertion is now its own converse and is strictly stronger. Sixteen ops,
-    # sixteen reachable, and equality in both directions: an op the enums cannot
-    # reach is a capability only a CLI caller has (the old defect), and an action
-    # the executor cannot run sends the model somewhere that refuses again (the
-    # check above). Adding a seventeenth op without an enum entry fails here.
+    # assertion is now its own converse and is strictly stronger. The one named
+    # exception is `table-delete`: its core and confirmed CLI path passed every
+    # deterministic check, but three frozen model-facing candidates failed the
+    # preregistered 60/60 confirmation-recovery gate. It is also omitted from
+    # the unknown-operation remedy, so no model is offered an unreachable action.
+    # Any second CLI-only op fails here rather than inheriting that decision.
     offered_ops = {armb.normalize(tool, {"action": action})[0]
                    for tool, actions in armb.ACTIONS.items()
                    for action in actions}
-    check("every op in OPS is reachable from a published action enum",
-          set(OPS) == offered_ops,
+    check("only the failed-gate table delete op is CLI-only",
+          set(OPS) - offered_ops == {"table-delete"}
+          and offered_ops <= set(OPS),
           (sorted(set(OPS) - offered_ops), sorted(offered_ops - set(OPS))))
 
     fused = {"action=add-item,item": "loose four", "path": "f.md"}

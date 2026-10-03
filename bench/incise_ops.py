@@ -3551,7 +3551,8 @@ def apply_op(content, op_name, args):
     """Return (new_content, None) or (None, error_message)."""
     fn = OPS.get(op_name)
     if fn is None:
-        return None, f'unknown operation "{op_name}". Valid: {", ".join(OPS)}'
+        offered = (op for op in OPS if op != "table-delete")
+        return None, f'unknown operation "{op_name}". Valid: {", ".join(offered)}'
     if args is not None and not isinstance(args, dict):
         # Reached when a model emits a bare string or array where the argument
         # object belongs. Without this it surfaced as "AttributeError: 'str'

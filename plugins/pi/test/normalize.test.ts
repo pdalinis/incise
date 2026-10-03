@@ -12,7 +12,6 @@ import {
 
 test("normalizes edit operation names", () => {
 	assert.equal(normalizeEdit("table_edit", { action: "add-row" }).operation, "table-add-row");
-	assert.equal(normalizeEdit("table_edit", { action: "delete-table" }).operation, "table-delete");
 	assert.equal(normalizeEdit("list_edit", { action: "set-checked" }).operation, "list-set-checked");
 	assert.equal(normalizeEdit("frontmatter_edit", { action: "set" }).operation, "frontmatter-set");
 	assert.equal(normalizeEdit("table_edit", {}).operation, "table-None");

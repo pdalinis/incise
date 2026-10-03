@@ -49,8 +49,11 @@ use crate::ops::table::{
     TableAddress, Values,
 };
 
-/// The ops this crate implements, in the order the "unknown operation" refusal
-/// names them.
+/// The ops this crate implements.
+///
+/// `table-delete` is deliberately omitted from the unknown-operation remedy:
+/// its confirmed CLI path exists, but the failed model-facing gate leaves it
+/// unpublished. The rest retain this order in that refusal.
 pub const OPS: &[&str] = &[
     "table-add-row",
     "table-update-cell",
@@ -82,9 +85,14 @@ pub const OPS: &[&str] = &[
 /// a repair; here the types make the promise instead.
 pub fn apply_op(content: &str, op: &str, args: Option<&Value>) -> Result<String> {
     if !OPS.contains(&op) {
+        let offered = OPS
+            .iter()
+            .copied()
+            .filter(|name| *name != "table-delete")
+            .collect::<Vec<_>>()
+            .join(", ");
         return Err(OpError::new(format!(
-            "unknown operation \"{op}\". Valid: {}",
-            OPS.join(", ")
+            "unknown operation \"{op}\". Valid: {offered}"
         )));
     }
     // Reached when a model emits a bare string or array where the argument
@@ -414,12 +422,12 @@ mod tests {
     }
 
     #[test]
-    fn unknown_op_names_what_exists() {
+    fn unknown_op_names_only_published_model_operations() {
         let e = apply_op(DOC, "table-sort", None).unwrap_err();
         assert_eq!(
             e.message(),
             "unknown operation \"table-sort\". Valid: table-add-row, table-update-cell, \
-             table-delete-row, table-delete, table-realign, list-add-item, list-remove-item, list-set-checked, \
+             table-delete-row, table-realign, list-add-item, list-remove-item, list-set-checked, \
              section-append, section-replace-body, section-insert, section-delete, \
              section-rename, section-set-level, frontmatter-set, frontmatter-delete"
         );

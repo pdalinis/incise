@@ -243,7 +243,7 @@ fn a_refusal_is_the_library_s_sentence_verbatim_on_stderr() {
 }
 
 /// An op name clap does not know is handed to the core rather than answered
-/// here, so a typo gets the sentence that names the fifteen ops that exist.
+/// here, so a typo gets the sentence that names the fifteen published ops.
 #[test]
 fn an_unknown_op_gets_the_core_s_list_not_clap_s_apology() {
     let run = plain(&["table-add-rows", "nothing.md"]);

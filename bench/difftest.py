@@ -163,10 +163,11 @@ ARG_VALUES = [
 #
 # Unknown op names used to be excluded beside it, because the oracle's `OPS` was
 # longer than the crate's and the two refusals therefore listed different ops.
-# With the frontmatter family ported they are the same fifteen entries in the
-# same order, so the exclusion is gone and `UNKNOWN_OPS` below compares that
-# sentence directly -- which makes the *order* of the table a tested property
-# rather than a convention, since the refusal prints it.
+# With the frontmatter family ported the executor tables agree. `table-delete`
+# is the one deliberate non-suggestion in both: its CLI path exists, but its
+# model-facing publication gate failed. `UNKNOWN_OPS` below compares the
+# remaining fifteen-name sentence directly -- which makes their order a tested
+# property rather than a convention.
 DISPATCH_ARGS = [
     # Not an object at all.
     "ABSENT", "null", '"widget"', "[1, 2]", "7", "true",

@@ -14,6 +14,8 @@ Use a raw patch for Markdown only when changing prose inside an existing paragra
 
 This is a correctness rule, not a formatting preference. In the recorded baseline, direct edits completed 60% of table tasks, 63% of list tasks, and 19% of section tasks, with data loss in 10%, 2%, and 28% respectively. The adopted Incise interfaces materially improved those results under the measured conditions. See `bench/FINDINGS.md` for exact scopes, retries, and caveats.
 
+To remove a whole table, use `incise table-delete` with the resolved table address and explicit `--confirm`; do not patch the table lines or rewrite the file. The model-facing `table_edit` schema does not publish this action yet, so use the CLI path after inspecting with `md_tables` or `incise tables`.
+
 ## This repository
 
 Incise is the implementation behind the structured Markdown tools. Treat the core as a small trust boundary: `crates/incise-core` takes no dependencies and is checked byte-for-byte against the independent Python oracle under `bench/`. The differential suite covers more than 100,000 generated cases, including resulting documents and refusal messages. The CLI and integrations may take dependencies when justified.

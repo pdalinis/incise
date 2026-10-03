@@ -846,8 +846,9 @@ def grade_one(task, trial, binary):
                 # contradicted the sentence three lines below it. Same fix and
                 # same reasoning as `armb.grade_one`; see FINDINGS F-terminal.
                 # Arm C is the one place the *sentence* is not also at fault:
-                # the CLI is handed an op directly, so naming all fifteen is
-                # correct here in a way it is not for a model with three tools.
+                # the CLI is handed an op directly. Its refusal still names the
+                # fifteen published model operations; the confirmed CLI-only
+                # table-delete path is documented by `incise help` instead.
                 errors.append(where + err.replace("\n", " | "))
                 codes.append(code)
             # A call that fails leaves the file untouched -- that is the op's
