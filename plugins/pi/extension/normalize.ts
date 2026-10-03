@@ -63,7 +63,10 @@ export function normalizeEdit(name: string, input: ToolArguments): { operation: 
 		}
 		return { operation: "section-insert", args };
 	}
-	if (name === "table_edit") return { operation: `table-${actionName(input.action)}`, args: input };
+	if (name === "table_edit") {
+		const action = actionName(input.action);
+		return { operation: action === "delete-table" ? "table-delete" : `table-${action}`, args: input };
+	}
 	if (name === "list_edit") return { operation: `list-${actionName(input.action)}`, args: input };
 	if (name === "frontmatter_edit") {
 		return { operation: `frontmatter-${actionName(input.action)}`, args: input };

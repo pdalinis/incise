@@ -45,9 +45,11 @@ table" and "did not narrow" are the two answers that question has.
 The three op families are graded by different predicates and one shared
 taxonomy, and they do not use the same standard of proof:
 
-  tables    **no goldens.** `correct` means "passes every mechanical check";
-            its conditions ("this row is present", "widths are uniform") are
-            expressible as predicates.
+  tables    Row and cell edits use **no goldens**: `correct` means "passes every
+            mechanical check" because their conditions are expressible as
+            predicates. Whole-table deletion uses a whole-document synthetic
+            golden because the requested result is the absence of a span plus
+            exact ownership of its surrounding blank-line gap.
   lists     **goldens scoped to the target list**, committed in
             `bench/tasks/lists.json`. A list's correctness *is* its formatting,
             so a predicate for it would be a golden written less legibly.
@@ -118,6 +120,8 @@ def check_result(task, before, after, report=None):
         return check_frontmatter_result(task, before, after)
     if task["family"].startswith("table-get"):
         return check_table_read_result(task, before, after, report)
+    if task["family"] == "table-delete":
+        return check_table_delete_result(task, before, after)
     return check_table_result(task, before, after)
 
 
@@ -260,6 +264,41 @@ def check_table_result(task, before, after):
         return "collateral:formatting", "ragged table was prettified"
 
     return "correct", None
+
+
+def check_table_delete_result(task, before, after):
+    """Grade removal of one complete table and exactly its owned gap."""
+    golden = task["golden"]
+    if after == golden:
+        return "correct", None
+
+    before_tables = find_tables(before)
+    after_tables = find_tables(after)
+    target = task["target_table"]
+    target_sig = tuple(before_tables[target].lines)
+    expected = [tuple(table.lines) for i, table in enumerate(before_tables)
+                if i != target]
+    actual = [tuple(table.lines) for table in after_tables]
+
+    for table in expected:
+        if table not in actual:
+            return "destructive", "a table outside the requested span disappeared"
+
+    golden_lines = golden.split("\n")
+    after_lines = after.split("\n")
+    lost = [line for line in golden_lines
+            if line.strip() and line not in after_lines]
+    if lost:
+        return "destructive", f"content outside the requested table was lost: {lost[0]!r}"
+
+    if _squash(after_lines) == _squash(golden_lines):
+        return "collateral:formatting", "whole table removed with the wrong blank-line gap"
+    if target_sig in actual or len(after_tables) >= len(before_tables):
+        return "wrong", "the requested whole table is still present"
+    if len(after_tables) < len(before_tables) - 1:
+        return "destructive", (
+            f"table count fell {len(before_tables)}->{len(after_tables)}; expected one deletion")
+    return "collateral:content", "the target table was removed but other content changed"
 
 
 # --------------------------------------------------------------------------

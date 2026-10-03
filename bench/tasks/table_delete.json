@@ -1,0 +1,59 @@
+{
+  "_comment": "Purpose-built whole-table deletion population preregistered in bench/TABLE_DELETE_PLAN.md. Synthetic fixtures are separate from the frozen corpus and contain no private document content.",
+  "tasks": [
+    {
+      "id": "delete-root-table",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-root.md",
+      "instruction": "Remove the entire table at the document root. Keep the introduction and conclusion unchanged.",
+      "target_table": 0,
+      "golden": "Root introduction.\n\nRoot conclusion.\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "(document root)"}, "confirm": true}}
+    },
+    {
+      "id": "delete-table-between-prose",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-between.md",
+      "instruction": "Delete the whole inventory table under Manual. Do not change the prose before or after it.",
+      "target_table": 0,
+      "golden": "# Manual\n\nBefore the inventory.\n\nAfter the inventory.\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "Manual"}, "confirm": true}}
+    },
+    {
+      "id": "delete-section-final-table",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-section-end.md",
+      "instruction": "Remove the complete counters table from the Metrics section. Leave both sections and all prose in place.",
+      "target_table": 0,
+      "golden": "# Guide\n\n## Metrics\n\nCurrent counters:\n\n## Deploy\n\nDeploy carefully.\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "Guide > Metrics"}, "confirm": true}}
+    },
+    {
+      "id": "delete-first-adjacent-table",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-adjacent.md",
+      "instruction": "Under Data, remove the first whole table, the one before the beta table. Keep the second table unchanged.",
+      "target_table": 0,
+      "golden": "# Data\n\n| Name | State |\n| --- | --- |\n| beta | paused |\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "Data", "ordinal": 0}, "confirm": true}}
+    },
+    {
+      "id": "delete-duplicate-heading-table",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-duplicate-heading.md",
+      "instruction": "Delete the entire table under Beta > Status. Keep the table under Alpha > Status unchanged.",
+      "target_table": 1,
+      "golden": "# Alpha\n\n## Status\n\n| Service | Health |\n| --- | --- |\n| api | good |\n\n# Beta\n\n## Status\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "Beta > Status"}, "confirm": true}}
+    },
+    {
+      "id": "delete-malformed-table",
+      "family": "table-delete",
+      "fixture": "bench/synthetic/table-delete-malformed.md",
+      "instruction": "Remove the whole malformed table under Broken import. Preserve both surrounding paragraphs exactly.",
+      "target_table": 0,
+      "golden": "# Broken import\n\nThe export stopped halfway through a row.\n\nKeep this recovery note.\n",
+      "ideal_call": {"op": "table-delete", "args": {"table": {"heading": "Broken import"}, "confirm": true}}
+    }
+  ]
+}

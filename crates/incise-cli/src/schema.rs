@@ -84,7 +84,7 @@
 pub const SCHEMAS: &str = r#"[
   {
     "name": "table_edit",
-    "description": "Edit a markdown table. Column widths and alignment are maintained automatically; you do not need to pad anything.\n`table` says WHICH table in the file and is required for every action. Copy it from the table list in the request; the last heading segment on its own is enough (e.g. \"All four forms\").\n  action=add-row      requires `table`, `values`\n  action=update-cell  requires `table`, `where`, `column`, `value`\n  action=delete-row   requires `table`, `where`\n  action=realign      requires `table`. Re-pads a table whose columns were left ragged by some other editor. Changes no cell text.",
+    "description": "Edit a markdown table. Column widths and alignment are maintained automatically; you do not need to pad anything.\n`table` says WHICH table in the file and is required for every action. Copy it from the table list in the request; the last heading segment on its own is enough (e.g. \"All four forms\").\n  action=add-row      requires `table`, `values`\n  action=update-cell  requires `table`, `where`, `column`, `value`\n  action=delete-row   requires `table`, `where`\n  action=realign      requires `table`. Re-pads a table whose columns were left ragged by some other editor. Changes no cell text.\n  action=delete-table requires `table`. Deletes the whole table only; review the confirmation preview, then retry with `confirm=true`.",
     "parameters": {
       "type": "object",
       "properties": {
@@ -99,6 +99,7 @@ pub const SCHEMAS: &str = r#"[
             "add-row",
             "update-cell",
             "delete-row",
+            "delete-table",
             "realign"
           ]
         },
@@ -144,6 +145,10 @@ pub const SCHEMAS: &str = r#"[
             "end",
             "start"
           ]
+        },
+        "confirm": {
+          "type": "boolean",
+          "description": "For delete-table: confirms deleting the complete resolved table after reviewing its preview."
         }
       },
       "required": [

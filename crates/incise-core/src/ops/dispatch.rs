@@ -23,9 +23,9 @@
 //! required", where the oracle would add the row.
 //!
 //! The other divergence is closed. This dispatch names what the crate
-//! implements, and with the frontmatter family ported that is all fifteen of
+//! implements, and with whole-table deletion added that is all sixteen of
 //! the oracle's `OPS` entries in the oracle's own order, so the "unknown
-//! operation" refusal now lists the same fifteen ops in the same sequence.
+//! operation" refusal now lists the same sixteen ops in the same sequence.
 //! `difftest.py` compares that refusal directly rather than excluding unknown
 //! op names, which is what it had to do while the two tables differed.
 //!
@@ -45,7 +45,8 @@ use crate::ops::section::{
     section_set_level, SectionAddress,
 };
 use crate::ops::table::{
-    table_add_row, table_delete_row, table_realign, table_update_cell, TableAddress, Values,
+    table_add_row, table_delete_confirmed, table_delete_row, table_realign, table_update_cell,
+    TableAddress, Values,
 };
 
 /// The ops this crate implements, in the order the "unknown operation" refusal
@@ -54,6 +55,7 @@ pub const OPS: &[&str] = &[
     "table-add-row",
     "table-update-cell",
     "table-delete-row",
+    "table-delete",
     "table-realign",
     "list-add-item",
     "list-remove-item",
@@ -131,6 +133,12 @@ pub fn apply_op(content: &str, op: &str, args: Option<&Value>) -> Result<String>
             let address = to_address(args::address(a)?);
             let selector = to_where(args::where_arg(a)?);
             table_delete_row(content, &address, &selector)
+        }
+        // lambda c, a: table_delete_confirmed(c, _address(a), bool(a.get("confirm")))
+        "table-delete" => {
+            let address = to_address(args::address(a)?);
+            let confirm = a.get("confirm").is_some_and(json::py_truthy);
+            table_delete_confirmed(content, &address, confirm)
         }
         // lambda c, a: table_realign(c, _address(a))
         //
@@ -411,7 +419,7 @@ mod tests {
         assert_eq!(
             e.message(),
             "unknown operation \"table-sort\". Valid: table-add-row, table-update-cell, \
-             table-delete-row, table-realign, list-add-item, list-remove-item, list-set-checked, \
+             table-delete-row, table-delete, table-realign, list-add-item, list-remove-item, list-set-checked, \
              section-append, section-replace-body, section-insert, section-delete, \
              section-rename, section-set-level, frontmatter-set, frontmatter-delete"
         );
@@ -539,6 +547,30 @@ mod tests {
         let out = apply_op(doc, "section-delete", Some(&leaf)).unwrap();
         assert!(!out.contains("Child"));
         assert!(out.contains("Parent") && out.contains("Keep"));
+    }
+
+    #[test]
+    fn deleting_a_table_requires_explicit_confirmation() {
+        let args = obj(&[("table", s("Parts"))]);
+        let refused = apply_op(DOC, "table-delete", Some(&args)).unwrap_err();
+        assert_eq!(
+            refused.message(),
+            "deleting table \"Parts\" ordinal 0 would remove 1 data row.\n  \
+             Columns: Component | Status | Owner\n  \
+             First row: | widget | ok | peter |\n  \
+             If you intend to delete this whole table, pass confirm=true."
+        );
+        let repair = refused.repair().expect("confirmation has a repair");
+        assert_eq!(repair.code, "table_confirmation_required");
+        assert_eq!(repair.argument.as_deref(), Some("confirm"));
+        assert_eq!(repair.received.as_deref(), Some("false"));
+        assert_eq!(repair.candidates, ["Parts ordinal 0"]);
+
+        let confirmed = obj(&[("table", s("Parts")), ("confirm", Value::Bool(true))]);
+        assert_eq!(
+            apply_op(DOC, "table-delete", Some(&confirmed)).unwrap(),
+            "# Parts\n"
+        );
     }
 
     #[test]

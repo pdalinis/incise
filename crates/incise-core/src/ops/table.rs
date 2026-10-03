@@ -19,10 +19,10 @@ use crate::args::{
     check_cell, check_column, check_filter, check_heading, check_ordinal, check_position,
     check_value,
 };
-use crate::error::{OpError, Result};
+use crate::error::{OpError, Repair, Result};
 use crate::heading::find_sections;
 use crate::json;
-use crate::scan::py_strip;
+use crate::scan::{py_strip, split_lines};
 use crate::similar::get_close_matches;
 use crate::table::{find_tables, split_row, Table};
 
@@ -1220,6 +1220,114 @@ pub fn table_delete_row(
     body.remove(idx);
     let aligned = table.is_aligned();
     rebuild(content, &table, &cols, &body, aligned, false)
+}
+
+/// Delete one complete table, including one separating blank-line gap.
+///
+/// Unlike row and cell operations, this deliberately resolves identity without
+/// checking rectangularity: the whole construct can be removed safely even
+/// when its rows cannot be mapped to columns. A table normally takes its
+/// trailing gap. At the end of a section or file there is no following body for
+/// that gap to belong to, so the leading gap goes instead.
+pub fn table_delete(content: &str, address: &TableAddress) -> Result<String> {
+    let table = locate_table(content, address)?;
+    Ok(delete_table_span(content, &table))
+}
+
+/// Agent-facing safety boundary for whole-table deletion.
+///
+/// The raw splice above remains available to round-trip and preservation
+/// invariants. Dispatched callers must explicitly acknowledge the compact
+/// preview of the table that was resolved.
+pub fn table_delete_confirmed(
+    content: &str,
+    address: &TableAddress,
+    confirm: bool,
+) -> Result<String> {
+    let table = locate_table(content, address)?;
+    if !confirm {
+        let tables = find_tables(content);
+        let entries = list_tables(content);
+        let entry = tables
+            .iter()
+            .zip(entries.iter())
+            .find(|(candidate, _)| candidate.start == table.start)
+            .map(|(_, entry)| entry)
+            .expect("a located table has a summary entry");
+        let rows = table.body();
+        let mut details = vec![format!(
+            "deleting table \"{}\" ordinal {} would remove {} data row{}.",
+            entry.heading,
+            entry.ordinal,
+            rows.len(),
+            if rows.len() == 1 { "" } else { "s" }
+        )];
+        details.push(format!(
+            "  Columns: {}",
+            capped_preview(&entry.columns.join(" | "), 160)
+        ));
+        if let Some(first) = rows.first() {
+            details.push(format!(
+                "  First row: {}",
+                capped_preview(py_strip(first), 160)
+            ));
+        }
+        if rows.len() > 1 {
+            details.push(format!(
+                "  Last row: {}",
+                capped_preview(py_strip(rows.last().unwrap()), 160)
+            ));
+        }
+        details.push("  If you intend to delete this whole table, pass confirm=true.".to_string());
+        let mut repair = Repair::new(
+            "table_confirmation_required",
+            "Repeat the call with confirm=true only if deleting this resolved table is intended.",
+        );
+        repair.argument = Some("confirm".to_string());
+        repair.received = Some("false".to_string());
+        repair.candidates = vec![format!("{} ordinal {}", entry.heading, entry.ordinal)];
+        return Err(OpError::with_repair(details.join("\n"), repair));
+    }
+    Ok(delete_table_span(content, &table))
+}
+
+fn delete_table_span(content: &str, table: &Table) -> String {
+    let lines = split_lines(content);
+    let mut after = table.end + 1;
+    while after < lines.len() && lines[after].trim().is_empty() {
+        after += 1;
+    }
+    let ends_section = after >= lines.len()
+        || find_sections(content)
+            .iter()
+            .any(|section| section.start == after);
+    if ends_section {
+        let mut start = table.start;
+        while start > 0 && lines[start - 1].trim().is_empty() {
+            start -= 1;
+        }
+        let mut out: Vec<&str> = lines[..start].to_vec();
+        out.extend_from_slice(&lines[table.end + 1..]);
+        return out.join("\n");
+    }
+    let mut out: Vec<&str> = lines[..table.start].to_vec();
+    out.extend_from_slice(&lines[after..]);
+    out.join("\n")
+}
+
+fn capped_preview(value: &str, limit: usize) -> String {
+    let mut chars = value.chars();
+    let head: String = chars.by_ref().take(limit).collect();
+    if chars.next().is_none() {
+        head
+    } else {
+        format!(
+            "{}...",
+            head.chars()
+                .take(limit.saturating_sub(3))
+                .collect::<String>()
+        )
+    }
 }
 
 /// Re-pad one named table to uniform column width.

@@ -327,6 +327,7 @@ fn op_about(op: &'static str) -> &'static str {
         "table-add-row" => "Add a row to a table.",
         "table-update-cell" => "Change one cell of one row.",
         "table-delete-row" => "Delete one row.",
+        "table-delete" => "Delete one complete table; requires --confirm.",
         "table-realign" => "Re-pad a table's columns.",
         "list-add-item" => "Add an item to a list.",
         "list-remove-item" => "Remove one item from a list.",

@@ -181,6 +181,13 @@ pub const FLAGS: &[Flag] = &[
         value_name: "",
         help: "Confirm that discarding a section's existing text is intended",
     },
+    Flag {
+        long: "confirm",
+        key: "confirm",
+        kind: Kind::Present,
+        value_name: "",
+        help: "Confirm deletion of the resolved complete table",
+    },
     // Frontmatter last, the order the families were built in. `--value` above is
     // shared rather than duplicated: `frontmatter-set` takes a value in the same
     // sense `table-update-cell` does, and a `--front-value` would be a second

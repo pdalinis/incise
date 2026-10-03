@@ -244,7 +244,7 @@ DISPATCH_ARGS = [
 ]
 
 DISPATCH_OPS = ["table-add-row", "table-update-cell", "table-delete-row",
-                "table-realign"]
+                "table-delete", "table-realign"]
 
 # Op names that are not ops. The near misses are the ones worth having: a model
 # that writes `table_add_row` or `frontmatter-get` has made a recoverable
@@ -1221,6 +1221,15 @@ def generate(files):
             emit(rel, "apply_op", opname="table-realign",
                  args=json.dumps({"table": {"heading": e["heading"],
                                             "ordinal": e["ordinal"]}}))
+            # Whole-table deletion deliberately skips rectangularity checks and
+            # has both a model-visible confirmation refusal and a successful
+            # splice. Exercise both on every table, including malformed ones.
+            delete_args = {"table": {"heading": e["heading"],
+                                     "ordinal": e["ordinal"]}}
+            emit(rel, "apply_op", opname="table-delete",
+                 args=json.dumps(delete_args))
+            emit(rel, "apply_op", opname="table-delete",
+                 args=json.dumps({**delete_args, "confirm": True}))
 
         # Dispatch ordering, against this document's first table. `{H}` is a
         # plain substitution rather than `.format()` because the cases are JSON

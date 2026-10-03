@@ -69,8 +69,8 @@ use incise_core::ops::section::{
     section_rename, section_replace_body, section_set_level, SectionAddress, POSITIONS,
 };
 use incise_core::ops::table::{
-    render_table_get, table_add_row, table_delete_row, table_get, table_realign, TableAddress,
-    Values,
+    render_table_get, table_add_row, table_delete, table_delete_row, table_get, table_realign,
+    TableAddress, Values,
 };
 use incise_core::table::{find_tables, outside_table, Table};
 
@@ -352,6 +352,48 @@ fn the_blank_line_after_a_table_survives() {
             );
         }
     });
+}
+
+#[test]
+fn inserting_then_deleting_a_whole_table_restores_every_byte() {
+    let cases = [
+        (
+            "# A\n\nBefore.\n\nAfter.\n",
+            "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n\nAfter.\n",
+            TableAddress::heading("A"),
+        ),
+        (
+            "# A\n\nBefore.\n\n# B\n\nAfter.\n",
+            "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n\n# B\n\nAfter.\n",
+            TableAddress::heading("A"),
+        ),
+        (
+            "# A\n\nBefore.\n",
+            "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n",
+            TableAddress::heading("A"),
+        ),
+        (
+            "# A\n\n| Name |\n| --- |\n| second |\n",
+            "# A\n\n| Name |\n| --- |\n| first |\n\n| Name |\n| --- |\n| second |\n",
+            TableAddress::heading("A").with_ordinal(0),
+        ),
+    ];
+    for (original, inserted, address) in cases {
+        assert_eq!(
+            table_delete(inserted, &address).unwrap(),
+            original,
+            "whole-table deletion was not the inverse of insertion"
+        );
+    }
+}
+
+#[test]
+fn whole_table_delete_needs_no_cell_geometry() {
+    let malformed = "# A\n\n| X | Y |\n| --- | --- |\n| one |\n";
+    assert_eq!(
+        table_delete(malformed, &TableAddress::heading("A")).unwrap(),
+        "# A\n"
+    );
 }
 
 #[test]
