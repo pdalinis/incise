@@ -316,13 +316,13 @@ MUTATIONS += [
 
     # -- whole-table deletion: confirmation and gap ownership ---------------
     ("table-delete-rect", src("ops", "table.rs"),
-     ") -> Result<String> {\n"
-     "    let table = locate_table(content, address)?;\n"
-     "    if !confirm {",
-     ") -> Result<String> {\n"
-     "    let table = resolve_table(content, address)?;\n"
-     "    if !confirm {",
+     "    let table = locate_table(content, address).map_err(|mut error| {",
+     "    let table = resolve_table(content, address).map_err(|mut error| {",
      "a malformed table cannot be removed even though deletion needs no cell geometry"),
+    ("table-delete-combined-repair", src("ops", "table.rs"),
+     "To delete one whole table, retry with both its ordinal and confirm=true.",
+     "To delete one whole table, retry with its ordinal.",
+     "an ambiguous deletion does not ask for confirmation in the same retry"),
     ("table-delete-confirm", src("ops", "table.rs"),
      "    if !confirm {\n"
      "        let tables = find_tables(content);",

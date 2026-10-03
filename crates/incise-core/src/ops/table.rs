@@ -1244,7 +1244,17 @@ pub fn table_delete_confirmed(
     address: &TableAddress,
     confirm: bool,
 ) -> Result<String> {
-    let table = locate_table(content, address)?;
+    let table = locate_table(content, address).map_err(|mut error| {
+        if !confirm
+            && error.message().starts_with("ambiguous:")
+            && error.message().contains(" tables under ")
+        {
+            error.0.push_str(
+                "\n  To delete one whole table, retry with both its ordinal and confirm=true.",
+            );
+        }
+        error
+    })?;
     if !confirm {
         let tables = find_tables(content);
         let entries = list_tables(content);

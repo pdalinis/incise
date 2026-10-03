@@ -739,13 +739,7 @@ fn json_refusals_keep_the_message_and_add_copyable_repair_data() {
 #[test]
 fn whole_table_delete_previews_then_accepts_cli_confirmation() {
     let s = Scratch::of("tables/aligned.md");
-    let refused = s.run(&[
-        "table-delete",
-        "@",
-        "--table",
-        "Components",
-        "--json",
-    ]);
+    let refused = s.run(&["table-delete", "@", "--table", "Components", "--json"]);
     assert_eq!(refused.code, 1, "{}{}", refused.out, refused.err);
     let payload = incise_core::json::parse(refused.out.trim()).expect("not JSON");
     assert!(payload
@@ -760,15 +754,12 @@ fn whole_table_delete_previews_then_accepts_cli_confirmation() {
         "table_confirmation_required"
     );
     assert_eq!(repair.get("argument").unwrap().as_str().unwrap(), "confirm");
-    assert!(s.is_untouched(), "a refused table deletion wrote to the file");
+    assert!(
+        s.is_untouched(),
+        "a refused table deletion wrote to the file"
+    );
 
-    let deleted = s.run(&[
-        "table-delete",
-        "@",
-        "--table",
-        "Components",
-        "--confirm",
-    ]);
+    let deleted = s.run(&["table-delete", "@", "--table", "Components", "--confirm"]);
     assert_eq!(deleted.code, 0, "{}{}", deleted.out, deleted.err);
     assert!(!s.text().contains("| Component"));
     assert!(s.text().contains("# Aligned table"));

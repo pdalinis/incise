@@ -173,6 +173,21 @@ def test_whole_table_delete():
     check("whole table delete accepts non-rectangular input",
           not err and deleted == "# A\n", err or repr(deleted))
 
+    adjacent = (
+        "# Data\n\n| Name |\n| --- |\n| alpha |\n\n"
+        "| Name |\n| --- |\n| beta |\n")
+    _, err = apply_op(
+        adjacent, "table-delete", {"table": {"heading": "Data"}})
+    check(
+        "ambiguous whole-table delete requests ordinal and confirmation together",
+        err == (
+            'ambiguous: 2 tables under "Data". Pass an ordinal.\n'
+            "  Candidates: ordinal 0 columns Name; ordinal 1 columns Name\n"
+            "  To delete one whole table, retry with both its ordinal and "
+            "confirm=true."),
+        err or "",
+    )
+
 
 def test_whole_table_delete_tasks():
     """Every preregistered deletion task has a byte-exact ideal ceiling."""

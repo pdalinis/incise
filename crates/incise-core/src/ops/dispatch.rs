@@ -574,6 +574,23 @@ mod tests {
     }
 
     #[test]
+    fn deleting_an_ambiguous_table_requests_both_missing_safety_fields() {
+        let doc = "# Data\n\n| Name |\n| --- |\n| alpha |\n\n| Name |\n| --- |\n| beta |\n";
+        let args = obj(&[("table", s("Data"))]);
+        let refused = apply_op(doc, "table-delete", Some(&args)).unwrap_err();
+        assert_eq!(
+            refused.message(),
+            "ambiguous: 2 tables under \"Data\". Pass an ordinal.\n  \
+             Candidates: ordinal 0 columns Name; ordinal 1 columns Name\n  \
+             To delete one whole table, retry with both its ordinal and confirm=true."
+        );
+
+        let confirmed_but_ambiguous = obj(&[("table", s("Data")), ("confirm", Value::Bool(true))]);
+        let refused = apply_op(doc, "table-delete", Some(&confirmed_but_ambiguous)).unwrap_err();
+        assert!(!refused.message().contains("confirm=true"));
+    }
+
+    #[test]
     fn frontmatter_existence_guards_are_host_owned_preconditions() {
         let doc = "---\nbuild:\n  target: release\n---\n\n# Project\n";
         let args = obj(&[

@@ -848,7 +848,17 @@ def table_delete(content, address):
 
 def table_delete_confirmed(content, address, confirm=False):
     """Agent-facing guard for the destructive whole-table splice."""
-    table = _locate_table(content, address)
+    try:
+        table = _locate_table(content, address)
+    except OpError as error:
+        message = str(error)
+        if (not confirm and message.startswith("ambiguous:")
+                and " tables under " in message):
+            raise OpError(
+                message
+                + "\n  To delete one whole table, retry with both its ordinal "
+                "and confirm=true.")
+        raise
     if not confirm:
         tables = find_tables(content)
         entries = list_tables(content, "")
