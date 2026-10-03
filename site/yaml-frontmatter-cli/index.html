@@ -28,7 +28,8 @@ incise frontmatter-set note.md \
       <article class="card"><h3>Preserve formatting</h3><p>Unrelated scalar styles and key order are not normalized through a serializer.</p></article>
       <article class="card"><h3>Refuse unsafe shapes</h3><p>Malformed or unsupported frontmatter produces a concrete refusal instead of a guess.</p></article>
     </div>
-    <div class="callout">Incise is intentionally not a general-purpose YAML formatter. It is a narrow mutation layer for Markdown documents.</div>
+    <div class="callout">Flow-style sequences and mappings such as <code>[one, two]</code> and <code>{mode: fast}</code> are recognized as containers but kept opaque. A scalar set cannot silently turn one into a quoted string; typed collection replacement is not currently supported.</div>
+    <p>Incise is intentionally not a general-purpose YAML formatter. It is a narrow mutation layer for Markdown documents.</p>
     <p><a class="button" href="/incise/docs/">See the editing workflow</a></p>
   </main>
   <footer><div class="wrap footer-row"><span>Semantic Markdown editing for agents.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>

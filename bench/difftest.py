@@ -653,6 +653,12 @@ FRONT_DISPATCH_ARGS = [
     '{"key": "bare_items[1]", "value": null}',
     '{"key": "chomp_strip", "value": "x"}',
     '{"key": "deep_seq.nested[0]", "value": "x"}',
+    '{"key": "ingredient_tags", "value": "[three, four]"}',
+    '{"key": "settings", "value": "plain"}',
+    '{"key": "nested.values", "value": "[five, six]"}',
+    '{"key": "collections[0]", "value": "plain"}',
+    '{"key": "collections[1]", "value": "plain"}',
+    '{"key": "quoted_sequence", "value": "[three, four]"}',
     '{"key": "solo", "value": "x"}',
     '{"key": "only", "value": "x"}',
     # New keys: top level, one needing quotes, and one under a map.
@@ -693,6 +699,8 @@ FRONT_GET_KEYS = [
     '"build.missing"', '"tags"', '"tags[0]"', '"authors"', '"authors[0]"',
     '"authors[0].role"', '"multiline"', '"nested"', '"nested.deeply"',
     '"deep"', '"list_of_maps"', '"dotted.key"', '"solo"', '"only"',
+    '"ingredient_tags"', '"settings"', '"nested.values"',
+    '"collections[0]"', '"collections[1]"', '"quoted_sequence"',
     "7", "true", '["a"]', '{"a": 1}', '"a..b"',
 ]
 

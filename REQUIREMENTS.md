@@ -1222,6 +1222,8 @@ Built and measured on the bench side only — see F-frontmatter and F-frontread.
 The Rust port, `difftest.py` cases, mutations, `invariants.rs`, CLI subcommands
 and Arm C are the later decision reserved below.
 
+Flow-style YAML sequences (`[...]`) and mappings (`{...}`) are opaque containers, not scalars. `frontmatter-get` reports their outer kind and value type but does not expose their children. `frontmatter-set` refuses to replace either collection with a scalar, including a string shaped like a YAML or JSON collection; quoted bracket- or brace-shaped text remains a scalar. Replacing a collection requires a separately measured typed operation. Deleting the key first is reserved for an intentional change from a collection to a scalar.
+
 ### 6.6 Scoped search / replace
 
 Literal and regex modes, scopable to a section or table, with an expected-match-count

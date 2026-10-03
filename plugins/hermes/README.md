@@ -115,6 +115,8 @@ Routing is additive integration behavior, not a relaxed executor contract. Every
 
 Incise refusals are safety behavior. Follow the remedy in the returned error instead of falling back to a whole-file rewrite.
 
+Flow-style YAML sequences and mappings are passed through as opaque containers. If a `frontmatter_edit` set call would replace one with a scalar—including a bracket-shaped string—the core refusal is returned verbatim and the file remains byte-identical. The plugin does not fall back to rewriting the document.
+
 ## Validation
 
 The adapter passes standalone and installed-host tests for registration, provider narrowing, schema identity, foreign-tool preservation, refusals, path safety, same-file locking, stale hashes, rollback, compound result framing, every route handler, and the one-success latch. Hermes Plugin Doctor loads the plugin and its two hooks under the real host. The final deterministic parity audit matched all 48 frozen Pi decisions: 47 routes and one standard fallback, including exact tool names and host-resolved arguments.

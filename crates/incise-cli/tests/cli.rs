@@ -33,6 +33,12 @@ struct Scratch {
 
 impl Scratch {
     fn of(rel: &str) -> Scratch {
+        let src = corpus(rel);
+        let name = src.file_name().unwrap().to_string_lossy().into_owned();
+        Scratch::from_bytes(&name, fs::read(&src).unwrap())
+    }
+
+    fn from_bytes(name: &str, original: Vec<u8>) -> Scratch {
         // Several cases copy the same fixture and the harness runs them on
         // parallel threads, so the directory name needs something that is unique
         // per *call* and not merely per process. A counter is; a timestamp is
@@ -40,11 +46,8 @@ impl Scratch {
         static NEXT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
         let n = NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
 
-        let src = corpus(rel);
-        let name = src.file_name().unwrap().to_string_lossy().into_owned();
         let dir = std::env::temp_dir().join(format!("incise-cli-{}-{n}", std::process::id()));
         fs::create_dir_all(&dir).unwrap();
-        let original = fs::read(&src).unwrap();
         let file = dir.join(name);
         fs::write(&file, &original).unwrap();
         Scratch {
@@ -930,6 +933,45 @@ fn a_frontmatter_existence_guard_refuses_with_structured_repair() {
         "build.target"
     );
     assert!(s.is_untouched(), "a refused guarded set wrote to the file");
+}
+
+#[test]
+fn flow_collection_set_refuses_with_structured_repair() {
+    let original = b"---\ningredient_tags: [one, two]\nsettings: {mode: fast}\nquoted: \"[one, two]\"\n---\n\n# Recipe\n".to_vec();
+    let s = Scratch::from_bytes("flow.md", original);
+
+    let run = s.run(&[
+        "frontmatter-set",
+        "@",
+        "--args",
+        r#"{"key":"ingredient_tags","value":"[three, four]"}"#,
+        "--json",
+    ]);
+    assert_eq!(run.code, 1, "{}{}", run.out, run.err);
+    let payload = incise_core::json::parse(run.out.trim()).expect("not JSON");
+    assert!(payload
+        .get("error")
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .contains("holds a flow-style sequence"));
+    let repair = payload.get("repair").expect("no repair object");
+    assert_eq!(
+        repair.get("code").unwrap().as_str().unwrap(),
+        "would_replace_container"
+    );
+    assert_eq!(repair.get("argument").unwrap().as_str().unwrap(), "key");
+    assert!(s.is_untouched(), "a refused flow set wrote to the file");
+
+    let typed = s.run(&[
+        "frontmatter-set",
+        "@",
+        "--args",
+        r#"{"key":"ingredient_tags","value":["three","four"]}"#,
+        "--json",
+    ]);
+    assert_eq!(typed.code, 1, "{}{}", typed.out, typed.err);
+    assert!(s.is_untouched(), "a refused typed set wrote to the file");
 }
 
 // --------------------------------------------------------------------------

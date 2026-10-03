@@ -296,6 +296,8 @@ The agent first inspects document structure, then calls a semantic editor with a
 
 Inspect keys with `incise keys FILE`, then call `incise frontmatter-set FILE --key PATH --value VALUE`. Incise preserves unrelated key order, comments, scalar formatting, and document content. See the [frontmatter guide](https://pdalinis.github.io/incise/yaml-frontmatter-cli/).
 
+Flow-style sequences and mappings such as `[one, two]` and `{mode: fast}` are reported as containers but kept opaque. Scalar `frontmatter-set` calls cannot replace them, so an array or object cannot silently become a quoted string. Quoted bracket-shaped text remains an ordinary scalar.
+
 ## Documentation
 
 The [Incise documentation site](https://pdalinis.github.io/incise/) covers installation and the core workflow, with focused guides for [Markdown tables](https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/), [YAML frontmatter](https://pdalinis.github.io/incise/yaml-frontmatter-cli/), and [Obsidian vaults](https://pdalinis.github.io/incise/obsidian-ai-agent-editing/).
