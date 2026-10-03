@@ -55,18 +55,23 @@ hermes plugins doctor --ci incise</code></pre>
 incise rows vault/Projects.md --table Projects
 incise table-update-cell vault/Projects.md \
   --table Projects --where Note=Launch \
-  --column Status --value done</code></pre>
+  --column Status --value done
+
+# Whole-table deletion previews first and requires explicit confirmation.
+incise table-delete vault/Projects.md --table Projects
+incise table-delete vault/Projects.md --table Projects --confirm</code></pre>
+    <p>Add <code>--ordinal N</code> when several tables share a heading. Whole-table deletion is CLI-only in this release; Pi and Hermes retain the measured four-action <code>table_edit</code> schema.</p>
 
     <h2>Supported structures</h2>
     <table><thead><tr><th>Structure</th><th>Operations</th></tr></thead><tbody>
-      <tr><td>Tables</td><td>Add and delete rows, update cells, query rows, realign columns</td></tr>
+      <tr><td>Tables</td><td>Add and delete rows, delete whole tables with confirmation, update cells, query rows, realign columns</td></tr>
       <tr><td>Lists</td><td>Add and remove items, toggle task checkboxes</td></tr>
       <tr><td>Sections</td><td>Append, replace, insert, delete, rename, change heading level</td></tr>
       <tr><td>Frontmatter</td><td>Read, set, and delete nested YAML keys</td></tr>
     </tbody></table>
 
     <h2>Agent integrations</h2>
-    <p>Print the standard function schemas with <code>incise schema</code> or inspect the experimental narrow surface with <code>incise schema --profile safe-small</code>. See the complete guides for <a href="https://github.com/pdalinis/incise/tree/main/plugins/hermes">Hermes Agent</a> and <a href="https://www.npmjs.com/package/pi-incise">Pi</a>.</p>
+    <p>Print the standard function schemas with <code>incise schema</code> or inspect the experimental narrow surface with <code>incise schema --profile safe-small</code>. The confirmed whole-table deletion command is intentionally absent from those model schemas after its publication gate failed. See the complete guides for <a href="https://github.com/pdalinis/incise/tree/main/plugins/hermes">Hermes Agent</a> and <a href="https://www.npmjs.com/package/pi-incise">Pi</a>.</p>
     <div class="callout"><strong>Need every command and option?</strong> Run <code>incise --help</code> or <code>incise &lt;command&gt; --help</code>. The <a href="https://github.com/pdalinis/incise#readme">project README</a> covers safety, compatibility, and development.</div>
   </main>
   <footer><div class="wrap footer-row"><span>Incise is MIT licensed.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>

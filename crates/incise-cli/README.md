@@ -49,6 +49,16 @@ incise table-update-cell vault/Projects.md \
 
 Run `incise --help` for every operation and `incise <operation> --help` for its arguments.
 
+To remove an entire table, inspect it first and use the confirmed operation. The first command previews the resolved table and refuses without writing; repeat with `--confirm` only after verifying the target:
+
+```bash
+incise tables vault/Projects.md
+incise table-delete vault/Projects.md --table Projects
+incise table-delete vault/Projects.md --table Projects --confirm
+```
+
+Use `--ordinal N` when a heading owns more than one table. This operation is available through the CLI but is not published as a `table_edit` model action.
+
 ## Agent integrations
 
 Incise publishes the function schemas intended for model tool use:

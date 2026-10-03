@@ -85,15 +85,24 @@ If the new value requires the table to widen, Incise re-pads the table correctly
 
 ---
 
+Delete a complete table only through the confirmed CLI operation. An unconfirmed call prints a bounded preview and writes nothing; after checking the resolved heading, ordinal, columns, and rows, repeat it with `--confirm`:
+
+```bash
+incise table-delete vault/Projects.md --table Projects
+incise table-delete vault/Projects.md --table Projects --confirm
+```
+
+If several tables share the heading, add `--ordinal N`. Whole-table deletion is intentionally CLI-only in this release: the measured `table_edit` schema used by Pi and Hermes retains its four established actions.
+
 ## What Incise can edit
 
-| Markdown structure   | Operations                                                            |
-| -------------------- | --------------------------------------------------------------------- |
-| **Tables**           | Add rows, update cells, delete rows, realign columns, query rows      |
-| **Lists & tasks**    | Add/remove items, toggle checkboxes                                   |
-| **Sections**         | Append, replace, insert, delete, rename, change heading levels        |
-| **YAML frontmatter** | Read, set, and delete nested keys                                     |
-| **Structure**        | Discover headings, tables, lists, frontmatter, rows, keys, and hashes |
+| Markdown structure   | Operations                                                                       |
+| -------------------- | -------------------------------------------------------------------------------- |
+| **Tables**           | Add rows, update cells, delete rows or whole tables, realign columns, query rows |
+| **Lists & tasks**    | Add/remove items, toggle checkboxes                                              |
+| **Sections**         | Append, replace, insert, delete, rename, change heading levels                   |
+| **YAML frontmatter** | Read, set, and delete nested keys                                                |
+| **Structure**        | Discover headings, tables, lists, frontmatter, rows, keys, and hashes            |
 
 ## Use Incise with an AI agent
 
@@ -267,7 +276,7 @@ These are scoped model measurements, not promises about every model or runtime. 
 
 Read the [benchmark summary](https://pdalinis.github.io/incise/benchmarks/), the complete [`bench/FINDINGS.md`](bench/FINDINGS.md), or inspect the [Ornith final analysis](bench/results/ornith_final_v2_safe_routed_20260923_analysis.json), [exact-route audit](bench/results/ornith_final_v2_routes_20260923_analysis.json), and [Gemma v8 analysis](bench/results/gemma_safe_routed_full_v8_20260922_analysis.json).
 
-The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across **110,406 generated cases over 54 fixtures**. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.
+The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across **122,307 generated cases over 60 fixtures**. Property invariants and 218 injected mutations provide additional evidence that preservation failures are detected.
 
 ## Frequently asked questions
 
