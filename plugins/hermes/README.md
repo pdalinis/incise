@@ -74,6 +74,8 @@ The plugin registers the union needed by the selected profile, but registration 
 
 Set `INCISE_PROFILE=safe-small` only to reproduce the earlier experimental narrow composition. The adopted MiniCPM path is `auto`, which uses guarded host-resolved routes and the standard fallback rather than exposing `safe-small` broadly.
 
+The version-matched plugin archive includes a binary with the confirmed `incise table-delete` CLI operation. Hermes does not expose it through `table_edit`: three preregistered model-facing candidates missed the required confirmation-recovery gate, so the measured standard and fallback tool surfaces remain unchanged.
+
 ## How it works
 
 At registration, the plugin asks the binary for the five measured schemas: `table_edit`, `list_edit`, `section_edit`, `frontmatter_edit`, and `table_get`. It adds three narrow structural reads—`md_tables`, `md_lists`, and `md_outline`—and registers the selected profile’s handlers as the `incise` toolset.

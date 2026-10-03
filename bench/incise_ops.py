@@ -840,6 +840,67 @@ def table_delete_row(content, address, where):
     return _rebuild(content, table, cols, body, table.is_aligned())
 
 
+def table_delete(content, address):
+    """Delete one complete table and one separating blank-line gap."""
+    table = _locate_table(content, address)
+    return _delete_table_span(content, table)
+
+
+def table_delete_confirmed(content, address, confirm=False):
+    """Agent-facing guard for the destructive whole-table splice."""
+    try:
+        table = _locate_table(content, address)
+    except OpError as error:
+        message = str(error)
+        if (not confirm and message.startswith("ambiguous:")
+                and " tables under " in message):
+            raise OpError(
+                message
+                + "\n  To delete one whole table, retry with both its ordinal "
+                "and confirm=true.")
+        raise
+    if not confirm:
+        tables = find_tables(content)
+        entries = list_tables(content, "")
+        entry = next(e for candidate, e in zip(tables, entries)
+                     if candidate.start == table.start)
+        rows = table.body
+        plural = "" if len(rows) == 1 else "s"
+        details = [
+            f'deleting table "{entry["heading"]}" ordinal '
+            f'{entry["ordinal"]} would remove {len(rows)} data row{plural}.',
+            f'  Columns: {_capped_preview(" | ".join(entry["columns"]), 160)}',
+        ]
+        if rows:
+            details.append(f"  First row: {_capped_preview(rows[0].strip(), 160)}")
+        if len(rows) > 1:
+            details.append(f"  Last row: {_capped_preview(rows[-1].strip(), 160)}")
+        details.append(
+            "  If you intend to delete this whole table, pass confirm=true.")
+        raise OpError("\n".join(details))
+    return _delete_table_span(content, table)
+
+
+def _delete_table_span(content, table):
+    lines = content.split("\n")
+    after = table.end + 1
+    while after < len(lines) and not lines[after].strip():
+        after += 1
+    ends_section = (after >= len(lines)
+                    or any(section.start == after
+                           for section in find_sections(content)))
+    if ends_section:
+        start = table.start
+        while start > 0 and not lines[start - 1].strip():
+            start -= 1
+        return "\n".join(lines[:start] + lines[table.end + 1:])
+    return "\n".join(lines[:table.start] + lines[after:])
+
+
+def _capped_preview(value, limit):
+    return value if len(value) <= limit else value[:limit - 3] + "..."
+
+
 def table_realign(content, address):
     """Re-pad one named table to uniform column width.
 
@@ -3446,6 +3507,8 @@ OPS = {
         c, _address(a), _where(a), a.get("column"), a.get("value", _MISSING)),
     "table-delete-row": lambda c, a: table_delete_row(
         c, _address(a), _where(a)),
+    "table-delete": lambda c, a: table_delete_confirmed(
+        c, _address(a), bool(a.get("confirm"))),
     "table-realign": lambda c, a: table_realign(c, _address(a)),
     "list-add-item": lambda c, a: list_add_item(
         c, _list_address(a), _item(a, "text"), a.get("position", "end"),
@@ -3488,7 +3551,8 @@ def apply_op(content, op_name, args):
     """Return (new_content, None) or (None, error_message)."""
     fn = OPS.get(op_name)
     if fn is None:
-        return None, f'unknown operation "{op_name}". Valid: {", ".join(OPS)}'
+        offered = (op for op in OPS if op != "table-delete")
+        return None, f'unknown operation "{op_name}". Valid: {", ".join(offered)}'
     if args is not None and not isinstance(args, dict):
         # Reached when a model emits a bare string or array where the argument
         # object belongs. Without this it surfaced as "AttributeError: 'str'

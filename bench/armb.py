@@ -1481,9 +1481,9 @@ CHECK_ACTION = False
 
 # The three families' op names, by tool, taken from **the enum each scheme
 # actually published**. The core composes its `unknown operation` sentence from
-# all fifteen at once, which is right for the CLI -- Arm C names the op
-# directly and any of them could have been meant -- and wrong here, where the
-# model called `list_edit` and cannot reach the other twelve whatever it does.
+# all fifteen published names at once, which is right for the broad executor --
+# any of them could have been meant -- and wrong here, where the model called
+# `list_edit` and cannot reach the other twelve whatever it does.
 #
 # This used to be derived from `OPS`, on the stated grounds that naming what the
 # executor accepts was "the lesser evil -- the alternative is a list that can be

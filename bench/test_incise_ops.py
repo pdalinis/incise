@@ -141,6 +141,71 @@ def test_corpus_roundtrip():
     check(f"add+delete round-trips byte-identical ({checked} tables)", checked > 0)
 
 
+def test_whole_table_delete():
+    """Whole-table deletion is confirmed, spacing-aware, and geometry-free."""
+    cases = [
+        ("# A\n\nBefore.\n\nAfter.\n",
+         "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n\nAfter.\n",
+         {"heading": "A"}),
+        ("# A\n\nBefore.\n\n# B\n\nAfter.\n",
+         "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n\n# B\n\nAfter.\n",
+         {"heading": "A"}),
+        ("# A\n\nBefore.\n",
+         "# A\n\nBefore.\n\n| Name |\n| --- |\n| widget |\n",
+         {"heading": "A"}),
+        ("# A\n\n| Name |\n| --- |\n| second |\n",
+         "# A\n\n| Name |\n| --- |\n| first |\n\n| Name |\n| --- |\n| second |\n",
+         {"heading": "A", "ordinal": 0}),
+    ]
+    for i, (original, inserted, address) in enumerate(cases):
+        refused, err = apply_op(inserted, "table-delete", {"table": address})
+        check(f"whole table {i} requires confirmation",
+              refused is None and bool(err) and "confirm=true" in err, err or "")
+        deleted, err = apply_op(
+            inserted, "table-delete", {"table": address, "confirm": True})
+        check(f"whole table {i} round-trips insertion",
+              not err and deleted == original, err or repr(deleted))
+
+    malformed = "# A\n\n| X | Y |\n| --- | --- |\n| one |\n"
+    deleted, err = apply_op(
+        malformed, "table-delete",
+        {"table": {"heading": "A"}, "confirm": True})
+    check("whole table delete accepts non-rectangular input",
+          not err and deleted == "# A\n", err or repr(deleted))
+
+    adjacent = (
+        "# Data\n\n| Name |\n| --- |\n| alpha |\n\n"
+        "| Name |\n| --- |\n| beta |\n")
+    _, err = apply_op(
+        adjacent, "table-delete", {"table": {"heading": "Data"}})
+    check(
+        "ambiguous whole-table delete requests ordinal and confirmation together",
+        err == (
+            'ambiguous: 2 tables under "Data". Pass an ordinal.\n'
+            "  Candidates: ordinal 0 columns Name; ordinal 1 columns Name\n"
+            "  To delete one whole table, retry with both its ordinal and "
+            "confirm=true."),
+        err or "",
+    )
+
+
+def test_whole_table_delete_tasks():
+    """Every preregistered deletion task has a byte-exact ideal ceiling."""
+    from grade import check_result
+
+    tasks = json.load(open(os.path.join(
+        ROOT, "bench/tasks/table_delete.json")))["tasks"]
+    check("whole-table task file has all six preregistered boundaries",
+          len(tasks) == 6, str(len(tasks)))
+    for task in tasks:
+        before = open(os.path.join(ROOT, task["fixture"]), newline="").read()
+        ideal = task["ideal_call"]
+        after, err = apply_op(before, ideal["op"], ideal["args"])
+        outcome, detail = check_result(task, before, after) if not err else ("op_error", err)
+        check(f"whole-table ceiling {task['id']}", outcome == "correct",
+              detail or "")
+
+
 def test_identity_update_roundtrip():
     r"""Writing a cell's own value back must leave the file byte-identical.
 
@@ -2281,7 +2346,7 @@ def test_action_check():
 
     The messages are pinned because they were written against a population that
     turned out not to be the documented one. Divergence C says a *missing or
-    misspelled* `action` gets fifteen cross-family op names. Across every
+    misspelled* `action` gets sixteen cross-family op names. Across every
     edit-tool call `bench/population.py` reports under `bench/results/`, not one
     `action` was missing or misspelled: every value that arrived as its own key
     was a valid op name, and every `*-None` case was a JSON failure --
@@ -2313,12 +2378,9 @@ def test_action_check():
     # have widened the offered surface as well as changing the sentence. The
     # enums are re-read from `armb.SCHEMES` rather than from `armb.ACTIONS`,
     # which is built from them; reading those back would pass vacuously.
-    offered = {f"{fam}-{a}" for tool, fam in (("table_edit", "table"),
-                                              ("list_edit", "list"),
-                                              ("section_edit", "section"),
-                                              ("frontmatter_edit",
-                                               "frontmatter"))
-               for a in armb.ACTIONS[tool]}
+    offered = {armb.normalize(tool, {"action": action})[0]
+               for tool, actions in armb.ACTIONS.items()
+               for action in actions}
     check("every action named is a real op", offered <= set(OPS),
           offered - set(OPS))
     published = {}
@@ -2335,19 +2397,18 @@ def test_action_check():
     # quietly: `OPS` had an op no tool ever offered a model. That op was
     # `table-realign`, and F-realign's gate shipped it -- 60/60 both ways on the
     # six existing table tasks, 0/29 -> 30/30 on the three ragged ones -- so the
-    # assertion is now its own converse and is strictly stronger. Fifteen ops,
-    # fifteen reachable, and equality in both directions: an op the enums cannot
-    # reach is a capability only a CLI caller has (the old defect), and an action
-    # the executor cannot run sends the model somewhere that refuses again (the
-    # check above). Adding a sixteenth op without an enum entry fails here.
-    offered_ops = {f"{fam}-{a}"
-                   for tool, fam in (("table_edit", "table"),
-                                     ("list_edit", "list"),
-                                     ("section_edit", "section"),
-                                     ("frontmatter_edit", "frontmatter"))
-                   for a in armb.ACTIONS[tool]}
-    check("every op in OPS is reachable from a published action enum",
-          set(OPS) == offered_ops,
+    # assertion is now its own converse and is strictly stronger. The one named
+    # exception is `table-delete`: its core and confirmed CLI path passed every
+    # deterministic check, but three frozen model-facing candidates failed the
+    # preregistered 60/60 confirmation-recovery gate. It is also omitted from
+    # the unknown-operation remedy, so no model is offered an unreachable action.
+    # Any second CLI-only op fails here rather than inheriting that decision.
+    offered_ops = {armb.normalize(tool, {"action": action})[0]
+                   for tool, actions in armb.ACTIONS.items()
+                   for action in actions}
+    check("only the failed-gate table delete op is CLI-only",
+          set(OPS) - offered_ops == {"table-delete"}
+          and offered_ops <= set(OPS),
           (sorted(set(OPS) - offered_ops), sorted(offered_ops - set(OPS))))
 
     fused = {"action=add-item,item": "loose four", "path": "f.md"}
@@ -2858,7 +2919,9 @@ def test_read_grading():
 
 
 def main():
-    for fn in (test_benchmark_tasks, test_corpus_roundtrip, test_outside_bytes_untouched,
+    for fn in (test_benchmark_tasks, test_corpus_roundtrip, test_whole_table_delete,
+               test_whole_table_delete_tasks,
+               test_outside_bytes_untouched,
                test_widen_never_shrink, test_alignment_markers_survive,
                test_crlf_preserved, test_ordered_values, test_string_address,
                test_stringified_arguments, test_refusals,

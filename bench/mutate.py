@@ -175,9 +175,21 @@ MUTATIONS += [
     # first two are the two mistakes that were really made and really caught by
     # the `apply_op` case family on the run that introduced it.
     ("disp-column-early", src("ops", "dispatch.rs"),
-     "            table_update_cell(content, &address, &selector, a.get(\"column\"), a.get(\"value\"))",
+     "            table_update_cell(\n"
+     "                content,\n"
+     "                &address,\n"
+     "                &selector,\n"
+     "                a.get(\"column\"),\n"
+     "                a.get(\"value\"),\n"
+     "            )",
      "            let _c = crate::args::check_column(a.get(\"column\"))?;\n"
-     "            table_update_cell(content, &address, &selector, a.get(\"column\"), a.get(\"value\"))",
+     "            table_update_cell(\n"
+     "                content,\n"
+     "                &address,\n"
+     "                &selector,\n"
+     "                a.get(\"column\"),\n"
+     "                a.get(\"value\"),\n"
+     "            )",
      "`column` is checked at the dispatch instead of inside the op"),
     ("disp-values-shape", src("ops", "dispatch.rs"),
      "        Some(other) => Values::Other(other),",
@@ -302,17 +314,59 @@ MUTATIONS += [
      "            i,\n            good.join(\", \"),",
      "the 1-based row number in a refusal goes 0-based"),
 
+    # -- whole-table deletion: confirmation and gap ownership ---------------
+    ("table-delete-rect", src("ops", "table.rs"),
+     "    let table = locate_table(content, address).map_err(|mut error| {",
+     "    let table = resolve_table(content, address).map_err(|mut error| {",
+     "a malformed table cannot be removed even though deletion needs no cell geometry"),
+    ("table-delete-combined-repair", src("ops", "table.rs"),
+     "To delete one whole table, retry with both its ordinal and confirm=true.",
+     "To delete one whole table, retry with its ordinal.",
+     "an ambiguous deletion does not ask for confirmation in the same retry"),
+    ("table-delete-confirm", src("ops", "table.rs"),
+     "    if !confirm {\n"
+     "        let tables = find_tables(content);",
+     "    if false {\n"
+     "        let tables = find_tables(content);",
+     "whole-table deletion proceeds without its required confirmation"),
+    ("table-delete-trailing-gap", src("ops", "table.rs"),
+     "    while after < lines.len() && lines[after].trim().is_empty() {",
+     "    while false && after < lines.len() && lines[after].trim().is_empty() {",
+     "a deleted table leaves its trailing separator behind"),
+    ("table-delete-section-end", src("ops", "table.rs"),
+     "    let ends_section = after >= lines.len()\n"
+     "        || find_sections(content)",
+     "    let ends_section = after >= lines.len()\n"
+     "        && find_sections(content)",
+     "a table before the next heading takes the wrong blank-line gap"),
+    ("table-delete-leading-gap", src("ops", "table.rs"),
+     "        while start > 0 && lines[start - 1].trim().is_empty() {",
+     "        while false && start > 0 && lines[start - 1].trim().is_empty() {",
+     "an end-of-section deletion leaves the obsolete leading separator behind"),
+
     # -- table-get: the read op, where the failure is a false report ---------
     # A read cannot corrupt the document, so every fault here is a statement
     # about a file that is not true -- which is worse than a refusal and much
     # harder to notice, because the output still looks like a table.
     ("get-filter-off", src("ops", "table.rs"),
-     "        .filter(|r| supplied.iter().all(|(k, v)| cell_of(&cols, r, k) == v.as_str()))",
+     "        .filter(|r| {\n"
+     "            supplied\n"
+     "                .iter()\n"
+     "                .all(|(k, v)| cell_of(&cols, r, k) == v.as_str())\n"
+     "        })",
      "        .filter(|_r| true)",
      "the filter is accepted and ignored, so every read returns the whole table"),
     ("get-filter-any", src("ops", "table.rs"),
-     "        .filter(|r| supplied.iter().all(|(k, v)| cell_of(&cols, r, k) == v.as_str()))",
-     "        .filter(|r| supplied.iter().any(|(k, v)| cell_of(&cols, r, k) == v.as_str()))",
+     "        .filter(|r| {\n"
+     "            supplied\n"
+     "                .iter()\n"
+     "                .all(|(k, v)| cell_of(&cols, r, k) == v.as_str())\n"
+     "        })",
+     "        .filter(|r| {\n"
+     "            supplied\n"
+     "                .iter()\n"
+     "                .any(|(k, v)| cell_of(&cols, r, k) == v.as_str())\n"
+     "        })",
      "a multi-column filter matches on any column instead of all of them"),
     ("get-total", src("ops", "table.rs"),
      "    let total = rows.len();", "    let total = rows.len() + 1;",
@@ -325,9 +379,17 @@ MUTATIONS += [
      '"incise will not rewrite a table it cannot read"',
      "a read borrows the write path's refusal and claims it was going to write"),
     ("get-keyed-rows", src("ops", "table.rs"),
-     "        .filter(|r| supplied.iter().all(|(k, v)| cell_of(&cols, r, k) == v.as_str()))\n"
+     "        .filter(|r| {\n"
+     "            supplied\n"
+     "                .iter()\n"
+     "                .all(|(k, v)| cell_of(&cols, r, k) == v.as_str())\n"
+     "        })\n"
      "        .collect();",
-     "        .filter(|r| supplied.iter().all(|(k, v)| cell_of(&cols, r, k) == v.as_str()))\n"
+     "        .filter(|r| {\n"
+     "            supplied\n"
+     "                .iter()\n"
+     "                .all(|(k, v)| cell_of(&cols, r, k) == v.as_str())\n"
+     "        })\n"
      "        .map(|r| cols.iter().map(|c| cell_of(&cols, &r, c).to_string()).collect())\n"
      "        .collect();",
      "rows go back through name lookup, so a repeated header reports one cell twice"),
@@ -370,14 +432,14 @@ MUTATIONS += [
      "the guard fires on every column, so no table can be addressed by name"),
     ("dupcol-count", src("ops", "table.rs"),
      "            \"the column \\\"{name}\\\" appears {n} times in this table's header,"
-     " so it does not identify one cell.\\n  Columns: {}\\n  Rename one of them in the"
-     " document, then retry.\",\n"
-     "            cols.join(\" | \")",
+     " so it does not identify one cell.\\n  Columns: {}\\n  {}\",\n"
+     "            cols.join(\" | \"),\n"
+     "            remedy.unwrap_or(\"Rename one of them in the document, then retry.\")",
      "            \"the column \\\"{name}\\\" appears {} times in this table's header,"
-     " so it does not identify one cell.\\n  Columns: {}\\n  Rename one of them in the"
-     " document, then retry.\",\n"
+     " so it does not identify one cell.\\n  Columns: {}\\n  {}\",\n"
      "            n + 1,\n"
-     "            cols.join(\" | \")",
+     "            cols.join(\" | \"),\n"
+     "            remedy.unwrap_or(\"Rename one of them in the document, then retry.\")",
      "the refusal misreports how many times the column appears"),
 
     # -- `filter` argument validation ----------------------------------------
@@ -430,11 +492,13 @@ MUTATIONS += [
      "            if items[k].depth < items[n].depth {",
      "an item's span swallows the sibling after it"),
     ("list-parent-stack", src("list.rs"),
-     "        while stack.last().map_or(false, |(w, _)| *w >= ind) {",
-     "        while stack.last().map_or(false, |(w, _)| *w > ind) {",
+     "        while stack.last().is_some_and(|(w, _)| *w >= ind) {",
+     "        while stack.last().is_some_and(|(w, _)| *w > ind) {",
      "items at equal indent are nested under each other"),
     ("list-text-rstrip", src("list.rs"),
-     "        text: rest.trim_end_matches(|c: char| c.is_whitespace()).to_string(),",
+     "        text: rest\n"
+     "            .trim_end_matches(|c: char| c.is_whitespace())\n"
+     "            .to_string(),",
      "        text: rest.to_string(),",
      "an item's text keeps its trailing whitespace, and a CRLF one its \\r"),
 
@@ -621,8 +685,18 @@ MUTATIONS += [
      '                if e.subsections > 0 { "s" } else { "" }',
      '"1 subsections" in the rendered outline'),
     ("section-indent", src("ops", "section.rs"),
-     '        out.push(format!("{}{}   ({})", "  ".repeat(e.level), e.text, bits.join(", ")));',
-     '        out.push(format!("{}{}   ({})", "  ".repeat(e.level - 1), e.text, bits.join(", ")));',
+     "        out.push(format!(\n"
+     '            "{}{}   ({})",\n'
+     '            "  ".repeat(e.level),\n'
+     "            e.text,\n"
+     '            bits.join(", ")\n'
+     "        ));",
+     "        out.push(format!(\n"
+     '            "{}{}   ({})",\n'
+     '            "  ".repeat(e.level - 1),\n'
+     "            e.text,\n"
+     '            bits.join(", ")\n'
+     "        ));",
      "the outline's indent stops showing the level it is indenting for"),
 
     # -- the resolver: four passes, narrowest first ---------------------------
@@ -631,8 +705,14 @@ MUTATIONS += [
      "    let preds: [&dyn Fn(&Section) -> bool; 4] = [&suffix, &folded, &exact, &suffix_folded];",
      "a loose suffix match runs before the exact path it would have widened"),
     ("section-suffix-prefix", src("ops", "section.rs"),
-     "            && s.path[s.path.len() - segs.len()..].iter().zip(&segs).all(|(a, b)| a == b)",
-     "            && s.path[..segs.len()].iter().zip(&segs).all(|(a, b)| a == b)",
+     "            && s.path[s.path.len() - segs.len()..]\n"
+     "                .iter()\n"
+     "                .zip(&segs)\n"
+     "                .all(|(a, b)| a == b)",
+     "            && s.path[..segs.len()]\n"
+     "                .iter()\n"
+     "                .zip(&segs)\n"
+     "                .all(|(a, b)| a == b)",
      '"macOS" stops addressing "Install > macOS" and starts addressing by prefix'),
     ("section-path-truthy", src("ops", "section.rs"),
      '        Some(p) if json::py_truthy(p) => (Some(p), "section.path"),',
@@ -756,8 +836,12 @@ MUTATIONS += [
      "    out.extend(blk);",
      "an appended block runs straight on from the last line of the body"),
     ("section-has-own-body", src("ops", "section.rs"),
-     "    lines[sec.heading_end + 1..=sec.own_end].iter().any(|ln| !ln.trim().is_empty())",
-     "    lines[sec.start..=sec.own_end].iter().any(|ln| !ln.trim().is_empty())",
+     "    lines[sec.heading_end + 1..=sec.own_end]\n"
+     "        .iter()\n"
+     "        .any(|ln| !ln.trim().is_empty())",
+     "    lines[sec.start..=sec.own_end]\n"
+     "        .iter()\n"
+     "        .any(|ln| !ln.trim().is_empty())",
      "the heading counts as a body, so replace-body refuses every section (S2)"),
     ("section-overwrite-guard", src("ops", "section.rs"),
      "    if !overwrite && has_own_body(content, &sec) {",
@@ -790,8 +874,16 @@ MUTATIONS += [
 
     # -- insert: the level is derived, and the gap has to compose with delete -
     ("section-insert-level", src("ops", "section.rs"),
-     '    let level = if pos_str == "before" || pos_str == "after" { sec.level } else { sec.level + 1 };',
-     '    let level = if pos_str == "before" || pos_str == "after" { sec.level + 1 } else { sec.level };',
+     '    let level = if pos_str == "before" || pos_str == "after" {\n'
+     "        sec.level\n"
+     "    } else {\n"
+     "        sec.level + 1\n"
+     "    };",
+     '    let level = if pos_str == "before" || pos_str == "after" {\n'
+     "        sec.level + 1\n"
+     "    } else {\n"
+     "        sec.level\n"
+     "    };",
      "before/after make a child and first-child/last-child make a sibling"),
     ("section-insert-firstchild", src("ops", "section.rs"),
      '        "first-child" => sec.own_end + 1,',
@@ -829,8 +921,18 @@ MUTATIONS += [
      "        // consecutive children run together",
      "two structured children are written with no blank line between them"),
     ("section-child-nested", src("ops", "section.rs"),
-     '            out.extend(child_blocks(&kids, level + 1, eol, &format!("{field}[{i}].children"))?);',
-     '            out.extend(child_blocks(&kids, level, eol, &format!("{field}[{i}].children"))?);',
+     "            out.extend(child_blocks(\n"
+     "                &kids,\n"
+     "                level + 1,\n"
+     "                eol,\n"
+     '                &format!("{field}[{i}].children"),\n'
+     "            )?);",
+     "            out.extend(child_blocks(\n"
+     "                &kids,\n"
+     "                level,\n"
+     "                eol,\n"
+     '                &format!("{field}[{i}].children"),\n'
+     "            )?);",
      "a grandchild is written at its parent's level"),
     ("section-verify-early", src("ops", "section.rs"),
      "    if find_sections(result).iter().any(|s| s.start == line) {",
@@ -839,8 +941,8 @@ MUTATIONS += [
 
     # -- set-level -----------------------------------------------------------
     ("section-setlevel-subtree", src("ops", "section.rs"),
-     "            if secs[k].level <= sec.level {",
-     "            if secs[k].level < sec.level {",
+     "            if following.level <= sec.level {",
+     "            if following.level < sec.level {",
      "a same-level sibling is dragged along as if it were a subsection"),
     ("section-setlevel-setext", src("ops", "section.rs"),
      "        if secs[k].style == HeadingStyle::Setext && new_level > 2 {",
@@ -851,7 +953,11 @@ MUTATIONS += [
      "            let ch = if new_level == 2 { '=' } else { '-' };",
      "a setext heading moved to level 1 gets the level-2 underline"),
     ("section-setlevel-space", src("ops", "section.rs"),
-     '            let space = if s.space.is_empty() { " " } else { s.space.as_str() };',
+     "            let space = if s.space.is_empty() {\n"
+     '                " "\n'
+     "            } else {\n"
+     "                s.space.as_str()\n"
+     "            };",
      '            let space = " ";',
      "an unusual run of spaces after the marker is normalized by a level change"),
     ("section-setlevel-noop", src("ops", "section.rs"),
@@ -932,8 +1038,8 @@ MUTATIONS += [
      '            let overwrite = a.get("overwrite").is_some();',
      "`overwrite: false` acknowledges the overwrite it denies"),
     ("section-subtree-default", src("ops", "dispatch.rs"),
-     '            let subtree = a.get("subtree").map_or(true, json::py_truthy);',
-     '            let subtree = a.get("subtree").map_or(false, json::py_truthy);',
+     '            let subtree = a.get("subtree").is_none_or(json::py_truthy);',
+     '            let subtree = a.get("subtree").is_some_and(json::py_truthy);',
      "an absent `subtree` reparents the children instead of carrying them"),
     # `section-children-chain` was here: dropping `.or_else(|| a.get("sections"))`
     # so the falsy last operand arrives as absent. It survived a full run, and it
@@ -1118,7 +1224,12 @@ MUTATIONS += [
 # leaves the effective value untouched.
 MUTATIONS += [
     ("front-eol-drop", src("front.rs"),
-     '        e.eol = if raw[e.line].ends_with(\'\\r\') { "\\r" } else { "" }.to_string();',
+     "        e.eol = if raw[e.line].ends_with('\\r') {\n"
+     '            "\\r"\n'
+     "        } else {\n"
+     '            ""\n'
+     "        }\n"
+     "        .to_string();",
      '        e.eol = String::new();',
      "a rebuilt CRLF line is silently converted to LF"),
     ("front-block-eol", src("front.rs"),

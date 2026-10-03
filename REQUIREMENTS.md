@@ -789,6 +789,10 @@ nothing and leaves no ambiguity to resolve, whereas relaxing `where` would throw
 away a stated constraint and change which row is touched. Agreement is free;
 guessing is not.
 
+**Whole-table deletion is a confirmed core/CLI operation, not a published model action.** `table-delete` takes `table` and refuses dispatched calls unless `confirm=true`. The refusal identifies the resolved heading and ordinal, row count, columns, and capped first/last row previews. Deletion resolves table identity without requiring rectangular rows, removes exactly the table lines plus one separating blank-line gap, normally owns the trailing gap, and owns the leading gap instead at end of file or immediately before the next section heading. It never removes a caption, heading, or section subtree. The raw splice exists for invariants; the dispatched CLI path owns confirmation.
+
+The `table_edit action=delete-table` candidate remains unpublished. Three frozen 60-trial MiniCPM5 runs scored 50/60, 59/60, and 59/60 with zero data loss, silent corruption, collateral deletion, or wrong-table deletion, but each failed the preregistered 60/60 confirmation-recovery gate. Pi and Hermes therefore retain the measured four-action `table_edit` schema. A later model-facing interface requires a new committed plan and result pool; it may not weaken the CLI confirmation guard by implication.
+
 ### 6.3 Section operations
 
 **Measured (`bench/FINDINGS.md` S1–S15, 430 trials + 77 retries + 510

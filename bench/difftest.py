@@ -163,10 +163,11 @@ ARG_VALUES = [
 #
 # Unknown op names used to be excluded beside it, because the oracle's `OPS` was
 # longer than the crate's and the two refusals therefore listed different ops.
-# With the frontmatter family ported they are the same fifteen entries in the
-# same order, so the exclusion is gone and `UNKNOWN_OPS` below compares that
-# sentence directly -- which makes the *order* of the table a tested property
-# rather than a convention, since the refusal prints it.
+# With the frontmatter family ported the executor tables agree. `table-delete`
+# is the one deliberate non-suggestion in both: its CLI path exists, but its
+# model-facing publication gate failed. `UNKNOWN_OPS` below compares the
+# remaining fifteen-name sentence directly -- which makes their order a tested
+# property rather than a convention.
 DISPATCH_ARGS = [
     # Not an object at all.
     "ABSENT", "null", '"widget"', "[1, 2]", "7", "true",
@@ -244,7 +245,7 @@ DISPATCH_ARGS = [
 ]
 
 DISPATCH_OPS = ["table-add-row", "table-update-cell", "table-delete-row",
-                "table-realign"]
+                "table-delete", "table-realign"]
 
 # Op names that are not ops. The near misses are the ones worth having: a model
 # that writes `table_add_row` or `frontmatter-get` has made a recoverable
@@ -1221,6 +1222,15 @@ def generate(files):
             emit(rel, "apply_op", opname="table-realign",
                  args=json.dumps({"table": {"heading": e["heading"],
                                             "ordinal": e["ordinal"]}}))
+            # Whole-table deletion deliberately skips rectangularity checks and
+            # has both a model-visible confirmation refusal and a successful
+            # splice. Exercise both on every table, including malformed ones.
+            delete_args = {"table": {"heading": e["heading"],
+                                     "ordinal": e["ordinal"]}}
+            emit(rel, "apply_op", opname="table-delete",
+                 args=json.dumps(delete_args))
+            emit(rel, "apply_op", opname="table-delete",
+                 args=json.dumps({**delete_args, "confirm": True}))
 
         # Dispatch ordering, against this document's first table. `{H}` is a
         # plain substitution rather than `.format()` because the cases are JSON

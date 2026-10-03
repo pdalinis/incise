@@ -41,6 +41,8 @@ Set `INCISE_PROFILE=safe-small` only to reproduce the earlier experimental small
 
 Set `INCISE_PROFILE=minicpm-list` only to reproduce the earlier MiniCPM-specific list-addition pipeline. It supports list additions only; the general MiniCPM recommendation is now `auto`.
 
+The version-matched native binary also contains the confirmed `incise table-delete` CLI operation for automation and direct shell use. It is not an action in the Pi `table_edit` schema: three preregistered model-facing candidates missed the required confirmation-recovery gate, so the measured standard and fallback surfaces remain unchanged.
+
 ## Measured results
 
 The current MiniCPM5 2B `auto` profile completed **480/480 full-composition trials (100%) with zero harmful outcomes**. Tables were 60/60, lists 100/100, sections 150/150, frontmatter 110/110, and table reads 60/60. All **470/470 routed trials** passed exact tool-surface and host-resolved-argument audits; all 10 standard fallbacks exposed the unchanged eight-tool surface. The recorded configuration used the official Q8_0 checkpoint through llama.cpp with thinking off, a 65,536-token context, `maxTokens: 8192`, temperature 0.7, and top-p 0.95.

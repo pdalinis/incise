@@ -124,7 +124,7 @@ def normalize(name: str, args: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
       accepts both spellings, so dropping this would look like it worked.
     * **A missing or misspelled `action` is passed through**, producing
       `table-None` or `table-updat`, because the core answers that with
-      `unknown operation "...". Valid: ...` -- a list of the fifteen real
+      `unknown operation "...". Valid: ...` -- a list of the fifteen published
       names, which is the sentence the model recovers from. Rejecting it here
       would replace a measured refusal with an unmeasured one.
 

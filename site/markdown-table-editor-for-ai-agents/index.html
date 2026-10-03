@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Safe Markdown Table Editing for AI Agents — Incise</title>
-  <meta name="description" content="Let AI agents update Markdown table cells and rows without corrupting pipes, alignment markers, padding, line endings, or nearby content.">
+  <meta name="description" content="Update Markdown table cells and rows or delete a whole table with confirmation, without corrupting pipes, padding, line endings, or nearby content.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website"><meta property="og:title" content="Safe Markdown table editing for AI agents"><meta property="og:description" content="Content-addressed table edits with deterministic formatting."><meta property="og:url" content="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
@@ -30,8 +30,12 @@
     <div class="grid">
       <article class="card"><h3>Update cells</h3><p>Change one selected value and widen the table only when necessary.</p></article>
       <article class="card"><h3>Add or delete rows</h3><p>Use named column values and exact row selectors instead of line positions.</p></article>
+      <article class="card"><h3>Delete a whole table</h3><p>Preview the resolved table, then confirm a byte-preserving CLI deletion that leaves its heading and neighbours intact.</p></article>
       <article class="card"><h3>Read and realign</h3><p>Query only the rows an agent needs or repair padding without changing cell text.</p></article>
     </div>
+    <pre><code>incise table-delete Projects.md --table Projects
+incise table-delete Projects.md --table Projects --confirm</code></pre>
+    <p>The first call writes nothing and shows the resolved table. Whole-table deletion remains CLI-only; it is not published in the measured Pi or Hermes model schema.</p>
     <p><a class="button" href="/incise/docs/">Install and try Incise</a></p>
   </main>
   <footer><div class="wrap footer-row"><span>Semantic Markdown editing for agents.</span><a href="https://github.com/pdalinis/incise">Source on GitHub</a></div></footer>

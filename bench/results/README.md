@@ -36,6 +36,10 @@ The adopted frontmatter pool is [`armb_front_p_v3.jsonl`](armb_front_p_v3.jsonl)
 
 The adopted table-read pool is [`armb_read_g.jsonl`](armb_read_g.jsonl) with [`armb_read_g_graded.jsonl`](armb_read_g_graded.jsonl). The `armb_read_naive` pair is its comparison condition.
 
+## Whole-table deletion publication gate
+
+The append-only `table_delete_20261003_treatment{,_v2,_v3}.jsonl` pools and their graded siblings record three preregistered MiniCPM5 candidates for publishing whole-table deletion through `table_edit`. They scored 50/60, 59/60, and 59/60 with zero harmful outcomes, but each failed its required 60/60 confirmation-recovery gate. These pools support the CLI-only disposition in `FINDINGS.md`; they are not evidence that `action=delete-table` ships in Pi or Hermes.
+
 ## Real-binary and framing runs
 
 Arm C executes recorded tasks through the compiled CLI against real temporary files rather than the Arm B mock. The primary family pools are [`armc_tables.jsonl`](armc_tables.jsonl), [`armc_lists.jsonl`](armc_lists.jsonl), and [`armc_sections.jsonl`](armc_sections.jsonl), each with a graded sibling.

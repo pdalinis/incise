@@ -49,7 +49,8 @@ pub use ops::section::{
 };
 pub use ops::table::{
     caption, heading_path, list_tables, render_table_get, render_table_list, render_table_rows,
-    resolve_row, resolve_table, table_add_row, table_delete_row, table_get, table_realign,
-    table_update_cell, Position, TableAddress, TableEntry, TableRows, Values,
+    resolve_row, resolve_table, table_add_row, table_delete, table_delete_confirmed,
+    table_delete_row, table_get, table_realign, table_update_cell, Position, TableAddress,
+    TableEntry, TableRows, Values,
 };
 pub use table::{find_tables, Table};

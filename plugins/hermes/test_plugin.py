@@ -163,7 +163,7 @@ def test_normalize():
     check("file path untouched", args["path"] == "doc.md", args["path"])
 
     # A missing action reaches the core, which answers with the list of the
-    # fifteen real names. Rejecting it here would replace a measured refusal
+    # fifteen published names. Rejecting it here would replace a measured refusal
     # with an unmeasured one.
     op, _ = plugin.normalize("table_edit", {})
     check("missing action passes through", op == "table-None", op)
