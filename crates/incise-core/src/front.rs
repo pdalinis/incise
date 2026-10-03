@@ -25,11 +25,12 @@
 //! comments, blank lines and block scalar styles survive without any code that
 //! knows they exist.
 //!
-//! What is deliberately *not* modelled: anchors, aliases, tags, flow mappings
-//! (`{a: 1}`), flow sequences (`[1, 2]`), multi-document streams, and merge
-//! keys. None appears in the corpus. They parse as opaque scalar text, which is
-//! the safe failure: an op that cannot address inside them refuses, and one that
-//! rewrites a sibling leaves them byte-identical.
+//! What is deliberately *not* modelled: anchors, aliases, tags,
+//! multi-document streams, and merge keys. Flow mappings (`{a: 1}`) and flow
+//! sequences (`[1, 2]`) are recognized as containers but their contents are
+//! opaque: an op cannot address inside or replace them, while edits to siblings
+//! still leave them byte-identical. Treating them as scalars is not safe because
+//! a scalar set could otherwise silently change the YAML type.
 //!
 //! The oracle spells its four scanners as regexes. Each one is hand-written
 //! here, in [`crate::scan::match_item`]'s style, with the pattern quoted above
@@ -60,6 +61,8 @@ pub enum Kind {
     Null,
     Map,
     Seq,
+    FlowMap,
+    FlowSeq,
     Block,
     Item,
 }
@@ -71,6 +74,8 @@ impl Kind {
             Kind::Null => "null",
             Kind::Map => "map",
             Kind::Seq => "seq",
+            Kind::FlowMap => "flow-map",
+            Kind::FlowSeq => "flow-seq",
             Kind::Block => "block",
             Kind::Item => "item",
         }
@@ -361,6 +366,21 @@ fn is_block_header(v: &str) -> bool {
     chomp_first || digits_first
 }
 
+/// An inline YAML collection whose children this line-preserving parser does
+/// not attempt to address.
+///
+/// `value` has already had its surrounding gap, padding and trailing comment
+/// split off. Requiring the matching closing delimiter keeps malformed or
+/// multi-line input on the existing conservative path, while a quoted literal
+/// such as `"[a, b]"` begins with its quote and remains a scalar.
+fn flow_collection_kind(value: &str) -> Option<Kind> {
+    match (value.as_bytes().first(), value.as_bytes().last()) {
+        (Some(b'['), Some(b']')) => Some(Kind::FlowSeq),
+        (Some(b'{'), Some(b'}')) => Some(Kind::FlowMap),
+        _ => None,
+    }
+}
+
 /// `INDEX_RE`: `^(.*?)\[(\d+)\]$`, peeling one bracket index off the right.
 ///
 /// The non-greedy prefix and the `$` anchor together mean the `[` is the last
@@ -611,6 +631,8 @@ fn parse_key(
     }
     let kind = if is_block_header(value) {
         Kind::Block
+    } else if let Some(kind) = flow_collection_kind(value) {
+        kind
     } else if end > i {
         let first = lines[i + 1..=end]
             .iter()
@@ -674,7 +696,9 @@ fn parse_item(
     let mut path = prefix_path.to_vec();
     path.push(Seg::Index(n.to_string()));
     let end = block_end(lines, hi, i, ind.len());
-    let split = if content.is_empty() {
+    let (_, item_value, _, _) = split_comment(content);
+    let flow_kind = flow_collection_kind(item_value);
+    let split = if content.is_empty() || flow_kind.is_some() {
         None
     } else {
         split_key(content)
@@ -702,7 +726,7 @@ fn parse_item(
         value,
         pad,
         comment,
-        kind: Kind::Item,
+        kind: flow_kind.unwrap_or(Kind::Item),
         eol: String::new(),
     });
 

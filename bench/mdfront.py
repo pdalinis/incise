@@ -26,11 +26,12 @@ alone. Lines no edit names are never touched at all, which is why comments,
 blank lines and block scalar styles survive without any code that knows they
 exist.
 
-What is deliberately *not* modelled: anchors, aliases, tags, flow mappings
-(`{a: 1}`), flow sequences (`[1, 2]`), multi-document streams, and merge keys.
-None appears in the corpus. They parse as opaque scalar text, which is the safe
-failure: an op that cannot address inside them refuses, and one that rewrites a
-sibling leaves them byte-identical.
+What is deliberately *not* modelled: anchors, aliases, tags, multi-document
+streams, and merge keys. Flow mappings (`{a: 1}`) and flow sequences (`[1, 2]`)
+are recognized as containers but their contents are opaque: an op cannot
+address inside or replace them, while edits to siblings still leave them
+byte-identical. Treating them as scalars is not safe because a scalar set could
+otherwise silently change the YAML type.
 
 **Addressing.** Dotted keys, plus bracket indices into a sequence --
 `authors[0].role`, which `corpus/frontmatter/rich.md:50` names as one of its own
@@ -57,6 +58,15 @@ QUOTED_KEY_RE = re.compile(r"""^("(?:[^"\\]|\\.)*"|'(?:[^']|'')*')[ \t]*:""")
 # A block scalar header: `|`, `>`, with optional chomping and explicit indent.
 BLOCK_RE = re.compile(r"^[|>][+-]?\d*$|^[|>]\d*[+-]?$")
 
+
+def _flow_collection_kind(value):
+    """The opaque container kind for one complete inline collection."""
+    if value.startswith("[") and value.endswith("]"):
+        return "flow-seq"
+    if value.startswith("{") and value.endswith("}"):
+        return "flow-map"
+    return None
+
 # A bracket index in an address: `authors[0]`.
 INDEX_RE = re.compile(r"^(.*?)\[(\d+)\]$")
 
@@ -81,7 +91,7 @@ class Entry:
     value: str            # the value text on the key line, verbatim
     pad: str              # between the value and the comment
     comment: str          # "# ...", verbatim, or ""
-    kind: str             # scalar | null | map | seq | block | item
+    kind: str             # scalar | null | map | seq | flow-map | flow-seq | block | item
     eol: str = ""         # "\r" if this line is CRLF, else ""
 
     @property
@@ -288,8 +298,11 @@ def _parse_key(lines, hi, i, prefix, key_text, rest, path, out):
     end = _block_end(lines, hi, i, len(prefix))
     if end == i and value == "":
         end = _seq_at(lines, hi, i, len(prefix))
+    flow_kind = _flow_collection_kind(value)
     if BLOCK_RE.match(value):
         kind = "block"
+    elif flow_kind is not None:
+        kind = flow_kind
     elif end > i:
         first = next((l for l in lines[i + 1:end + 1] if l.strip()), "")
         kind = "seq" if SEQ_RE.match(first) else "map"
@@ -316,7 +329,9 @@ def _parse_item(lines, hi, i, m, prefix_path, n, out):
     ind, dash, sp, content = m.group(1), m.group(2), m.group(3) or "", m.group(4) or ""
     path = prefix_path + (n,)
     end = _block_end(lines, hi, i, len(ind))
-    split = _split_key(content) if content else None
+    _, item_value, _, _ = _split_comment(content)
+    flow_kind = _flow_collection_kind(item_value)
+    split = _split_key(content) if content and flow_kind is None else None
 
     # A scalar item's trailing comment is split off, so setting its value keeps
     # it; a *map* item's is left in `content` on purpose, because the key on
@@ -327,7 +342,7 @@ def _parse_item(lines, hi, i, m, prefix_path, n, out):
     else:
         value, pad, comment = content, "", ""
     out.append(Entry(path, i, end, ind + dash + sp, "", "", value, pad, comment,
-                     "item"))
+                     flow_kind or "item"))
 
     if split is not None:
         key_text, rest = split

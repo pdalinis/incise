@@ -250,6 +250,25 @@ def test_frontmatter_edit_applies():
           len(before.splitlines()) == len(after.splitlines()))
 
 
+def test_frontmatter_flow_collection_refusal_is_verbatim():
+    """A string-shaped sequence cannot flatten an existing YAML sequence."""
+    path = scratch("bench/synthetic/front-flow.md")
+    before = open(path, "rb").read()
+    out = call("frontmatter_edit", {
+        "action": "set",
+        "path": path,
+        "key": "ingredient_tags",
+        "value": "[three, four]",
+    })
+    error = out.get("error", "")
+    check("flow collection replacement is refused through Hermes",
+          "holds a flow-style sequence" in error
+          and "will not replace it with a scalar" in error,
+          error.replace("\n", " ")[:200])
+    check("flow collection refusal preserves the file byte-for-byte",
+          open(path, "rb").read() == before)
+
+
 def _first_table(path):
     """The heading of the first table, read the way a model would: md_tables."""
     out = call("md_tables", {"path": path})
@@ -1200,6 +1219,7 @@ def main():
     print("plugin: edits")
     test_edit_applies()
     test_frontmatter_edit_applies()
+    test_frontmatter_flow_collection_refusal_is_verbatim()
     test_refusal_is_verbatim()
     test_same_file_edits_are_serialized()
     test_long_refusal_is_capped_by_the_host()

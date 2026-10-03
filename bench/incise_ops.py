@@ -2998,15 +2998,19 @@ def _holds(entry):
         return "a map"
     if entry.kind == "seq":
         return "a sequence"
+    if entry.kind == "flow-map":
+        return "a flow-style map"
+    if entry.kind == "flow-seq":
+        return "a flow-style sequence"
     if entry.kind == "block":
         return "a block scalar"
     return "a map on its `-` line"
 
 
 def _front_value_type(entry, fm):
-    if entry.kind == "map":
+    if entry.kind in ("map", "flow-map"):
         return "object"
-    if entry.kind == "seq":
+    if entry.kind in ("seq", "flow-seq"):
         return "array"
     if entry.kind == "block":
         return "string"
@@ -3204,6 +3208,10 @@ def render_frontmatter(content, path):
             what = _plural(len(fm.children_of(e.path)), "key") + " below it"
         elif e.kind == "seq":
             what = _plural(len(fm.children_of(e.path)), "item")
+        elif e.kind == "flow-map":
+            what = "flow-style map (contents are not addressable)"
+        elif e.kind == "flow-seq":
+            what = "flow-style sequence (items are not addressable)"
         elif e.kind == "block":
             style = "literal" if e.value.startswith("|") else "folded"
             what = f"{style} block scalar, {e.end - e.line} lines"
@@ -3264,6 +3272,10 @@ def render_frontmatter_get(content, path, key=None):
             what = _plural(len(kids), "key") + " below it"
         elif e.kind == "seq":
             what = _plural(len(kids), "item")
+        elif e.kind == "flow-map":
+            what = "flow-style map (contents are not addressable)"
+        elif e.kind == "flow-seq":
+            what = "flow-style sequence (items are not addressable)"
         elif e.kind == "item":
             # A sequence item that is itself a map (`authors[0]`) has no value
             # of its own -- `e.value` holds the first line of the mapping, which
@@ -3428,6 +3440,15 @@ def frontmatter_set(content, key, value=_MISSING, must_absent=_MISSING,
         settable = e.kind in ("scalar", "null") or (
             e.kind == "item" and not _front_children(fm, path))
         if not settable:
+            if e.kind in ("flow-map", "flow-seq"):
+                raise OpError(
+                    f"`{mdfront.format_path(path)}` holds {_holds(e)}, so "
+                    "`frontmatter-set` will not replace it with a scalar.\n"
+                    "  Flow-style collection replacement is not supported. "
+                    "Leave it unchanged, or delete "
+                    f"`{mdfront.format_path(path)}` first if replacing it "
+                    "with a scalar is intended."
+                )
             raise OpError(
                 f"`{mdfront.format_path(path)}` holds {_holds(e)}, so setting "
                 "it to a single value would delete what is under it.\n"

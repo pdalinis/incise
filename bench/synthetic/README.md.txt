@@ -298,6 +298,14 @@ after the block. These three files are the shapes that style does not reach.
   for both — an implementation that checked only `\n` would keep agreeing on
   every LF document ever written.
 
+- **front-flow.md** — flow-style YAML sequences and maps at the root, below a
+  mapping, and as sequence items, paired with quoted strings having the same
+  bracket shapes. The parser deliberately keeps collection contents opaque,
+  but must still classify the outer value as a container: otherwise a scalar
+  `frontmatter-set` silently changes `[one, two]` from an array to a string.
+  The quoted controls prove that syntax inside quotes remains ordinary scalar
+  data rather than being guessed into a collection.
+
 ## `describe_change`
 
 - **no-headings.md** — a document with a table, a list and prose, and **no

@@ -255,6 +255,8 @@ fn holds(entry: &Entry) -> &'static str {
     match entry.kind {
         Kind::Map => "a map",
         Kind::Seq => "a sequence",
+        Kind::FlowMap => "a flow-style map",
+        Kind::FlowSeq => "a flow-style sequence",
         Kind::Block => "a block scalar",
         _ => "a map on its `-` line",
     }
@@ -274,6 +276,8 @@ fn front_value_type(entry: &Entry, fm: &FrontMatter) -> &'static str {
     match entry.kind {
         Kind::Map => "object",
         Kind::Seq => "array",
+        Kind::FlowMap => "object",
+        Kind::FlowSeq => "array",
         Kind::Block => "string",
         Kind::Null => "null",
         Kind::Item if !front_children(fm, &entry.path).is_empty() => "object",
@@ -552,6 +556,8 @@ pub fn render_frontmatter(content: &str, path: &str) -> String {
             Kind::Item => continue,
             Kind::Map => format!("{} below it", plural(fm.children_of(&e.path).len(), "key")),
             Kind::Seq => plural(fm.children_of(&e.path).len(), "item"),
+            Kind::FlowMap => "flow-style map (contents are not addressable)".to_string(),
+            Kind::FlowSeq => "flow-style sequence (items are not addressable)".to_string(),
             Kind::Block => format!("{} block scalar, {} lines", block_style(e), e.end - e.line),
             Kind::Null => "empty (null)".to_string(),
             Kind::Scalar => "scalar".to_string(),
@@ -628,6 +634,8 @@ pub fn render_frontmatter_get(content: &str, path: &str, key: Option<&Value>) ->
         let what = match e.kind {
             Kind::Map => format!("{} below it", plural(kids.len(), "key")),
             Kind::Seq => plural(kids.len(), "item"),
+            Kind::FlowMap => "flow-style map (contents are not addressable)".to_string(),
+            Kind::FlowSeq => "flow-style sequence (items are not addressable)".to_string(),
             // A sequence item that is itself a map (`authors[0]`) has no value
             // of its own — `e.value` holds the first line of the mapping, which
             // would print `name: Peter` beside a path whose children print the
@@ -856,13 +864,29 @@ pub fn frontmatter_set_guarded(
                 .iter()
                 .map(|child| format_path(&child.path))
                 .collect();
-            let mut repair = Repair::new(
-                "would_replace_container",
-                "Set one exact child key instead, or explicitly delete the container first.",
-            );
+            let flow = matches!(e.kind, Kind::FlowMap | Kind::FlowSeq);
+            let remedy = if flow {
+                "Flow-style collection replacement is not supported. Leave the key unchanged, or explicitly delete it first if replacing it with a scalar is intended."
+            } else {
+                "Set one exact child key instead, or explicitly delete the container first."
+            };
+            let mut repair = Repair::new("would_replace_container", remedy);
             repair.argument = Some("key".to_string());
             repair.received = Some(format_path(&path));
             repair.candidates = child_keys;
+            if flow {
+                return Err(OpError::with_repair(
+                    format!(
+                        "`{}` holds {}, so `frontmatter-set` will not replace it with a scalar.\n  \
+                         Flow-style collection replacement is not supported. Leave it unchanged, or \
+                         delete `{}` first if replacing it with a scalar is intended.",
+                        format_path(&path),
+                        holds(e),
+                        format_path(&path)
+                    ),
+                    repair,
+                ));
+            }
             return Err(OpError::with_repair(
                 format!(
                     "`{}` holds {}, so setting it to a single value would delete \

@@ -1899,7 +1899,8 @@ def test_frontmatter_touches_one_line():
                 # else is a key the family can address and cannot edit, which is
                 # the shape of refusal 5.3 exists to rule out.
                 check(f"refusal names a container: {rel} {key}",
-                      e.kind in ("map", "seq", "block", "item")
+                      e.kind in ("map", "seq", "flow-map", "flow-seq",
+                                 "block", "item")
                       or "." in key,
                       err.replace("\n", " ")[:80])
                 continue
@@ -2066,6 +2067,58 @@ def test_frontmatter_existence_guards():
     check("existence guards require booleans",
           bool(err) and "must be a boolean" in err,
           (err or "").replace("\n", " "))
+
+
+def test_frontmatter_flow_collections_refuse_scalar_replacement():
+    """Opaque flow collections cannot be flattened through scalar set."""
+    from incise_ops import frontmatter_get
+
+    content = open(os.path.join(ROOT, "bench/synthetic/front-flow.md"),
+                   newline="").read()
+    fm = mdfront.find_frontmatter(content)
+    expected = {
+        "ingredient_tags": "flow-seq",
+        "settings": "flow-map",
+        "nested.values": "flow-seq",
+        "collections[0]": "flow-seq",
+        "collections[1]": "flow-map",
+    }
+    by = fm.by_path()
+    for key, kind in expected.items():
+        path = mdfront.parse_path(key)
+        check(f"{key} is recognized as {kind}",
+              by[path].kind == kind, by[path].kind)
+        after, err = apply_op(content, "frontmatter-set", {
+            "key": key, "value": "[three, four]",
+        })
+        check(f"scalar replacement of {key} refuses without a document",
+              after is None and bool(err), repr(after))
+        check(f"{key} refusal names the flow collection",
+              "holds a flow-style" in (err or "")
+              and "will not replace it with a scalar" in (err or ""),
+              (err or "").replace("\n", " "))
+
+    after, err = apply_op(content, "frontmatter-set", {
+        "key": "ingredient_tags", "value": ["three", "four"],
+    })
+    check("typed sequence replacement still refuses without a document",
+          after is None and bool(err) and "arrived as an array" in err,
+          (err or "").replace("\n", " "))
+
+    changed, err = apply_op(content, "frontmatter-set", {
+        "key": "quoted_sequence", "value": "[three, four]",
+    })
+    check("quoted array-shaped scalar remains settable",
+          err is None and 'quoted_sequence: "[three, four]"' in changed,
+          (err or "")[:120])
+    check("setting the quoted scalar preserves the flow sequence",
+          "ingredient_tags: [one, two]" in (changed or ""))
+
+    got = {key["path"]: key for key in frontmatter_get(content)["keys"]}
+    check("flow sequence read stays typed as an array",
+          got["ingredient_tags"]["kind"] == "flow-seq"
+          and got["ingredient_tags"]["type"] == "array",
+          str(got["ingredient_tags"]))
 
 
 def test_frontmatter_read():
@@ -2941,6 +2994,7 @@ def main():
                test_frontmatter_goldens, test_frontmatter_roundtrip,
                test_frontmatter_touches_one_line, test_frontmatter_states,
                test_frontmatter_refusals, test_frontmatter_existence_guards,
+               test_frontmatter_flow_collections_refuse_scalar_replacement,
                test_frontmatter_read, test_frontmatter_read_scheme,
                test_tasks_are_regenerable,
                test_action_check,

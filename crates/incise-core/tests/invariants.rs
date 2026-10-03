@@ -1635,6 +1635,72 @@ fn frontmatter_existence_guards_refuse_without_writing() {
     );
 }
 
+/// Flow collections are containers even though their children are opaque.
+///
+/// A string-shaped replacement is the dangerous transport path: the schema
+/// permits only a scalar, so an agent can encode a requested sequence as
+/// `"[three, four]"`. That string is valid user data and cannot be reinterpreted
+/// as an array. The existing target therefore supplies the safety boundary:
+/// replacing a flow collection through scalar `frontmatter-set` must refuse.
+#[test]
+fn flow_collections_refuse_scalar_replacement() {
+    let content = "---\ningredient_tags: [one, two]\nsettings: {mode: fast}\nquoted_sequence: \"[one, two]\"\ncollections:\n  - [alpha, beta]\n  - {name: first}\n---\n\n# Recipe\n";
+    let replacement = json::Value::Str("[three, four]".to_string());
+    let fm = find_frontmatter(content);
+
+    for (name, kind) in [
+        ("ingredient_tags", Kind::FlowSeq),
+        ("settings", Kind::FlowMap),
+        ("collections[0]", Kind::FlowSeq),
+        ("collections[1]", Kind::FlowMap),
+    ] {
+        let path = json::Value::Str(name.to_string());
+        let parsed = fm
+            .by_path(&incise_core::front::parse_path(name).unwrap())
+            .unwrap();
+        assert_eq!(
+            parsed.kind, kind,
+            "{name} was not recognized as a container"
+        );
+
+        let err = frontmatter_set(content, Some(&path), Some(&replacement)).unwrap_err();
+        assert!(
+            err.message().contains("holds a flow-style"),
+            "{name}: {err}"
+        );
+        assert!(
+            err.message().contains("will not replace it with a scalar"),
+            "{name}: {err}"
+        );
+        assert_eq!(
+            err.repair().map(|repair| repair.code.as_str()),
+            Some("would_replace_container")
+        );
+    }
+
+    let typed = json::Value::Array(vec![
+        json::Value::Str("three".to_string()),
+        json::Value::Str("four".to_string()),
+    ]);
+    let key = json::Value::Str("ingredient_tags".to_string());
+    let typed_err = frontmatter_set(content, Some(&key), Some(&typed)).unwrap_err();
+    assert!(typed_err.message().contains("arrived as an array"));
+
+    let quoted = json::Value::Str("quoted_sequence".to_string());
+    let changed = frontmatter_set(content, Some(&quoted), Some(&replacement)).unwrap();
+    assert!(changed.contains("quoted_sequence: \"[three, four]\""));
+    assert!(changed.contains("ingredient_tags: [one, two]"));
+
+    let got = frontmatter_get(content, None).unwrap();
+    let ingredient_tags = got
+        .keys
+        .iter()
+        .find(|key| key.path == "ingredient_tags")
+        .unwrap();
+    assert_eq!(ingredient_tags.kind, "flow-seq");
+    assert_eq!(ingredient_tags.value_type, "array");
+}
+
 /// A set rewrites the key's own line and no other, for every settable key.
 ///
 /// The containers are the other half of the claim, and they are counted rather
