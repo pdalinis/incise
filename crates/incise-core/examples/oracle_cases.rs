@@ -35,6 +35,7 @@ use incise_core::ops::table::{
 };
 use incise_core::table::find_tables;
 use incise_core::{args as va, json};
+use incise_core::{check_document, fix_safe, render_check_report};
 
 const FS: char = '\u{1f}'; // between fields
 const RS: char = '\u{1e}'; // between args
@@ -359,6 +360,29 @@ fn run(content: &str, op: &str, a: &Args) -> (&'static str, String) {
             "ok",
             render_table_list(content, a.get("path").map(String::as_str).unwrap_or("")),
         ),
+        "check_document" => ("ok", render_check_report(&check_document(content))),
+        "check_document_text" => {
+            let checked = match a.get("text").and_then(|text| json::parse(text)) {
+                Some(json::Value::Str(value)) => value,
+                _ => panic!("checker text case is not a JSON string"),
+            };
+            ("ok", render_check_report(&check_document(&checked)))
+        }
+        "fix_safe_text" => {
+            let checked = match a.get("text").and_then(|text| json::parse(text)) {
+                Some(json::Value::Str(value)) => value,
+                _ => panic!("safe-fix text case is not a JSON string"),
+            };
+            let fixed = fix_safe(&checked);
+            (
+                "ok",
+                format!(
+                    "{}\n--\n{}",
+                    render_check_report(&fixed.report),
+                    fixed.content
+                ),
+            )
+        }
         "list_tables" => {
             let dump = list_tables(content)
                 .iter()

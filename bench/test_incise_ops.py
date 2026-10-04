@@ -22,8 +22,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "bench"))
 
 from incise_ops import (  # noqa: E402
-    OPS, OpError, apply_op, describe_change, list_lists, list_tables,
-    resolve_list, resolve_section, resolve_table, section_outline,
+    OPS, OpError, apply_op, check_document, describe_change, fix_safe,
+    list_lists, list_tables, resolve_list, resolve_section, resolve_table,
+    section_outline,
 )
 import mdlist  # noqa: E402
 from mdlist import find_lists  # noqa: E402
@@ -2971,8 +2972,32 @@ def test_read_grading():
           check_result(task, before, before, good)[0] == "correct")
 
 
+def test_document_check():
+    content = ("---\nowner: first\nowner: second\n---\n\n"
+               "# Hazards\n\n"
+               "| A | A |\r\n"
+               " | --- | --- |\n"
+               "| one |\r\n")
+    report = check_document(content)
+    codes = {finding["code"] for finding in report["findings"]}
+    for code in ("frontmatter.duplicate_path", "table.duplicate_column",
+                 "table.mixed_indentation", "table.mixed_line_endings",
+                 "table.non_rectangular"):
+        check(f"checker reports {code}", code in codes, repr(report))
+    check("checker status is the greatest severity", report["status"] == "error",
+          repr(report))
+    check("checker spans are valid UTF-8 byte ranges",
+          all(0 <= finding["span"]["start"] <= finding["span"]["end"]
+              <= len(content.encode("utf-8")) for finding in report["findings"]),
+          repr(report))
+    fixed = fix_safe(content)
+    check("v1 safe fix is byte-identical", fixed["content"] == content)
+    check("v1 safe fix claims no repairs", fixed["repaired"] == [])
+    check("v1 safe fix preserves the report", fixed["report"] == report)
+
+
 def main():
-    for fn in (test_benchmark_tasks, test_corpus_roundtrip, test_whole_table_delete,
+    for fn in (test_document_check, test_benchmark_tasks, test_corpus_roundtrip, test_whole_table_delete,
                test_whole_table_delete_tasks,
                test_outside_bytes_untouched,
                test_widen_never_shrink, test_alignment_markers_survive,

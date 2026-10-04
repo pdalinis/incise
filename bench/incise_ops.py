@@ -171,6 +171,177 @@ def render_table_list(content, path):
     return "\n".join(lines)
 
 
+# --------------------------------------------------------------------------
+# document checks
+# --------------------------------------------------------------------------
+
+CHECK_SCHEMA_VERSION = 1
+
+
+def _check_span(content, start, end):
+    """UTF-8 byte offsets for an inclusive range of line indexes."""
+    parts = content.split("\n")
+    offset = 0
+    span_start = 0
+    for index, line in enumerate(parts):
+        if index == start:
+            span_start = offset
+        offset += len(line.encode("utf-8"))
+        if index < len(parts) - 1:
+            offset += 1
+        if index == end:
+            return {"start": span_start, "end": offset}
+    return {"start": span_start, "end": len(content.encode("utf-8"))}
+
+
+def check_document(content):
+    """Report structural hazards using the same parsers as the edit ops.
+
+    This is an independent oracle for the Rust checker, not a style linter.
+    A finding is included only when a condition makes semantic addressing
+    ambiguous, makes an existing operation refuse, or has an existing repair
+    that still requires explicit intent.
+    """
+    findings = []
+    tables = find_tables(content)
+    entries = list_tables(content, "")
+    for table, entry in zip(tables, entries):
+        address = {"table": {"heading": entry["heading"],
+                              "ordinal": entry["ordinal"]}}
+        span = _check_span(content, table.start, table.end)
+        counts = [len(split_row(line)) for line in table.lines]
+        want = counts[0] if counts else 0
+        rectangular = all(count == want for count in counts)
+        mismatch = next(((i, count) for i, count in enumerate(counts)
+                         if count != want), None)
+        if mismatch is not None:
+            index, got = mismatch
+            place = "the delimiter row" if index == 1 else f"row {max(index - 1, 0)}"
+            findings.append({
+                "code": "table.non_rectangular",
+                "severity": "error",
+                "message": (f'table under "{entry["heading"]}" ordinal '
+                            f'{entry["ordinal"]} is not rectangular: the header '
+                            f'has {want} columns but {place} has {got}.'),
+                "address": address,
+                "span": span,
+                "repair_class": "manual",
+                "repair": None,
+            })
+
+        has_crlf = any(line.endswith("\r") for line in table.lines)
+        has_lf = any(not line.endswith("\r") for line in table.lines)
+        if has_crlf and has_lf:
+            findings.append({
+                "code": "table.mixed_line_endings",
+                "severity": "error",
+                "message": (f'table under "{entry["heading"]}" ordinal '
+                            f'{entry["ordinal"]} mixes CRLF and LF line endings.'),
+                "address": address,
+                "span": span,
+                "repair_class": "manual",
+                "repair": None,
+            })
+
+        indents = {line[:len(line) - len(line.lstrip())] for line in table.lines}
+        consistent_indent = len(indents) == 1
+        if not consistent_indent:
+            findings.append({
+                "code": "table.mixed_indentation",
+                "severity": "error",
+                "message": (f'table under "{entry["heading"]}" ordinal '
+                            f'{entry["ordinal"]} has inconsistent structural indentation.'),
+                "address": address,
+                "span": span,
+                "repair_class": "manual",
+                "repair": None,
+            })
+
+        column_counts = {}
+        for column in table.cells(table.header):
+            column_counts[column] = column_counts.get(column, 0) + 1
+        for column in sorted(column_counts):
+            count = column_counts[column]
+            if count <= 1:
+                continue
+            findings.append({
+                "code": "table.duplicate_column",
+                "severity": "warning",
+                "message": (f'table under "{entry["heading"]}" ordinal '
+                            f'{entry["ordinal"]} has duplicate column "{column}" '
+                            f'({count} occurrences), so that name does not identify one cell.'),
+                "address": address,
+                "span": span,
+                "repair_class": "manual",
+                "repair": None,
+            })
+
+        if (rectangular and not (has_crlf and has_lf) and consistent_indent
+                and (not table.is_aligned() or _has_tabs(table))):
+            table_address = address["table"]
+            try:
+                table_realign(content, table_address)
+            except OpError:
+                pass
+            else:
+                findings.append({
+                    "code": "table.ragged_alignment",
+                    "severity": "info",
+                    "message": (f'table under "{entry["heading"]}" ordinal '
+                                f'{entry["ordinal"]} is rectangular but not uniformly '
+                                'aligned; use table-realign only if reformatting the '
+                                'whole table is intended.'),
+                    "address": address,
+                    "span": span,
+                    "repair_class": "explicit",
+                    "repair": {"operation": "table-realign",
+                               "arguments": {"table": table_address}},
+                })
+
+    front = mdfront.find_frontmatter(content)
+    if front.present and front.fmt == "yaml":
+        by_path = {}
+        for index, entry in enumerate(front.entries):
+            by_path.setdefault(entry.path, []).append(index)
+        for path, indices in by_path.items():
+            if len(indices) <= 1:
+                continue
+            first = front.entries[indices[0]]
+            last = front.entries[indices[-1]]
+            key = mdfront.format_path(path)
+            findings.append({
+                "code": "frontmatter.duplicate_path",
+                "severity": "warning",
+                "message": (f'frontmatter path "{key}" appears {len(indices)} times; '
+                            'Incise edits the last occurrence, while other YAML '
+                            'readers may disagree.'),
+                "address": {"frontmatter": {"key": key}},
+                "span": _check_span(content, first.line, last.end),
+                "repair_class": "manual",
+                "repair": None,
+            })
+
+    def address_key(finding):
+        address = finding["address"]
+        if "table" in address:
+            table = address["table"]
+            return f'table:{table["heading"]}:{table["ordinal"]}'
+        return f'frontmatter:{address["frontmatter"]["key"]}'
+
+    findings.sort(key=lambda finding: (finding["span"]["start"],
+                                       finding["code"], address_key(finding)))
+    rank = {"info": 0, "warning": 1, "error": 2}
+    status = (max((finding["severity"] for finding in findings), key=rank.get)
+              if findings else "clean")
+    return {"schema_version": CHECK_SCHEMA_VERSION,
+            "status": status, "findings": findings}
+
+
+def fix_safe(content):
+    """Apply allowlisted automatic repairs; v1 deliberately has none."""
+    return {"content": content, "report": check_document(content), "repaired": []}
+
+
 def table_get(content, address, filter=None):
     """Rows of one named table, optionally filtered. A read, not an edit.
 

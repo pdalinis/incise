@@ -41,6 +41,8 @@ Every pull request that touches behavior or benchmarking should state one classi
 
 Use no model-facing effect only when the bytes visible to the model and the executor behavior are unchanged. Replay or regrade is appropriate when stored calls can answer the question without asking the model to choose again. A live rerun is required whenever the change can alter which call the model emits or whether it continues to another turn. Changes to the published tool set or shared framing require composition-level consideration.
 
+The structural checker has two deliberately separate surfaces. Finding detection, report JSON, CLI behavior, and the empty automatic-fix allowlist are deterministic executor contracts covered by the oracle and invariant suites. The packaged `incise-check` skills are model instructions when explicitly invoked, even though Pi disables implicit invocation and Hermes does not add plugin skills to the initial prompt. Enabling implicit selection, publishing native checker tools, changing finding prose or repair classification, or recommending automatic use in every editing turn requires a new reach analysis and the corresponding preregistered model measurement.
+
 ## GPU-backed measurements
 
 Do not rerun the full GPU benchmark for every contribution. First establish reach: identify which recorded calls, tasks, refusal branches, or tool combinations can encounter the changed surface. Prefer deterministic tests, recorded-call replay, counterfactual regrading, and ceiling checks when they answer the question.

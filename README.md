@@ -69,6 +69,10 @@ incise outline vault/Projects.md
 
 For exact values after structural discovery, use `incise rows notes.md --table Components`, `incise items notes.md --list Tasks`, or `incise keys notes.md`. Their JSON forms carry the structured rows, list items, or flattened frontmatter keys together with the file hash.
 
+### Check structural hazards
+
+Run `incise check notes.md --json` to report structural hazards that can make Incise addressing ambiguous or force an edit to refuse. This is deliberately narrower than a Markdown style linter. Checking never writes. `incise check notes.md --fix-safe --if-match HASH --json` applies only repairs classified as `automatic`; explicit repairs still require the named semantic operation, and manual findings require user intent. The first release has no automatic repair rules, so safe-fix is a hash-guarded no-op until a rule earns that classification.
+
 ### Make a semantic edit
 
 ```bash
@@ -96,13 +100,13 @@ If several tables share the heading, add `--ordinal N`. Whole-table deletion is 
 
 ## What Incise can edit
 
-| Markdown structure   | Operations                                                                       |
-| -------------------- | -------------------------------------------------------------------------------- |
-| **Tables**           | Add rows, update cells, delete rows or whole tables, realign columns, query rows |
-| **Lists & tasks**    | Add/remove items, toggle checkboxes                                              |
-| **Sections**         | Append, replace, insert, delete, rename, change heading levels                   |
-| **YAML frontmatter** | Read, set, and delete nested keys                                                |
-| **Structure**        | Discover headings, tables, lists, frontmatter, rows, keys, and hashes            |
+| Markdown structure   | Operations                                                                                |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| **Tables**           | Add rows, update cells, delete rows or whole tables, realign columns, query rows          |
+| **Lists & tasks**    | Add/remove items, toggle checkboxes                                                       |
+| **Sections**         | Append, replace, insert, delete, rename, change heading levels                            |
+| **YAML frontmatter** | Read, set, and delete nested keys                                                         |
+| **Structure**        | Discover headings, tables, lists, frontmatter, rows, keys, hashes, and structural hazards |
 
 ## Use Incise with an AI agent
 

@@ -33,8 +33,9 @@ use incise_core::json::Value;
 use incise_core::ops::dispatch::to_address;
 use incise_core::ops::list::{list_address_fields, render_list_summary};
 use incise_core::{
-    args, frontmatter_get, list_get, render_frontmatter, render_frontmatter_get, render_list_items,
-    render_section_outline, render_table_list, render_table_rows, table_get,
+    args, check_document, fix_safe, frontmatter_get, list_get, render_frontmatter,
+    render_frontmatter_get, render_list_items, render_section_outline, render_table_list,
+    render_table_rows, table_get,
 };
 
 mod io;
@@ -43,7 +44,7 @@ mod out;
 mod schema;
 
 use opargs::{Kind, FLAGS};
-use out::{Format, EXIT_USAGE};
+use out::{CheckMeta, Format, EXIT_USAGE};
 
 fn main() {
     let matches = match cli().try_get_matches() {
@@ -89,6 +90,32 @@ fn cli() -> Command {
         .subcommand(rows_subcommand())
         .subcommand(items_subcommand())
         .subcommand(keys_subcommand())
+        .subcommand(
+            Command::new("check")
+                .about("Check for structural hazards that affect Incise edits.")
+                .long_about(
+                    "Check for structural hazards that affect Incise edits.\n\n\
+                     This is not a Markdown style linter. Checking is read-only. \
+                     --fix-safe applies only deterministic repairs explicitly classified \
+                     as automatic; it never applies explicit or manual repairs.",
+                )
+                .arg(file_arg())
+                .arg(
+                    Arg::new("fix-safe")
+                        .long("fix-safe")
+                        .action(ArgAction::SetTrue)
+                        .requires("if-match")
+                        .help("Atomically apply allowlisted automatic repairs"),
+                )
+                .arg(
+                    Arg::new("if-match")
+                        .long("if-match")
+                        .value_name("HASH")
+                        .requires("fix-safe")
+                        .help("Refuse unless the file still hashes to this (any prefix)"),
+                )
+                .args(common_args()),
+        )
         .subcommand(
             Command::new("hash")
                 .about("Print the file's content hash, for --if-match.")
@@ -357,6 +384,7 @@ fn run(m: &ArgMatches) -> i32 {
         Some(("rows", s)) => read(s, View::Rows),
         Some(("items", s)) => read(s, View::Items),
         Some(("keys", s)) => read(s, View::Keys),
+        Some(("check", s)) => document_check(s),
         Some(("hash", s)) => hash(s),
         Some(("schema", s)) => print_schema(s),
         Some((op, s)) if incise_core::OPS.contains(&op) => edit(op, s),
@@ -487,14 +515,8 @@ fn edit(op: &str, m: &ArgMatches) -> i32 {
     };
     let hash = io::sha256_hex(&bytes);
 
-    if let Some(want) = m.get_one::<String>("if-match") {
-        let want = want.trim().to_ascii_lowercase();
-        if want.is_empty() || !want.chars().all(|c| c.is_ascii_hexdigit()) {
-            return out::usage(&f, "--if-match takes a hex hash, or a prefix of one");
-        }
-        if !hash.starts_with(&want) {
-            return out::stale(&f, &want, &hash, &path);
-        }
+    if let Err(code) = validate_match(m, &f, &path, &hash) {
+        return code;
     }
 
     match incise_core::apply_op(&before, op, Some(&args)) {
@@ -531,6 +553,89 @@ fn edit(op: &str, m: &ArgMatches) -> i32 {
             out::success(&f, &description, &hash, changed, written, &path)
         }
     }
+}
+
+fn validate_match(
+    m: &ArgMatches,
+    f: &Format,
+    path: &std::path::Path,
+    hash: &str,
+) -> Result<(), i32> {
+    let Some(want) = m.get_one::<String>("if-match") else {
+        return Ok(());
+    };
+    let want = want.trim().to_ascii_lowercase();
+    if want.is_empty() || !want.chars().all(|c| c.is_ascii_hexdigit()) {
+        return Err(out::usage(
+            f,
+            "--if-match takes a hex hash, or a prefix of one",
+        ));
+    }
+    if !hash.starts_with(&want) {
+        return Err(out::stale(f, &want, hash, path));
+    }
+    Ok(())
+}
+
+/// Read-only structural checking, with an explicit transactional safe-fix mode.
+fn document_check(m: &ArgMatches) -> i32 {
+    let f = format_of(m);
+    let path = match path_of(m) {
+        Ok(path) => path,
+        Err(message) => return out::usage(&f, message),
+    };
+    let bytes = match io::read_bytes(&path) {
+        Ok(bytes) => bytes,
+        Err(error) => return out::usage(&f, &error.0),
+    };
+    let content = match io::to_text(&bytes, &path) {
+        Ok(content) => content,
+        Err(error) => return out::usage(&f, &error.0),
+    };
+    let before_hash = io::sha256_hex(&bytes);
+    if let Err(code) = validate_match(m, &f, &path, &before_hash) {
+        return code;
+    }
+
+    if !m.get_flag("fix-safe") {
+        return out::check_view(
+            &f,
+            &check_document(&content),
+            &CheckMeta {
+                hash: &before_hash,
+                before_hash: None,
+                path: &path,
+                fix_safe: false,
+                changed: false,
+                repaired: &[],
+            },
+        );
+    }
+
+    let fixed = fix_safe(&content);
+    let changed = fixed.content != content;
+    if changed {
+        if let Err(error) = io::write_atomic(&path, &fixed.content, &bytes) {
+            return out::usage(&f, &error.0);
+        }
+    }
+    let after_hash = if changed {
+        io::sha256_hex(fixed.content.as_bytes())
+    } else {
+        before_hash.clone()
+    };
+    out::check_view(
+        &f,
+        &fixed.report,
+        &CheckMeta {
+            hash: &after_hash,
+            before_hash: Some(&before_hash),
+            path: &path,
+            fix_safe: true,
+            changed,
+            repaired: &fixed.repaired,
+        },
+    )
 }
 
 fn is_singleton_object_array(value: &Value) -> bool {

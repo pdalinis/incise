@@ -73,10 +73,87 @@ use incise_core::ops::table::{
     TableAddress, Values,
 };
 use incise_core::table::{find_tables, outside_table, Table};
+use incise_core::{check_document, fix_safe, CheckAddress, RepairClass};
 
 /// Short enough never to widen a column — this is a round-trip test, not a
 /// re-pad test, and a widening value would legitimately fail to shrink back.
 const SENTINEL: &str = "zq7";
+
+#[test]
+fn checking_and_safe_fixing_never_change_v1_input() {
+    let mut checked = 0;
+    for (rel, content) in corpus() {
+        let report = check_document(&content);
+        let fixed = fix_safe(&content);
+        assert_eq!(fixed.content, content, "{rel}: safe fix changed bytes");
+        assert!(fixed.repaired.is_empty(), "{rel}: v1 claimed a repair");
+        assert_eq!(fixed.report, report, "{rel}: safe fix changed the report");
+        for finding in &report.findings {
+            assert!(
+                finding.span.start <= finding.span.end,
+                "{rel}: reversed span"
+            );
+            assert!(
+                finding.span.end <= content.len(),
+                "{rel}: span exceeds bytes"
+            );
+            assert!(
+                content.is_char_boundary(finding.span.start),
+                "{rel}: bad UTF-8 start"
+            );
+            assert!(
+                content.is_char_boundary(finding.span.end),
+                "{rel}: bad UTF-8 end"
+            );
+            assert_ne!(
+                finding.repair_class,
+                RepairClass::Automatic,
+                "{rel}: v1 acquired an automatic repair without changing the contract"
+            );
+            if finding.repair_class == RepairClass::Explicit {
+                let CheckAddress::Table { heading, ordinal } = &finding.address else {
+                    panic!("{rel}: explicit repair has no table address")
+                };
+                assert_eq!(finding.repair.as_ref().unwrap().operation, "table-realign");
+                let address = TableAddress {
+                    heading: Some(json::Value::Str(heading.clone())),
+                    ordinal: Some(json::Value::Int(*ordinal as i64)),
+                };
+                table_realign(&content, &address)
+                    .unwrap_or_else(|error| panic!("{rel}: advertised repair refused: {error}"));
+            }
+        }
+        checked += 1;
+    }
+    assert!(checked > 20, "only {checked} documents checked");
+}
+
+#[test]
+fn every_v1_structural_hazard_has_a_stable_code() {
+    let content = concat!(
+        "---\nowner: first\nowner: second\n---\n\n",
+        "# Hazards\n\n",
+        "| A | A |\r\n",
+        " | --- | --- |\n",
+        "| one |\r\n",
+    );
+    let report = check_document(content);
+    let codes = report
+        .findings
+        .iter()
+        .map(|finding| finding.code)
+        .collect::<std::collections::BTreeSet<_>>();
+    for code in [
+        "frontmatter.duplicate_path",
+        "table.duplicate_column",
+        "table.mixed_indentation",
+        "table.mixed_line_endings",
+        "table.non_rectangular",
+    ] {
+        assert!(codes.contains(code), "missing {code}: {report:#?}");
+    }
+    assert_eq!(report.status(), "error");
+}
 
 #[test]
 fn the_list_read_exposes_exact_text_and_nesting_without_parser_bookkeeping() {
