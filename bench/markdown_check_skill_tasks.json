@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "clean-basic",
+      "initial": "# Note\n\nEverything is structurally sound.\n",
+      "expected": "# Note\n\nEverything is structurally sound.\n",
+      "expected_codes": [],
+      "expected_status": "clean",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and do not make unrelated changes."
+    },
+    {
+      "id": "error-non-rectangular",
+      "initial": "# Inventory\n\n| Item | Owner |\n| --- | --- |\n| oven |\n",
+      "expected": "# Inventory\n\n| Item | Owner |\n| --- | --- |\n| oven |\n",
+      "expected_codes": ["table.non_rectangular"],
+      "expected_status": "error",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and do not guess at or rewrite ambiguous table data."
+    },
+    {
+      "id": "error-mixed-line-endings",
+      "initial": "# Inventory\r\n\r\n| Item | Owner |\r\n| ---- | ----- |\n| oven | ada   |\r\n",
+      "expected": "# Inventory\r\n\r\n| Item | Owner |\r\n| ---- | ----- |\n| oven | ada   |\r\n",
+      "expected_codes": ["table.mixed_line_endings"],
+      "expected_status": "error",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result; preserve its exact line endings and do not repair ambiguous findings."
+    },
+    {
+      "id": "error-mixed-indentation",
+      "initial": "# Inventory\n\n| Item | Owner |\n | ---- | ----- |\n| oven | ada   |\n",
+      "expected": "# Inventory\n\n| Item | Owner |\n | ---- | ----- |\n| oven | ada   |\n",
+      "expected_codes": ["table.mixed_indentation"],
+      "expected_status": "error",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and do not normalize indentation or rewrite the table."
+    },
+    {
+      "id": "warning-duplicate-column",
+      "initial": "# Inventory\n\n| Item | Item |\n| ---- | ---- |\n| oven | ada  |\n",
+      "expected": "# Inventory\n\n| Item | Item |\n| ---- | ---- |\n| oven | ada  |\n",
+      "expected_codes": ["table.duplicate_column"],
+      "expected_status": "warning",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and do not rename or delete either duplicate column."
+    },
+    {
+      "id": "warning-duplicate-frontmatter",
+      "initial": "---\nowner: ada\nowner: lin\ntags: [bread, notes]\n---\n\n# Note\n",
+      "expected": "---\nowner: ada\nowner: lin\ntags: [bread, notes]\n---\n\n# Note\n",
+      "expected_codes": ["frontmatter.duplicate_path"],
+      "expected_status": "warning",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and leave ambiguous frontmatter byte-identical."
+    },
+    {
+      "id": "explicit-ragged-report-only",
+      "initial": "# Inventory\n\n| Item | Owner |\n| --- | --- |\n| oven | ada |\n",
+      "expected": "# Inventory\n\n| Item | Owner |\n| --- | --- |\n| oven | ada |\n",
+      "expected_codes": ["table.ragged_alignment"],
+      "expected_status": "info",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise and report the result. Do not reformat anything; this request does not authorize an explicit repair."
+    },
+    {
+      "id": "explicit-ragged-realign",
+      "initial": "# Inventory\n\n| Item | Owner |\n| --- | --- |\n| oven | ada |\n",
+      "expected": "# Inventory\n\n| Item | Owner |\n| ---- | ----- |\n| oven | ada   |\n",
+      "expected_codes": ["table.ragged_alignment"],
+      "expected_status": "info",
+      "authorize_realign": true,
+      "prompt": "Validate note.md with Incise. If it reports table.ragged_alignment, realign that table with the named Incise semantic operation, then recheck. Do not make unrelated changes."
+    },
+    {
+      "id": "clean-crlf",
+      "initial": "# Inventory\r\n\r\n| Item | Owner |\r\n| ---- | ----- |\r\n| oven | ada   |\r\n",
+      "expected": "# Inventory\r\n\r\n| Item | Owner |\r\n| ---- | ----- |\r\n| oven | ada   |\r\n",
+      "expected_codes": [],
+      "expected_status": "clean",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. It uses intentional CRLF bytes; report the result without normalizing them."
+    },
+    {
+      "id": "clean-missing-final-newline",
+      "initial": "# Note\n\nThe missing final newline is intentional.",
+      "expected": "# Note\n\nThe missing final newline is intentional.",
+      "expected_codes": [],
+      "expected_status": "clean",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. Report the result and preserve the intentional missing final newline."
+    },
+    {
+      "id": "clean-repeated-headings",
+      "initial": "# Log\n\n## Day\n\nFirst entry.\n\n## Day\n\nSecond entry.\n",
+      "expected": "# Log\n\n## Day\n\nFirst entry.\n\n## Day\n\nSecond entry.\n",
+      "expected_codes": [],
+      "expected_status": "clean",
+      "authorize_realign": false,
+      "prompt": "Validate note.md for structural hazards with Incise. The repeated headings are intentional; report the result without editing them."
+    },
+    {
+      "id": "clean-escaped-pipe-completed-edit",
+      "initial": "# Components\n\n| Key  | Value   |\n| ---- | ------- |\n| x\\|y | literal |\n",
+      "expected": "# Components\n\n| Key  | Value   |\n| ---- | ------- |\n| x\\|y | literal |\n",
+      "expected_codes": [],
+      "expected_status": "clean",
+      "authorize_realign": false,
+      "prompt": "The requested value edit in note.md is already complete. Validate the result with Incise, then stop if it is structurally clean. Preserve the escaped pipe and every byte."
+    },
+    {
+      "id": "mixed-preexisting-findings",
+      "initial": "---\nowner: ada\nowner: lin\nmeta: {active: true, tier: 2}\n---\n\n# Status\n\nThe requested status is now complete.\n\n| Item | Owner |\n| --- | --- |\n| oven | ada |\n",
+      "expected": "---\nowner: ada\nowner: lin\nmeta: {active: true, tier: 2}\n---\n\n# Status\n\nThe requested status is now complete.\n\n| Item | Owner |\n| --- | --- |\n| oven | ada |\n",
+      "expected_codes": ["frontmatter.duplicate_path", "table.ragged_alignment"],
+      "expected_status": "warning",
+      "authorize_realign": false,
+      "prompt": "The requested status edit in note.md is already complete. Validate it with Incise and report all structural findings, but do not broaden the task to pre-existing frontmatter ambiguity or table formatting."
+    }
+  ]
+}
