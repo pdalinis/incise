@@ -105,6 +105,10 @@ rewriting the document. Use raw editing only for prose changes that Incise does
 not represent.
 ```
 
+## Structural check skill
+
+The archive bundles and registers `incise:incise-check`. Load it through Hermes skill discovery when a user explicitly asks to validate Markdown or inspect a checker finding. The skill runs `incise check` through the plugin’s own binary resolver, keeps checking read-only by default, and permits `--fix-safe` only with the report hash. It never turns explicit or manual findings into raw patches. Plugin skills are opt-in and are not added to Hermes’s initial available-skills prompt.
+
 ## Safety
 
 Every path is checked through `agent.file_safety` before the binary runs, using the same read blocks, write denylist, safe-root policy, and approval checks as Hermes’s built-in file tools. If those host guards cannot be imported, the plugin fails closed and refuses all paths.

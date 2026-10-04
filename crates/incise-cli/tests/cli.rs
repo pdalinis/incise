@@ -121,6 +121,83 @@ const ADD: &[&str] = &[
     "Owner=ada",
 ];
 
+#[test]
+fn check_reports_findings_successfully_without_touching_the_file() {
+    let s = Scratch::from_bytes(
+        "hazards.md",
+        b"# Hazards\n\n| A | A |\n| --- | --- |\n| one |\n".to_vec(),
+    );
+    let run = s.run(&["check", "@", "--json"]);
+    assert_eq!(run.code, 0, "stderr: {}", run.err);
+    assert_eq!(run.err, "");
+    assert!(run.out.contains("\"schema_version\": 1"), "{}", run.out);
+    assert!(run.out.contains("\"status\": \"error\""), "{}", run.out);
+    assert!(run.out.contains("table.non_rectangular"), "{}", run.out);
+    assert!(run.out.contains("table.duplicate_column"), "{}", run.out);
+    assert!(run.out.contains("\"fix_safe\": false"), "{}", run.out);
+    assert!(s.is_untouched());
+}
+
+#[test]
+fn clean_check_json_has_a_frozen_envelope() {
+    let s = Scratch::from_bytes("clean.md", b"# Clean\n".to_vec());
+    let hash = s.run(&["hash", "@"]).out.trim().to_string();
+    let run = s.run(&["check", "@", "--json"]);
+    let path = incise_core::json::dumps_str(&s.file.display().to_string());
+    assert_eq!(run.code, 0, "stderr: {}", run.err);
+    assert_eq!(
+        run.out,
+        format!(
+            "{{\"schema_version\": 1, \"path\": {path}, \"hash\": \"{hash}\", \
+             \"status\": \"clean\", \"findings\": [], \"fix_safe\": false, \
+             \"repaired\": [], \"changed\": false, \"written\": false}}\n"
+        )
+    );
+    assert!(s.is_untouched());
+}
+
+#[test]
+fn fix_safe_is_hash_guarded_and_v1_is_a_no_op() {
+    let s = Scratch::from_bytes(
+        "hazards.md",
+        b"| A | B |\n| --- | --- |\n| one |\n".to_vec(),
+    );
+    let hash = s.run(&["hash", "@"]).out.trim().to_string();
+    let run = s.run(&["check", "@", "--fix-safe", "--if-match", &hash, "--json"]);
+    assert_eq!(run.code, 0, "stderr: {}", run.err);
+    assert!(run.out.contains("\"fix_safe\": true"), "{}", run.out);
+    assert!(run.out.contains("\"repaired\": []"), "{}", run.out);
+    assert!(
+        run.out.contains(&format!("\"before_hash\": \"{hash}\"")),
+        "{}",
+        run.out
+    );
+    assert!(run.out.contains("\"changed\": false"), "{}", run.out);
+    assert!(run.out.contains("\"written\": false"), "{}", run.out);
+    assert!(s.is_untouched());
+
+    let stale = s.run(&[
+        "check",
+        "@",
+        "--fix-safe",
+        "--if-match",
+        "deadbeef",
+        "--json",
+    ]);
+    assert_eq!(stale.code, 3);
+    assert!(stale.out.contains("\"stale\": true"), "{}", stale.out);
+    assert!(s.is_untouched());
+}
+
+#[test]
+fn fix_safe_requires_an_if_match_guard() {
+    let s = Scratch::from_bytes("clean.md", b"# Clean\n".to_vec());
+    let run = s.run(&["check", "@", "--fix-safe"]);
+    assert_eq!(run.code, 2);
+    assert!(run.err.contains("--if-match"), "{}", run.err);
+    assert!(s.is_untouched());
+}
+
 // --------------------------------------------------------------------------
 // what a success prints
 // --------------------------------------------------------------------------

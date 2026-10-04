@@ -19,6 +19,7 @@
 //! where a comment here cites a corpus fixture, that fixture is the test.
 
 pub mod args;
+pub mod check;
 pub mod describe;
 pub mod error;
 pub mod front;
@@ -30,6 +31,11 @@ pub mod scan;
 pub mod similar;
 pub mod table;
 
+pub use check::{
+    check_document, fix_safe, render_check_findings, render_check_report, CheckAddress,
+    CheckRepair, CheckReport, CheckSpan, Finding, RepairClass, SafeFixResult, Severity,
+    CHECK_SCHEMA_VERSION,
+};
 pub use describe::describe_change;
 pub use error::{OpError, Repair, Result};
 pub use front::{find_frontmatter, format_path, parse_path, Entry, Fmt, FrontMatter, Kind, Seg};

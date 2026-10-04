@@ -895,6 +895,14 @@ V3 changed only the delete-table ambiguity refusal so one recovery call was told
 
 Across all 180 trials there was no data loss, silent corruption, collateral deletion, or wrong-table deletion. That validates the executor's safety boundary, not the public interface: every frozen gate required 60/60. Retention and composition runs were not reached because the targeted gate failed first. `table_edit action=delete-table`, its `confirm` property, and the Pi/Hermes normalization exception therefore remain unpublished. The CLI operation may ship behind explicit `--confirm`; a future model-facing attempt needs a separately preregistered interface and new result pool.
 
+## F-check — structural findings are deterministic; agent behavior remains unmeasured
+
+Issue #48 adds a read-only structural checker and a hash-guarded safe-fix transaction. V1 reports six conditions already proven by Incise’s parsers: non-rectangular tables, mixed table line endings, mixed structural indentation, duplicate column names, ragged tables eligible for explicit `table-realign`, and duplicate YAML frontmatter paths. Proposed rules for unclosed frontmatter and repeated headings or list text were dropped because the existing parsers could not distinguish a hazard from supported syntax without guessing.
+
+The automatic repair allowlist is empty. Consequently `--fix-safe` is byte-identical and reports no repairs on every corpus and synthetic document. Rust property tests pin that result, every advertised explicit repair is executable, the Python oracle agrees byte-for-byte with the Rust report on all 61 fixtures plus four encoded boundary documents, and the complete differential run passes all 125,427 cases. CLI tests pin schema version 1, finding-success exit semantics, stale hashes, no writes during checking, and the guarded no-op transaction. Pi package tests and Hermes plugin tests pin canonical skill bytes and host-owned binary selection.
+
+This is deterministic evidence only. No claim is made that presenting the skill improves model editing behavior. Pi publishes it as explicit-only and Hermes plugin skills remain outside the initial prompt. Automatic selection, a native checker tool, or a non-empty automatic repair allowlist remains separately measured work under the committed `bench/MARKDOWN_CHECK_PLAN.md`.
+
 # F-ornith-final — reasoning-off routing reaches 480/480
 
 The Ornith 1.5 9B campaign began with the official Q8 checkpoint through llama.cpp and the standard Pi composition. Reasoning-on inference was prohibitively slow and did not solve the executor-selection failures. The adopted configuration disabled thinking, capped output at 2,048 tokens, and sent `parallel_tool_calls: false`; the shared `safe-routed` profile then moved structural decisions into exact parsers plus inspected host-owned arguments while retaining the standard tools for unsupported requests.

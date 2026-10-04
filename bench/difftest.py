@@ -139,6 +139,15 @@ ARG_VALUES = [
     '"a\\\\\\\\|b"', '"a\\\\\\\\\\\\| b"',
 ]
 
+# Purpose-built checker documents. Encoding them as JSON keeps CRLF and missing
+# final newlines intact on the one-line differential wire.
+CHECK_DOCUMENT_VALUES = [
+    "# Clean\n\n| A | B |\n| - | - |\n| x | y |\n",
+    "| A | A |\r\n | --- | --- |\n| one |\r\n",
+    "---\nowner: first\nowner: second\n---\n",
+    "| A | B |\n| --- | --- |\n| caf\u00e9 | x |",
+]
+
 # --------------------------------------------------------------------------
 # dispatch ordering
 # --------------------------------------------------------------------------
@@ -785,12 +794,16 @@ def generate(files):
     for fn in ARG_FNS:
         for text in ARG_VALUES:
             emit(nominal, "check_args", fn=fn, text=text)
+    for content in CHECK_DOCUMENT_VALUES:
+        text = json.dumps(content)
+        emit(nominal, "check_document_text", text=text)
+        emit(nominal, "fix_safe_text", text=text)
 
     for rel in files:
         content = open(os.path.join(ROOT, rel), newline="").read()
         for op in ("find_sections", "inert_headings", "find_tables",
                    "find_lists", "find_frontmatter", "list_tables",
-                   "list_lists"):
+                   "list_lists", "check_document"):
             emit(rel, op)
         emit(rel, "render_table_list", path=rel)
         emit(rel, "render_list_summary", path=rel)
@@ -1503,6 +1516,15 @@ def py_run(content, rel, op, args):
 
     if op == "render_table_list":
         return "ok", F.render_table_list(content, args.get("path", ""))
+    if op == "check_document":
+        return "ok", json.dumps(F.check_document(content), ensure_ascii=True)
+    if op == "check_document_text":
+        checked = json.loads(args["text"])
+        return "ok", json.dumps(F.check_document(checked), ensure_ascii=True)
+    if op == "fix_safe_text":
+        fixed = F.fix_safe(json.loads(args["text"]))
+        return ("ok", json.dumps(fixed["report"], ensure_ascii=True)
+                + "\n--\n" + fixed["content"])
     if op == "table_get":
         # Through the rendered form, which is the whole result: the heading, the
         # matched/total counts, the columns and every cell all appear in the

@@ -590,6 +590,7 @@ class FakeCtx:
         self.tools = []
         self.hooks = {}
         self.middleware = {}
+        self.skills = []
 
     def register_tool(self, name, toolset, schema, handler, **kw):
         self.tools.append((name, toolset, schema, handler, kw))
@@ -600,11 +601,26 @@ class FakeCtx:
     def register_middleware(self, name, callback):
         self.middleware[name] = callback
 
+    def register_skill(self, name, path, description="", frontmatter=None):
+        self.skills.append((name, Path(path), description, dict(frontmatter or {})))
+
 
 def test_register():
     ctx = FakeCtx()
     plugin.register(ctx)
     names = [t[0] for t in ctx.tools]
+    check("one checker skill is registered", len(ctx.skills) == 1, str(ctx.skills))
+    if ctx.skills:
+        skill_name, skill_path, description, frontmatter = ctx.skills[0]
+        check("checker skill name is host-qualified later", skill_name == "incise-check")
+        check("checker skill file exists", skill_path.is_file(), str(skill_path))
+        check("checker skill has a discovery description", "structural hazards" in description)
+        check("checker skill stays explicit-only", frontmatter.get("disable-model-invocation") is True)
+        canonical = Path(ROOT) / "skills" / "incise-check" / "SKILL.md"
+        check("Hermes packages the canonical skill",
+              skill_path.read_bytes() == canonical.read_bytes())
+        check("Hermes packages a host-resolved launcher",
+              (skill_path.parent / "scripts" / "check.py").is_file())
     check(
         "eight tools, the measured five first",
         names == ["table_edit", "list_edit", "section_edit", "frontmatter_edit",

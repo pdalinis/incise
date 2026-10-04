@@ -34,6 +34,7 @@ import os
 import sys
 import threading
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
 from . import runner, safety, safe_routed, schema_cache
@@ -348,6 +349,14 @@ def register(ctx) -> None:
             runner.available() or "`incise schema` did not return a tool list.",
         )
         return
+
+    skill = Path(__file__).parent / "skills" / "incise-check" / "SKILL.md"
+    ctx.register_skill(
+        "incise-check",
+        skill,
+        "Check Markdown for structural hazards that affect Incise edits.",
+        {"disable-model-invocation": True},
+    )
 
     # Plugin Doctor runs registration under an isolated temporary HERMES_HOME.
     # Emit the resolved executable there because a stale binary can otherwise

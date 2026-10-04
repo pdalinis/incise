@@ -1235,6 +1235,14 @@ Multiple operations applied against one file in a single call, all-or-nothing. T
 matters for small models: one call, one result, one chance to be wrong. Batch input
 is a JSON array of ops.
 
+### 6.8 Structural checks
+
+`incise check FILE` reports structural conditions that affect semantic addressability, operation eligibility, or byte-preserving edits. It is not a style linter. Reports are deterministic, schema-versioned JSON with stable finding codes, severity, actionable messages, semantic addresses, UTF-8 byte spans, and repair classes. A completed check exits successfully even when findings exist.
+
+Repairs are classified as `automatic`, `explicit`, or `manual`. Only `incise check FILE --fix-safe --if-match HASH` may apply automatic repairs, in one atomic transaction followed by a recheck. It must never apply an explicit or manual repair. The initial automatic allowlist is empty. Explicit descriptors name an existing Incise semantic operation; manual findings require user intent rather than document reconstruction.
+
+The initial rules cover non-rectangular tables, mixed table line endings, mixed table indentation, duplicate table columns, explicitly realignable ragged tables, and duplicate YAML frontmatter paths. Rules that cannot distinguish a real Incise hazard from supported Markdown without guessing are excluded.
+
 ## 7. Non-functional requirements
 
 - **Startup latency < 10ms.** The tool is invoked per-edit; process startup is a real

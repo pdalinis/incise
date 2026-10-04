@@ -272,6 +272,9 @@ jobs:
             plugins/hermes/schema_cache.py \
             staging/incise/
           cp LICENSE staging/incise/LICENSE
+          mkdir -p staging/incise/skills/incise-check/scripts
+          cp skills/incise-check/SKILL.md staging/incise/skills/incise-check/SKILL.md
+          cp plugins/hermes/skills/incise-check/scripts/check.py staging/incise/skills/incise-check/scripts/check.py
           tar -C staging -czf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" incise
 
       - name: Verify Hermes plugin archive
@@ -280,6 +283,7 @@ jobs:
           tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz"
           test "$(tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" | grep -c '^incise/$')" -eq 1
           test "$(tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" | grep -c '^incise/plugin.yaml$')" -eq 1
+          test "$(tar -tzf "dist/incise-hermes-${GITHUB_REF_NAME}.tar.gz" | grep -c '^incise/skills/incise-check/SKILL.md$')" -eq 1
 
       - name: Upload Hermes plugin archive
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

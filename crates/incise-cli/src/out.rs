@@ -34,7 +34,10 @@
 use std::path::Path;
 
 use incise_core::json::dumps_str;
-use incise_core::{Fmt, FrontState, ListItems, OpError, TableRows};
+use incise_core::{
+    render_check_findings, CheckReport, Fmt, FrontState, ListItems, OpError, TableRows,
+    CHECK_SCHEMA_VERSION,
+};
 
 pub const EXIT_OK: i32 = 0;
 pub const EXIT_REFUSED: i32 = 1;
@@ -44,6 +47,15 @@ pub const EXIT_STALE: i32 = 3;
 pub struct Format {
     pub json: bool,
     pub quiet: bool,
+}
+
+pub struct CheckMeta<'a> {
+    pub hash: &'a str,
+    pub before_hash: Option<&'a str>,
+    pub path: &'a Path,
+    pub fix_safe: bool,
+    pub changed: bool,
+    pub repaired: &'a [&'a str],
 }
 
 /// A successful edit: the one sentence, and nothing else on stdout.
@@ -93,6 +105,52 @@ pub fn view(f: &Format, text: &str, hash: &str, path: &Path) -> i32 {
         if !f.quiet {
             eprintln!("hash: {hash}");
         }
+    }
+    EXIT_OK
+}
+
+/// A structural check report. Findings are a successful check result, not a
+/// process failure; callers branch on `status` or stable finding codes.
+pub fn check_view(f: &Format, report: &CheckReport, meta: &CheckMeta<'_>) -> i32 {
+    if f.json {
+        let repaired = meta
+            .repaired
+            .iter()
+            .map(|code| (*code).to_string())
+            .collect::<Vec<_>>();
+        let before_hash = meta
+            .before_hash
+            .map(|value| format!(", \"before_hash\": {}", dumps_str(value)))
+            .unwrap_or_default();
+        println!(
+            "{{\"schema_version\": {CHECK_SCHEMA_VERSION}, \"path\": {}, \"hash\": {}{before_hash}, \
+             \"status\": {}, \"findings\": {}, \"fix_safe\": {}, \"repaired\": {}, \
+             \"changed\": {}, \"written\": {}}}",
+            dumps_str(&meta.path.display().to_string()),
+            dumps_str(meta.hash),
+            dumps_str(report.status()),
+            render_check_findings(report),
+            meta.fix_safe,
+            dumps_strs(&repaired),
+            meta.changed,
+            meta.changed,
+        );
+    } else if !f.quiet {
+        if report.findings.is_empty() {
+            println!("clean: no structural findings");
+        } else {
+            for finding in &report.findings {
+                println!(
+                    "{} {} [{}..{}]: {}",
+                    finding.severity.as_str(),
+                    finding.code,
+                    finding.span.start,
+                    finding.span.end,
+                    finding.message
+                );
+            }
+        }
+        eprintln!("hash: {}", meta.hash);
     }
     EXIT_OK
 }
