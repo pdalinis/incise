@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261003"
+PREFIX = "markdown_check_skill_v1_20261003_v2"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,7 +43,7 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v2")
 DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v1")
 HARMFUL = "harmful"
 
@@ -227,7 +227,8 @@ def operation_command(binary: Path, note: Path, finding: dict) -> list[str]:
 def ceiling(args) -> dict:
     binary = Path(args.binary).resolve()
     tasks = load_tasks()
-    root = ensure_marked_dir(Path(args.sandbox).resolve() / "ceiling", MARKER)
+    base = ensure_marked_dir(Path(args.sandbox).resolve(), MARKER)
+    root = ensure_marked_dir(base / "ceiling", MARKER)
     rows = []
     for task in tasks:
         sandbox, note = reset_sandbox(root, task["id"], task)

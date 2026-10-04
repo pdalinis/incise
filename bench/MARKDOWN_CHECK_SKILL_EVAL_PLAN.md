@@ -154,7 +154,7 @@ remain separate, composition-wide decisions.
 
 ## Artifacts
 
-Use the immutable prefix `markdown_check_skill_v1_20261003` under
+Use the immutable prefix `markdown_check_skill_v1_20261003_v2` under
 `bench/results/`:
 
 - `_manifest.json`
@@ -167,3 +167,7 @@ pool. The analysis records the raw and graded artifact hashes. After the run,
 append the scoped result to `bench/FINDINGS.md`, link the
 artifacts from issue 50, and decide whether the evidence supports the v0.5.0
 release. Historical benchmark claims remain scoped to their original surfaces.
+
+The prefix has a `_v2` suffix because the first preflight-only manifest exposed
+a sandbox-marker bug before any model request or raw/graded pool was created.
+That manifest remains immutable; `_v2` is the first live executor.
