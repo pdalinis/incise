@@ -154,7 +154,7 @@ remain separate, composition-wide decisions.
 
 ## Artifacts
 
-Use the immutable prefix `markdown_check_skill_v1_20261003_v2` under
+Use the immutable prefix `markdown_check_skill_v1_20261003_v3` under
 `bench/results/`:
 
 - `_manifest.json`
@@ -168,6 +168,10 @@ append the scoped result to `bench/FINDINGS.md`, link the
 artifacts from issue 50, and decide whether the evidence supports the v0.5.0
 release. Historical benchmark claims remain scoped to their original surfaces.
 
-The prefix has a `_v2` suffix because the first preflight-only manifest exposed
+The prefix has a `_v3` suffix because the first preflight-only manifest exposed
 a sandbox-marker bug before any model request or raw/graded pool was created.
-That manifest remains immutable; `_v2` is the first live executor.
+The `_v2` attempt then found the single model slot occupied by an unrelated
+seed-1007, 8192-token request before its first result; it was interrupted with
+zero-byte raw and graded pools. Both aborted manifests remain immutable. The
+`_v3` executor requires an idle endpoint at preflight and immediately before
+every trial, and is the first eligible live pool.

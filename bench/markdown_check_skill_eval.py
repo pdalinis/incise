@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261003_v2"
+PREFIX = "markdown_check_skill_v1_20261003_v3"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,7 +43,7 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v2")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v3")
 DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v1")
 HARMFUL = "harmful"
 
@@ -504,6 +504,7 @@ def run_trials(args) -> None:
                     index += 1
                     final_row = final_grade = None
                     for attempt in (1, 2):
+                        require_idle_endpoint(args.endpoint, f"before {host}/{condition}/{task['id']}")
                         sandbox, note = reset_sandbox(root, host, task)
                         before = note.read_bytes()
                         result = (
@@ -625,6 +626,23 @@ def endpoint_json(endpoint: str, route: str) -> dict:
         return json.load(response)
 
 
+def require_idle_endpoint(endpoint: str, context: str) -> list[dict]:
+    slots = endpoint_json(endpoint, "/slots")
+    active = [slot for slot in slots if slot.get("is_processing")]
+    if active:
+        summary = [
+            {
+                "id": slot.get("id"),
+                "id_task": slot.get("id_task"),
+                "seed": (slot.get("params") or {}).get("seed"),
+                "max_tokens": (slot.get("params") or {}).get("max_tokens"),
+            }
+            for slot in active
+        ]
+        raise SystemExit(f"model endpoint is busy {context}: {summary}")
+    return slots
+
+
 def host_version(command: list[str]) -> str:
     return subprocess.run(command, text=True, capture_output=True, check=True).stdout.strip()
 
@@ -633,6 +651,7 @@ def preflight(args) -> None:
     dirty = git_output("status", "--porcelain")
     if dirty:
         raise SystemExit("preflight requires a clean preregistered worktree")
+    slots = require_idle_endpoint(args.endpoint, "at preflight")
     ensure_hermes_home(Path(args.hermes_home), Path(args.source_hermes_home).expanduser())
     binary = Path(args.binary).resolve()
     ceiling_report = ceiling(args)
@@ -684,6 +703,7 @@ def preflight(args) -> None:
             "models": models,
             "props": props,
             "model_sha256": sha256_file(model_path) if model_path.is_file() else None,
+            "idle_slots": slots,
         },
         "conditions": {
             "control": {"pi_tools": PI_TOOLS, "hermes_toolsets": ["terminal", "incise"]},
