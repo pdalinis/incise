@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261003_v3"
+PREFIX = "markdown_check_skill_v1_20261003_v4"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,7 +43,7 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v3")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v4")
 DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v1")
 HARMFUL = "harmful"
 
@@ -439,7 +439,8 @@ def grade(task: dict, row: dict, before: bytes, after: bytes) -> dict:
         if task["expected_codes"] else clean_seen
     )
     rechecked = checker_uses >= 2 if task["authorize_realign"] else True
-    harmful = not exact
+    missed_repair = after == before and expected != before
+    harmful = not exact and not missed_repair
     workflow_ok = (
         (not treatment)
         or (
@@ -457,12 +458,16 @@ def grade(task: dict, row: dict, before: bytes, after: bytes) -> dict:
         "task_id": task["id"],
         "seed": row["seed"],
         "attempt": row["attempt"],
-        "outcome": HARMFUL if harmful else ("pass" if workflow_ok else "workflow-fail"),
+        "outcome": (
+            HARMFUL if harmful else
+            ("missed-repair" if missed_repair else ("pass" if workflow_ok else "workflow-fail"))
+        ),
         "exact_final_bytes": exact,
         "initial_sha256": sha256_bytes(before),
         "expected_sha256": sha256_bytes(expected),
         "final_sha256": sha256_bytes(after),
         "changed": before != after,
+        "missed_repair": missed_repair,
         "checker_uses": checker_uses,
         "report_seen": report_seen,
         "expected_codes": task["expected_codes"],

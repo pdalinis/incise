@@ -10,6 +10,12 @@ Use this skill when the user explicitly asks to validate a Markdown file, inspec
 
 Run the version-matched launcher bundled beside this file:
 
+The host's `<skill ... location="ABSOLUTE/PATH/SKILL.md">` wrapper gives the
+absolute path to this file. Copy that `location` exactly, remove the final
+`/SKILL.md`, and append the launcher path below. Do not search for the skill,
+do not assume it is under the current working directory, and do not list
+directories to rediscover a path the wrapper already supplied.
+
 - If `scripts/check.mjs` exists, run `node --experimental-strip-types <skill-directory>/scripts/check.mjs PATH`.
 - Otherwise run `python3 <skill-directory>/scripts/check.py PATH`.
 

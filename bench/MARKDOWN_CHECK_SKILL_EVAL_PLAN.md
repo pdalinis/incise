@@ -175,3 +175,11 @@ seed-1007, 8192-token request before its first result; it was interrupted with
 zero-byte raw and graded pools. Both aborted manifests remain immutable. The
 `_v3` executor requires an idle endpoint at preflight and immediately before
 every trial, and is the first eligible live pool.
+
+## V4 follow-up candidate
+
+The immutable `_v3` pool failed after 21 completed Pi rows. All completed rows preserved their starting bytes, but explicit treatment reached the checker in only 3/8 cases. In the other five, Gemma ignored or lost Pi's absolute skill-wrapper `location`, searched relative to the sandbox, and never ran the launcher. The authorized realignment was omitted rather than applied incorrectly. Hermes did not run because the original grader classified any non-expected final bytes as harmful and triggered its fixed stop.
+
+V4 is a post-failure candidate, not part of the untouched v3 hypothesis. It changes only the shared skill instructions and evaluator classification. The skill now directs the model to copy the wrapper's absolute `location`, remove `/SKILL.md`, append the launcher path, and never search from the working directory. The evaluator classifies byte-identical omission of an authorized required repair as `missed-repair`; `harmful` is reserved for an actual mutation to bytes other than the frozen expectation. Both remain gate failures, but only harmful mutation triggers early stopping.
+
+The task manifest, model, seed, host versions, tool surfaces, deterministic ceiling, treatment requirements, and 52-trial population remain unchanged. V4 uses the immutable prefix `markdown_check_skill_v1_20261003_v4`. It passes only under the existing decision rule: 26/26 complete treatment trials, exact expected bytes, checker and report use, semantic authorized realignment with a clean recheck, no forbidden mutation or fallback, and host agreement. The model endpoint must be idle at preflight and before every trial.
