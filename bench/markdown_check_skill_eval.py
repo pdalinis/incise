@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261003_v4"
+PREFIX = "markdown_check_skill_v1_20261004_v5"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v4")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v1")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v5")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v5")
 HARMFUL = "harmful"
 
 
@@ -176,15 +176,40 @@ def normalized_hermes(events: list[dict]) -> tuple[list[dict], list[dict], dict]
     return calls, results, terminal
 
 
-def ensure_hermes_home(path: Path, source: Path) -> Path:
+def ensure_hermes_home(path: Path, source: Path, endpoint: str) -> Path:
     home = ensure_marked_dir(path, HOME_MARKER)
     os.chmod(home, 0o700)
-    for name in ("config.yaml", ".env"):
-        src = source / name
-        dst = home / name
-        if src.is_file() and not dst.exists():
-            shutil.copyfile(src, dst)
-            os.chmod(dst, 0o600)
+    source_config = source / "config.yaml"
+    config = home / "config.yaml"
+    direct_base = endpoint.rstrip("/") + "/v1"
+    if not config.exists():
+        if not source_config.is_file():
+            raise RuntimeError(f"missing Hermes source config: {source_config}")
+        text = source_config.read_text(encoding="utf-8")
+        old_base = "http://localhost:4000/v1"
+        if old_base not in text or "  custom:litellm:\n" not in text:
+            raise RuntimeError("Hermes source config lacks the preregistered LiteLLM route")
+        text = text.replace(old_base, direct_base)
+        text = text.replace(
+            "  custom:litellm:\n",
+            "  custom:litellm:\n"
+            "    gemma4-direct-q8:\n"
+            "      context_window: 65536\n"
+            "      supports_vision: false\n"
+            "      supports_tools: true\n"
+            "      supports_reasoning: false\n",
+            1,
+        )
+        config.write_text(text, encoding="utf-8", newline="\n")
+        os.chmod(config, 0o600)
+    config_text = config.read_text(encoding="utf-8")
+    if direct_base not in config_text or "gemma4-direct-q8:" not in config_text:
+        raise RuntimeError("existing Hermes benchmark home does not match the direct v5 route")
+    env_source = source / ".env"
+    env_dest = home / ".env"
+    if env_source.is_file() and not env_dest.exists():
+        shutil.copyfile(env_source, env_dest)
+        os.chmod(env_dest, 0o600)
     plugins = home / "plugins"
     plugins.mkdir(exist_ok=True)
     link = plugins / "incise"
@@ -415,14 +440,16 @@ def grade(task: dict, row: dict, before: bytes, after: bytes) -> dict:
     results = result_text(row)
     expected = task["expected"].encode()
     checker_markers = ("check.mjs", "check.py", "incise check", "incise\",\"check")
-    checker_uses = sum(calls.count(marker) for marker in checker_markers)
+    tool_names = [call.get("function", {}).get("name", "") for call in row.get("tool_calls", [])]
+    checker_uses = tool_names.count("md_check") + sum(
+        calls.count(marker) for marker in checker_markers
+    )
     observed_codes = [code for code in task["expected_codes"] if code in results]
     clean_seen = bool(re.search(r'["\']status["\']\s*:\s*["\']clean["\']', results))
     realign_semantic = (
         "table-realign" in calls
         or bool(re.search(r'"action"\s*:\s*"realign"', calls))
     )
-    tool_names = [call.get("function", {}).get("name", "") for call in row.get("tool_calls", [])]
     raw_tool = any(name in {"edit", "write", "apply_patch", "write_file"} for name in tool_names)
     ad_hoc = bool(re.search(
         r"\b(sed|perl|ruby)\b|python(?:3)?\s+-c|(?:>|>>)\s*[^\n]*note\.md",
@@ -489,6 +516,35 @@ def is_transport(row: dict) -> bool:
     ))
 
 
+def audit_first_provider_request(host: str, condition: str, row: dict) -> None:
+    requests = row.get("provider_requests") or []
+    if not requests:
+        raise SystemExit(f"{host}/{condition}: no provider request was recorded")
+    first = requests[0]
+    expected_tools = {
+        ("pi", "control"): ["bash", "table_edit"],
+        ("pi", "treatment"): ["md_check"],
+        ("hermes", "control"): [
+            "terminal", "table_edit", "list_edit", "section_edit", "frontmatter_edit",
+            "table_get", "md_tables", "md_lists", "md_outline",
+        ],
+        ("hermes", "treatment"): ["md_check"],
+    }[(host, condition)]
+    observed_tools = first.get("tools") or first.get("active_tools") or []
+    checks = {
+        "model": first.get("model") == "gemma4-direct-q8",
+        "seed": first.get("seed") == SEED,
+        "max_tokens": first.get("max_tokens") == 4096,
+        "tools": observed_tools == expected_tools,
+    }
+    failed = [name for name, passed in checks.items() if not passed]
+    if failed:
+        raise SystemExit(
+            f"{host}/{condition}: provider contract mismatch {failed}: "
+            f"{json.dumps(first, sort_keys=True)}"
+        )
+
+
 def run_trials(args) -> None:
     manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
     if manifest.get("ceiling", {}).get("status") != "pass":
@@ -517,6 +573,7 @@ def run_trials(args) -> None:
                             if host == "pi"
                             else call_hermes(args, sandbox, task, condition)
                         )
+                        audit_first_provider_request(host, condition, result)
                         after = note.read_bytes()
                         row = {
                             **result,
@@ -657,9 +714,27 @@ def preflight(args) -> None:
     if dirty:
         raise SystemExit("preflight requires a clean preregistered worktree")
     slots = require_idle_endpoint(args.endpoint, "at preflight")
-    ensure_hermes_home(Path(args.hermes_home), Path(args.source_hermes_home).expanduser())
+    hermes_home = ensure_hermes_home(
+        Path(args.hermes_home), Path(args.source_hermes_home).expanduser(), args.endpoint
+    )
     binary = Path(args.binary).resolve()
     ceiling_report = ceiling(args)
+    contract_env = {**os.environ, "INCISE_BIN": str(binary)}
+    pi_contract = subprocess.run(
+        ["npm", "test"], cwd=ROOT / "plugins" / "pi", env=contract_env,
+        text=True, capture_output=True,
+    )
+    if pi_contract.returncode:
+        raise SystemExit(f"Pi host contract failed:\n{pi_contract.stdout}\n{pi_contract.stderr}")
+    hermes_contract = subprocess.run(
+        [sys.executable, str(HERMES_PLUGIN / "test_plugin.py")], cwd=ROOT,
+        env={**contract_env, "HERMES_HOME": str(hermes_home)},
+        text=True, capture_output=True,
+    )
+    if hermes_contract.returncode:
+        raise SystemExit(
+            f"Hermes host contract failed:\n{hermes_contract.stdout}\n{hermes_contract.stderr}"
+        )
     skill_hashes = {
         str(path.relative_to(ROOT)): sha256_file(path)
         for path in (
@@ -673,7 +748,11 @@ def preflight(args) -> None:
     pi_version = json.loads(
         (PI_SDK.parent.parent / "package.json").read_text(encoding="utf-8")
     )["version"]
-    hermes_version = host_version([args.hermes, "--version"])
+    hermes_version_process = subprocess.run(
+        [args.hermes, "--version"], text=True, capture_output=True, check=True,
+        env={**os.environ, "HERMES_HOME": str(hermes_home)},
+    )
+    hermes_version = hermes_version_process.stdout.strip()
     binary_version = host_version([str(binary), "--version"])
     props = endpoint_json(args.endpoint, "/props")
     models = endpoint_json(args.endpoint, "/v1/models")
@@ -701,7 +780,12 @@ def preflight(args) -> None:
         "skills": skill_hashes,
         "hosts": {
             "pi": {"version": pi_version, "sdk": str(PI_SDK)},
-            "hermes": {"version": hermes_version},
+            "hermes": {
+                "version": hermes_version,
+                "home": str(hermes_home),
+                "config_sha256": sha256_file(hermes_home / "config.yaml"),
+                "warmup_stderr": hermes_version_process.stderr,
+            },
         },
         "model": {
             "endpoint": args.endpoint,
@@ -718,6 +802,12 @@ def preflight(args) -> None:
             },
         },
         "ceiling": ceiling_report,
+        "host_contracts": {
+            "pi": {"status": "pass", "command": "npm test"},
+            "hermes": {"status": "pass", "command": "python3 plugins/hermes/test_plugin.py"},
+            "ordinary_surface_unchanged": True,
+            "treatment_initial_tools": ["md_check"],
+        },
     }
     write_new_json(Path(args.manifest), manifest)
     print(json.dumps(manifest, indent=2, sort_keys=True))
@@ -731,7 +821,7 @@ def add_runtime(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--hermes-home", default=str(DEFAULT_HERMES_HOME))
     parser.add_argument("--source-hermes-home", default="~/.hermes")
     parser.add_argument("--hermes-provider", default="custom")
-    parser.add_argument("--hermes-model", default="gemma4-no-thinking")
+    parser.add_argument("--hermes-model", default="gemma4-direct-q8")
     parser.add_argument("--sandbox", default=str(DEFAULT_SANDBOX))
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--run-budget", type=int, default=240)

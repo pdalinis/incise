@@ -107,7 +107,7 @@ not represent.
 
 ## Structural check skill
 
-The archive bundles and registers `incise:incise-check`. Load it through Hermes skill discovery when a user explicitly asks to validate Markdown or inspect a checker finding. The skill runs `incise check` through the plugin’s own binary resolver, keeps checking read-only by default, and permits `--fix-safe` only with the report hash. It never turns explicit or manual findings into raw patches. Plugin skills are opt-in and are not added to Hermes’s initial available-skills prompt.
+The archive bundles and registers `incise:incise-check`. Load it through Hermes skill discovery when a user explicitly asks to validate Markdown or inspect a checker finding. During that explicit preload, request middleware exposes only a read-only `md_check` tool backed by the plugin’s binary resolver; after its report, only the named Incise semantic repair tool is added for rechecking and an authorized repair. Ordinary provider requests do not include `md_check`. The skill never turns explicit or manual findings into raw patches, remains opt-in, and is not added to Hermes’s initial available-skills prompt.
 
 ## Safety
 

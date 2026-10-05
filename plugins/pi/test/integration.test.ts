@@ -33,15 +33,23 @@ function exec(command: string, args: string[], options: ExecOptions = {}): Promi
 	});
 }
 
-test("loads eight tools and preserves read, write, refusal, and queue behavior", async () => {
+test("loads ordinary tools plus hidden md_check and preserves read, write, refusal, and queue behavior", async () => {
 	const repository = resolve(process.cwd(), "..", "..");
 	const binary = resolve(repository, "target", "debug", "incise");
 	const tools = new Map<string, any>();
 	const commands = new Map<string, any>();
+	const events = new Map<string, any>();
+	const active = new Set<string>();
 	const pi = {
 		exec,
-		registerTool(tool: any) { tools.set(tool.name, tool); },
+		registerTool(tool: any) { tools.set(tool.name, tool); active.add(tool.name); },
 		registerCommand(name: string, command: any) { commands.set(name, command); },
+		on(name: string, handler: any) { events.set(name, handler); },
+		getActiveTools() { return [...active]; },
+		setActiveTools(names: string[]) {
+			active.clear();
+			for (const name of names) active.add(name);
+		},
 	} as unknown as ExtensionAPI;
 
 	const previousBinary = process.env.INCISE_BIN;
@@ -55,6 +63,7 @@ test("loads eight tools and preserves read, write, refusal, and queue behavior",
 	assert.deepEqual([...tools.keys()].sort(), [
 		"frontmatter_edit",
 		"list_edit",
+		"md_check",
 		"md_lists",
 		"md_outline",
 		"md_tables",
@@ -62,6 +71,7 @@ test("loads eight tools and preserves read, write, refusal, and queue behavior",
 		"table_edit",
 		"table_get",
 	]);
+	assert(!active.has("md_check"));
 	assert(commands.has("incise-doctor"));
 
 	const directory = await mkdtemp(join(tmpdir(), "pi-incise-"));
@@ -100,6 +110,66 @@ test("loads eight tools and preserves read, write, refusal, and queue behavior",
 	);
 });
 
+test("explicit checker skill activates md_check, narrows repairs, and restores the ordinary surface", async () => {
+	const repository = resolve(process.cwd(), "..", "..");
+	const binary = resolve(repository, "target", "debug", "incise");
+	const tools = new Map<string, any>();
+	const events = new Map<string, any>();
+	const active = new Set<string>(["foreign_tool"]);
+	const pi = {
+		exec,
+		registerTool(tool: any) { tools.set(tool.name, tool); active.add(tool.name); },
+		registerCommand() {},
+		on(name: string, handler: any) { events.set(name, handler); },
+		getActiveTools() { return [...active]; },
+		setActiveTools(names: string[]) {
+			active.clear();
+			for (const name of names) active.add(name);
+		},
+	} as unknown as ExtensionAPI;
+
+	const previousBinary = process.env.INCISE_BIN;
+	const previousProfile = process.env.INCISE_PROFILE;
+	process.env.INCISE_BIN = binary;
+	process.env.INCISE_PROFILE = "measured";
+	try {
+		await inciseExtension(pi);
+	} finally {
+		if (previousBinary === undefined) delete process.env.INCISE_BIN;
+		else process.env.INCISE_BIN = previousBinary;
+		if (previousProfile === undefined) delete process.env.INCISE_PROFILE;
+		else process.env.INCISE_PROFILE = previousProfile;
+	}
+	const ordinary = [...active];
+	assert(!ordinary.includes("md_check"));
+
+	const directory = await mkdtemp(join(tmpdir(), "pi-incise-check-skill-"));
+	const path = join(directory, "note.md");
+	await writeFile(path, "# T\n\n| A | B |\n| --- | --- |\n| one| two |\n", "utf8");
+	await events.get("before_agent_start")({
+		type: "before_agent_start",
+		prompt: [
+			'<skill name="incise-check" location="/installed/incise-check/SKILL.md">',
+			"instructions",
+			"</skill>",
+			"",
+			"Check note.md.",
+		].join("\n"),
+		systemPrompt: "System.", systemPromptOptions: {},
+	}, { cwd: directory } as any);
+	assert.deepEqual([...active], ["md_check"]);
+
+	const checked = await tools.get("md_check").execute(
+		"check", { path: "note.md" }, undefined, undefined, { cwd: directory } as any,
+	);
+	const direct = await exec(binary, ["check", path, "--json"]);
+	assert.deepEqual(JSON.parse(checked.content[0].text), JSON.parse(direct.stdout));
+	assert.deepEqual([...active], ["md_check", "table_edit"]);
+
+	await events.get("agent_end")({ type: "agent_end", messages: [] }, { cwd: directory } as any);
+	assert.deepEqual([...active], ordinary);
+});
+
 test("minicpm-list profile validates two phases and permits one successful write", async () => {
 	const repository = resolve(process.cwd(), "..", "..");
 	const binary = resolve(repository, "target", "debug", "incise");
@@ -111,7 +181,14 @@ test("minicpm-list profile validates two phases and permits one successful write
 		exec,
 		registerTool(tool: any) { tools.set(tool.name, tool); },
 		registerCommand(name: string, command: any) { commands.set(name, command); },
-		on(name: string, handler: any) { events.set(name, handler); },
+		on(name: string, handler: any) {
+			const previous = events.get(name);
+			events.set(name, previous ? async (event: any, ctx: any) => {
+				const first = await previous(event, ctx);
+				const next = first?.systemPrompt ? { ...event, systemPrompt: first.systemPrompt } : event;
+				return await handler(next, ctx) ?? first;
+			} : handler);
+		},
 		setActiveTools(names: string[]) { active.push([...names]); },
 	} as unknown as ExtensionAPI;
 
@@ -210,7 +287,14 @@ test("safe-routed profile resolves section targets and preserves foreign tools",
 			active.add(tool.name);
 		},
 		registerCommand(name: string, command: any) { commands.set(name, command); },
-		on(name: string, handler: any) { events.set(name, handler); },
+		on(name: string, handler: any) {
+			const previous = events.get(name);
+			events.set(name, previous ? async (event: any, ctx: any) => {
+				const first = await previous(event, ctx);
+				const next = first?.systemPrompt ? { ...event, systemPrompt: first.systemPrompt } : event;
+				return await handler(next, ctx) ?? first;
+			} : handler);
+		},
 		getActiveTools() { return [...active]; },
 		setActiveTools(names: string[]) {
 			active.clear();
@@ -893,7 +977,14 @@ test("auto profile selects once from the active model and reports the decision",
 		exec,
 		registerTool(tool: any) { tools.set(tool.name, tool); active.add(tool.name); },
 		registerCommand(name: string, command: any) { commands.set(name, command); },
-		on(name: string, handler: any) { events.set(name, handler); },
+		on(name: string, handler: any) {
+			const previous = events.get(name);
+			events.set(name, previous ? async (event: any, ctx: any) => {
+				const first = await previous(event, ctx);
+				const next = first?.systemPrompt ? { ...event, systemPrompt: first.systemPrompt } : event;
+				return await handler(next, ctx) ?? first;
+			} : handler);
+		},
 		getActiveTools() { return [...active]; },
 		setActiveTools(names: string[]) {
 			active.clear();

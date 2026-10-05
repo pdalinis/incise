@@ -14,10 +14,15 @@ routes it to `_handle_view` and `safety.check_read`, never to the write guard.
 It replaced a hand-written `md_rows` that published the same op behind a plain
 string `table` -- see `schema_cache` for what that spelling could not address.
 
-The other three -- `md_tables`, `md_lists`, `md_outline` -- are reads written
+Three others -- `md_tables`, `md_lists`, `md_outline` -- are reads written
 here rather than measured. One tool per renderer, with no discriminator between
 them: see the comment above `MD_TABLES` in `schema_cache.py` for the live call
 that bought that shape.
+
+`md_check` is a fourth integration-owned read, but it is hidden from ordinary
+provider requests. It becomes active only with the explicit `incise-check`
+skill; `check_skill.py` owns that activation and the report-derived repair
+surface.
 
 The standard and safe-small profiles remain thin translators: they map tool
 names to Incise operations and preserve the core's arguments and refusals.
@@ -37,7 +42,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
-from . import runner, safety, safe_routed, schema_cache
+from . import check_skill, runner, safety, safe_routed, schema_cache
 
 try:
     from tools.registry import tool_error, tool_result
@@ -74,6 +79,7 @@ EMOJI = {
     "section_insert": "📝",
     "section_append": "📝",
     "frontmatter_set": "🏷️",
+    "md_check": "✅",
 }
 EMOJI.update({name: "🛡️" for name in safe_routed.ROUTED_TOOL_NAMES})
 
@@ -324,6 +330,32 @@ def _make_routed_handler(adapter: safe_routed.SafeRoutedAdapter, name: str):
     return handler
 
 
+def _make_check_handler(adapter: check_skill.CheckSkillAdapter):
+    def handler(args: Dict[str, Any], **kw) -> str:
+        if not adapter.is_active(**kw):
+            return tool_error(
+                "md_check is available only while the explicit incise-check skill is active."
+            )
+        if not isinstance(args, dict):
+            return tool_error(
+                f"md_check expects an object of arguments, got {type(args).__name__}."
+            )
+        path = _path_of(args)
+        if not path:
+            return tool_error("md_check needs `path`: the markdown file to check.")
+        blocked = safety.check_read(path)
+        if blocked:
+            return tool_error(blocked)
+        code, payload, _ = runner.invoke(["check", path])
+        if code != runner.EXIT_OK:
+            return tool_error(payload.get("error") or f"incise exited {code} with nothing to say.")
+        adapter.observe_report(payload, **kw)
+        return tool_result(payload)
+
+    handler.__name__ = "incise_md_check"
+    return handler
+
+
 def _check() -> bool:
     """`check_fn`: True when the tool can actually run.
 
@@ -369,7 +401,9 @@ def register(ctx) -> None:
             file=sys.stderr,
         )
 
-    for schema in schemas + schema_cache.structural_tools():
+    standard_schemas = schemas + schema_cache.structural_tools()
+    standard_names = [schema["name"] for schema in standard_schemas]
+    for schema in standard_schemas:
         name = schema["name"]
         is_read = name in schema_cache.READ_SUBCOMMAND
         ctx.register_tool(
@@ -382,17 +416,27 @@ def register(ctx) -> None:
             emoji=EMOJI.get(name, "📄"),
         )
 
+    check_adapter = check_skill.CheckSkillAdapter(standard_names)
+    ctx.register_tool(
+        name=check_skill.CHECK_TOOL_NAME,
+        toolset=TOOLSET,
+        schema=check_skill.CHECK_TOOL_SCHEMA,
+        handler=_make_check_handler(check_adapter),
+        check_fn=_check,
+        description=check_skill.CHECK_TOOL_SCHEMA["description"],
+        emoji=EMOJI[check_skill.CHECK_TOOL_NAME],
+    )
+
     profile = os.environ.get("INCISE_PROFILE", "measured")
+    session_end = check_adapter.on_session_end
     if profile in {"auto", "safe-routed"}:
         adapter = safe_routed.SafeRoutedAdapter(
             requested_profile=profile,
-            standard_tools=[
-                schema["name"]
-                for schema in schemas + schema_cache.structural_tools()
-            ],
+            standard_tools=standard_names,
             serialize_write=_serialize_write,
             tool_error=tool_error,
             tool_result=tool_result,
+            request_filter=check_adapter.llm_request,
         )
         for schema in safe_routed.route_registration_schemas():
             name = schema["name"]
@@ -406,5 +450,12 @@ def register(ctx) -> None:
                 emoji=EMOJI[name],
             )
         ctx.register_hook("pre_llm_call", adapter.pre_llm_call)
-        ctx.register_hook("on_session_end", adapter.on_session_end)
-        ctx.register_middleware("llm_request", adapter.llm_request)
+        def session_end(**kwargs):
+            adapter.on_session_end(**kwargs)
+            check_adapter.on_session_end(**kwargs)
+    ctx.register_hook("on_session_end", session_end)
+    ctx.register_middleware(
+        "llm_request",
+        adapter.llm_request if profile in {"auto", "safe-routed"}
+        else check_adapter.llm_request,
+    )
