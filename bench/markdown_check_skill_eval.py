@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v7"
+PREFIX = "markdown_check_skill_v1_20261004_v8"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v7")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v7")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v8")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v8")
 HARMFUL = "harmful"
 
 
@@ -564,8 +564,8 @@ def audit_first_provider_request(host: str, condition: str, row: dict) -> None:
         ("pi", "control"): ["bash", "table_edit"],
         ("pi", "treatment"): ["md_check"],
         ("hermes", "control"): [
-            "terminal", "table_edit", "list_edit", "section_edit", "frontmatter_edit",
-            "table_get", "md_tables", "md_lists", "md_outline",
+            "process_manage", "terminal", "table_edit", "list_edit", "section_edit",
+            "md_tables", "md_lists", "md_outline", "frontmatter_edit", "table_get",
         ],
         ("hermes", "treatment"): ["md_check"],
     }[(host, condition)]

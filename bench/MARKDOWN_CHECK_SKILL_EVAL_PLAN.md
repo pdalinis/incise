@@ -284,3 +284,27 @@ V7 uses the immutable prefix
 `markdown_check_skill_v1_20261004_v7`. The partial v6 raw and graded pools
 remain immutable and are reported as an infrastructure abort, not a candidate
 result.
+
+## V8 Hermes control audit correction
+
+V7 completed all 26 Pi trials: all 13 treatment workflows passed, including
+semantic realignment and clean recheck, with no harmful mutation. It then
+aborted before accepting the first Hermes control because the provider audit's
+expected list omitted Hermes's built-in `process_manage` tool and ordered the
+standard Incise tools differently.
+
+The observed Hermes control surface was
+`["process_manage", "terminal", "table_edit", "list_edit", "section_edit",
+"md_tables", "md_lists", "md_outline", "frontmatter_edit", "table_get"]`.
+That is byte-for-byte the first Hermes control surface recorded in immutable v4
+evidence. The candidate did not add `md_check` to it.
+
+V8 changes only the frozen Hermes control expectation to that historical list.
+Treatment must still begin with exactly `["md_check"]`. Product code, session
+construction, skill instructions, direct provider route, tasks, model, seed,
+grader, decision rule, and 52-trial population are unchanged.
+
+V8 uses the immutable prefix
+`markdown_check_skill_v1_20261004_v8`. The partial v7 pools remain immutable
+and are reported as an audit-spec abort, while their complete Pi results remain
+useful supporting evidence.
