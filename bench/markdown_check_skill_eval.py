@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v8"
+PREFIX = "markdown_check_skill_v1_20261004_v9"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v8")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v8")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v9")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v9")
 HARMFUL = "harmful"
 
 
@@ -187,9 +187,21 @@ def ensure_hermes_home(path: Path, source: Path, endpoint: str) -> Path:
             raise RuntimeError(f"missing Hermes source config: {source_config}")
         text = source_config.read_text(encoding="utf-8")
         old_base = "http://localhost:4000/v1"
-        if old_base not in text or "  custom:litellm:\n" not in text:
+        if (
+            old_base not in text
+            or "  custom:litellm:\n" not in text
+            or "auxiliary:\n" not in text
+        ):
             raise RuntimeError("Hermes source config lacks the preregistered LiteLLM route")
         text = text.replace(old_base, direct_base)
+        text = text.replace(
+            "auxiliary:\n",
+            "auxiliary:\n"
+            "  title_generation:\n"
+            "    enabled: false\n"
+            "    model_upgrade_enabled: false\n",
+            1,
+        )
         text = text.replace(
             "  custom:litellm:\n",
             "  custom:litellm:\n"
@@ -203,7 +215,11 @@ def ensure_hermes_home(path: Path, source: Path, endpoint: str) -> Path:
         config.write_text(text, encoding="utf-8", newline="\n")
         os.chmod(config, 0o600)
     config_text = config.read_text(encoding="utf-8")
-    if direct_base not in config_text or "gemma4-direct-q8:" not in config_text:
+    if (
+        direct_base not in config_text
+        or "gemma4-direct-q8:" not in config_text
+        or "title_generation:\n    enabled: false" not in config_text
+    ):
         raise RuntimeError("existing Hermes benchmark home does not match the direct v5 route")
     env_source = source / ".env"
     env_dest = home / ".env"

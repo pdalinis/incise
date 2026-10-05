@@ -308,3 +308,24 @@ V8 uses the immutable prefix
 `markdown_check_skill_v1_20261004_v8`. The partial v7 pools remain immutable
 and are reported as an audit-spec abort, while their complete Pi results remain
 useful supporting evidence.
+
+## V9 disable unrelated Hermes auto-title traffic
+
+V8 completed the 26 Pi trials and accepted the first Hermes control, which
+passed. Before Hermes control trial 2, the idle guard detected a background
+request with default seed and 8,192 output tokens. The request was Hermes's
+automatic session-title upgrade, not an agent turn: its parameters differed
+from the traced agent request, and it cleared shortly afterward.
+
+Waiting for that request would prevent overlap but would still charge unrelated
+model work and timing to the Hermes condition. V9 instead sets
+`auxiliary.title_generation.enabled: false` and
+`model_upgrade_enabled: false` in the isolated benchmark configuration.
+This changes no Incise tool, skill, agent prompt, task, or graded output. It
+removes an auxiliary product feature unrelated to the checker workflow and
+allows the one-slot idle guard to audit only agent traffic.
+
+The direct endpoint, main-request model, seed, token cap, tool surfaces, tasks,
+grader, decision rule, and 52-trial population remain unchanged. V9 uses the
+immutable prefix `markdown_check_skill_v1_20261004_v9`. The partial v8 pools
+remain immutable and are reported as an auxiliary-traffic isolation abort.
