@@ -329,3 +329,13 @@ The direct endpoint, main-request model, seed, token cap, tool surfaces, tasks,
 grader, decision rule, and 52-trial population remain unchanged. V9 uses the
 immutable prefix `markdown_check_skill_v1_20261004_v9`. The partial v8 pools
 remain immutable and are reported as an auxiliary-traffic isolation abort.
+
+## V10 recognize Hermes qualified plugin-skill identity
+
+V9 completed all 26 Pi trials and all 13 Hermes controls. Every Pi treatment workflow passed with no harmful mutation, and the Hermes control surface remained unchanged. The run then aborted at the first Hermes treatment provider audit: the first request exposed the ordinary Hermes tools instead of only `md_check`.
+
+Hermes records the successful preload as `incise:incise-check` and renders that canonical qualified identity in its API-time system prompt. The middleware detector required the unqualified `incise-check` marker, so it did not recognize the real plugin-skill preload. This is an integration-contract mismatch, not a model outcome.
+
+V10 changes only the Hermes exact preload marker to the host canonical value `incise:incise-check`. The host contract adds coverage that the qualified marker activates the checker surface while the unqualified lookalike does not. Pi, the checker, semantic repairs, skill instructions, isolated Hermes configuration, direct endpoint, tasks, model, seed, token cap, grader, decision rule, and 52-trial population remain unchanged.
+
+V10 uses the immutable prefix `markdown_check_skill_v1_20261004_v10`. The 39-row v9 raw and graded pools remain immutable and are reported as an activation-signal audit abort, while their complete Pi and Hermes-control results remain useful supporting evidence.
