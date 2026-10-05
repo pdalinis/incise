@@ -1,0 +1,129 @@
+{
+  "artifacts": {
+    "graded": "bench/results/markdown_check_skill_v1_20261003_v3_graded.jsonl",
+    "graded_sha256": "4657c5a7e00f408830366afc8c800fdf96968267ea3711da39667429470d292f",
+    "raw": "bench/results/markdown_check_skill_v1_20261003_v3_raw.jsonl",
+    "raw_sha256": "a0e3b220935ee0f35c49618c0078a46667076d6d74d8005e12853b6618db2b5b"
+  },
+  "by_condition": {
+    "control": {
+      "changed": 0,
+      "checker_use": 0,
+      "mean_completion_tokens": 60.0,
+      "mean_elapsed_s": 3.518,
+      "mean_turns": 3.154,
+      "n": 13,
+      "outcomes": {
+        "harmful": 1,
+        "pass": 12
+      }
+    },
+    "treatment": {
+      "changed": 0,
+      "checker_use": 3,
+      "mean_completion_tokens": 162.25,
+      "mean_elapsed_s": 6.609,
+      "mean_turns": 3.5,
+      "n": 8,
+      "outcomes": {
+        "harmful": 1,
+        "pass": 3,
+        "workflow-fail": 4
+      }
+    }
+  },
+  "by_host": {
+    "hermes": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 0,
+        "mean_elapsed_s": 0,
+        "mean_turns": 0,
+        "n": 0,
+        "outcomes": {}
+      },
+      "treatment": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 0,
+        "mean_elapsed_s": 0,
+        "mean_turns": 0,
+        "n": 0,
+        "outcomes": {}
+      }
+    },
+    "pi": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 60.0,
+        "mean_elapsed_s": 3.518,
+        "mean_turns": 3.154,
+        "n": 13,
+        "outcomes": {
+          "harmful": 1,
+          "pass": 12
+        }
+      },
+      "treatment": {
+        "changed": 0,
+        "checker_use": 3,
+        "mean_completion_tokens": 162.25,
+        "mean_elapsed_s": 6.609,
+        "mean_turns": 3.5,
+        "n": 8,
+        "outcomes": {
+          "harmful": 1,
+          "pass": 3,
+          "workflow-fail": 4
+        }
+      }
+    }
+  },
+  "expected_treatment_trials": 26,
+  "gate": {
+    "all_treatment_complete": false,
+    "all_treatment_workflows_pass": false,
+    "zero_treatment_harm": false
+  },
+  "observed_pairs": 21,
+  "status": "fail",
+  "treatment_failures": [
+    [
+      "pi",
+      "treatment",
+      "error-mixed-line-endings",
+      71,
+      "workflow-fail"
+    ],
+    [
+      "pi",
+      "treatment",
+      "explicit-ragged-realign",
+      71,
+      "harmful"
+    ],
+    [
+      "pi",
+      "treatment",
+      "explicit-ragged-report-only",
+      71,
+      "workflow-fail"
+    ],
+    [
+      "pi",
+      "treatment",
+      "warning-duplicate-column",
+      71,
+      "workflow-fail"
+    ],
+    [
+      "pi",
+      "treatment",
+      "warning-duplicate-frontmatter",
+      71,
+      "workflow-fail"
+    ]
+  ]
+}

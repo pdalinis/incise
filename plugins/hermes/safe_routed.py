@@ -1406,6 +1406,7 @@ class SafeRoutedAdapter:
         serialize_write: Callable[[str], Any],
         tool_error: Callable[..., str],
         tool_result: Callable[..., str],
+        request_filter: Optional[Callable[..., Optional[Dict[str, Any]]]] = None,
     ) -> None:
         self.requested_profile = requested_profile
         self.standard_tools = set(standard_tools)
@@ -1413,6 +1414,7 @@ class SafeRoutedAdapter:
         self.serialize_write = serialize_write
         self.tool_error = tool_error
         self.tool_result = tool_result
+        self.request_filter = request_filter
         self._states: Dict[Tuple[str, str], RoutedState] = {}
         self._lock = threading.Lock()
         self._trace_lock = threading.Lock()
@@ -1598,8 +1600,24 @@ class SafeRoutedAdapter:
         updated = dict(request)
         updated["tools"] = narrowed
         self._benchmark_request_controls(updated)
+        if self.request_filter is not None:
+            filtered = self.request_filter(
+                request=updated,
+                session_id=session_id,
+                task_id=task_id,
+                turn_id=turn_id,
+                model=model,
+                provider=provider,
+                api_request_id=api_request_id,
+            )
+            if isinstance(filtered, dict) and isinstance(filtered.get("request"), dict):
+                updated = filtered["request"]
+                reason = f"{reason}; {filtered.get('reason', 'request filter')}"
         changed = changed or updated.get("max_tokens") != request.get("max_tokens")
         changed = changed or updated.get("parallel_tool_calls") != request.get("parallel_tool_calls")
+        changed = changed or [_tool_name(tool) for tool in updated.get("tools", [])] != [
+            _tool_name(tool) for tool in request.get("tools", [])
+        ]
         self._trace_request(
             request=updated,
             state=state,
@@ -1615,7 +1633,7 @@ class SafeRoutedAdapter:
         choice = updated.get("tool_choice")
         if isinstance(choice, dict):
             chosen = _tool_name(choice)
-            if chosen and chosen not in {_tool_name(tool) for tool in narrowed}:
+            if chosen and chosen not in {_tool_name(tool) for tool in updated.get("tools", [])}:
                 updated["tool_choice"] = "auto"
         return {"request": updated, "source": "incise", "reason": reason}
 

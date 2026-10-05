@@ -2,6 +2,7 @@ import { withFileMutationQueue, type ExtensionAPI } from "@earendil-works/pi-cod
 import type { TSchema } from "typebox";
 
 import { packageVersion, resolveBinary, type ResolvedBinary } from "./binary.ts";
+import { installCheckSkillTool } from "./check-skill.ts";
 import { installMiniCpmListProfile, MINICPM_LIST_TOOL_NAMES } from "./minicpm-list.ts";
 import { prepareInvocation, READ_SUBCOMMAND, type ToolArguments } from "./normalize.ts";
 import {
@@ -216,5 +217,6 @@ export default async function inciseExtension(pi: ExtensionAPI): Promise<void> {
 			onRoute(route) { diagnostics.activeRoute = route; },
 		});
 	}
+	installCheckSkillTool(pi, binary, schemas.map((schema) => schema.name));
 	registerDoctor(pi, diagnostics);
 }

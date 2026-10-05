@@ -1,0 +1,9 @@
+{
+  "artifacts": {
+    "graded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "observed_trials": 0,
+  "reason": "The single model slot was occupied by an unrelated seed-1007, 8192-token request before the first result. The run was interrupted to preserve paired runtime conditions.",
+  "status": "aborted-pre-outcome"
+}

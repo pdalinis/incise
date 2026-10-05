@@ -1,0 +1,94 @@
+{
+  "artifacts": {
+    "graded": "bench/results/markdown_check_skill_v1_20261004_v12_graded.jsonl",
+    "graded_sha256": "f869744a80bfe6a13b064c8460dbbdff5a2634707f91dd1bd2e58bd54aad1ea2",
+    "raw": "bench/results/markdown_check_skill_v1_20261004_v12_raw.jsonl",
+    "raw_sha256": "da6e3acec60cdcfc57eb6bb18db4a4272cab67dd08237143fefe29b2ee77fb10"
+  },
+  "by_condition": {
+    "control": {
+      "changed": 0,
+      "checker_use": 0,
+      "mean_completion_tokens": 96.154,
+      "mean_elapsed_s": 11.049,
+      "mean_turns": 3.192,
+      "n": 26,
+      "outcomes": {
+        "missed-repair": 2,
+        "pass": 24
+      }
+    },
+    "treatment": {
+      "changed": 2,
+      "checker_use": 26,
+      "mean_completion_tokens": 90.231,
+      "mean_elapsed_s": 6.824,
+      "mean_turns": 2.154,
+      "n": 26,
+      "outcomes": {
+        "pass": 26
+      }
+    }
+  },
+  "by_host": {
+    "hermes": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 89.462,
+        "mean_elapsed_s": 17.696,
+        "mean_turns": 2.769,
+        "n": 13,
+        "outcomes": {
+          "missed-repair": 1,
+          "pass": 12
+        }
+      },
+      "treatment": {
+        "changed": 1,
+        "checker_use": 13,
+        "mean_completion_tokens": 81.0,
+        "mean_elapsed_s": 8.197,
+        "mean_turns": 2.154,
+        "n": 13,
+        "outcomes": {
+          "pass": 13
+        }
+      }
+    },
+    "pi": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 102.846,
+        "mean_elapsed_s": 4.402,
+        "mean_turns": 3.615,
+        "n": 13,
+        "outcomes": {
+          "missed-repair": 1,
+          "pass": 12
+        }
+      },
+      "treatment": {
+        "changed": 1,
+        "checker_use": 13,
+        "mean_completion_tokens": 99.462,
+        "mean_elapsed_s": 5.451,
+        "mean_turns": 2.154,
+        "n": 13,
+        "outcomes": {
+          "pass": 13
+        }
+      }
+    }
+  },
+  "expected_treatment_trials": 26,
+  "gate": {
+    "all_treatment_complete": true,
+    "all_treatment_workflows_pass": true,
+    "zero_treatment_harm": true
+  },
+  "observed_pairs": 52,
+  "status": "pass",
+  "treatment_failures": []
+}

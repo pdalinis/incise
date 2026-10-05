@@ -21,6 +21,7 @@ provides_tools:
   - md_tables
   - md_lists
   - md_outline
+  - md_check
   - table_add_row
   - table_update_cell
   - list_get

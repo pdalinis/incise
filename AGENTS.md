@@ -16,7 +16,7 @@ This is a correctness rule, not a formatting preference. In the recorded baselin
 
 To remove a whole table, use `incise table-delete` with the resolved table address and explicit `--confirm`; do not patch the table lines or rewrite the file. The model-facing `table_edit` schema does not publish this action yet, so use the CLI path after inspecting with `md_tables` or `incise tables`.
 
-After an Incise mutation, or when asked to validate a Markdown file, run `incise check FILE --json`. Treat `automatic`, `explicit`, and `manual` findings differently: use `--fix-safe --if-match HASH` only for automatic repairs, invoke an explicit finding’s named semantic operation only with matching user intent, and report manual findings instead of patching around them. Recheck after any repair and stop if the report makes no progress.
+After an Incise mutation, or when asked to validate a Markdown file, explicitly load the packaged `incise-check` skill when the host offers it and call `md_check`; otherwise run `incise check FILE --json`. Treat `automatic`, `explicit`, and `manual` findings differently: use a hash-guarded safe fix only for automatic repairs, invoke an explicit finding’s named semantic operation only with matching user intent, and report manual findings instead of patching around them. Recheck after any repair and stop if the report makes no progress.
 
 ## This repository
 
