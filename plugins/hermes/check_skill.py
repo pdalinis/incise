@@ -100,6 +100,7 @@ class CheckSkillAdapter:
         session_id: str = "",
         task_id: str = "",
         turn_id: str = "",
+        **_kwargs: Any,
     ) -> None:
         key = self._key(session_id, task_id)
         with self._lock:

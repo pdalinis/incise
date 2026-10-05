@@ -781,7 +781,8 @@ def test_explicit_check_skill_surface():
     check("Hermes md_check refuses outside the explicit skill",
           "only while the explicit" in inactive.get("error", ""), json.dumps(inactive))
     report = json.loads(handler(
-        {"path": path}, session_id="skill", task_id="skill", turn_id="turn-1"
+        {"path": path}, session_id="skill", task_id="skill", turn_id="turn-1",
+        user_task="Check note.md.",
     ))
     check("Hermes md_check returns the versioned report", report.get("schema_version") == 1,
           json.dumps(report))
