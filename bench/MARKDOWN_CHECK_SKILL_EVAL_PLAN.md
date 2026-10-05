@@ -349,3 +349,13 @@ The isolated Hermes home copies the source profile dotenv because Hermes needs t
 V11 changes only isolated-home construction: after copying the dotenv, it replaces the complete `INCISE_BIN` assignment with the resolved preregistered checkout binary, or appends that assignment when absent. Preflight verifies the exact pinned line. This preserves all other profile values while making the manifest binary and plugin binary identical. Product code, tool surfaces, skill instructions, direct endpoint, tasks, model, seed, token cap, grader, decision rule, and 52-trial population remain unchanged.
 
 V11 uses the immutable prefix `markdown_check_skill_v1_20261004_v11`. The v10 preflight manifest remains immutable and is reported as a pre-pool binary-isolation abort.
+
+## V12 accept Hermes tool-handler context metadata
+
+V11 completed all 26 Pi trials and all 13 Hermes controls. All Pi treatments passed with no harmful mutation, both hosts retained the expected control repair miss, and the first four Hermes treatment provider requests correctly exposed only `md_check`. Those four treatments called the checker but failed after the report returned, so the run was stopped before eleven redundant failures.
+
+Real Hermes includes `user_task` in the keyword context passed to a tool handler. The handler forwards host context to `CheckSkillAdapter.observe_report`; that internal method named the three identity fields but did not accept additional host metadata, raising `TypeError: CheckSkillAdapter.observe_report() got an unexpected keyword argument user_task`. The checker subprocess and its pinned binary were otherwise working.
+
+V12 changes only the internal report observer to ignore additional keyword context after consuming `session_id`, `task_id`, and `turn_id`. The Hermes host contract invokes the handler with a representative `user_task` value and still requires the exact versioned checker report. Pi, provider surfaces, skill instructions, isolated configuration, direct endpoint, tasks, model, seed, token cap, grader, decision rule, and 52-trial population remain unchanged.
+
+V12 uses the immutable prefix `markdown_check_skill_v1_20261004_v12`. The 43-row v11 raw and graded pools remain immutable and are reported as a tool-handler context abort; their complete controls and Pi treatments remain useful supporting evidence.
