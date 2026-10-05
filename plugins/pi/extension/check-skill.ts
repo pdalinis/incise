@@ -52,34 +52,36 @@ export function installCheckSkillTool(
 ): void {
 	const available = new Set(standardTools);
 	let active = false;
+	let registered = false;
 	let restore: string[] | undefined;
 
-	pi.registerTool({
-		name: CHECK_TOOL_SCHEMA.name,
-		label: CHECK_TOOL_SCHEMA.name,
-		description: CHECK_TOOL_SCHEMA.description,
-		parameters: CHECK_TOOL_SCHEMA.parameters as TSchema,
-		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
-			if (!active) throw new Error("md_check is available only while the explicit incise-check skill is active.");
-			const located = resolveToolPath(params as ToolArguments, ctx.cwd);
-			const result = await runIncise(pi.exec.bind(pi), binary.path, ["check", located.path], signal);
-			if (result.code !== 0 || result.payload.ok === false) throw processError(result);
-			pi.setActiveTools([CHECK_TOOL_NAME, ...repairTools(result.payload, available)]);
-			return {
-				content: [{ type: "text", text: JSON.stringify(result.payload) }],
-				details: result.payload,
-			};
-		},
-	});
-
-	// Registration activates tools in Pi. Keep md_check out of every ordinary
-	// provider request; explicit skill expansion below is the only activation.
-	pi.setActiveTools(pi.getActiveTools().filter((name) => name !== CHECK_TOOL_NAME));
+	const register = (): void => {
+		if (registered) return;
+		pi.registerTool({
+			name: CHECK_TOOL_SCHEMA.name,
+			label: CHECK_TOOL_SCHEMA.name,
+			description: CHECK_TOOL_SCHEMA.description,
+			parameters: CHECK_TOOL_SCHEMA.parameters as TSchema,
+			async execute(_toolCallId, params, signal, _onUpdate, ctx) {
+				if (!active) throw new Error("md_check is available only while the explicit incise-check skill is active.");
+				const located = resolveToolPath(params as ToolArguments, ctx.cwd);
+				const result = await runIncise(pi.exec.bind(pi), binary.path, ["check", located.path], signal);
+				if (result.code !== 0 || result.payload.ok === false) throw processError(result);
+				pi.setActiveTools([CHECK_TOOL_NAME, ...repairTools(result.payload, available)]);
+				return {
+					content: [{ type: "text", text: JSON.stringify(result.payload) }],
+					details: result.payload,
+				};
+			},
+		});
+		registered = true;
+	};
 
 	pi.on("before_agent_start", async (event) => {
 		if (!isExplicitCheckSkillPrompt(event.prompt)) return;
 		restore = pi.getActiveTools().filter((name) => name !== CHECK_TOOL_NAME);
 		active = true;
+		register();
 		pi.setActiveTools([CHECK_TOOL_NAME]);
 	});
 

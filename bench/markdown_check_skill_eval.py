@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v5"
+PREFIX = "markdown_check_skill_v1_20261004_v6"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v5")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v5")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v6")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v6")
 HARMFUL = "harmful"
 
 
@@ -363,6 +363,44 @@ def call_pi(args, sandbox: Path, task: dict, condition: str) -> dict:
             "stdout": process.stdout, "stderr": process.stderr,
         }
     return json.loads(matches[0])
+
+
+def probe_pi_surface(args) -> dict:
+    root = ensure_marked_dir(Path(args.sandbox).resolve() / "preflight", MARKER)
+    sandbox, _note = reset_sandbox(root, "pi-probe", {"initial": ""})
+    request = {
+        "mode": "probe",
+        "cwd": str(sandbox),
+        "agentDir": str(sandbox / ".agent"),
+        "extension": str(PI_EXTENSION),
+        "piSdk": str(PI_SDK),
+        "endpoint": args.endpoint,
+        "tools": PI_TOOLS,
+        "noSkills": True,
+        "seed": SEED,
+        "model": {"maxTokens": 4096},
+    }
+    process = subprocess.run(
+        [args.node, str(PI_WORKER)], input=json.dumps(request), text=True,
+        capture_output=True, timeout=args.timeout,
+        env={**os.environ, "INCISE_BIN": str(Path(args.binary).resolve())},
+    )
+    matches = [
+        line[len(RESULT_PREFIX):] for line in process.stdout.splitlines()
+        if line.startswith(RESULT_PREFIX)
+    ]
+    if process.returncode or len(matches) != 1:
+        raise SystemExit(
+            f"Pi surface probe failed ({process.returncode}): "
+            f"{process.stderr or process.stdout}"
+        )
+    result = json.loads(matches[0])
+    if result.get("activeTools") != PI_TOOLS:
+        raise SystemExit(
+            f"Pi ordinary surface changed: expected {PI_TOOLS}, "
+            f"got {result.get('activeTools')}"
+        )
+    return result
 
 
 def call_hermes(args, sandbox: Path, task: dict, condition: str) -> dict:
@@ -735,6 +773,7 @@ def preflight(args) -> None:
         raise SystemExit(
             f"Hermes host contract failed:\n{hermes_contract.stdout}\n{hermes_contract.stderr}"
         )
+    pi_surface = probe_pi_surface(args)
     skill_hashes = {
         str(path.relative_to(ROOT)): sha256_file(path)
         for path in (
@@ -806,6 +845,7 @@ def preflight(args) -> None:
             "pi": {"status": "pass", "command": "npm test"},
             "hermes": {"status": "pass", "command": "python3 plugins/hermes/test_plugin.py"},
             "ordinary_surface_unchanged": True,
+            "pi_ordinary_surface_probe": pi_surface.get("activeTools"),
             "treatment_initial_tools": ["md_check"],
         },
     }

@@ -45,7 +45,7 @@ The version-matched native binary also contains the confirmed `incise table-dele
 
 ## Structural check skill
 
-The package includes the explicit-only `/skill:incise-check` skill. While that skill is active, the extension exposes a read-only `md_check` tool backed by the same version-matched binary, then enables only the semantic repair tool named by the report. `md_check` is removed from ordinary provider requests and the previous active tool surface is restored when the run ends. The skill handles `automatic`, `explicit`, and `manual` findings without reconstructing the file; `disable-model-invocation: true` keeps it out of automatic selection.
+The package includes the explicit-only `/skill:incise-check` skill. When that skill starts, the extension registers a read-only `md_check` tool backed by the same version-matched binary, then enables only the semantic repair tool named by the report. Ordinary runs never register or activate `md_check`, and the previous active tool surface is restored when the skill run ends. The skill handles `automatic`, `explicit`, and `manual` findings without reconstructing the file; `disable-model-invocation: true` keeps it out of automatic selection.
 
 ## Measured results
 

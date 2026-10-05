@@ -229,3 +229,30 @@ endpoint. Any mismatch aborts the pool before grading.
 This candidate can license only explicit checker-skill activation. It cannot
 license automatic discovery, a default `md_check` tool, a shared prompt,
 automatic repairs, or changes to the core published edit schema.
+
+## V6 lazy Pi registration correction
+
+V5 was aborted before recording its first trial. Its provider audit observed the
+first Pi control request and refused it because the ordinary tool surface was
+`["bash"]`, not the historical `["bash", "table_edit"]`. Both v5 raw and
+graded pools are zero bytes and remain immutable. No model output or document
+mutation was accepted into the pool.
+
+The cause was registration-time activation, not the native checker schema. Pi
+activates a newly registered extension tool, and calling `setActiveTools`
+while the resource loader was still constructing the session changed how the
+later harness tool selection resolved `table_edit`. V6 registers `md_check`
+lazily inside the already-supported `before_agent_start` hook only after the
+host-expanded explicit `incise-check` wrapper is present. Ordinary sessions
+therefore never register or activate the new tool. Treatment still starts with
+exactly `md_check`, and the report-derived repair and end-of-run restoration
+rules are unchanged.
+
+V6 adds a real Pi SDK session probe to preflight, in addition to unit tests. The
+probe must reproduce the historical ordinary active surface
+`["bash", "table_edit"]` before any live request. The provider audit retains
+that exact expectation. Hermes, tasks, model, seed, direct endpoint, grader,
+decision rule, and 52-trial population are unchanged.
+
+V6 uses the immutable prefix
+`markdown_check_skill_v1_20261004_v6`.

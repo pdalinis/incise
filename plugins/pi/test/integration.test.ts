@@ -33,7 +33,7 @@ function exec(command: string, args: string[], options: ExecOptions = {}): Promi
 	});
 }
 
-test("loads ordinary tools plus hidden md_check and preserves read, write, refusal, and queue behavior", async () => {
+test("loads the unchanged ordinary tools and preserves read, write, refusal, and queue behavior", async () => {
 	const repository = resolve(process.cwd(), "..", "..");
 	const binary = resolve(repository, "target", "debug", "incise");
 	const tools = new Map<string, any>();
@@ -63,7 +63,6 @@ test("loads ordinary tools plus hidden md_check and preserves read, write, refus
 	assert.deepEqual([...tools.keys()].sort(), [
 		"frontmatter_edit",
 		"list_edit",
-		"md_check",
 		"md_lists",
 		"md_outline",
 		"md_tables",
@@ -71,7 +70,7 @@ test("loads ordinary tools plus hidden md_check and preserves read, write, refus
 		"table_edit",
 		"table_get",
 	]);
-	assert(!active.has("md_check"));
+	assert(!tools.has("md_check"));
 	assert(commands.has("incise-doctor"));
 
 	const directory = await mkdtemp(join(tmpdir(), "pi-incise-"));
@@ -158,6 +157,7 @@ test("explicit checker skill activates md_check, narrows repairs, and restores t
 		systemPrompt: "System.", systemPromptOptions: {},
 	}, { cwd: directory } as any);
 	assert.deepEqual([...active], ["md_check"]);
+	assert(tools.has("md_check"));
 
 	const checked = await tools.get("md_check").execute(
 		"check", { path: "note.md" }, undefined, undefined, { cwd: directory } as any,
