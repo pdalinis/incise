@@ -183,3 +183,49 @@ The immutable `_v3` pool failed after 21 completed Pi rows. All completed rows p
 V4 is a post-failure candidate, not part of the untouched v3 hypothesis. It changes only the shared skill instructions and evaluator classification. The skill now directs the model to copy the wrapper's absolute `location`, remove `/SKILL.md`, append the launcher path, and never search from the working directory. The evaluator classifies byte-identical omission of an authorized required repair as `missed-repair`; `harmful` is reserved for an actual mutation to bytes other than the frozen expectation. Both remain gate failures, but only harmful mutation triggers early stopping.
 
 The task manifest, model, seed, host versions, tool surfaces, deterministic ceiling, treatment requirements, and 52-trial population remain unchanged. V4 uses the immutable prefix `markdown_check_skill_v1_20261003_v4`. It passes only under the existing decision rule: 26/26 complete treatment trials, exact expected bytes, checker and report use, semantic authorized realignment with a clean recheck, no forbidden mutation or fallback, and host agreement. The model endpoint must be idle at preflight and before every trial.
+
+## V5 native checker candidate
+
+V4 failed the existing gate without harmful mutations: Pi treatment invoked the
+launcher in 9/13 tasks, and the one attempted Hermes control exposed a
+non-equivalent provider route. This is the preregistered post-failure candidate
+allowed by the original plan's host-constraint clause. It does not change the
+core checker, finding schema, repair allowlist, task population, or automatic
+skill discovery.
+
+Both integrations register one read-only `md_check(path)` adapter over
+`incise check PATH --json`. The adapter returns the versioned report without
+paraphrasing it. It is not added to the core measured schema. Ordinary requests
+must have the same ordered provider-visible tool names and schemas as before:
+Pi removes the tool from its active set, and Hermes removes it in request
+middleware. Tests and preflight compare the ordinary surface byte for byte.
+
+Explicit loading is the only activation signal. Pi recognizes the host-expanded
+`<skill name="incise-check" ...>` wrapper in `before_agent_start`. Hermes
+recognizes the exact session preload marker emitted by
+`--skills incise:incise-check` in provider messages. The first treatment
+request exposes only `md_check`, eliminating path rediscovery through terminal
+tools. After a successful report, the adapter keeps `md_check` for rechecking
+and exposes only the Incise semantic tool implied by repair operations in that
+report; for v1, `table-realign` maps to `table_edit`. Manual-only and clean
+reports expose no mutation tool. Pi restores the prior active surface when the
+agent run ends. Hermes keys report state by session and task and clears it at
+session end.
+
+The live population remains 13 tasks × 2 conditions × 2 hosts × seed 71. V5
+uses the immutable prefix `markdown_check_skill_v1_20261004_v5`. The existing
+decision rule remains in force, plus two preflight requirements: ordinary
+provider surfaces are unchanged, and treatment starts with exactly
+`md_check`. The deterministic ceiling and host unit tests must pass before
+live trials.
+
+Hermes uses a fresh isolated home whose custom provider points directly to
+`http://127.0.0.1:8081/v1`, not the user's LiteLLM hop. Preflight warms the
+Hermes installation outside measured trials, records the effective provider
+configuration hash, and verifies from the first request trace that model, seed
+71, maximum output 4,096, and the expected treatment surface reached the direct
+endpoint. Any mismatch aborts the pool before grading.
+
+This candidate can license only explicit checker-skill activation. It cannot
+license automatic discovery, a default `md_check` tool, a shared prompt,
+automatic repairs, or changes to the core published edit schema.
