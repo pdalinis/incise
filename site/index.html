@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Incise — Semantic Markdown Editing for AI Agents</title>
-  <meta name="description" content="Incise gives AI agents safe, semantic Markdown tools. MiniCPM, Ornith, and Gemma reached 480/480 through measured Pi or Hermes profiles.">
+  <meta name="description" content="Incise gives AI agents safe, semantic Markdown editing and deterministic structural checks. MiniCPM, Ornith, and Gemma reached 480/480 through measured Pi or Hermes profiles.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/">
   <link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/incise/assets/styles.css">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Incise — Semantic Markdown Editing for AI Agents">
-  <meta property="og:description" content="MiniCPM, Ornith, and Gemma reached 480/480 through measured Incise profiles. Safe, byte-preserving Markdown tools for agents.">
+  <meta property="og:description" content="Safe, byte-preserving Markdown editing and deterministic structural checks for agents. MiniCPM, Ornith, and Gemma reached 480/480 through measured Incise profiles.">
   <meta property="og:url" content="https://pdalinis.github.io/incise/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png">
   <meta property="og:image:width" content="1774">
@@ -28,7 +28,7 @@
     "description": "Semantic, byte-preserving Markdown editing for AI agents and automation.",
     "url": "https://pdalinis.github.io/incise/",
     "downloadUrl": "https://github.com/pdalinis/incise/releases",
-    "softwareVersion": "0.4.0",
+    "softwareVersion": "0.5.0",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Linux, macOS",
     "license": "https://opensource.org/license/mit",
@@ -68,6 +68,14 @@
       <article class="card"><h3>Semantic addresses</h3><p>Target headings, cell values, item text, keys, and ordinals instead of stale line numbers.</p></article>
       <article class="card"><h3>Byte-preserving</h3><p>Change the smallest structural range possible. Unrelated prose, formatting, and line endings survive.</p></article>
       <article class="card"><h3>Loud ambiguity</h3><p>Unsafe or ambiguous operations refuse with an actionable remedy instead of choosing a plausible target.</p></article>
+    </section>
+
+    <section>
+      <h2>Check structural hazards before you finish</h2>
+      <pre><code>incise check vault/Projects.md --json</code></pre>
+      <p>Incise reports Markdown conditions that affect semantic addressing or byte-preserving edits, including ragged tables, duplicate columns, mixed table formatting, and duplicate frontmatter paths. Findings distinguish safe automatic repairs from changes that need explicit intent or manual judgment. Checking never writes.</p>
+      <p class="muted">Pi and Hermes 0.5.0 also package an explicit-only <code>incise-check</code> skill backed by a native <code>md_check</code> tool. It stays out of ordinary model context and exposes only the semantic repair operation named by the report.</p>
+      <div class="actions"><a class="button secondary" href="/incise/docs/#structural-checks">Use structural checks</a></div>
     </section>
 
     <section>

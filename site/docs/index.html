@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Install Incise for Pi, Hermes Agent, and the Command Line</title>
-  <meta name="description" content="Install Incise for Pi, Hermes Agent, or the command line. Use measured MiniCPM, Ornith, and Gemma profiles with semantic Markdown operations.">
+  <meta name="description" content="Install Incise for Pi, Hermes Agent, or the command line. Use semantic Markdown operations, deterministic structural checks, and measured model profiles.">
   <link rel="canonical" href="https://pdalinis.github.io/incise/docs/"><link rel="icon" type="image/png" sizes="64x64" href="/incise/assets/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="/incise/assets/apple-touch-icon.png"><link rel="stylesheet" href="/incise/assets/styles.css">
-  <meta property="og:type" content="website"><meta property="og:title" content="Install Incise for Pi, Hermes Agent, and the CLI"><meta property="og:description" content="Recommended Ornith, Gemma, and MiniCPM profiles, version-matched Hermes setup, and semantic Markdown editing commands."><meta property="og:url" content="https://pdalinis.github.io/incise/docs/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Install Incise for Pi, Hermes Agent, and the CLI"><meta property="og:description" content="Recommended model profiles, version-matched host setup, semantic Markdown editing, and deterministic structural checks."><meta property="og:url" content="https://pdalinis.github.io/incise/docs/">
   <meta property="og:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta property="og:image:width" content="1774"><meta property="og:image:height" content="887"><meta property="og:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://pdalinis.github.io/incise/assets/incise-preview.png"><meta name="twitter:image:alt" content="Incise: safe, semantic Markdown editing for AI agents">
 </head>
@@ -62,12 +62,26 @@ incise table-delete vault/Projects.md --table Projects
 incise table-delete vault/Projects.md --table Projects --confirm</code></pre>
     <p>Add <code>--ordinal N</code> when several tables share a heading. Whole-table deletion is CLI-only in this release; Pi and Hermes retain the measured four-action <code>table_edit</code> schema.</p>
 
+    <h2 id="structural-checks">Structural checks</h2>
+    <p><code>incise check</code> detects structural conditions that can make Incise addressing ambiguous or prevent a byte-preserving operation. It is not a Markdown style linter, and checking never changes the file.</p>
+    <pre><code>incise check vault/Projects.md --json
+
+# Reserved for findings classified as automatic; HASH comes from the report.
+incise check vault/Projects.md --fix-safe --if-match HASH --json</code></pre>
+    <p>Each finding has a stable code, severity, semantic address, byte span, and repair class. <code>automatic</code> findings may use the hash-guarded safe-fix path; <code>explicit</code> findings name an existing Incise operation that still requires matching user intent; <code>manual</code> findings should be reported instead of patched around. Version 0.5.0 starts with an empty automatic allowlist.</p>
+    <div class="grid">
+      <article class="card"><h3>Pi</h3><p>Run <code>/skill:incise-check</code> when explicitly asked to validate Markdown or verify an edit. The package activates the read-only <code>md_check</code> tool for that skill run only.</p></article>
+      <article class="card"><h3>Hermes Agent</h3><p>Explicitly load the packaged <code>incise:incise-check</code> skill. The plugin exposes <code>md_check</code>, then only the semantic repair tool named by its report.</p></article>
+      <article class="card"><h3>Recommended agent rule</h3><p>Check after an Incise mutation, recheck after any authorized repair, and stop if the report makes no progress. Never turn a manual finding into a broad rewrite.</p></article>
+    </div>
+
     <h2>Supported structures</h2>
     <table><thead><tr><th>Structure</th><th>Operations</th></tr></thead><tbody>
       <tr><td>Tables</td><td>Add and delete rows, delete whole tables with confirmation, update cells, query rows, realign columns</td></tr>
       <tr><td>Lists</td><td>Add and remove items, toggle task checkboxes</td></tr>
       <tr><td>Sections</td><td>Append, replace, insert, delete, rename, change heading level</td></tr>
       <tr><td>Frontmatter</td><td>Read, set, and delete nested YAML keys</td></tr>
+      <tr><td>Structural checks</td><td>Report addressability hazards and classify repairs without writing</td></tr>
     </tbody></table>
 
     <h2>Agent integrations</h2>
