@@ -9,7 +9,7 @@ from typing import Any, Dict, Iterable, Optional, Tuple
 
 CHECK_TOOL_NAME = "md_check"
 PRELOAD_MARKER = (
-    '[IMPORTANT: The user launched this CLI session with the "incise-check" skill preloaded.'
+    '[IMPORTANT: The user launched this CLI session with the "incise:incise-check" skill preloaded.'
 )
 
 CHECK_TOOL_SCHEMA: Dict[str, Any] = {
