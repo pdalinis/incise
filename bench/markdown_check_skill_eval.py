@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v11"
+PREFIX = "markdown_check_skill_v1_20261004_v12"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v11")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v11")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v12")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v12")
 HARMFUL = "harmful"
 
 
