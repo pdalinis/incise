@@ -1,0 +1,124 @@
+{
+  "artifacts": {
+    "graded": "bench/results/markdown_check_skill_v1_20261003_v4_graded.jsonl",
+    "graded_sha256": "26afca60d1802aa69bbe6d3c9d282429c3b0cf606a30add38b60b0f318ee4c11",
+    "raw": "bench/results/markdown_check_skill_v1_20261003_v4_raw.jsonl",
+    "raw_sha256": "420db9dfcf84eb5896eb296181c6c25e98409dc4de1318a0533be9ec19d753f1"
+  },
+  "by_condition": {
+    "control": {
+      "changed": 0,
+      "checker_use": 0,
+      "mean_completion_tokens": 54.5,
+      "mean_elapsed_s": 8.317,
+      "mean_turns": 3.071,
+      "n": 14,
+      "outcomes": {
+        "missed-repair": 1,
+        "pass": 13
+      }
+    },
+    "treatment": {
+      "changed": 0,
+      "checker_use": 9,
+      "mean_completion_tokens": 131.385,
+      "mean_elapsed_s": 5.26,
+      "mean_turns": 3.0,
+      "n": 13,
+      "outcomes": {
+        "missed-repair": 1,
+        "pass": 9,
+        "workflow-fail": 3
+      }
+    }
+  },
+  "by_host": {
+    "hermes": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 106.0,
+        "mean_elapsed_s": 78.672,
+        "mean_turns": 4.0,
+        "n": 1,
+        "outcomes": {
+          "pass": 1
+        }
+      },
+      "treatment": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 0,
+        "mean_elapsed_s": 0,
+        "mean_turns": 0,
+        "n": 0,
+        "outcomes": {}
+      }
+    },
+    "pi": {
+      "control": {
+        "changed": 0,
+        "checker_use": 0,
+        "mean_completion_tokens": 50.538,
+        "mean_elapsed_s": 2.905,
+        "mean_turns": 3.0,
+        "n": 13,
+        "outcomes": {
+          "missed-repair": 1,
+          "pass": 12
+        }
+      },
+      "treatment": {
+        "changed": 0,
+        "checker_use": 9,
+        "mean_completion_tokens": 131.385,
+        "mean_elapsed_s": 5.26,
+        "mean_turns": 3.0,
+        "n": 13,
+        "outcomes": {
+          "missed-repair": 1,
+          "pass": 9,
+          "workflow-fail": 3
+        }
+      }
+    }
+  },
+  "expected_treatment_trials": 26,
+  "gate": {
+    "all_treatment_complete": false,
+    "all_treatment_workflows_pass": false,
+    "zero_treatment_harm": true
+  },
+  "observed_pairs": 27,
+  "status": "fail",
+  "treatment_failures": [
+    [
+      "pi",
+      "treatment",
+      "clean-missing-final-newline",
+      71,
+      "workflow-fail"
+    ],
+    [
+      "pi",
+      "treatment",
+      "explicit-ragged-realign",
+      71,
+      "missed-repair"
+    ],
+    [
+      "pi",
+      "treatment",
+      "mixed-preexisting-findings",
+      71,
+      "workflow-fail"
+    ],
+    [
+      "pi",
+      "treatment",
+      "warning-duplicate-frontmatter",
+      71,
+      "workflow-fail"
+    ]
+  ]
+}
