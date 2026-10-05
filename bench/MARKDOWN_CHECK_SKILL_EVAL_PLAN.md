@@ -339,3 +339,13 @@ Hermes records the successful preload as `incise:incise-check` and renders that 
 V10 changes only the Hermes exact preload marker to the host canonical value `incise:incise-check`. The host contract adds coverage that the qualified marker activates the checker surface while the unqualified lookalike does not. Pi, the checker, semantic repairs, skill instructions, isolated Hermes configuration, direct endpoint, tasks, model, seed, token cap, grader, decision rule, and 52-trial population remain unchanged.
 
 V10 uses the immutable prefix `markdown_check_skill_v1_20261004_v10`. The 39-row v9 raw and graded pools remain immutable and are reported as an activation-signal audit abort, while their complete Pi and Hermes-control results remain useful supporting evidence.
+
+## V11 pin the Hermes subprocess binary inside its dotenv
+
+The v10 preflight passed. Before opening the 52-trial pool, a host-real Hermes treatment probe confirmed that the first provider request contained exactly `md_check`; the qualified-skill fix therefore works. The model then called `md_check`, which exposed a separate harness-isolation fault: the handler reached an installed Incise binary that does not provide `check`.
+
+The isolated Hermes home copies the source profile dotenv because Hermes needs that profile context. Hermes deliberately loads its home dotenv with `override=True`, so the copied `INCISE_BIN=/Users/peter/.local/bin/incise` replaced the evaluator process environment value. The v10 manifest identifies the intended checkout binary, but the plugin subprocess did not receive it. No v10 scored pool was opened.
+
+V11 changes only isolated-home construction: after copying the dotenv, it replaces the complete `INCISE_BIN` assignment with the resolved preregistered checkout binary, or appends that assignment when absent. Preflight verifies the exact pinned line. This preserves all other profile values while making the manifest binary and plugin binary identical. Product code, tool surfaces, skill instructions, direct endpoint, tasks, model, seed, token cap, grader, decision rule, and 52-trial population remain unchanged.
+
+V11 uses the immutable prefix `markdown_check_skill_v1_20261004_v11`. The v10 preflight manifest remains immutable and is reported as a pre-pool binary-isolation abort.
