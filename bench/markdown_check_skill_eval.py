@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v10"
+PREFIX = "markdown_check_skill_v1_20261004_v11"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v10")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v10")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v11")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v11")
 HARMFUL = "harmful"
 
 
@@ -176,7 +176,7 @@ def normalized_hermes(events: list[dict]) -> tuple[list[dict], list[dict], dict]
     return calls, results, terminal
 
 
-def ensure_hermes_home(path: Path, source: Path, endpoint: str) -> Path:
+def ensure_hermes_home(path: Path, source: Path, endpoint: str, binary: Path) -> Path:
     home = ensure_marked_dir(path, HOME_MARKER)
     os.chmod(home, 0o700)
     source_config = source / "config.yaml"
@@ -226,6 +226,29 @@ def ensure_hermes_home(path: Path, source: Path, endpoint: str) -> Path:
     if env_source.is_file() and not env_dest.exists():
         shutil.copyfile(env_source, env_dest)
         os.chmod(env_dest, 0o600)
+    if not env_dest.is_file():
+        raise RuntimeError("missing Hermes source dotenv for the isolated benchmark home")
+    text = env_dest.read_text(encoding="utf-8")
+    lines = text.splitlines(keepends=True)
+    pinned = f"INCISE_BIN={binary.resolve()}"
+    found = False
+    for index, line in enumerate(lines):
+        if line.startswith("INCISE_BIN="):
+            newline = (
+                "\r\n" if line.endswith("\r\n")
+                else "\n" if line.endswith("\n")
+                else ""
+            )
+            lines[index] = pinned + newline
+            found = True
+    if not found:
+        if text and not text.endswith(("\n", "\r")):
+            lines.append("\n")
+        lines.append(pinned + "\n")
+    env_dest.write_text("".join(lines), encoding="utf-8", newline="")
+    os.chmod(env_dest, 0o600)
+    if pinned not in env_dest.read_text(encoding="utf-8").splitlines():
+        raise RuntimeError("Hermes benchmark dotenv did not pin the preregistered binary")
     plugins = home / "plugins"
     plugins.mkdir(exist_ok=True)
     link = plugins / "incise"
@@ -769,10 +792,11 @@ def preflight(args) -> None:
     if dirty:
         raise SystemExit("preflight requires a clean preregistered worktree")
     slots = require_idle_endpoint(args.endpoint, "at preflight")
-    hermes_home = ensure_hermes_home(
-        Path(args.hermes_home), Path(args.source_hermes_home).expanduser(), args.endpoint
-    )
     binary = Path(args.binary).resolve()
+    hermes_home = ensure_hermes_home(
+        Path(args.hermes_home), Path(args.source_hermes_home).expanduser(),
+        args.endpoint, binary,
+    )
     ceiling_report = ceiling(args)
     contract_env = {**os.environ, "INCISE_BIN": str(binary)}
     pi_contract = subprocess.run(
@@ -839,6 +863,7 @@ def preflight(args) -> None:
             "hermes": {
                 "version": hermes_version,
                 "home": str(hermes_home),
+                "incise_binary": str(binary),
                 "config_sha256": sha256_file(hermes_home / "config.yaml"),
                 "warmup_stderr": hermes_version_process.stderr,
             },
