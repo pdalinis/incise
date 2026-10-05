@@ -366,7 +366,8 @@ def call_pi(args, sandbox: Path, task: dict, condition: str) -> dict:
 
 
 def probe_pi_surface(args) -> dict:
-    root = ensure_marked_dir(Path(args.sandbox).resolve() / "preflight", MARKER)
+    base = ensure_marked_dir(Path(args.sandbox).resolve(), MARKER)
+    root = ensure_marked_dir(base / "preflight", MARKER)
     sandbox, _note = reset_sandbox(root, "pi-probe", {"initial": ""})
     request = {
         "mode": "probe",
