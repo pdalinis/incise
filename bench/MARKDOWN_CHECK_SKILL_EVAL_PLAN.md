@@ -256,3 +256,31 @@ decision rule, and 52-trial population are unchanged.
 
 V6 uses the immutable prefix
 `markdown_check_skill_v1_20261004_v6`.
+
+## V7 Pi treatment allowlist correction
+
+V6 recorded all 13 Pi control trials, then aborted before accepting the first
+treatment trial. The controls reproduced the historical provider surface and
+preserved bytes; the authorized-repair control omitted the repair as expected.
+The first treatment provider audit saw an empty tool list and refused the
+request before its output or bytes were graded.
+
+The cause is specific to the benchmark SDK constructor. Its static `tools`
+allowlist is resolved before `before_agent_start`; a tool registered lazily by
+that hook remains unavailable unless its name was admitted to the constructor.
+Interactive Pi does not impose this two-name benchmark allowlist, and adding
+`md_check` to ordinary benchmark sessions would violate the preserved control
+surface.
+
+V7 therefore changes only treatment session construction: Pi receives the
+historical `["bash", "table_edit"]` allowlist plus `"md_check"`. The explicit
+skill hook still narrows the first provider request to exactly
+`["md_check"]`; controls retain exactly `["bash", "table_edit"]`. The
+provider audit enforces both. Integration code, skill instructions, Hermes,
+tasks, model, seed, direct endpoint, grader, decision rule, and population are
+unchanged.
+
+V7 uses the immutable prefix
+`markdown_check_skill_v1_20261004_v7`. The partial v6 raw and graded pools
+remain immutable and are reported as an infrastructure abort, not a candidate
+result.

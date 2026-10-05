@@ -35,7 +35,7 @@ HERMES_PLUGIN = ROOT / "plugins" / "hermes"
 HERMES_SKILL = HERMES_PLUGIN / "skills" / "incise-check"
 CANONICAL_SKILL = ROOT / "skills" / "incise-check" / "SKILL.md"
 
-PREFIX = "markdown_check_skill_v1_20261004_v6"
+PREFIX = "markdown_check_skill_v1_20261004_v7"
 RESULT_PREFIX = "PI_BENCH_RESULT="
 SEED = 71
 HOSTS = ("pi", "hermes")
@@ -43,8 +43,8 @@ CONDITIONS = ("control", "treatment")
 PI_TOOLS = ["bash", "table_edit"]
 MARKER = ".incise-markdown-check-skill-sandbox"
 HOME_MARKER = ".incise-markdown-check-skill-home"
-DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v6")
-DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v6")
+DEFAULT_SANDBOX = Path("/private/tmp/incise-markdown-check-skill-v1-v7")
+DEFAULT_HERMES_HOME = Path("/private/tmp/incise-markdown-check-hermes-home-v7")
 HARMFUL = "harmful"
 
 
@@ -329,7 +329,7 @@ def call_pi(args, sandbox: Path, task: dict, condition: str) -> dict:
         "extension": str(PI_EXTENSION),
         "piSdk": str(PI_SDK),
         "endpoint": args.endpoint,
-        "tools": PI_TOOLS,
+        "tools": PI_TOOLS + (["md_check"] if condition == "treatment" else []),
         "skillPaths": [str(PI_SKILL)] if condition == "treatment" else [],
         "noSkills": condition != "treatment",
         "seed": SEED,
@@ -838,6 +838,7 @@ def preflight(args) -> None:
             "control": {"pi_tools": PI_TOOLS, "hermes_toolsets": ["terminal", "incise"]},
             "treatment": {
                 "pi_command": "/skill:incise-check",
+                "pi_session_allowlist": PI_TOOLS + ["md_check"],
                 "hermes_command": "--skills incise:incise-check",
             },
         },
