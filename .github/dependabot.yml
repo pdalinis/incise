@@ -9,6 +9,11 @@ updates:
       time: "09:00"
       timezone: "America/Los_Angeles"
     open-pull-requests-limit: 5
+    # sha2 0.11.1 requires Rust 1.88; 0.11.0 lacks its AArch64 safety fix.
+    # Revisit this restriction with the workspace's Rust 1.85 MSRV review.
+    ignore:
+      - dependency-name: "sha2"
+        versions: [">=0.11"]
     commit-message:
       prefix: "chore(deps)"
 
