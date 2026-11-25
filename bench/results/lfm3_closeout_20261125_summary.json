@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "kind": "closeout_summary_of_existing_evidence_not_a_new_trial",
+  "date": "2026-11-25",
+  "decision": "Abandon LFM3-specific support and close the research effort as unsuccessful by explicit user decision. No further development, inference, promotion or release is planned.",
+  "source_reports": [
+    {
+      "file": "lfm3_primary_assertion_workflow_v81_20261125_live_v1.json",
+      "sha256": "6e126423cc52d4b07d8eecadbf59ae172a9455e8b085f43e333ed49c77598d3f",
+      "research_checkpoint": "93015cdf"
+    },
+    {
+      "file": "lfm3_compact_primary_assertion_v80_20261125_cpu_qualification_v1.json",
+      "sha256": "4d85aba9768e2982063e298e2cd91e634c8bad79478d9b6fa83f4ccc6d5855dc",
+      "research_checkpoint": "93015cdf"
+    },
+    {
+      "file": "lfm3_1_7b_q8_20261113_smoke_analysis.json",
+      "sha256": "b178225008535ee916aed395f61ff6ba35f6a0e6a21f55ad265dc3db45158a1b",
+      "research_checkpoint": "93015cdf"
+    }
+  ],
+  "source_availability": "Full reports, frozen packages and raw traces remain in local isolated research checkouts. This summary is not an independent replication.",
+  "checkpoint": {
+    "model": "LFM3-1.7B-Q8_0.gguf",
+    "sha256": "8f6b24182258205e9e01e21f1f24a1f208c1e8115578825d202ce39976af20b6",
+    "server": "llama.cpp b11960-8642541b2",
+    "runtime_commit": "c719d8b46c95cc9f75e9603b5919e06e35ae01be",
+    "context": 32768,
+    "response_tokens": 8192,
+    "reserve_tokens": 4096,
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 0,
+    "min_p": 0,
+    "repeat_penalty": 1,
+    "thinking": "off"
+  },
+  "live_v81": {
+    "seed": 2503,
+    "second_seed2504_collected": false,
+    "conditions": {
+      "common": "Same frozen V80 archive/CLI, mandatory observed dates, primary-change guard TRUE and bounded grouped retention in both arms. Full source/instruction/history/one-attempt/atomic/checker/budget protections, all capabilities, original guide except selected assertion presentation. Same thinking-off .6 sampling,32768context/8192response/4096reserve. No model/adapter/server/decoder changes.",
+      "control": "Trusted host-options requirePrimaryChangeForStamp:true, requirePrimaryAssertion:false. Existing V74 primary-change contract and metadata.",
+      "candidate": "Same options with requirePrimaryAssertion:true: model authors required assert_primary before/after; compact V80 selected writer metadata and shared instruction. No host supplied expectation, repair or route."
+    },
+    "rows": [
+      {
+        "task_id": "parent-checkbox",
+        "condition": "control",
+        "seed": 2503,
+        "requests": 12,
+        "inclusive_s": 122.68836758309044,
+        "exact_final_files": false,
+        "stopped_final": false,
+        "unexpected_effect_frames": [],
+        "tool_errors": 4,
+        "deadline": false,
+        "generic_capped": true
+      },
+      {
+        "task_id": "parent-checkbox",
+        "condition": "candidate",
+        "seed": 2503,
+        "requests": 12,
+        "inclusive_s": 179.6973367498722,
+        "exact_final_files": false,
+        "stopped_final": false,
+        "unexpected_effect_frames": [],
+        "tool_errors": 2,
+        "deadline": false,
+        "generic_capped": true
+      },
+      {
+        "task_id": "cedar-region",
+        "condition": "candidate",
+        "seed": 2503,
+        "requests": 6,
+        "inclusive_s": 75.77571120811626,
+        "exact_final_files": true,
+        "stopped_final": true,
+        "unexpected_effect_frames": [],
+        "tool_errors": 0,
+        "deadline": false,
+        "generic_capped": false
+      },
+      {
+        "task_id": "cedar-region",
+        "condition": "control",
+        "seed": 2503,
+        "requests": 11,
+        "inclusive_s": 189.51950504095294,
+        "exact_final_files": true,
+        "stopped_final": false,
+        "unexpected_effect_frames": [],
+        "tool_errors": 1,
+        "deadline": true,
+        "generic_capped": false
+      }
+    ],
+    "stats": {
+      "control": {
+        "all_attempt_inclusive_median_s": 156.1039363120217,
+        "nearest_rank_p95_s": 189.51950504095294,
+        "strict_complete_safe_factual": 0
+      },
+      "candidate": {
+        "all_attempt_inclusive_median_s": 127.73652397899423,
+        "nearest_rank_p95_s": 179.6973367498722,
+        "strict_complete_safe_factual": 1
+      }
+    },
+    "mechanics": {
+      "admitted_requests": 41,
+      "complete_raw_native_responses": 40,
+      "actual_native_tool_calls": 39,
+      "all_complete_calls_equal_delivered_native_arguments": true,
+      "all_complete_ordinary_and_reasoning_bytes_replayed": true,
+      "partial_response": {
+        "task": "cedar-region/control",
+        "request": 11,
+        "observed_bytes": 0,
+        "reason": "body_error on cancellation; not a complete/parser-qualified generation"
+      },
+      "all_requests_accounted": true,
+      "normal8192_requests": 41,
+      "max_native_prompt_tokens": 11760,
+      "all_native8192_plus4096_fit": true,
+      "source_effect_and_receipt_verification_complete": true,
+      "observed_mode_sampling_rows": 40,
+      "unexpected_intermediate_or_final_effect_states": 0,
+      "confirmed_writes": 2,
+      "assertion_successful_primary_comparisons": 1,
+      "assertion_mismatch_refusals": 0,
+      "primary_noop_refusals": 0
+    },
+    "root_cause_scope": "Observed list selectors are distinct and correct in tool output. The model concatenates parent and child into a source block and cannot recover from the generic exact-item refusal. This is one fixed seed on two public tasks, not a general causal diagnosis. The assertion policy is bundled with compact metadata and no mismatch guard is exercised; its independent efficacy is unmeasured.",
+    "release_qualified": false,
+    "runtime_promoted": false,
+    "defaults_promoted": false
+  },
+  "limitations": [
+    "Two tasks at one seed, four fresh sessions; not an overall benchmark accuracy estimate.",
+    "Candidate bundles primary assertions and compact metadata; no assertion-mismatch guard was exercised.",
+    "Zero observed harmful states in this small pool does not establish safety.",
+    "Single interface-visible Codex review, not blinded or independent human safety review.",
+    "Neither LFM3 advertised support nor latency gates passed; historical result pools remain unchanged."
+  ],
+  "cpu_v80": "Deterministic qualification passed in its frozen scope, including 1983 Pi tests and 127974 differential cases. This does not establish model efficacy.",
+  "closeout_inference_requests": 0,
+  "closeout_fix": {
+    "sha256": "7506d9c9d6b4fc676b7337fb23271b28a65f26ae3eaa762577fc7b717b365450",
+    "commit": "558e9474f970d53bfbf2923de5eed66ac7868e04",
+    "base": "01c12dfaa6eb09fd988689497bc252b4a3340465",
+    "branch": "fix/lfm3-canonical-grouped-closeout",
+    "published": false,
+    "not_directly_applicable_to_remote_main": "The canonical/grouped experimental components are unpublished.",
+    "patch_filename": "incise-lfm3-canonical-grouped-closeout.patch",
+    "deterministic_verification": {
+      "focused": "15 passed, 0 failed, 0 skipped; frozen predecessor comparison enabled",
+      "full_pi": "1766 passed, 0 failed, 0 skipped; frozen predecessor comparison enabled",
+      "ordinary_full_pi_repeat": "1765 passed, 0 failed, 1 skipped (optional frozen predecessor comparison not enabled); identical code",
+      "typecheck": "passed",
+      "package_check": "passed, 58 files",
+      "cargo_build": "passed",
+      "cargo_fmt": "passed",
+      "cargo_clippy": "passed",
+      "cargo_test": "passed",
+      "python": {
+        "test_incise_ops": {
+          "exit_code": 0,
+          "seconds": 49.034
+        },
+        "difftest": {
+          "exit_code": 0,
+          "seconds": 133.147
+        },
+        "schematest": {
+          "exit_code": 0,
+          "seconds": 0.249
+        },
+        "replaycheck": {
+          "exit_code": 0,
+          "seconds": 1.072
+        },
+        "hermes": {
+          "exit_code": 0
+        }
+      },
+      "reverted_fix_mutant": "reached and failed the new catalog test with original unequal-target error, as expected",
+      "markdown_closeout": "zero findings",
+      "markdown_requirements": "15 existing explicit alignment findings; no automatic/manual findings and no reformatting attempted"
+    },
+    "benchmark_impact": "Historical unpromoted composition; no live remeasurement is planned.",
+    "disposition": "Archived experiment; no merge or release planned."
+  },
+  "research_status": "closed_unsuccessful",
+  "archive_branch": "archive/lfm3-research-20261125",
+  "original_direct_with_without": {
+    "pairs": 41,
+    "baseline_only_correct": 8,
+    "incise_only_correct": 8,
+    "mcnemar_exact_p": 1.0,
+    "excluded_pairs": [
+      [
+        "add-item-ordered-renumber",
+        100
+      ]
+    ],
+    "primary_editing": {
+      "baseline": {
+        "correct": 29,
+        "correct_rate": 0.7073170731707317,
+        "destructive": 2,
+        "harmful": 11,
+        "mean_calls": 3.1219512195121952,
+        "mean_completion_tokens": 1176.6341463414635,
+        "mean_elapsed_s": 99.68121951219511,
+        "mean_input_tokens": 8163.707317073171,
+        "mean_n_turns": 4.121951219512195,
+        "mean_reasoning_characters": 3862.8536585365855,
+        "mean_reasoning_tokens": 0.0,
+        "n": 41,
+        "outcomes": {
+          "collateral:content": 2,
+          "collateral:formatting": 4,
+          "correct": 29,
+          "destructive": 2,
+          "malformed": 1,
+          "wrong": 3
+        },
+        "tool_calls": {
+          "edit": 42,
+          "read": 84,
+          "write": 2
+        },
+        "wilson_95": [
+          0.5552024292386027,
+          0.8239098236694112
+        ]
+      },
+      "incise": {
+        "correct": 29,
+        "correct_rate": 0.7073170731707317,
+        "destructive": 1,
+        "harmful": 9,
+        "mean_calls": 3.682926829268293,
+        "mean_completion_tokens": 2214.487804878049,
+        "mean_elapsed_s": 223.03146341463412,
+        "mean_input_tokens": 21689.121951219513,
+        "mean_n_turns": 4.682926829268292,
+        "mean_reasoning_characters": 7878.1463414634145,
+        "mean_reasoning_tokens": 0.0,
+        "n": 41,
+        "outcomes": {
+          "collateral:content": 1,
+          "collateral:formatting": 1,
+          "correct": 29,
+          "destructive": 1,
+          "malformed": 3,
+          "wrong": 6
+        },
+        "tool_calls": {
+          "edit": 8,
+          "frontmatter_edit": 8,
+          "list_edit": 9,
+          "md_lists": 7,
+          "md_outline": 21,
+          "md_tables": 5,
+          "read": 67,
+          "section_edit": 12,
+          "table_edit": 8,
+          "table_get": 4,
+          "write": 2
+        },
+        "wilson_95": [
+          0.5552024292386027,
+          0.8239098236694112
+        ]
+      }
+    }
+  },
+  "retirement_cleanup": {
+    "local_source_commit": "e2359d262ec1bb252fe29beb4cbdda22ec2a5f7c",
+    "archive_branch": "archive/lfm3-research-20261125",
+    "archive_checkpoint": "93015cdf6bc644c43fb69ed917394cd990b4a9f0",
+    "local_product_changes": "Removed unpublished LFM3 Pi modules, profiles, focused tools and activation instructions; restored shared routing implementation to remote main; archived draft.",
+    "published_product_changes": "Remote main already lacked LFM3-specific runtime support; the PR records abandonment and adds profile/package regression checks.",
+    "dedicated_lfm3_server": "stopped",
+    "compiler_caches_removed": 32,
+    "compiler_cache_allocated_bytes_removed": 2476601344,
+    "evidence_preserved": true,
+    "model_runs_started": 0
+  }
+}
