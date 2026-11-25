@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "closeout_summary_of_existing_evidence_not_a_new_trial",
   "date": "2026-11-25",
-  "decision": "Defer advertised LFM3 support; research goal remains paused. No further inference authorized by this closeout.",
+  "decision": "Abandon LFM3-specific support and close the research effort as unsuccessful by explicit user decision. No further development, inference, promotion or release is planned.",
   "source_reports": [
     {
       "file": "lfm3_primary_assertion_workflow_v81_20261125_live_v1.json",
@@ -12,6 +12,11 @@
     {
       "file": "lfm3_compact_primary_assertion_v80_20261125_cpu_qualification_v1.json",
       "sha256": "4d85aba9768e2982063e298e2cd91e634c8bad79478d9b6fa83f4ccc6d5855dc",
+      "research_checkpoint": "93015cdf"
+    },
+    {
+      "file": "lfm3_1_7b_q8_20261113_smoke_analysis.json",
+      "sha256": "b178225008535ee916aed395f61ff6ba35f6a0e6a21f55ad265dc3db45158a1b",
       "research_checkpoint": "93015cdf"
     }
   ],
@@ -186,6 +191,105 @@
       "markdown_closeout": "zero findings",
       "markdown_requirements": "15 existing explicit alignment findings; no automatic/manual findings and no reformatting attempted"
     },
-    "benchmark_impact": "composition-wide live remeasurement required before efficacy claims; deferred"
+    "benchmark_impact": "Historical unpromoted composition; no live remeasurement is planned.",
+    "disposition": "Archived experiment; no merge or release planned."
+  },
+  "research_status": "closed_unsuccessful",
+  "archive_branch": "archive/lfm3-research-20261125",
+  "original_direct_with_without": {
+    "pairs": 41,
+    "baseline_only_correct": 8,
+    "incise_only_correct": 8,
+    "mcnemar_exact_p": 1.0,
+    "excluded_pairs": [
+      [
+        "add-item-ordered-renumber",
+        100
+      ]
+    ],
+    "primary_editing": {
+      "baseline": {
+        "correct": 29,
+        "correct_rate": 0.7073170731707317,
+        "destructive": 2,
+        "harmful": 11,
+        "mean_calls": 3.1219512195121952,
+        "mean_completion_tokens": 1176.6341463414635,
+        "mean_elapsed_s": 99.68121951219511,
+        "mean_input_tokens": 8163.707317073171,
+        "mean_n_turns": 4.121951219512195,
+        "mean_reasoning_characters": 3862.8536585365855,
+        "mean_reasoning_tokens": 0.0,
+        "n": 41,
+        "outcomes": {
+          "collateral:content": 2,
+          "collateral:formatting": 4,
+          "correct": 29,
+          "destructive": 2,
+          "malformed": 1,
+          "wrong": 3
+        },
+        "tool_calls": {
+          "edit": 42,
+          "read": 84,
+          "write": 2
+        },
+        "wilson_95": [
+          0.5552024292386027,
+          0.8239098236694112
+        ]
+      },
+      "incise": {
+        "correct": 29,
+        "correct_rate": 0.7073170731707317,
+        "destructive": 1,
+        "harmful": 9,
+        "mean_calls": 3.682926829268293,
+        "mean_completion_tokens": 2214.487804878049,
+        "mean_elapsed_s": 223.03146341463412,
+        "mean_input_tokens": 21689.121951219513,
+        "mean_n_turns": 4.682926829268292,
+        "mean_reasoning_characters": 7878.1463414634145,
+        "mean_reasoning_tokens": 0.0,
+        "n": 41,
+        "outcomes": {
+          "collateral:content": 1,
+          "collateral:formatting": 1,
+          "correct": 29,
+          "destructive": 1,
+          "malformed": 3,
+          "wrong": 6
+        },
+        "tool_calls": {
+          "edit": 8,
+          "frontmatter_edit": 8,
+          "list_edit": 9,
+          "md_lists": 7,
+          "md_outline": 21,
+          "md_tables": 5,
+          "read": 67,
+          "section_edit": 12,
+          "table_edit": 8,
+          "table_get": 4,
+          "write": 2
+        },
+        "wilson_95": [
+          0.5552024292386027,
+          0.8239098236694112
+        ]
+      }
+    }
+  },
+  "retirement_cleanup": {
+    "local_source_commit": "e2359d262ec1bb252fe29beb4cbdda22ec2a5f7c",
+    "archive_branch": "archive/lfm3-research-20261125",
+    "archive_checkpoint": "93015cdf6bc644c43fb69ed917394cd990b4a9f0",
+    "local_product_changes": "Removed unpublished LFM3 Pi modules, profiles, focused tools and activation instructions; restored shared routing implementation to remote main; archived draft.",
+    "published_product_changes": "Remote main already lacked LFM3-specific runtime support; the PR records abandonment and adds profile/package regression checks.",
+    "dedicated_lfm3_server": "stopped",
+    "compiler_caches_removed": 32,
+    "compiler_cache_allocated_bytes_removed": 2476601344,
+    "evidence_preserved": true,
+    "model_runs_started": 0
   }
 }

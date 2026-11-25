@@ -7,6 +7,7 @@ test("profile names preserve the measured alias and reject typos", () => {
 	assert.equal(requestedProfile(undefined), "standard");
 	assert.equal(requestedProfile("measured"), "standard");
 	assert.equal(requestedProfile("safe-routed"), "safe-routed");
+	assert.throws(() => requestedProfile("lfm3-routed"), /Unknown INCISE_PROFILE/);
 	assert.throws(() => requestedProfile("gemma"), /Unknown INCISE_PROFILE/);
 });
 
@@ -31,4 +32,5 @@ test("auto enables only capabilities backed by a passing model-family evaluation
 	assert.match(minicpm.reason, /measured MiniCPM/);
 	assert.equal(selectProfile("auto", { id: "some-future-model" }).effective, "standard");
 	assert.equal(selectProfile("safe-routed", { id: "some-future-model" }).effective, "safe-routed");
+	assert.equal(selectProfile("auto", { id: "LiquidAI/LFM3-1.7B" }).effective, "standard");
 });

@@ -18,6 +18,7 @@ assert(files.includes("package.json"));
 assert(files.includes("README.md"));
 assert(files.includes("LICENSE"));
 assert(files.includes("extension/index.ts"));
+assert(!files.some((path) => path.startsWith("extension/lfm3-")));
 assert(files.includes("skills/incise-check/SKILL.md"));
 assert(files.includes("skills/incise-check/scripts/check.mjs"));
 assert(!files.some((path) => path.startsWith("test/")));

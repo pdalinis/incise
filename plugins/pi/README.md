@@ -29,6 +29,8 @@ The package default is `standard` for model-agnostic compatibility. `auto` enabl
 
 After Pi starts, run `/incise-doctor`. It reports the requested and effective profiles, detected model family, selected binary, schema state, registered tools, and last route.
 
+LFM3-specific support was abandoned on 25 November 2026 after the evaluation failed to demonstrate an overall editing benefit and incurred substantial latency overhead. No LFM3-specific profile or focus preview is provided. Historical evaluation records remain under `bench/`.
+
 ## Tools
 
 The default `standard` profile registers `table_edit`, `list_edit`, `section_edit`, `frontmatter_edit`, `table_get`, `md_tables`, `md_lists`, and `md_outline`. Inspect document structure with the relevant read tool before editing, and follow the remedy in any Incise refusal. The former `measured` profile name remains an alias for `standard`.
