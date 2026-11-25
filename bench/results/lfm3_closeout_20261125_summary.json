@@ -142,5 +142,50 @@
     "Neither LFM3 advertised support nor latency gates passed; historical result pools remain unchanged."
   ],
   "cpu_v80": "Deterministic qualification passed in its frozen scope, including 1983 Pi tests and 127974 differential cases. This does not establish model efficacy.",
-  "closeout_inference_requests": 0
+  "closeout_inference_requests": 0,
+  "closeout_fix": {
+    "sha256": "7506d9c9d6b4fc676b7337fb23271b28a65f26ae3eaa762577fc7b717b365450",
+    "commit": "558e9474f970d53bfbf2923de5eed66ac7868e04",
+    "base": "01c12dfaa6eb09fd988689497bc252b4a3340465",
+    "branch": "fix/lfm3-canonical-grouped-closeout",
+    "published": false,
+    "not_directly_applicable_to_remote_main": "The canonical/grouped experimental components are unpublished.",
+    "patch_filename": "incise-lfm3-canonical-grouped-closeout.patch",
+    "deterministic_verification": {
+      "focused": "15 passed, 0 failed, 0 skipped; frozen predecessor comparison enabled",
+      "full_pi": "1766 passed, 0 failed, 0 skipped; frozen predecessor comparison enabled",
+      "ordinary_full_pi_repeat": "1765 passed, 0 failed, 1 skipped (optional frozen predecessor comparison not enabled); identical code",
+      "typecheck": "passed",
+      "package_check": "passed, 58 files",
+      "cargo_build": "passed",
+      "cargo_fmt": "passed",
+      "cargo_clippy": "passed",
+      "cargo_test": "passed",
+      "python": {
+        "test_incise_ops": {
+          "exit_code": 0,
+          "seconds": 49.034
+        },
+        "difftest": {
+          "exit_code": 0,
+          "seconds": 133.147
+        },
+        "schematest": {
+          "exit_code": 0,
+          "seconds": 0.249
+        },
+        "replaycheck": {
+          "exit_code": 0,
+          "seconds": 1.072
+        },
+        "hermes": {
+          "exit_code": 0
+        }
+      },
+      "reverted_fix_mutant": "reached and failed the new catalog test with original unequal-target error, as expected",
+      "markdown_closeout": "zero findings",
+      "markdown_requirements": "15 existing explicit alignment findings; no automatic/manual findings and no reformatting attempted"
+    },
+    "benchmark_impact": "composition-wide live remeasurement required before efficacy claims; deferred"
+  }
 }

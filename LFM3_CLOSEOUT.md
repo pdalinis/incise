@@ -16,6 +16,8 @@ Canonical item selection and grouped mutations were incompatible on mixed checkb
 
 The fix and regression tests are retained on local branch `fix/lfm3-canonical-grouped-closeout`, based on research commit `01c12dfaa6eb09fd988689497bc252b4a3340465`. They are not included in this documentation PR: both components depend on unpublished experimental runtime code. Passing compatibility tests does not establish that LFM3 will choose the correct item. The assertion workflow and larger prototypes remain isolated.
 
+The retained patch is commit `558e9474f970d53bfbf2923de5eed66ac7868e04`. Close-out validation passed 15 focused regressions, the full 1,766-test Pi suite with the frozen-predecessor comparison enabled, typechecking, package validation, Rust formatting/lint/tests, Python invariants, 127,974 differential cases, schema checks, recorded-call replay and Hermes tests. Reverting the fix makes the new mixed-list regression fail with the original refusal. These are local deterministic checks; supported-platform CI and model efficacy are separate gates.
+
 ## Conditions for reopening
 
 Reopen only as a separately scoped decision with an owner, a fixed time/inference budget, one preregistered comparison and a stopping rule. Qualify the full intended composition before making support claims. Existing gates remain: at least 19/20 on the original cohort including every required edit and guard, zero harm, no category regression, median at most 60 seconds and P95 at most 180 seconds, replication, broader task families, the non-adapter Hermes host, independent human safety review and supported-platform CI.
